@@ -15,3 +15,11 @@ export const ButtonRegister = styled(Button) ({
     backgroundColor: '#403267',
   }
 });
+
+export const ButtonLoginWith = styled(Button) ({
+  backgroundColor: '#ffffff',
+  color: '#000000',
+  '&:hover': {
+    borderColor: '#0066ff',
+  }
+});

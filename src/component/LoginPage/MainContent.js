@@ -6,7 +6,7 @@ import LogoFB from '../../img/facebook.png'
 import * as CustomButton from '../../custom/CustomButton.js'
 //import * as CustomTextField from '../../custom/CustomTextField.js'
 
-import { Box, Stack, TextField, Button, Link, Divider, Typography } from '@mui/material';
+import { Box, Stack, TextField, Link, Divider, Typography } from '@mui/material';
 
 class MainContent extends Component {
     render() {
@@ -43,14 +43,14 @@ class MainContent extends Component {
                         {'Quên mật khẩu?'}
                     </Link>
                     <Divider > Hoặc </Divider>
-                    <Button variant="outlined" fullWidth >
+                    <CustomButton.ButtonLoginWith variant="outlined" fullWidth >
                         <img src={LogoGG} alt="Logo" width={25}/>
                         <Typography pl={2}> Đăng nhập bằng GG </Typography>
-                    </Button>
-                    <Button variant="outlined" fullWidth >
+                    </CustomButton.ButtonLoginWith>
+                    <CustomButton.ButtonLoginWith variant="outlined" fullWidth >
                         <img src={LogoFB} alt="Logo" width={25}/>
                         <Typography pl={2}> Đăng nhập bằng FB </Typography>
-                    </Button>
+                    </CustomButton.ButtonLoginWith>
                     <CustomButton.ButtonRegister variant="contained" fullWidth>
                         Tạo tài khoản
                     </CustomButton.ButtonRegister>
