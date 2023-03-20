@@ -23,9 +23,9 @@ function MainContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
-  const [emailHelperText, setEmailHelperText] = useState('');
+  const [emailHelperText, setEmailHelperText] = useState("");
   const [passwordError, setPasswordError] = useState(false);
-  const [passwordHelperText, setPasswordHelperText] = useState('');
+  const [passwordHelperText, setPasswordHelperText] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -33,42 +33,48 @@ function MainContent() {
     if (email === "") {
       setEmailError(true);
     } else {
-      var validEmail = '^(?=.{8,255}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$';
+      var validEmail =
+        "^(?=.{8,255}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$";
       if (!email.match(validEmail)) {
         setEmailError(true);
-        setEmailHelperText('Error');
+        setEmailHelperText("Error");
       }
     }
     if (password === "") {
       setPasswordError(true);
     } else {
-      var validPassword = '^(?=[.\\S]*[A-Z][.\\S]*)(?=[.\\S]*[0-9][.\\S]*)(?=[.\\S]*[a-z][.\\S]*)[.\\S]{8,255}$';
+      var validPassword =
+        "^(?=[.\\S]*[A-Z][.\\S]*)(?=[.\\S]*[0-9][.\\S]*)(?=[.\\S]*[a-z][.\\S]*)[.\\S]{8,255}$";
       if (!password.match(validPassword)) {
         setPasswordError(true);
-        setPasswordHelperText('Error');
+        setPasswordHelperText("Error");
       }
     }
-    
+
     let formData = {
       username: email,
-      password: password
-    }
+      password: password,
+    };
 
     submitLogin(formData);
-
   };
 
   const submitLogin = async (formData) => {
     try {
-      const response = await api.post('/auth/login', formData);
+      const response = await api.post("/auth/login", formData);
       console.log(response.data);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
-    <Box flex={2}>
+    <Box
+      flex={2}
+      sx={{ display: { xs: "flex" } }}
+      justifyContent="center"
+      alignItems="start"
+    >
       <Stack
         spacing={2}
         sx={{ width: { xs: "80%", sm: "70%" } }}
