@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-import "../../css/Login.css";
-import Register from "./Register";
-import LogoGG from "../../img/google.png";
-import LogoFB from "../../img/facebook.png";
-import * as CustomButton from "../../custom/CustomButton.js";
+import "../../assets/css/Login.css";
+import FormSignUp from "./FormSignUp";
+import LogoGG from "../../assets/img/google.png";
+import LogoFB from "../../assets/img/facebook.png";
+import * as CustomButton from "../../component/custom/CustomButton.js";
 
 // import * as axios from "axios";
 
@@ -19,7 +19,7 @@ import {
 
 import api from "../../http/http-common";
 
-function MainContent() {
+function FormSignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
@@ -124,10 +124,10 @@ function MainContent() {
           <img src={LogoFB} alt="Logo" width={25} />
           <Typography pl={2}> Đăng nhập bằng FB </Typography>
         </CustomButton.ButtonLoginWith>
-        <Register />
+        <FormSignUp />
       </Stack>
     </Box>
   );
 }
 
-export default MainContent;
+export default FormSignIn;

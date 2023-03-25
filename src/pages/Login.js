@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import '../../css/Login.css'
+import '../assets/css/Login.css'
 
 import { Stack } from '@mui/material';
-import LeftContent from './LeftContent';
-import MainContent from './MainContent';
+import Welcome from '../features/Login/Welcome';
+import FormSignIn from '../features/Login/FormSignIn';
 
 class Login extends Component {
     render() {
@@ -13,8 +13,8 @@ class Login extends Component {
                 direction='row' 
                 className='login-page'
             >
-                <LeftContent />
-                <MainContent />
+                <Welcome />
+                <FormSignIn />
             </Stack>
         );
     }

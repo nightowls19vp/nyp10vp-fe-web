@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import '../../css/Login.css'
-import LogoGG from '../../img/google.png'
-import LogoFB from '../../img/facebook.png'
+import '../../assets/css/Login.css'
+import LogoGG from "../../assets/img/google.png";
+import LogoFB from "../../assets/img/facebook.png";
+import * as CustomButton from "../../component/custom/CustomButton.js";
 import { Box, Modal, Typography, TextField, Stack, Divider, Container } from '@mui/material';
 
-import * as CustomButton from '../../custom/CustomButton.js'
 
 const style = {
   position: 'absolute',
@@ -20,7 +20,7 @@ const style = {
   p: 4,
 };
 
-export default function Register() {
+export default function FormSignUp() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
