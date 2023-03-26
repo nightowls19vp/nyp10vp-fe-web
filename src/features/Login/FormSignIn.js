@@ -32,11 +32,14 @@ function FormSignIn() {
     var validPassword =
       "^(?=[.\\S]*[A-Z][.\\S]*)(?=[.\\S]*[0-9][.\\S]*)(?=[.\\S]*[a-z][.\\S]*)[.\\S]{8,255}$";
 
+    console.log(email.match(validEmail))
     if (email === "") {
       setEmailError(true);
       setEmailHelperText("Vui lòng điền email!")
     } else if (!email.match(validEmail)) {
+      console.log("email");
       setEmailError(true);
+      console.log({emailError});
       setEmailHelperText("Email không hợp lệ!");
     } else {
       setEmailError(false);
@@ -47,13 +50,13 @@ function FormSignIn() {
       setPasswordError(true);
       setPasswordHelperText("Vui lòng điền mật khẩu!");
     } else if (!password.match(validPassword)) {
+      console.log("passs");
       setPasswordError(true);
       setPasswordHelperText("Mật khẩu không hợp lệ!");
       setPassword("");
     } else {
       setPasswordError(false);
       setPasswordHelperText("");
-
     }
 
     let formData = {
@@ -62,17 +65,19 @@ function FormSignIn() {
     };
 
     console.log(emailError, passwordError);
+    console.log(email, password);
 
     if (emailError === false && passwordError === false) {
       submitLogin(formData);
     }
-
   };
 
   const submitLogin = async (formData) => {
     console.log("submitLogin");
     try {
-      const response = await api.post("/auth/login", formData);
+      const response = await api.post("/auth/login", formData, {
+        withCredentials: true,
+      });
       localStorage.setItem("accessToken", response.data.accessToken);
       console.log(response.data);
     } catch (error) {
