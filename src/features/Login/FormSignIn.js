@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "../../assets/css/Login.css";
 import FormSignUp from "./FormSignUp";
 import LogoGG from "../../assets/img/google.png";
 import LogoFB from "../../assets/img/facebook.png";
 import * as CustomButton from "../../component/custom/CustomButton.js";
-
-// import * as axios from "axios";
 
 import {
   Box,
@@ -27,28 +25,35 @@ function FormSignIn() {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordHelperText, setPasswordHelperText] = useState("");
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const handleLogin = () => {
+    // e.preventDefault();
+    var validEmail =
+      "^(?=.{8,255}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$";
+    var validPassword =
+      "^(?=[.\\S]*[A-Z][.\\S]*)(?=[.\\S]*[0-9][.\\S]*)(?=[.\\S]*[a-z][.\\S]*)[.\\S]{8,255}$";
 
     if (email === "") {
       setEmailError(true);
+      setEmailHelperText("Vui lòng điền email!")
+    } else if (!email.match(validEmail)) {
+      setEmailError(true);
+      setEmailHelperText("Email không hợp lệ!");
     } else {
-      var validEmail =
-        "^(?=.{8,255}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$";
-      if (!email.match(validEmail)) {
-        setEmailError(true);
-        setEmailHelperText("Error");
-      }
+      setEmailError(false);
+      setEmailHelperText("");
     }
+
     if (password === "") {
       setPasswordError(true);
+      setPasswordHelperText("Vui lòng điền mật khẩu!");
+    } else if (!password.match(validPassword)) {
+      setPasswordError(true);
+      setPasswordHelperText("Mật khẩu không hợp lệ!");
+      setPassword("");
     } else {
-      var validPassword =
-        "^(?=[.\\S]*[A-Z][.\\S]*)(?=[.\\S]*[0-9][.\\S]*)(?=[.\\S]*[a-z][.\\S]*)[.\\S]{8,255}$";
-      if (!password.match(validPassword)) {
-        setPasswordError(true);
-        setPasswordHelperText("Error");
-      }
+      setPasswordError(false);
+      setPasswordHelperText("");
+
     }
 
     let formData = {
@@ -56,12 +61,19 @@ function FormSignIn() {
       password: password,
     };
 
-    submitLogin(formData);
+    console.log(emailError, passwordError);
+
+    if (emailError === false && passwordError === false) {
+      submitLogin(formData);
+    }
+
   };
 
   const submitLogin = async (formData) => {
+    console.log("submitLogin");
     try {
       const response = await api.post("/auth/login", formData);
+      localStorage.setItem("accessToken", response.data.accessToken);
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -91,6 +103,7 @@ function FormSignIn() {
           label="Email"
           variant="outlined"
           fullWidth
+          value={email}
           helperText={emailHelperText}
           onChange={(e) => setEmail(e.target.value)}
           error={emailError}
@@ -101,6 +114,7 @@ function FormSignIn() {
           type="password"
           autoComplete="current-password"
           fullWidth
+          value={password}
           helperText={passwordHelperText}
           onChange={(e) => setPassword(e.target.value)}
           error={passwordError}
