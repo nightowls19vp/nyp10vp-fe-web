@@ -34,7 +34,7 @@ function FormSignIn() {
 
     if (email === "") {
       setEmailError(true);
-      setEmailHelperText("Vui lòng điền email!")
+      setEmailHelperText("Vui lòng điền email!");
     } else if (!email.match(validEmail)) {
       setEmailError(true);
       setEmailHelperText("Email không hợp lệ!");
@@ -76,6 +76,20 @@ function FormSignIn() {
       console.log(response.data);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const googleLogin = async () => {
+    try {
+      window.open(
+        `http://localhost:3000/api/auth/google-logins/${"http://localhost:8080".replaceAll(
+          "/",
+          "@"
+        )}`,
+        "_self"
+      );
+    } catch (ex) {
+      console.log(ex);
     }
   };
 
@@ -129,7 +143,11 @@ function FormSignIn() {
           {"Quên mật khẩu?"}
         </Link>
         <Divider flexItem> Hoặc </Divider>
-        <CustomButton.ButtonLoginWith variant="outlined" fullWidth>
+        <CustomButton.ButtonLoginWith
+          variant="outlined"
+          fullWidth
+          onClick={googleLogin}
+        >
           <img src={LogoGG} alt="Logo" width={25} />
           <Typography pl={2}> Đăng nhập bằng GG </Typography>
         </CustomButton.ButtonLoginWith>
