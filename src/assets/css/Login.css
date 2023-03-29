@@ -1,5 +1,19 @@
 .login-page {
     width: 100%;
     height: 100vh;
-    background-color: #DBDCFF;
+    background-color: #ffeacc;
+}
+
+.modal-form-signup {
+    height: calc(100vh - 200px);
+    overflow: auto;
+}
+
+#modal-modal-signup::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+  }
+  
+#modal-modal-signup::-webkit-scrollbar-thumb {
+    background-color: #d9d9d9;
 }

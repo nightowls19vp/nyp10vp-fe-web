@@ -13,6 +13,7 @@ import {
   Link,
   Divider,
   Typography,
+  Button,
 } from "@mui/material";
 
 import api from "../../http/http-common";
@@ -34,7 +35,7 @@ function FormSignIn() {
 
     if (email === "") {
       setEmailError(true);
-      setEmailHelperText("Vui lòng điền email!")
+      setEmailHelperText("Vui lòng điền email!");
     } else if (!email.match(validEmail)) {
       setEmailError(true);
       setEmailHelperText("Email không hợp lệ!");
@@ -108,6 +109,7 @@ function FormSignIn() {
           error={emailError}
         />
         <TextField
+          required
           id="outlined-password-input"
           label="Password"
           type="password"
@@ -118,25 +120,25 @@ function FormSignIn() {
           onChange={(e) => setPassword(e.target.value)}
           error={passwordError}
         />
-        <CustomButton.ButtonLogin
+        <CustomButton.Button1
           variant="contained"
           fullWidth
           onClick={handleLogin}
         >
           Đăng nhập
-        </CustomButton.ButtonLogin>
+        </CustomButton.Button1>
         <Link href="#" underline="hover">
           {"Quên mật khẩu?"}
         </Link>
         <Divider flexItem> Hoặc </Divider>
-        <CustomButton.ButtonLoginWith variant="outlined" fullWidth>
+        <Button variant="outlined" fullWidth>
           <img src={LogoGG} alt="Logo" width={25} />
           <Typography pl={2}> Đăng nhập bằng GG </Typography>
-        </CustomButton.ButtonLoginWith>
-        <CustomButton.ButtonLoginWith variant="outlined" fullWidth>
+        </Button>
+        <Button variant="outlined" fullWidth>
           <img src={LogoFB} alt="Logo" width={25} />
           <Typography pl={2}> Đăng nhập bằng FB </Typography>
-        </CustomButton.ButtonLoginWith>
+        </Button>
         <FormSignUp />
       </Stack>
     </Box>

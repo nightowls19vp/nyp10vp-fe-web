@@ -1,14 +1,14 @@
 import { Button, styled } from "@mui/material";
 
-export const ButtonLogin = styled(Button) ({
-  backgroundColor: '#EDDC98',
-  color: '#000000',
+export const Button1 = styled(Button) ({
+  backgroundColor: '#ffaa33',
+  color: '#ffffff',
   '&:hover': {
-    backgroundColor: '#e4cb67',
+    backgroundColor: '#f58f00',
   }
 });
 
-export const ButtonRegister = styled(Button) ({
+export const Button2 = styled(Button) ({
   backgroundColor: '#6750A4',
   color: '#ffffff',
   '&:hover': {
