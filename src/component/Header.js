@@ -1,10 +1,11 @@
-import React from "react";
-
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
   Typography,
   Paper,
+  Box,
   InputBase,
   Divider,
   IconButton,
@@ -12,7 +13,7 @@ import {
   Button,
   Avatar,
 } from "@mui/material";
-
+import routesConfig from "../config/routes.js";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import SearchIcon from "@mui/icons-material/Search";
 import HomeIcon from "@mui/icons-material/Home";
@@ -25,8 +26,16 @@ function Header() {
   return (
     <AppBar>
       <Toolbar>
-        <Typography> Megoo</Typography>
-        <Paper sx={{ p: "2px 4px", display: "flex", alignItems: "center" }}>
+        <Typography flex={2}> Megoo</Typography>
+        <Paper
+          sx={{
+            p: "2px 4px",
+            display: "flex",
+            flex: 2,
+            alignItems: "center",
+            borderRadius: 8,
+          }}
+        >
           <InputBase
             sx={{ ml: 1, flex: 1 }}
             placeholder="Hinted search text"
@@ -37,44 +46,48 @@ function Header() {
             <SearchIcon />
           </IconButton>
         </Paper>
-        <Tooltip title="Home">
-          <IconButton
-            type="button"
-            sx={{ color: "#ffffff", alignItems: "center" }}
-          >
-            <HomeIcon sx={{ fontSize: 40 }} />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Stock">
-          <IconButton
-            type="button"
-            sx={{ color: "#ffffff", alignItems: "center" }}
-          >
-            <WarehouseIcon sx={{ fontSize: 35 }} />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Message">
-          <IconButton
-            type="button"
-            sx={{ color: "#ffffff", alignItems: "center" }}
-          >
-            <MessageIcon sx={{ fontSize: 34 }} />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Shopping">
-          <IconButton
-            type="button"
-            sx={{ color: "#ffffff", alignItems: "center" }}
-          >
-            <ShoppingCartIcon sx={{ fontSize: 35 }} />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Account">
-          <Button>
-            {" "}
-            <Avatar />{" "}
-          </Button>
-        </Tooltip>
+        <Box flex={3} align="end">
+          <Tooltip title="Home">
+            <Link to={routesConfig.login}>
+              <IconButton
+                type="button"
+                sx={{ color: "#ffffff", alignItems: "center" }}
+              >
+                <HomeIcon sx={{ fontSize: 40 }} />
+              </IconButton>
+            </Link>
+          </Tooltip>
+          <Tooltip title="Stock">
+            <IconButton
+              type="button"
+              sx={{ color: "#ffffff", alignItems: "center" }}
+            >
+              <WarehouseIcon sx={{ fontSize: 35 }} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Message">
+            <IconButton
+              type="button"
+              sx={{ color: "#ffffff", alignItems: "center" }}
+            >
+              <MessageIcon sx={{ fontSize: 34 }} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Shopping">
+            <IconButton
+              type="button"
+              sx={{ color: "#ffffff", alignItems: "center" }}
+            >
+              <ShoppingCartIcon sx={{ fontSize: 35 }} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Account">
+            <Button>
+              {" "}
+              <Avatar />{" "}
+            </Button>
+          </Tooltip>
+        </Box>
       </Toolbar>
     </AppBar>
   );

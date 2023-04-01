@@ -1,12 +1,18 @@
-import './App.css'
-
-import Login from './pages/Login.js';
-import Home from './pages/Home.js';
+import { Routes, Route } from 'react-router-dom';
+import { publicRoutes, privateRoutes } from './routes/index.js'
 
 function App() {
   return (
-    <Login />
-    // <Home />
+    <Routes>
+      {publicRoutes.map((route, index) => {
+        const Page = route.component
+        return <Route key={index} path={route.path} element={<Page />} />
+      })}
+      {privateRoutes.map((route, index) => {
+        const Page = route.component
+        return <Route key={index} path={route.path} element={<Page />} />
+      })}
+    </Routes>
   );
 }
 

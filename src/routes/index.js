@@ -1,12 +1,13 @@
 import LoginPage from '../pages/Login.js'
 import HomePage from '../pages/Home.js'
+import routesConfig from '../config/routes.js';
 
 const publicRoutes = [
-    { path: "/", component: HomePage},
+    { path: routesConfig.home, component: HomePage},
 ];
 
 const privateRoutes = [
-    { path: "/login", component: LoginPage},
+    { path: routesConfig.login, component: LoginPage},
 ];
 
 export { publicRoutes, privateRoutes};

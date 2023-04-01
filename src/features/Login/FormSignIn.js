@@ -59,6 +59,7 @@ function FormSignIn() {
       setPasswordError(false);
       checkPass = true;
       setPasswordHelperText("");
+      setPassword("");
     }
 
     let formData = {
