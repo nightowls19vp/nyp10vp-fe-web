@@ -28,6 +28,9 @@ function FormSignIn() {
 
   const handleLogin = () => {
     // e.preventDefault();
+    var checkEmail = false;
+    var checkPass = false;
+
     var validEmail =
       "^(?=.{8,255}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$";
     var validPassword =
@@ -41,6 +44,7 @@ function FormSignIn() {
       setEmailHelperText("Email không hợp lệ!");
     } else {
       setEmailError(false);
+      checkEmail = true;
       setEmailHelperText("");
     }
 
@@ -53,6 +57,7 @@ function FormSignIn() {
       setPassword("");
     } else {
       setPasswordError(false);
+      checkPass = true;
       setPasswordHelperText("");
     }
 
@@ -61,11 +66,9 @@ function FormSignIn() {
       password: password,
     };
 
-    submitLogin(formData);
-
-    // if (emailError === false && passwordError === false) {
-    //   submitLogin(formData);
-    // }
+    if (checkEmail === true && checkPass === true) {
+      submitLogin(formData);
+    }
   };
 
   const submitLogin = async (formData) => {
