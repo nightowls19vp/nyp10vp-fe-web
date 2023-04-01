@@ -9,13 +9,14 @@ function LeftContent() {
       sx={{ display: { xs: "none", sm: "none", md: "flex" } }}
       justifyContent="center"
       alignItems="center"
+      bgcolor={"#ffbf66"}
     >
       <Typography
         variant="h2"
         component="h2"
         p={2}
       >
-        Trang web quản lý nhu yếu phẩm
+        Welcome to Megoo
       </Typography>
     </Box>
   );

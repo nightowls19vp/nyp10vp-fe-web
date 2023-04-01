@@ -10,3 +10,15 @@ export const TextFieldInput = styled(TextField)({
       },
     },
 });
+
+export const TextFieldSearch = styled(TextField)({
+  '& .MuiOutlinedInput-root': {
+    backgroundColor: '#ffffff',
+    '& fieldset': {
+      borderColor: '#ffffff',
+    },
+    '&:hover fieldset': {
+      borderColor: '#ffffff',
+    },
+  },
+});

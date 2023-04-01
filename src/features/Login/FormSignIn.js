@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import "../../assets/css/Login.css";
+import "../../assets/css/index.css";
 import FormSignUp from "./FormSignUp";
 import LogoGG from "../../assets/img/google.png";
 import LogoFB from "../../assets/img/facebook.png";
@@ -85,17 +85,19 @@ function FormSignIn() {
       flex={2}
       sx={{ display: { xs: "flex" } }}
       justifyContent="center"
-      alignItems="start"
+      alignItems="center"
+      bgcolor="#ffffff"
     >
       <Stack
+        id="form-id-signin"
         spacing={2}
-        sx={{ width: { xs: "80%", sm: "70%" } }}
+        sx={{ width: { xs: "80%", sm: "90%" } }}
         p={{ xs: 1, sm: 2, md: 4 }}
-        m={{ xs: 1, sm: 2, md: 5 }}
-        bgcolor="#ffffff"
+        // m={{ xs: 1, sm: 2, md: 5 }}
         justifyContent="center"
         alignItems="center"
         borderRadius={{ xs: 1, sm: 2, md: 5 }}
+        className="form-signin"
       >
         <TextField
           required

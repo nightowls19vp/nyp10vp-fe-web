@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import "../../assets/css/Login.css";
+import "../../assets/css/index.css";
 import LogoGG from "../../assets/img/google.png";
 import LogoFB from "../../assets/img/facebook.png";
 import * as CustomButton from "../../component/custom/CustomButton.js";
@@ -13,9 +13,9 @@ import {
   Stack,
   Divider,
   Container,
+  Button,
 } from "@mui/material";
 
-import "../../assets/css/Login.css";
 import api from "../../http/http-common";
 
 const style = {
@@ -25,7 +25,6 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: { xs: "80%", sm: "60%", md: "40%" },
   height: "calc(100vh - 100px)",
-  // overflow: "auto",
   bgcolor: "background.paper",
   border: "1px solid #000",
   borderRadius: 4,
@@ -44,6 +43,7 @@ export default function FormSignUp() {
   const [phone, setPhone] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [rePassword, setRePassword] = React.useState("");
+  const [date, setDate] = React.useState("");
 
   const [usernameError, setUsernameError] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
@@ -256,6 +256,7 @@ export default function FormSignUp() {
               error={rePasswordError}
               helperText={rePasswordText}
             />
+            <DateTimePicker />
             <CustomButton.Button1
               variant="contained"
               fullWidth
@@ -264,14 +265,14 @@ export default function FormSignUp() {
               Đăng ký
             </CustomButton.Button1>
             <Divider flexItem> Hoặc </Divider>
-            <CustomButton.ButtonLoginWith variant="outlined" fullWidth>
+            <Button variant="outlined" fullWidth>
               <img src={LogoGG} alt="Logo" width={25} />
               <Typography pl={2}> Đăng ký bằng GG </Typography>
-            </CustomButton.ButtonLoginWith>
-            <CustomButton.ButtonLoginWith variant="outlined" fullWidth>
+            </Button>
+            <Button variant="outlined" fullWidth>
               <img src={LogoFB} alt="Logo" width={25} />
               <Typography pl={2}> Đăng ký bằng FB </Typography>
-            </CustomButton.ButtonLoginWith>
+            </Button>
           </Stack>
         </Box>
       </Modal>
