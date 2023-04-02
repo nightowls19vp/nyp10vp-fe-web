@@ -8,7 +8,7 @@ export default function DateTimePicker() {
   
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker value={dateTime} onChange={(e) => setDateTime(e.target.value)} />
+      <DatePicker value={dateTime} onChange={(newValue) => setDateTime(newValue)} />
     </LocalizationProvider>
   );
 }
