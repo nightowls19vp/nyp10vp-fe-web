@@ -5,6 +5,7 @@ import {
   Toolbar,
   Typography,
   Paper,
+  Stack,
   Box,
   InputBase,
   Divider,
@@ -20,13 +21,11 @@ import HomeIcon from "@mui/icons-material/Home";
 import WarehouseIcon from "@mui/icons-material/Warehouse";
 import MessageIcon from "@mui/icons-material/Message";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import "../assets/css/index.css";
-import NavItem from "./Header/NavItem.js";
 
 function Header() {
   const [isActive, setIsActive] = useState(false);
   return (
-    <AppBar position="static">
+    <AppBar position="static" >
       <Toolbar>
         <Typography flex={2}> Megoo</Typography>
         <Paper
@@ -48,14 +47,14 @@ function Header() {
             <SearchIcon />
           </IconButton>
         </Paper>
-        <Box flex={3} align="end">
+        <Stack flex={3} direction="row" justifyContent="end" spacing={2} >
           <Tooltip title="Home" >
-            <NavLink to={routesConfig.home} className={() => setIsActive(true)}>
+            <NavLink to={routesConfig.home} >
               <IconButton
                 type="button"
                 sx={{ color: isActive ? "#000000" : "#ffffff", alignItems: "center" }}
               >
-                <HomeIcon sx={{ fontSize: 40, paddingRight: 2 }} />
+                <HomeIcon sx={{ fontSize: 40 }} />
               </IconButton>
             </NavLink>
           </Tooltip>
@@ -64,7 +63,7 @@ function Header() {
               type="button"
               sx={{ color: "#ffffff", alignItems: "center" }}
             >
-              <WarehouseIcon sx={{ fontSize: 35, paddingRight: 2 }} />
+              <WarehouseIcon sx={{ fontSize: 35 }} />
             </IconButton>
           </Tooltip>
           <Tooltip title="Message">
@@ -72,7 +71,7 @@ function Header() {
               type="button"
               sx={{ color: "#ffffff", alignItems: "center" }}
             >
-              <MessageIcon sx={{ fontSize: 34, paddingRight: 2 }} />
+              <MessageIcon sx={{ fontSize: 34 }} />
             </IconButton>
           </Tooltip>
           <Tooltip title="Shopping">
@@ -80,7 +79,7 @@ function Header() {
               type="button"
               sx={{ color: "#ffffff", alignItems: "center" }}
             >
-              <ShoppingCartIcon sx={{ fontSize: 35, paddingRight: 2 }} />
+              <ShoppingCartIcon sx={{ fontSize: 35 }} />
             </IconButton>
           </Tooltip>
           <Tooltip title="Account">
@@ -89,7 +88,7 @@ function Header() {
               <Avatar />{" "}
             </Button>
           </Tooltip>
-        </Box>
+        </Stack>
       </Toolbar>
     </AppBar>
   );

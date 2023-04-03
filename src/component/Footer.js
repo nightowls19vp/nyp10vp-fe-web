@@ -1,9 +1,9 @@
 import React from "react";
-import { Container } from "@mui/material";
+import { Paper  } from "@mui/material";
 
 function Footer() {
   return (
-    <Container ></Container>
+    <Paper  />
   );
 }
 

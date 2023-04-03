@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-
-import "../assets/css/index.css";
-
 import { Stack } from "@mui/material";
+
 import Welcome from "../features/Login/Welcome";
 import FormSignIn from "../features/Login/FormSignIn";
 
@@ -13,7 +11,7 @@ class Login extends Component {
         justifyContent="center"
         alignItems="center"
         bgcolor={"#ffeacc"}
-        className="page"
+        sx={{ height: "100vh", width: "100%" }}
       >
         <Stack
           direction="row"

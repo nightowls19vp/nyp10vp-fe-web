@@ -2,6 +2,7 @@ import React from "react";
 
 import Header from "../component/Header.js";
 import SiderBar from "../component/Siderbar/SiderBar.js";
+import Footer from "../component/Footer.js";
 import { Grid, Stack } from "@mui/material";
 
 function Home() {
@@ -14,6 +15,7 @@ function Home() {
 
         </div>
       </Grid>
+      <Footer />
     </Stack>
   );
 }

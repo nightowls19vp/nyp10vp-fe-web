@@ -1,4 +1,4 @@
-import { Button, styled } from "@mui/material";
+import { AppBar, Button, TextField, styled } from "@mui/material";
 
 export const Button1 = styled(Button) ({
   backgroundColor: '#ffaa33',
@@ -22,4 +22,15 @@ export const ButtonLoginWith = styled(Button) ({
   '&:hover': {
     borderColor: '#0066ff',
   }
+});
+
+export const TextFieldInput = styled(TextField)({
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: 'red',
+    },
+    '&:hover fieldset': {
+      borderColor: '#005ce6',
+    },
+  },
 });

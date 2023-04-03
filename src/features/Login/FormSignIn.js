@@ -1,11 +1,4 @@
 import React, { useState } from "react";
-
-import "../../assets/css/index.css";
-import FormSignUp from "./FormSignUp";
-import LogoGG from "../../assets/img/google.png";
-import LogoFB from "../../assets/img/facebook.png";
-import * as CustomButton from "../../component/custom/CustomButton.js";
-
 import {
   Box,
   Stack,
@@ -15,6 +8,12 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+
+import "../../assets/css/FormSignIn.scss";
+import FormSignUp from "./FormSignUp";
+import LogoGG from "../../assets/img/google.png";
+import LogoFB from "../../assets/img/facebook.png";
+import * as CustomButton from "../../component/custom/CustomComponents.js";
 
 import api from "../../http/http-common";
 
@@ -87,21 +86,21 @@ function FormSignIn() {
   return (
     <Box
       flex={2}
-      sx={{ display: { xs: "flex" } }}
+      sx={{ display: { xs: "flex" }, flexDirection: "column" }}
       justifyContent="center"
       alignItems="center"
       bgcolor="#ffffff"
     >
       <Stack
-        id="form-id-signin"
+        // id="form-id-signin"
         spacing={2}
         sx={{ width: { xs: "80%", sm: "90%" } }}
         p={{ xs: 1, sm: 2, md: 4 }}
-        // m={{ xs: 1, sm: 2, md: 5 }}
+        // mt={2}
         justifyContent="center"
         alignItems="center"
-        borderRadius={{ xs: 1, sm: 2, md: 5 }}
-        className="form-signin"
+        // borderRadius={{ xs: 1, sm: 2, md: 5 }}
+        // className="form-class-signin"
       >
         <TextField
           required

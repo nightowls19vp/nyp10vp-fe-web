@@ -1,10 +1,4 @@
 import * as React from "react";
-
-import "../../assets/css/index.css";
-import LogoGG from "../../assets/img/google.png";
-import LogoFB from "../../assets/img/facebook.png";
-import * as CustomButton from "../../component/custom/CustomButton.js";
-import DateTimePicker from "../../component/DateTimePicker";
 import {
   Box,
   Modal,
@@ -15,6 +9,12 @@ import {
   Container,
   Button,
 } from "@mui/material";
+
+import '../../assets/css/FormSignUp.scss'
+import LogoGG from "../../assets/img/google.png";
+import LogoFB from "../../assets/img/facebook.png";
+import * as CustomButton from "../../component/custom/CustomComponents.js";
+import DateTimePicker from "../../component/DateTimePicker";
 
 import api from "../../http/http-common";
 
@@ -182,11 +182,11 @@ export default function FormSignUp() {
             Đăng ký
           </Typography>
           <Stack
-            id="modal-modal-signup"
+            id="modalFormSignup"
             mt={2}
             p={2}
             spacing={2}
-            className="modal-form-signup"
+            className="modalModalSignup"
           >
             <TextField
               required
