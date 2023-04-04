@@ -1,15 +1,37 @@
 import React from "react";
-import { Grid, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Stack,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-function Menu({ icon, title, children }) {
+import "../../assets/css/SiderBar.scss";
+
+function Menu({ title, children }) {
+  const [expanded, setExpanded] = React.useState("panel1");
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
   return (
-    <Stack spacing={2} >
-      <Grid display={"flex"} >
-        {icon}
-        <Typography paddingLeft={2}> {title} </Typography>
-      </Grid>
-      {children}
-    </Stack>
+    <Accordion
+      expanded={expanded === "panel1"}
+      onChange={handleChange("panel1")}
+    >
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Typography > {title} </Typography>
+      </AccordionSummary>
+      <AccordionDetails>{children}</AccordionDetails>
+    </Accordion>
   );
 }
 

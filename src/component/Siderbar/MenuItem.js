@@ -1,12 +1,15 @@
 import React from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, Button } from "@mui/material";
 
-function MenuItem({ icon, title }) {
+function MenuItem({ title }) {
   return (
-    <Grid display={"flex"} pl={2} >
-      {icon}
-      <Typography paddingLeft={2}> {title} </Typography>
-    </Grid>
+    <Button
+      type="button"
+      sx={{ color: "#000000", alignItems: "center" }}
+      fullWidth
+    >
+      <Typography> {title} </Typography>
+    </Button>
   );
 }
 

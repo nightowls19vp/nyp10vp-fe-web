@@ -3,6 +3,7 @@ import React from "react";
 import Header from "../component/Header.js";
 import SiderBar from "../component/Siderbar/SiderBar.js";
 import Footer from "../component/Footer.js";
+import ListItem from "../component/Siderbar/list.js"
 import { Grid, Stack } from "@mui/material";
 
 function Home() {
@@ -10,10 +11,8 @@ function Home() {
     <Stack>
       <Header/>
       <Grid display={"flex"}>
-        <SiderBar/>
-        <div>
-
-        </div>
+        <SiderBar />
+        {/* <ListItem /> */}
       </Grid>
       <Footer />
     </Stack>

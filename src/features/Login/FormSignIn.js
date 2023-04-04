@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Stack,
@@ -24,6 +25,8 @@ function FormSignIn() {
   const [emailHelperText, setEmailHelperText] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [passwordHelperText, setPasswordHelperText] = useState("");
+
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     // e.preventDefault();
@@ -77,9 +80,13 @@ function FormSignIn() {
         withCredentials: true,
       });
       localStorage.setItem("accessToken", response.data.accessToken);
-      console.log(response.data);
+      if (response.data.statusCode === 200) {
+        navigate('/');
+      } 
     } catch (error) {
-      console.log(error);
+      setEmailError(true)
+      setPasswordError(true)
+      setPasswordHelperText("username hoặc mật khẩu không đúng!")
     }
   };
 
