@@ -145,7 +145,7 @@ export default function FormSignUp() {
       username: username,
       password: password,
       name: name,
-      dob: "2023-03-28T08:53:37.727Z",
+      dob: date,
       phone: phone,
       email: email,
     };
@@ -161,6 +161,10 @@ export default function FormSignUp() {
       console.log(error);
     }
   };
+
+  const handleDateTimePicker = (dateValue) => {
+    setDate(dateValue);
+  }
 
   return (
     <Container disableGutters maxWidth={false}>
@@ -256,7 +260,7 @@ export default function FormSignUp() {
               error={rePasswordError}
               helperText={rePasswordText}
             />
-            <DateTimePicker />
+            <DateTimePicker handleDateTimePicker={handleDateTimePicker} />
             <CustomButton.Button1
               variant="contained"
               fullWidth

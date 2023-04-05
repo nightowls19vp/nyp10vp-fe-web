@@ -1,13 +1,13 @@
 import React from "react";
 import { Box, Grid, Stack, Typography, Button } from "@mui/material";
 
-import LogoFB from "../assets/img/facebook.png";
-import LogoIns from "../assets/img/instagram.png";
-import { MoMoIcon, ATMIcon } from "../assets/icons";
+import LogoFB from "../../assets/img/facebook.png";
+import LogoIns from "../../assets/img/instagram.png";
+import { MoMoIcon, ATMIcon } from "../../assets/icons";
 
 function Footer() {
   return (
-    <Box bgcolor={"#FFC26B"} sx={{ width: "100%" }}>
+    <Box bgcolor={"#F58F00"} sx={{ width: "100%" }} color={"#ffffff"}>
       <Grid
         container
         direction="row"

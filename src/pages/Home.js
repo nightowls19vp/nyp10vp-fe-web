@@ -1,9 +1,8 @@
 import React from "react";
 
-import Header from "../component/Header.js";
-import SiderBar from "../component/Siderbar/SiderBar.js";
-import Footer from "../component/Footer.js";
-import ListItem from "../component/Siderbar/list.js"
+import Header from "../component/header/Header.js";
+import Footer from "../component/footer/Footer.js";
+import SideBar from "../component/sidebar/Sidebar.js";
 import { Grid, Stack } from "@mui/material";
 
 function Home() {
@@ -11,8 +10,7 @@ function Home() {
     <Stack>
       <Header/>
       <Grid display={"flex"}>
-        <SiderBar />
-        {/* <ListItem /> */}
+        <SideBar />
       </Grid>
       <Footer />
     </Stack>
