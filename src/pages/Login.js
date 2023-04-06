@@ -16,7 +16,7 @@ class Login extends Component {
         <Stack
           direction="row"
           className="login-page"
-          sx={{ height: "calc(100vh - 20%)", width: { xs: "80%", sm: "60%" } }}
+          sx={{ width: { xs: "80%", sm: "60%" } }}
         >
           <Welcome />
           <FormSignIn />

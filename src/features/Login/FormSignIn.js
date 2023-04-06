@@ -33,17 +33,9 @@ function FormSignIn() {
     var checkEmail = false;
     var checkPass = false;
 
-    var validEmail =
-      "^(?=.{8,255}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$";
-    var validPassword =
-      "^(?=[.\\S]*[A-Z][.\\S]*)(?=[.\\S]*[0-9][.\\S]*)(?=[.\\S]*[a-z][.\\S]*)[.\\S]{8,255}$";
-
     if (email === "") {
       setEmailError(true);
       setEmailHelperText("Vui lòng điền email!");
-    } else if (!email.match(validEmail)) {
-      setEmailError(true);
-      setEmailHelperText("Email không hợp lệ!");
     } else {
       setEmailError(false);
       checkEmail = true;
@@ -53,10 +45,6 @@ function FormSignIn() {
     if (password === "") {
       setPasswordError(true);
       setPasswordHelperText("Vui lòng điền mật khẩu!");
-    } else if (!password.match(validPassword)) {
-      setPasswordError(true);
-      setPasswordHelperText("Mật khẩu không hợp lệ!");
-      setPassword("");
     } else {
       setPasswordError(false);
       checkPass = true;
@@ -81,12 +69,12 @@ function FormSignIn() {
       });
       localStorage.setItem("accessToken", response.data.accessToken);
       if (response.data.statusCode === 200) {
-        navigate('/');
-      } 
+        navigate("/");
+      }
     } catch (error) {
-      setEmailError(true)
-      setPasswordError(true)
-      setPasswordHelperText("username hoặc mật khẩu không đúng!")
+      setEmailError(true);
+      setPasswordError(true);
+      setPasswordHelperText("username hoặc mật khẩu không đúng!");
     }
   };
 
@@ -99,20 +87,19 @@ function FormSignIn() {
       bgcolor="#ffffff"
     >
       <Stack
-        // id="form-id-signin"
+        id="form-id-signin"
         spacing={2}
         sx={{ width: { xs: "80%", sm: "90%" } }}
-        p={{ xs: 1, sm: 2, md: 4 }}
-        // mt={2}
-        justifyContent="center"
+        p={2}
+        mt={2}
+        mb={2}
         alignItems="center"
-        // borderRadius={{ xs: 1, sm: 2, md: 5 }}
-        // className="form-class-signin"
+        className="form-class-signin"
       >
         <TextField
           required
-          id="outlined-required"
-          label="Email"
+          id="outlined-required-username"
+          label="Username"
           variant="outlined"
           fullWidth
           value={email}
