@@ -6,14 +6,16 @@ import {
   Typography,
 } from "@mui/material";
 
+import { Colors } from "../../config/Colors";
+
 function SidebarItem({ item }) {
   const [isOpen, setIsOpen] = useState(false);
-
+  
   return (
     <>
       <ListItemButton
         sx={{
-          "&: hover": { backgroundColor: "#ffd599" },
+          "&: hover": { backgroundColor: Colors.gray },
         }}
         onClick={() => setIsOpen(!isOpen)}
       >

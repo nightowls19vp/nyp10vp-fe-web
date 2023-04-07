@@ -59,6 +59,10 @@ export default function FormSignUp() {
   const [passwordText, setPasswordText] = React.useState("");
   const [rePasswordText, setRePasswordText] = React.useState("");
 
+  const handleDateTimePicker = (dateValue) => {
+    setDate(dateValue);
+  }
+
   const handleValidation = () => {
     var validUsername =
       "^(?=.{8,255}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$";
@@ -137,7 +141,6 @@ export default function FormSignUp() {
   };
 
   const handleRegister = () => {
-    //
 
     handleValidation();
 
@@ -161,10 +164,6 @@ export default function FormSignUp() {
       console.log(error);
     }
   };
-
-  const handleDateTimePicker = (dateValue) => {
-    setDate(dateValue);
-  }
 
   return (
     <Container disableGutters maxWidth={false}>

@@ -10,6 +10,7 @@ import {
 import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
 
 import SidebarItem from "./SidebarItem";
+import { Colors } from "../../config/Colors";
 
 function SidebarItemCollapse({ item }) {
   const [open, setOpen] = useState(item.status);
@@ -17,21 +18,32 @@ function SidebarItemCollapse({ item }) {
     <>
       <ListItemButton
         sx={{
-          backgroundColor: "#CC7700",
-          color: "#ffffff",
+          // backgroundColor: "#CC7700",
           "&: hover": {
-            backgroundColor: "#995900",
+            backgroundColor: Colors.gray,
           },
         }}
         onClick={() => setOpen(!open)}
       >
-        <ListItemIcon sx={{ color: "#ffffff" }}>
+        <ListItemIcon
+          sx={{
+            color: open ? Colors.textPrimary : Colors.text,
+            fontWeight: open ? 600 : null,
+          }}
+        >
           {item.icon && item.icon}
         </ListItemIcon>
         <ListItemText>
-          <Typography>{item.title}</Typography>
+          <Typography
+            sx={{
+              color: open ? Colors.textPrimary : Colors.text,
+              fontWeight: open ? 600 : null,
+            }}
+          >
+            {item.title}
+          </Typography>
         </ListItemText>
-        {open ? <ExpandLessOutlined /> : <ExpandMoreOutlined />}
+        {open ? <ExpandLessOutlined sx={{ color: Colors.textPrimary }} /> : <ExpandMoreOutlined />}
       </ListItemButton>
       <Collapse in={open} timeout="auto">
         <List sx={{ paddingLeft: 2.5 }}>
