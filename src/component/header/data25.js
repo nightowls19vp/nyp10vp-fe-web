@@ -13,7 +13,7 @@ import {
 import routesConfig from "../../config/routes";
 import { Colors } from "../../config/Colors";
 
-export const dataHeader = [
+export const dataHeader1 = [
   {
     id: 1,
     title: "home",

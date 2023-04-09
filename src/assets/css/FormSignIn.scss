@@ -1,3 +1,10 @@
+.page-sigin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .form-class-signin {
     height: calc(100vh - 20%);
     overflow: auto;

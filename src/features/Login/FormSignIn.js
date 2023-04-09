@@ -15,6 +15,7 @@ import FormSignUp from "./FormSignUp";
 import LogoGG from "../../assets/img/google.png";
 import LogoFB from "../../assets/img/facebook.png";
 import * as CustomButton from "../../component/custom/CustomComponents.js";
+import { Colors } from "../../config/Colors";
 
 import api from "../../http/http-common";
 
@@ -28,8 +29,8 @@ function FormSignIn() {
 
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // e.preventDefault();
+  const handleLogin = (e) => {
+    e.preventDefault();
     var checkEmail = false;
     var checkPass = false;
 
@@ -81,10 +82,9 @@ function FormSignIn() {
   return (
     <Box
       flex={2}
-      sx={{ display: { xs: "flex" }, flexDirection: "column" }}
-      justifyContent="center"
-      alignItems="center"
-      bgcolor="#ffffff"
+      sx={{ display: { xs: "flex" } }}
+      bgcolor={Colors.background}
+      className="page-sigin"
     >
       <Stack
         id="form-id-signin"

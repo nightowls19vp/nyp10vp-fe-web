@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -14,35 +13,25 @@ import {
   Avatar,
   Box,
   Autocomplete,
-  TextField,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
-import {
-  MdHome,
-  MdOutlineHome,
-  MdInventory2,
-  MdOutlineInventory2,
-  MdPersonAddAlt1,
-  MdPersonAddAlt,
-  MdChat,
-  MdOutlineChat,
-  MdShoppingCart,
-  MdOutlineShoppingCart,
-} from "react-icons/md";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { AiOutlineBars } from "react-icons/ai";
 
-import routesConfig from "../../config/routes.js";
+import '../../assets/css/Header.scss';
 import { Colors } from "../../config/Colors.js";
 import MenuItem from "./MenuItem.js";
-import { dataHeader } from "./dataHeader.js";
+import MenuItemRow from "./MenuItemRow.js";
+import { dataHeader1 } from "./data25.js";
+import { dataHeader2 } from "./data35.js";
 
-const top100Films = [];
+const topSearch = [];
 
-function Header() {
+function Header({ handleBars }) {
   const [path, setPath] = useState(null);
-
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [isOpenBars, setIsOpenBars] = React.useState(true);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -55,6 +44,11 @@ function Header() {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
+  const handleHeaderBars = () => {
+    setIsOpenBars(!isOpenBars);
+    handleBars(isOpenBars);
+  }
+
   useEffect(() => {
     setPath(window.location.pathname);
   }, []);
@@ -64,34 +58,36 @@ function Header() {
       position="static"
       sx={{
         backgroundColor: Colors.background,
-        zIndex: 1100,
-        padding: 0,
-        margin: 0,
-        width: "100%",
       }}
+      className="header"
     >
       <Toolbar>
-        <Typography flex={1} sx={{ color: Colors.primary, fontWeight: 600 }}>
-          Megoo
-        </Typography>
+        <Stack
+          flex={{ xs: 2, sm: 1 }}
+          className="app-bar"
+        >
+          <Box display={{ xs: "block", sm: "none" }} >
+            <IconButton
+              onClick={handleHeaderBars}
+            >
+              <AiOutlineBars />
+            </IconButton>
+          </Box>
+          <Typography sx={{ color: Colors.primary, fontWeight: 600 }}>
+            Megoo
+          </Typography>
+        </Stack>
         <Box
-          flex={2}
+          flex={{ xs: 3, sm: 2 }}
           sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-            borderRadius: "15px",
             backgroundColor: Colors.search,
-            "&: hover": {
-              borderStyle: "solid",
-              borderColor: "rgba(22, 24, 35, 0.2)",
-            },
           }}
+          className="search-bar"
         >
           <Autocomplete
             disablePortal
             id="combo-box-demo"
-            options={top100Films}
+            options={topSearch}
             fullWidth
             renderInput={(params) => (
               <InputBase
@@ -104,10 +100,6 @@ function Header() {
               />
             )}
           />
-          {/* <InputBase
-            sx={{ ml: 1, flex: 1, color: Colors.text }}
-            placeholder="Hinted search text"
-          /> */}
           <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
           <IconButton
             type="button"
@@ -135,12 +127,8 @@ function Header() {
               horizontal: "left",
             }}
           >
-            <Stack
-              direction="row"
-              justifyContent={"center"}
-              alignItems={"center"}
-            >
-              {dataHeader.map((data, index) => (
+            <Stack direction="column">
+              {dataHeader1.map((data, index) => (
                 <MenuItem item={data} key={index} path={path} />
               ))}
               <Tooltip title="Account">
@@ -156,89 +144,13 @@ function Header() {
           sx={{ display: { xs: "none", sm: "flex" } }}
           direction="row"
           justifyContent="end"
-          spacing={{ xs: "5px", sm: "10px", md: "15px" }}
           alignItems="center"
+          spacing={{ xs: "5px", sm: "10px", md: "15px" }}
+          className="nav-bar"
         >
-          <Tooltip title="Home">
-            <IconButton
-              type="button"
-              sx={{
-                alignItems: "center",
-              }}
-            >
-              <NavLink to={routesConfig.home}>
-                {path === routesConfig.home ? (
-                  <MdHome size={35} color={Colors.primary} />
-                ) : (
-                  <MdOutlineHome size={35} color={Colors.icon} />
-                )}
-              </NavLink>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Package">
-            <IconButton
-              type="button"
-              sx={{
-                alignItems: "center",
-              }}
-            >
-              <NavLink to="#">
-                {path === "#" ? (
-                  <MdPersonAddAlt1 size={35} color={Colors.primary} />
-                ) : (
-                  <MdPersonAddAlt size={35} color={Colors.icon} />
-                )}
-              </NavLink>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Stock">
-            <IconButton
-              type="button"
-              sx={{
-                alignItems: "center",
-              }}
-            >
-              <NavLink to={routesConfig.stock}>
-                {path === routesConfig.stock ? (
-                  <MdInventory2 size={35} color={Colors.primary} />
-                ) : (
-                  <MdOutlineInventory2 size={35} color={Colors.icon} />
-                )}
-              </NavLink>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Message">
-            <IconButton
-              type="button"
-              sx={{
-                alignItems: "center",
-              }}
-            >
-              <NavLink to={"#"}>
-                {path === "#" ? (
-                  <MdChat size={35} color={Colors.primary} />
-                ) : (
-                  <MdOutlineChat size={35} color={Colors.icon} />
-                )}
-              </NavLink>
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Shopping">
-            <IconButton
-              type="button"
-              sx={{
-                alignItems: "center",
-              }}
-            >
-              <NavLink to={"#"}>
-                {path === "#" ? (
-                  <MdShoppingCart size={35} color={Colors.primary} />
-                ) : (
-                  <MdOutlineShoppingCart size={35} color={Colors.icon} />
-                )}
-              </NavLink>
-            </IconButton>
-          </Tooltip>
+          {dataHeader2.map((data, index) => (
+            <MenuItemRow item={data} key={index} path={path} />
+          ))}
           <Tooltip title="Account">
             <Button>
               <Avatar sizes="35" />
