@@ -74,6 +74,21 @@ function FormSignIn() {
     }
   };
 
+
+  const googleLogin = async () => {
+    try {
+      window.open(
+        `http://localhost:3000/api/auth/oauth2/google/${"http://localhost:8080".replaceAll(
+          "/",
+          "@"
+        )}`,
+        "_self"
+      );
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
   const submitLogin = async (formData) => {
     try {
       const response = await api.post("/auth/login", formData, {
@@ -143,7 +158,7 @@ function FormSignIn() {
           {"Quên mật khẩu?"}
         </Link>
         <Divider flexItem> Hoặc </Divider>
-        <Button variant="outlined" fullWidth>
+        <Button variant="outlined" fullWidth onClick={googleLogin}>
           <img src={LogoGG} alt="Logo" width={25} />
           <Typography pl={2}> Đăng nhập bằng GG </Typography>
         </Button>

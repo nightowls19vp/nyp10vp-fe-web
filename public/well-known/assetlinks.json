@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.example.nyp19vp_mb",
+      "sha256_cert_fingerprints": [
+        "C0:0B:93:7A:81:71:1F:B8:8E:F0:D2:D3:E9:12:B7:91:81:E9:F0:35:E4:D0:F6:C8:32:3F:E0:C9:72:E9:E4:0D"
+      ]
+    }
+  }
+]
