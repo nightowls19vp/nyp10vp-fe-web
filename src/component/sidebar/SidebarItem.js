@@ -9,22 +9,24 @@ import {
 import { Colors } from "../../config/Colors";
 
 function SidebarItem({ item }) {
-  const [isOpen, setIsOpen] = useState(false);
-  
+  const [selectedIdx, setSelectedIdx] = useState(1);
   return (
     <>
       <ListItemButton
         sx={{
           "&: hover": { backgroundColor: Colors.gray },
         }}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setSelectedIdx(item.id)}
       >
-        <ListItemIcon sx={{ color: isOpen ? "#e60000" : null }}>
+        <ListItemIcon sx={{ color: selectedIdx === item.id ? Colors.itemSidebar : null }}>
           {item.icon && item.icon}
         </ListItemIcon>
         <ListItemText>
           <Typography
-            sx={{ color: isOpen ? "#e60000" : null, fontWeight: isOpen ? 800 : null }}
+            sx={{
+              color: selectedIdx === item.id ? Colors.itemSidebar : null,
+              fontWeight: selectedIdx === item.id ? 800 : null,
+            }}
           >
             {item.name}
           </Typography>

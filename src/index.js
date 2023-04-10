@@ -9,16 +9,19 @@ import { ThemeProvider } from "@mui/material";
 import { customTheme } from "./component/custom/customTheme";
 
 import { Provider } from "react-redux";
-import store from "./redux/store";
+import { store, persistor } from "./redux/store";
+import { PersistGate } from 'redux-persist/integration/react'
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
     <BrowserRouter>
       <ThemeProvider theme={customTheme}>
         <App />
       </ThemeProvider>
     </BrowserRouter>
+    </PersistGate>
   </Provider>
 );
 

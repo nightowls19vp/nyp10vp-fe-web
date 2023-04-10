@@ -1,0 +1,19 @@
+.content {
+    display: flex;
+    flex-direction: row;
+}
+
+.form-personal-infor {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+}
+
+.btn-save {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    padding-right: 5%;
+}

@@ -1,26 +1,23 @@
 import { Button, TextField, styled } from "@mui/material";
 
+import { Colors } from "../../config/Colors";
+
 export const Button1 = styled(Button) ({
-  backgroundColor: '#ffaa33',
-  color: '#ffffff',
+  backgroundColor: Colors.btnFill,
+  color: Colors.background,
   '&:hover': {
-    backgroundColor: '#f58f00',
+    backgroundColor: Colors.primary,
   }
 });
 
 export const Button2 = styled(Button) ({
-  backgroundColor: '#6750A4',
-  color: '#ffffff',
+  backgroundColor: Colors.background,
+  border: "1px solid",
+  borderColor: Colors.btnFill,
+  color: Colors.btnFill,
   '&:hover': {
-    backgroundColor: '#403267',
-  }
-});
-
-export const ButtonLoginWith = styled(Button) ({
-  backgroundColor: '#ffffff',
-  color: '#000000',
-  '&:hover': {
-    borderColor: '#0066ff',
+    backgroundColor: Colors.btnOutline,
+    border: "2px solid",
   }
 });
 

@@ -19,7 +19,7 @@ import { Colors } from "../../config/Colors";
 
 // import api from "../../http/http-common";
 import { loginUser } from "../../redux/authRequest";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function FormSignIn() {
   const [email, setEmail] = useState("");
@@ -62,26 +62,23 @@ function FormSignIn() {
     };
 
     if (checkEmail === true && checkPass === true) {
-      // submitLogin(formData);
       loginUser(formData, dispatch, navigate);
     }
   };
 
-  // const submitLogin = async (formData) => {
-  //   try {
-  //     const response = await api.post("/auth/login", formData, {
-  //       withCredentials: true,
-  //     });
-  //     localStorage.setItem("accessToken", response.data.accessToken);
-  //     if (response.data.statusCode === 200) {
-  //       navigate("/");
-  //     }
-  //   } catch (error) {
-  //     setEmailError(true);
-  //     setPasswordError(true);
-  //     setPasswordHelperText("username hoặc mật khẩu không đúng!");
-  //   }
-  // };
+  const googleLogin = async () => {
+    try {
+      window.open(
+        `http://localhost:3000/api/auth/oauth2/google/${"http://localhost:8080".replaceAll(
+          "/",
+          "@"
+        )}`,
+        "_self"
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Box
@@ -134,7 +131,7 @@ function FormSignIn() {
           {"Quên mật khẩu?"}
         </Link>
         <Divider flexItem> Hoặc </Divider>
-        <Button variant="outlined" fullWidth>
+        <Button variant="outlined" fullWidth onClick={googleLogin}>
           <img src={LogoGG} alt="Logo" width={25} />
           <Typography pl={2}> Đăng nhập bằng GG </Typography>
         </Button>

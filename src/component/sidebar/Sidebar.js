@@ -20,7 +20,7 @@ function SideBar({ status, data }) {
           route.child ? (
             <SidebarItemCollapse item={route} key={index} />
           ) : (
-            <SidebarItem item={route} />
+            <SidebarItem item={route} key={index} />
           )
         ) : null
       )}

@@ -7,4 +7,7 @@ export const Colors = {
     gray: "#bfbfbf",
     search: "#F0F2F5",
     icon: "#666666",
+    itemSidebar: "#002699",
+    btnFill: "#FFAA33",
+    btnOutline: "#ffeacc",
 };
