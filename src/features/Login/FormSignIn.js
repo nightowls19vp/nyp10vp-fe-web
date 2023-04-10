@@ -17,7 +17,9 @@ import LogoFB from "../../assets/img/facebook.png";
 import * as CustomButton from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 
-import api from "../../http/http-common";
+// import api from "../../http/http-common";
+import { loginUser } from "../../redux/authRequest";
+import { useDispatch } from "react-redux";
 
 function FormSignIn() {
   const [email, setEmail] = useState("");
@@ -27,6 +29,7 @@ function FormSignIn() {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordHelperText, setPasswordHelperText] = useState("");
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
@@ -59,25 +62,26 @@ function FormSignIn() {
     };
 
     if (checkEmail === true && checkPass === true) {
-      submitLogin(formData);
+      // submitLogin(formData);
+      loginUser(formData, dispatch, navigate);
     }
   };
 
-  const submitLogin = async (formData) => {
-    try {
-      const response = await api.post("/auth/login", formData, {
-        withCredentials: true,
-      });
-      localStorage.setItem("accessToken", response.data.accessToken);
-      if (response.data.statusCode === 200) {
-        navigate("/");
-      }
-    } catch (error) {
-      setEmailError(true);
-      setPasswordError(true);
-      setPasswordHelperText("username hoặc mật khẩu không đúng!");
-    }
-  };
+  // const submitLogin = async (formData) => {
+  //   try {
+  //     const response = await api.post("/auth/login", formData, {
+  //       withCredentials: true,
+  //     });
+  //     localStorage.setItem("accessToken", response.data.accessToken);
+  //     if (response.data.statusCode === 200) {
+  //       navigate("/");
+  //     }
+  //   } catch (error) {
+  //     setEmailError(true);
+  //     setPasswordError(true);
+  //     setPasswordHelperText("username hoặc mật khẩu không đúng!");
+  //   }
+  // };
 
   return (
     <Box

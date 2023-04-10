@@ -8,15 +8,18 @@ import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider } from "@mui/material";
 import { customTheme } from "./component/custom/customTheme";
 
+import { Provider } from "react-redux";
+import store from "./redux/store";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <BrowserRouter>
       <ThemeProvider theme={customTheme}>
         <App />
       </ThemeProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
