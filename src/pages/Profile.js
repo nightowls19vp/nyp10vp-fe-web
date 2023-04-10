@@ -4,9 +4,9 @@ import { Grid, Stack } from "@mui/material";
 import HeaderComponent from "../component/header/Header.js";
 import FooterComponent from "../component/footer/Footer.js";
 import SideBarComponent from "../component/sidebar/Sidebar.js";
-import dataPackage from "../component/sidebar/data/dataPackage.js";
+import dataProfile from "../component/sidebar/data/profile.js"
 
-function Stock() {
+function Profile() {
   const [openSidebar, setOpenSidebar] = useState(null);
   const handleBars = (isOpenBars) => {
     setOpenSidebar(isOpenBars);
@@ -15,11 +15,11 @@ function Stock() {
     <Stack>
       <HeaderComponent handleBars={handleBars} />
       <Grid display={"flex"}>
-        <SideBarComponent status={openSidebar} data={dataPackage} />
+        <SideBarComponent status={openSidebar} data={dataProfile} />
       </Grid>
       <FooterComponent />
     </Stack>
   );
 }
 
-export default Stock;
+export default Profile;

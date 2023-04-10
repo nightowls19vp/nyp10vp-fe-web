@@ -15,16 +15,16 @@ import {
   Autocomplete,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { AiOutlineBars } from "react-icons/ai";
+import { NavLink } from "react-router-dom";
 
-import '../../assets/css/Header.scss';
+import "../../assets/css/Header.scss";
 import { Colors } from "../../config/Colors.js";
+import routesConfig from "../../config/routes.js";
+import { dataHeader1, dataHeader2 } from "./data";
 import MenuItem from "./MenuItem.js";
 import MenuItemRow from "./MenuItemRow.js";
-import { dataHeader1 } from "./data25.js";
-import { dataHeader2 } from "./data35.js";
 
 const topSearch = [];
 
@@ -47,7 +47,7 @@ function Header({ handleBars }) {
   const handleHeaderBars = () => {
     setIsOpenBars(!isOpenBars);
     handleBars(isOpenBars);
-  }
+  };
 
   useEffect(() => {
     setPath(window.location.pathname);
@@ -62,14 +62,9 @@ function Header({ handleBars }) {
       className="header"
     >
       <Toolbar>
-        <Stack
-          flex={{ xs: 2, sm: 1 }}
-          className="app-bar"
-        >
-          <Box display={{ xs: "block", sm: "none" }} >
-            <IconButton
-              onClick={handleHeaderBars}
-            >
+        <Stack flex={{ xs: 2, sm: 1 }} className="app-bar">
+          <Box display={{ xs: "block", sm: "none" }}>
+            <IconButton onClick={handleHeaderBars}>
               <AiOutlineBars />
             </IconButton>
           </Box>
@@ -153,7 +148,9 @@ function Header({ handleBars }) {
           ))}
           <Tooltip title="Account">
             <Button>
-              <Avatar sizes="35" />
+              <NavLink to={routesConfig.profile}>
+                <Avatar sizes="35" />
+              </NavLink>
             </Button>
           </Tooltip>
         </Stack>

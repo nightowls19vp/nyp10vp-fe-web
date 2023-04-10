@@ -1,13 +1,12 @@
 import React from "react";
 import { List } from "@mui/material";
 
-import dataPackage from "./dataPackage.js";
 import SidebarItemCollapse from "./SidebarItemCollapse.js";
 import SidebarItem from "./SidebarItem.js";
 import { Colors } from "../../config/Colors.js";
 
-function SideBar({ status }) {
-  const dataSidebar = dataPackage;
+function SideBar({ status, data }) {
+  const dataSidebar = data;
 
   return (
     <List
