@@ -43,13 +43,21 @@ function SidebarItemCollapse({ item }) {
             {item.title}
           </Typography>
         </ListItemText>
-        {open ? <ExpandLessOutlined sx={{ color: Colors.textPrimary }} /> : <ExpandMoreOutlined />}
+        {open ? (
+          <ExpandLessOutlined sx={{ color: Colors.textPrimary }} />
+        ) : (
+          <ExpandMoreOutlined />
+        )}
       </ListItemButton>
       <Collapse in={open} timeout="auto">
         <List sx={{ paddingLeft: 2.5 }}>
-          {item.child.map((pack, index) => (
-            <SidebarItem item={pack} key={index} />
-          ))}
+          {item.child?.map((route, index) =>
+            route.child ? (
+              <SidebarItemCollapse item={route} key={index} />
+            ) : (
+              <SidebarItem item={route} />
+            )
+          )}
         </List>
       </Collapse>
     </>
