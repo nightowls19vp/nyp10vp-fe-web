@@ -3,46 +3,44 @@ import { BsEnvelopePaper } from "react-icons/bs";
 
 const dataPackage = [
   {
-    id: 1,
     icon: <TbPackages />,
     title: "CÁC GÓI NGƯỜI DÙNG",
     status: true,
     child: [
       {
-        id: 11,
+        id: 1,
         icon: <TbPackage />,
         name: "Gói 1",
       },
       {
-        id: 12,
+        id: 2,
         icon: <TbPackage />,
         name: "Gói 2",
       },
       {
-        id: 13,
+        id: 3,
         icon: <TbPackage />,
         name: "Gói 3",
       },
     ],
   },
   {
-    id: 2,
     icon: <TbShoppingBag />,
     title: "CÁC TIỆN ÍCH",
     status: false,
     child: [
       {
-        id: 21,
+        id: 4,
         icon: <BsEnvelopePaper />,
         name: "Tiện ích 1",
       },
       {
-        id: 22,
+        id: 5,
         icon: <BsEnvelopePaper />,
         name: "Tiện ích 2",
       },
       {
-        id: 23,
+        id: 6,
         icon: <BsEnvelopePaper />,
         name: "Tiện ích 3",
       },

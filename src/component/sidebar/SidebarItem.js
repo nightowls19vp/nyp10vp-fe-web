@@ -10,6 +10,7 @@ import { Colors } from "../../config/Colors";
 
 function SidebarItem({ item }) {
   const [selectedIdx, setSelectedIdx] = useState(1);
+
   return (
     <>
       <ListItemButton

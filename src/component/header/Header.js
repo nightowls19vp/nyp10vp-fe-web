@@ -17,7 +17,9 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { AiOutlineBars } from "react-icons/ai";
-import { NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import jwtDecode from "jwt-decode";
+import { useSelector } from "react-redux";
 
 import "../../assets/css/Header.scss";
 import { Colors } from "../../config/Colors.js";
@@ -33,6 +35,9 @@ function Header({ handleBars }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isOpenBars, setIsOpenBars] = React.useState(true);
 
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  const navigate = useNavigate();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -47,6 +52,12 @@ function Header({ handleBars }) {
   const handleHeaderBars = () => {
     setIsOpenBars(!isOpenBars);
     handleBars(isOpenBars);
+  };
+
+  const handleAvatar = () => {
+    if (!user) {
+      navigate("/login");
+    }
   };
 
   useEffect(() => {
@@ -127,8 +138,10 @@ function Header({ handleBars }) {
                 <MenuItem item={data} key={index} path={path} />
               ))}
               <Tooltip title="Account">
-                <IconButton>
-                  <Avatar sx={{ width: 25, height: 25 }} />
+                <IconButton onClick={handleAvatar}>
+                  <NavLink to={routesConfig.profile} className="avatar">
+                    <Avatar sx={{ width: "27px", height: "27px" }} className="avatarActive" />
+                  </NavLink>
                 </IconButton>
               </Tooltip>
             </Stack>
@@ -147,9 +160,9 @@ function Header({ handleBars }) {
             <MenuItemRow item={data} key={index} path={path} />
           ))}
           <Tooltip title="Account">
-            <Button>
-              <NavLink to={routesConfig.profile}>
-                <Avatar sizes="35" />
+            <Button onClick={handleAvatar}>
+              <NavLink to={routesConfig.profile} className="avatar">
+                <Avatar sizes="35" className="avatarActive" />
               </NavLink>
             </Button>
           </Tooltip>

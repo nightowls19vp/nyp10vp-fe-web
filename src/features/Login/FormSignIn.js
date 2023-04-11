@@ -17,9 +17,8 @@ import LogoFB from "../../assets/img/facebook.png";
 import * as CustomButton from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 
-// import api from "../../http/http-common";
 import { loginUser } from "../../redux/authRequest";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 function FormSignIn() {
   const [email, setEmail] = useState("");

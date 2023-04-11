@@ -4,10 +4,10 @@ import ImgAvatar from "../../assets/img/user.png";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import "../../assets/css/Content.scss";
 
-function PersonalInformation({ info }) {
+function PersonalInformation({ status }) {
   const [image, setImage] = useState(ImgAvatar);
   return (
-    <Stack direction="column" >
+    <Stack direction="column" sx={{ display: { xs: status ? "none": "block", sm: "block" }, }} >
       <Stack
         direction="row"
         justifyContent="center"
@@ -19,7 +19,8 @@ function PersonalInformation({ info }) {
         <Box>
           <Grid className="form-personal-infor">
             <Typography p={2}> Họ & tên </Typography>
-            <TextField id="name" variant="outlined" defaultValue={info.username} />
+            <TextField id="name" variant="outlined" />
+            {/* <TextField id="name" variant="outlined" defaultValue={info.username} /> */}
           </Grid>
           <Grid className="form-personal-infor">
             <Typography p={2}> Email </Typography>

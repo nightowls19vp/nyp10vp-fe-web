@@ -12,45 +12,11 @@ import "../assets/css/Content.scss";
 import dataProfile from "../component/sidebar/data/profile.js";
 
 function Profile() {
-  const user = useSelector((state) => state.auth.login?.currentUser)
-  const decodedToken = jwtDecode(user?.accessToken);
-  // console.log(decodedToken?.user.username);
-  let formData = {
-    username: decodedToken?.user.username,
-  };
-  
-  // const dispatch = useDispatch();
-  // let axiosJWT = axios.create();
-
-  // const refeshToken = async () => {
-  //   try {
-  //     const res = await axios.post("", {
-  //       withCredentials: true,
-  //     });
-  //     return res.data;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
-  // axiosJWT.interceptors.request.use(
-  //   async(config) => {
-  //     let day = new Date();
-  //     const decodedToken = jwtDecode(user?.accessToken);
-  //     if (decodedToken.exp < day.setTime()/1000) {
-  //       const data = await refeshToken();
-  //       const refeshUser = {
-  //         accessToken: data.accessToken,
-  //       };
-  //       dispatch(loginSuccess(refeshUser));
-  //       config.headers["token"] = "Bearer " + data.accessToken;
-  //     }
-  //     return config;
-  //   },
-  //   (error) => {
-  //     return Promise.reject(error);
-  //   }
-  // )
+  // const user = useSelector((state) => state.auth.login?.currentUser);
+  // const decodedToken = jwtDecode(user?.accessToken);
+  // let formData = {
+  //   username: decodedToken?.user.username,
+  // };
 
   const [openSidebar, setOpenSidebar] = useState(null);
   const handleBars = (isOpenBars) => {
@@ -59,9 +25,9 @@ function Profile() {
   return (
     <Stack>
       <HeaderComponent handleBars={handleBars} />
-      <Box className="content" >
+      <Box className="content">
         <SideBarComponent status={openSidebar} data={dataProfile} />
-        <PersonalInformation info={formData} />
+        <PersonalInformation status={openSidebar} />
       </Box>
       <FooterComponent />
     </Stack>
