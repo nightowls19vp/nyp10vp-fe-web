@@ -7,7 +7,13 @@ import "../../assets/css/Content.scss";
 function PersonalInformation({ status }) {
   const [image, setImage] = useState(ImgAvatar);
   return (
-    <Stack direction="column" sx={{ display: { xs: status ? "none": "block", sm: "block" }, }} >
+    <Stack
+      direction="column"
+      sx={{
+        display: { xs: status ? "none" : "block", sm: "block" },
+        width: { sx: "100%", sm: "70%"},
+      }}
+    >
       <Stack
         direction="row"
         justifyContent="center"
@@ -15,7 +21,7 @@ function PersonalInformation({ status }) {
         spacing={2}
         paddingY={2}
       >
-        <img src={image} alt="Avatar" width={"30%"} />
+        <img src={image} alt="Avatar" width={"25%"} />
         <Box>
           <Grid className="form-personal-infor">
             <Typography p={2}> Họ & tên </Typography>
@@ -36,8 +42,8 @@ function PersonalInformation({ status }) {
           </Grid>
         </Box>
       </Stack>
-      <Box className="btn-save" >
-        <CustomComponent.Button2 > Lưu thay đổi </CustomComponent.Button2>
+      <Box className="btn-save">
+        <CustomComponent.Button2> Lưu thay đổi </CustomComponent.Button2>
       </Box>
     </Stack>
   );

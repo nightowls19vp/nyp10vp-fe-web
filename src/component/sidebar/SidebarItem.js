@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch } from "react-redux";
 import {
   ListItemButton,
   ListItemIcon,
@@ -7,17 +8,32 @@ import {
 } from "@mui/material";
 
 import { Colors } from "../../config/Colors";
+import { updateProfileId, updateStockId } from "../../redux/sidebarSlice";
 
-function SidebarItem({ item }) {
-  const [selectedIdx, setSelectedIdx] = useState(1);
+function SidebarItem({ item, title, selectedID }) {
 
+  const selectedIdx = selectedID;
+
+  const dispacth = useDispatch();
+
+  const handleButtonItemID = (ID) => {
+    if (title === "stock") {
+      dispacth(updateStockId(ID));
+    } else if (title === "profile") {
+      dispacth(updateProfileId(ID));
+    }
+  }
+  
   return (
     <>
       <ListItemButton
         sx={{
           "&: hover": { backgroundColor: Colors.gray },
         }}
-        onClick={() => setSelectedIdx(item.id)}
+        onClick={() => {
+          // setSelectedIdx(item.id);
+          handleButtonItemID(item.id);
+        }}
       >
         <ListItemIcon sx={{ color: selectedIdx === item.id ? Colors.itemSidebar : null }}>
           {item.icon && item.icon}

@@ -1,23 +1,17 @@
-import React, { useState } from "react";
-import { Grid, Stack } from "@mui/material";
+import React from "react";
+import { Box, Grid, Stack } from "@mui/material";
 
 import HeaderComponent from "../component/header/Header.js";
 import FooterComponent from "../component/footer/Footer.js";
-import SideBarComponent from "../component/sidebar/Sidebar.js";
-import dataPackage from "../component/sidebar/data/dataPackage.js";
 
 function Home() {
-  const [openSidebar, setOpenSidebar] = useState(null);
-  const handleBars = (isOpenBars) => {
-    setOpenSidebar(isOpenBars);
-  };
   return (
     <Stack>
-      <HeaderComponent handleBars={handleBars} />
-      <Grid display={"flex"}>
-        <SideBarComponent status={openSidebar} data={dataPackage} />
-      </Grid>
-      <FooterComponent />
+      <HeaderComponent />
+      <Grid display={"flex"}></Grid>
+      <Box position={"absolute"} left={0} bottom={0} width={"100%"}>
+        <FooterComponent />
+      </Box>
     </Stack>
   );
 }

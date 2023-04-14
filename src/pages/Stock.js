@@ -7,6 +7,7 @@ import SideBarComponent from "../component/sidebar/Sidebar.js";
 import dataPackage from "../component/sidebar/data/dataPackage.js";
 
 function Stock() {
+
   const [openSidebar, setOpenSidebar] = useState(null);
   const handleBars = (isOpenBars) => {
     setOpenSidebar(isOpenBars);
@@ -15,7 +16,7 @@ function Stock() {
     <Stack>
       <HeaderComponent handleBars={handleBars} />
       <Grid display={"flex"}>
-        <SideBarComponent status={openSidebar} data={dataPackage} />
+        <SideBarComponent status={openSidebar} data={dataPackage} title="stock" />
       </Grid>
       <FooterComponent />
     </Stack>

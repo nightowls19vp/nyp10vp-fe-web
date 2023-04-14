@@ -18,15 +18,17 @@ function Profile() {
   //   username: decodedToken?.user.username,
   // };
 
+
   const [openSidebar, setOpenSidebar] = useState(null);
   const handleBars = (isOpenBars) => {
     setOpenSidebar(isOpenBars);
   };
+
   return (
     <Stack>
       <HeaderComponent handleBars={handleBars} />
       <Box className="content">
-        <SideBarComponent status={openSidebar} data={dataProfile} />
+        <SideBarComponent status={openSidebar} data={dataProfile} title="profile" />
         <PersonalInformation status={openSidebar} />
       </Box>
       <FooterComponent />

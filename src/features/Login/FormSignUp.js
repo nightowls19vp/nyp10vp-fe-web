@@ -67,13 +67,11 @@ export default function FormSignUp() {
     var validUsername =
       "^(?=.{8,255}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$";
 
-    var validName = "/^[a-zA-Z ]{2,30}$/";
-
-    var validEmail = "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$/";
+    var validEmail = "/^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/";
 
     var validPassword = "^(?=[.\\S]*[A-Z][.\\S]*)(?=[.\\S]*[0-9][.\\S]*)(?=[.\\S]*[a-z][.\\S]*)[.\\S]{8,255}$";
 
-    var validPhone = "/(84|0[3|5|7|8|9])+([0-9]{8})\b/g";
+    var validPhone = "/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/";
 
     if (username === "") {
       setUsernameError(true);
@@ -88,16 +86,13 @@ export default function FormSignUp() {
     if (name === "") {
       setNameError(true);
       setNameText("Vui lòng điền tên người dùng!");
-    } else if (!name.match(validName)) {
-      setNameError(true);
-      setNameText("Tên người dùng không hợp lệ!");
     } else {
       setNameError(false);
     }
 
     if (email === "") {
       setEmailError(true);
-      setEmailText("Vaui lòng điền email!");
+      setEmailText("Vui lòng điền email!");
     } else if (!email.match(validEmail)) {
       setEmailError(true);
       setEmailText("Email không hợp lệ!");
@@ -142,7 +137,7 @@ export default function FormSignUp() {
 
   const handleRegister = () => {
 
-    handleValidation();
+    // handleValidation();
 
     let formData = {
       username: username,

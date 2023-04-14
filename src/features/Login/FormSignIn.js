@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -18,7 +18,7 @@ import * as CustomButton from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 
 import { loginUser } from "../../redux/authRequest";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function FormSignIn() {
   const [email, setEmail] = useState("");
@@ -28,6 +28,7 @@ function FormSignIn() {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordHelperText, setPasswordHelperText] = useState("");
 
+  const loginMsg = useSelector((state) => state.auth.login?.msg);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -78,6 +79,16 @@ function FormSignIn() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (loginMsg?.statusCode === 401) {
+      setPasswordError(true);
+      setPasswordHelperText(loginMsg?.message);
+    } else if (loginMsg?.statusCode === 404) {
+      setEmailError(true);
+      setEmailHelperText(loginMsg?.message);
+    }
+  }, [loginMsg])
 
   return (
     <Box

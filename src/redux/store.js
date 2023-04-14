@@ -1,5 +1,4 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-
+// import { combineReducers, configureStore } from "@reduxjs/toolkit";
 // import {
 //   persistStore,
 //   persistReducer,
@@ -12,13 +11,17 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 // } from "redux-persist";
 // import storage from "redux-persist/lib/storage";
 
+import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
+import sidebarSlice from "./sidebarSlice";
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer
+    auth: authReducer,
+    sidebar: sidebarSlice,
   }
 });
+
 
 // const persistConfig = {
 //   key: "root",

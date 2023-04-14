@@ -28,7 +28,7 @@ export const registerUser = async (user, dispatch, navigate) => {
   try {
     const res = await apiClient.post("/auth/register", user);
     dispatch(registerSuccess(res.data));
-    navigate("/login");
+    window.location.reload(false);
   } catch (error) {
     dispatch(registerFailed(error.response.data));
   }

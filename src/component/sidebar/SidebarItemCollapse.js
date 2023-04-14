@@ -12,13 +12,12 @@ import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
 import SidebarItem from "./SidebarItem";
 import { Colors } from "../../config/Colors";
 
-function SidebarItemCollapse({ item }) {
+function SidebarItemCollapse({ item, title, selectedID }) {
   const [open, setOpen] = useState(item.status);
   return (
     <>
       <ListItemButton
         sx={{
-          // backgroundColor: "#CC7700",
           "&: hover": {
             backgroundColor: Colors.gray,
           },
@@ -53,9 +52,19 @@ function SidebarItemCollapse({ item }) {
         <List sx={{ paddingLeft: 2.5 }}>
           {item.child?.map((route, index) =>
             route.child ? (
-              <SidebarItemCollapse item={route} key={index} />
+              <SidebarItemCollapse
+                item={route}
+                key={index}
+                title={title}
+                selectedID={selectedID}
+              />
             ) : (
-              <SidebarItem item={route} />
+              <SidebarItem
+                item={route}
+                key={index}
+                title={title}
+                selectedID={selectedID}
+              />
             )
           )}
         </List>
