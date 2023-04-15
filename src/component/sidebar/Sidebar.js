@@ -6,16 +6,16 @@ import SidebarItemCollapse from "./SidebarItemCollapse.js";
 import SidebarItem from "./SidebarItem.js";
 import { Colors } from "../../config/Colors.js";
 
-function SideBar({ status, data, title }) {
+function SideBar({ status, data, title, selectedID }) {
   const dataSidebar = data;
-  const selectedStock = useSelector((state) => state.sidebar?.stockID);
-  const selectedProfile = useSelector((state) => state.sidebar?.profileID);
-  let selectedID = null;
-  if (title === "stock") {
-    selectedID = selectedStock;
-  } else {
-    selectedID = selectedProfile;
-  }
+  // const selectedStock = useSelector((state) => state.sidebar?.stockID);
+  // const selectedProfile = useSelector((state) => state.sidebar?.profileID);
+  // let selectedID = null;
+  // if (title === "stock") {
+  //   selectedID = selectedStock;
+  // } else {
+  //   selectedID = selectedProfile;
+  // }
   return (
     <List
       sx={{

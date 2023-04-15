@@ -18,7 +18,7 @@ function Profile() {
   //   username: decodedToken?.user.username,
   // };
 
-
+  const selectedProfile = useSelector((state) => state.sidebar?.profileID);
   const [openSidebar, setOpenSidebar] = useState(null);
   const handleBars = (isOpenBars) => {
     setOpenSidebar(isOpenBars);
@@ -28,7 +28,12 @@ function Profile() {
     <Stack>
       <HeaderComponent handleBars={handleBars} />
       <Box className="content">
-        <SideBarComponent status={openSidebar} data={dataProfile} title="profile" />
+        <SideBarComponent
+          status={openSidebar}
+          data={dataProfile}
+          title="profile"
+          selectedID={selectedProfile}
+        />
         <PersonalInformation status={openSidebar} />
       </Box>
       <FooterComponent />
