@@ -49,7 +49,7 @@ function SidebarItemCollapse({ item, title, selectedID }) {
         )}
       </ListItemButton>
       <Collapse in={open} timeout="auto">
-        <List sx={{ paddingLeft: 2.5 }}>
+        <List sx={{ paddingX: 2.5 }}>
           {item.child?.map((route, index) =>
             route.child ? (
               <SidebarItemCollapse

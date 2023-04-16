@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -19,24 +19,28 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { AiOutlineBars } from "react-icons/ai";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import jwtDecode from "jwt-decode";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import "../../assets/css/Header.scss";
 import { Colors } from "../../config/Colors.js";
 import routesConfig from "../../config/routes.js";
-import { dataHeader1, dataHeader2 } from "./data";
+import { dataHeader1, dataHeader2 } from "../../data/index.js";
 import MenuItem from "./MenuItem.js";
 import MenuItemRow from "./MenuItemRow.js";
+import { updateHeightHeader } from "../../redux/sidebarSlice";
 
 const topSearch = [];
 
 function Header({ handleBars }) {
+  const refContainer = useRef();
+  const [heightHeader, setHeightHeader] = useState(null);
   const [path, setPath] = useState(null);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [isOpenBars, setIsOpenBars] = React.useState(true);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isOpenBars, setIsOpenBars] = useState(true);
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  // const user = useSelector((state) => state.auth.login?.currentUser);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -54,15 +58,18 @@ function Header({ handleBars }) {
     handleBars(isOpenBars);
   };
 
-  const handleAvatar = () => {
-    if (!user) {
-      navigate("/login");
-    }
-  };
+  // const handleAvatar = () => {
+  //   if (!user) {
+  //     navigate("/login");
+  //   }
+  // };
 
   useEffect(() => {
     setPath(window.location.pathname);
+    setHeightHeader(refContainer.current.offsetHeight);
   }, []);
+
+  dispatch(updateHeightHeader(heightHeader));
 
   return (
     <AppBar
@@ -70,6 +77,7 @@ function Header({ handleBars }) {
       sx={{
         backgroundColor: Colors.background,
       }}
+      ref={refContainer}
       className="header"
     >
       <Toolbar>
@@ -138,7 +146,7 @@ function Header({ handleBars }) {
                 <MenuItem item={data} key={index} path={path} />
               ))}
               <Tooltip title="Account">
-                <IconButton onClick={handleAvatar}>
+                <IconButton >
                   <NavLink to={routesConfig.profile} className="avatar">
                     <Avatar sx={{ width: "27px", height: "27px" }} className="avatarActive" />
                   </NavLink>
@@ -160,7 +168,7 @@ function Header({ handleBars }) {
             <MenuItemRow item={data} key={index} path={path} />
           ))}
           <Tooltip title="Account">
-            <Button onClick={handleAvatar}>
+            <Button >
               <NavLink to={routesConfig.profile} className="avatar">
                 <Avatar sizes="35" className="avatarActive" />
               </NavLink>

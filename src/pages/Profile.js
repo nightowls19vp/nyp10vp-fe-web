@@ -9,7 +9,8 @@ import FooterComponent from "../component/footer/Footer.js";
 import SideBarComponent from "../component/sidebar/Sidebar.js";
 import PersonalInformation from "../features/Profile/PersonalInformation.js";
 import "../assets/css/Content.scss";
-import dataProfile from "../component/sidebar/data/profile.js";
+import dataProfile from "../data/profile.js";
+import { Colors } from "../config/Colors.js";
 
 function Profile() {
   // const user = useSelector((state) => state.auth.login?.currentUser);

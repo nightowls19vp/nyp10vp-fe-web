@@ -28,20 +28,20 @@ function SidebarItem({ item, title, selectedID }) {
     <>
       <ListItemButton
         sx={{
+          backgroundColor: selectedIdx === item.id ? Colors.primary : null,
           "&: hover": { backgroundColor: Colors.gray },
         }}
         onClick={() => {
-          // setSelectedIdx(item.id);
           handleButtonItemID(item.id);
         }}
       >
-        <ListItemIcon sx={{ color: selectedIdx === item.id ? Colors.itemSidebar : null }}>
+        <ListItemIcon sx={{ color: selectedIdx === item.id ? Colors.background : null }}>
           {item.icon && item.icon}
         </ListItemIcon>
         <ListItemText>
           <Typography
             sx={{
-              color: selectedIdx === item.id ? Colors.itemSidebar : null,
+              color: selectedIdx === item.id ? Colors.background : null,
               fontWeight: selectedIdx === item.id ? 800 : null,
             }}
           >

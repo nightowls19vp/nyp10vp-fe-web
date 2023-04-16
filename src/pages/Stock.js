@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Grid, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
+import { useSelector } from "react-redux";
 
 import HeaderComponent from "../component/header/Header.js";
 import FooterComponent from "../component/footer/Footer.js";
 import SideBarComponent from "../component/sidebar/Sidebar.js";
-import dataPackage from "../component/sidebar/data/dataPackage.js";
-import { useSelector } from "react-redux";
+import "../assets/css/Content.scss";
+import dataPackage from "../data/dataPackage.js";
 
 function Stock() {
   const selectedStock = useSelector((state) => state.sidebar?.stockID);
@@ -16,14 +17,14 @@ function Stock() {
   return (
     <Stack>
       <HeaderComponent handleBars={handleBars} />
-      <Grid display={"flex"}>
+      <Box className="content">
         <SideBarComponent
           status={openSidebar}
           data={dataPackage}
           title="stock"
           selectedID={selectedStock}
         />
-      </Grid>
+      </Box>
       <FooterComponent />
     </Stack>
   );

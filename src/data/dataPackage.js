@@ -1,47 +1,46 @@
-import { TbPackages, TbPackage, TbShoppingBag } from "react-icons/tb";
-import { BsEnvelopePaper } from "react-icons/bs";
+import { TbPackages, TbPackage, TbShoppingBag, TbAppWindow } from "react-icons/tb";
 
 const dataPackage = [
   {
-    icon: <TbPackages />,
+    icon: <TbPackages size={25} />,
     title: "CÁC GÓI NGƯỜI DÙNG",
     status: true,
     child: [
       {
         id: 1,
-        icon: <TbPackage />,
+        icon: <TbPackage size={20} />,
         name: "Gói 1",
       },
       {
         id: 2,
-        icon: <TbPackage />,
+        icon: <TbPackage size={20} />,
         name: "Gói 2",
       },
       {
         id: 3,
-        icon: <TbPackage />,
+        icon: <TbPackage size={20} />,
         name: "Gói 3",
       },
     ],
   },
   {
-    icon: <TbShoppingBag />,
+    icon: <TbShoppingBag size={25} />,
     title: "CÁC TIỆN ÍCH",
     status: false,
     child: [
       {
         id: 4,
-        icon: <BsEnvelopePaper />,
+        icon: <TbAppWindow size={20} />,
         name: "Tiện ích 1",
       },
       {
         id: 5,
-        icon: <BsEnvelopePaper />,
+        icon: <TbAppWindow size={20} />,
         name: "Tiện ích 2",
       },
       {
         id: 6,
-        icon: <BsEnvelopePaper />,
+        icon: <TbAppWindow size={20} />,
         name: "Tiện ích 3",
       },
     ],

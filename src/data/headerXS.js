@@ -10,8 +10,8 @@ import {
   MdShoppingCart,
   MdOutlineShoppingCart,
 } from "react-icons/md";
-import routesConfig from "../../../config/routes";
-import { Colors } from "../../../config/Colors";
+import routesConfig from "../config/routes";
+import { Colors } from "../config/Colors";
 
 export const dataHeader1 = [
   {

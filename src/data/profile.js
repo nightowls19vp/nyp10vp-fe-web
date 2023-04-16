@@ -9,43 +9,43 @@ import { TbPackage, TbSettings, TbLogout } from "react-icons/tb";
 const profile = [
   {
     id: 1,
-    icon: <BsPersonBoundingBox />,
+    icon: <BsPersonBoundingBox size={20} />,
     name: "Thông tin cá nhân",
     action: "personnalInfomation",
   },
   {
     id: 2,
-    icon: <BsFillLockFill />,
+    icon: <BsFillLockFill size={20} />,
     name: "Đổi mật khẩu",
     action: "changePassword",
   },
   {
     id: 3,
-    icon: <BsFillInfoSquareFill />,
+    icon: <BsFillInfoSquareFill size={20} />,
     name: "Thông tin & quyền",
     action: "information&Rights",
   },
   {
     id: 4,
-    icon: <TbPackage />,
+    icon: <TbPackage size={20} />,
     name: "Tùy chọn quảng cáo",
     action: "advertisement",
   },
   {
     id: 5,
-    icon: <TbPackage />,
+    icon: <TbPackage size={20} />,
     name: "Gói của tôi",
     action: "myPackage",
   },
   {
     id: 6,
-    icon: <TbSettings />,
+    icon: <TbSettings size={20} />,
     name: "Cài đặt thông báo",
     action: "settings",
   },
   {
     id: 7,
-    icon: <TbLogout />,
+    icon: <TbLogout size={20} />,
     name: "logout",
   },
 ];
