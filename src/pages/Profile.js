@@ -1,44 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Stack, Box } from "@mui/material";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 
-import HeaderComponent from "../component/header/Header.js";
-import FooterComponent from "../component/footer/Footer.js";
-import SideBarComponent from "../component/sidebar/Sidebar.js";
+import SidebarLayout from "../layout/SidebarLayout";
+
 import PersonalInformation from "../features/Profile/PersonalInformation.js";
-import "../assets/css/Content.scss";
+import ChangePassword from "../features/Profile/ChangePassword";
+
 import dataProfile from "../data/profile.js";
-import { Colors } from "../config/Colors.js";
+
 
 function Profile() {
+  // const refHeader = useRef(null);
+  // const refFooter = useRef(null);
   // const user = useSelector((state) => state.auth.login?.currentUser);
   // const decodedToken = jwtDecode(user?.accessToken);
   // let formData = {
   //   username: decodedToken?.user.username,
   // };
 
-  const selectedProfile = useSelector((state) => state.sidebar?.profileID);
-  const [openSidebar, setOpenSidebar] = useState(null);
-  const handleBars = (isOpenBars) => {
-    setOpenSidebar(isOpenBars);
-  };
+  const selectedProfile = useSelector((state) => state.sidebar?.profile);
+  // const selectedItem = useSelector((state) => state.sidebar?.profileItem);
+  
+  // const heightHeader = useSelector((state) => state.sidebar?.heightHeader);
+  // const heightFooter = useSelector((state) => state.sidebar?.heightFooter);
+
 
   return (
-    <Stack>
-      <HeaderComponent handleBars={handleBars} />
-      <Box className="content">
-        <SideBarComponent
-          status={openSidebar}
-          data={dataProfile}
-          title="profile"
-          selectedID={selectedProfile}
-        />
-        <PersonalInformation status={openSidebar} />
-      </Box>
-      <FooterComponent />
-    </Stack>
+    <SidebarLayout
+      data={dataProfile}
+      title="profile"
+      selectedID={selectedProfile.id}
+    >
+      {/* <PersonalInformation /> */}
+      {/* <ChangePassword /> */}
+      {selectedProfile.name}
+    </SidebarLayout>
   );
 }
 

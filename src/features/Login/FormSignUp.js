@@ -14,7 +14,7 @@ import '../../assets/css/FormSignUp.scss'
 import LogoGG from "../../assets/img/google.png";
 import LogoFB from "../../assets/img/facebook.png";
 import * as CustomButton from "../../component/custom/CustomComponents.js";
-import DateTimePicker from "../../component/DateTimePicker";
+import DateTimePicker from "../../component/Date/DateTimePicker.js";
 
 import api from "../../http/http-common";
 

@@ -1,25 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
 import { Box, Grid, Stack, Typography, Button } from "@mui/material";
 
 import LogoFB from "../../assets/img/facebook.png";
 import LogoIns from "../../assets/img/instagram.png";
 import { MoMoIcon, ATMIcon } from "../../assets/icons";
 import { Colors } from "../../config/Colors";
-import { updateHeightFooter } from "../../redux/sidebarSlice";
 
 function Footer() {
-  const refContainer = useRef();
-  const [heightFooter, setHeightFooter] = useState(null);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setHeightFooter(refContainer.current.offsetHeight);
-  }, []);
-
-  dispatch(updateHeightFooter(heightFooter));
-
+  
   return (
     <Box
       position={"static"}
@@ -29,8 +17,7 @@ function Footer() {
       sx={{ width: "100%" }}
       color={Colors.textPrimary}
       boxShadow={"0px -4px 3px rgba(50, 50, 50, 0.25)"}
-      zIndex={1}
-      ref={refContainer}
+      // zIndex={1}
     >
       <Grid
         container

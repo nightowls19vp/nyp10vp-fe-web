@@ -14,7 +14,9 @@ import {
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
-    const res = await apiClient.post("/auth/login", user);
+    const res = await apiClient.post("/auth/login", user, {
+      withCredentials: true,
+    });
     // localStorage.setItem("accessToken", res.data.accessToken);
     dispatch(loginSuccess(res.data));
     navigate("/profile");
@@ -28,7 +30,7 @@ export const registerUser = async (user, dispatch, navigate) => {
   try {
     const res = await apiClient.post("/auth/register", user);
     dispatch(registerSuccess(res.data));
-    window.location.reload(false);
+    navigate("/login");
   } catch (error) {
     dispatch(registerFailed(error.response.data));
   }

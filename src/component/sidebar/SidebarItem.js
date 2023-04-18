@@ -20,7 +20,11 @@ function SidebarItem({ item, title, selectedID }) {
     if (title === "stock") {
       dispacth(updateStockId(ID));
     } else if (title === "profile") {
-      dispacth(updateProfileId(ID));
+      let formData = {
+        id: ID,
+        name: item.action,
+      }
+      dispacth(updateProfileId(formData));
     }
   }
   

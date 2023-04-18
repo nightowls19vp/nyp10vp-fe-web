@@ -1,4 +1,4 @@
-import { Button, TextField, styled } from "@mui/material";
+import { Button, OutlinedInput, styled } from "@mui/material";
 
 import { Colors } from "../../config/Colors";
 
@@ -21,13 +21,21 @@ export const Button2 = styled(Button) ({
   }
 });
 
-export const TextFieldInput = styled(TextField)({
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: 'red',
-    },
-    '&:hover fieldset': {
-      borderColor: '#005ce6',
-    },
+export const PasswordInput = styled(OutlinedInput)(({ theme }) => ({
+  'label + &': {
+    marginTop: theme.spacing(2),
   },
-});
+  '& .MuiOutlinedInput-input': {
+    borderRadius: 4,
+    position: 'relative',
+    backgroundColor: theme.palette.mode === 'light' ? '#fcfcfb' : '#2b2b2b',
+    fontSize: 16,
+    width: 'auto',
+    padding: '10px 12px',
+    transition: theme.transitions.create([
+      'border-color',
+      'background-color',
+      'box-shadow',
+    ]),
+  },
+}));

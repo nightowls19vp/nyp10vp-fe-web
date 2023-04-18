@@ -1,18 +1,26 @@
 import React from "react";
-import { Box, Grid, Stack } from "@mui/material";
+import { Typography } from "@mui/material";
+import { useDispatch } from "react-redux";
 
-import HeaderComponent from "../component/header/Header.js";
-import FooterComponent from "../component/footer/Footer.js";
+import DefaultLayout from "../layout/DefaultLayout.js";
+import { loginSuccess } from "../redux/authSlice.js";
 
 function Home() {
+  const dispatch = useDispatch();
+
+  const urlParams = new URL(window.location.href).searchParams;
+
+  if (urlParams.get("accessToken") != null) {
+    const token = {
+      accessToken:  urlParams.get("accessToken"),
+    }
+    dispatch(loginSuccess(token));
+  }
+ 
   return (
-    <Stack>
-      <HeaderComponent />
-      <Grid display={"flex"}></Grid>
-      <Box position={"absolute"} left={0} bottom={0} width={"100%"}>
-        <FooterComponent />
-      </Box>
-    </Stack>
+    <DefaultLayout >
+      <Typography> Content </Typography>
+    </DefaultLayout>
   );
 }
 

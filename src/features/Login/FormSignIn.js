@@ -10,15 +10,16 @@ import {
   Button,
 } from "@mui/material";
 
-import "../../assets/css/FormSignIn.scss";
+import { loginUser } from "../../redux/authRequest";
+import { useDispatch, useSelector } from "react-redux";
+import { loginFailed, loginStart } from "../../redux/authSlice";
+
 import FormSignUp from "./FormSignUp";
 import LogoGG from "../../assets/img/google.png";
 import LogoFB from "../../assets/img/facebook.png";
 import * as CustomButton from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
-
-import { loginUser } from "../../redux/authRequest";
-import { useDispatch, useSelector } from "react-redux";
+import "../../assets/css/FormSignIn.scss";
 
 function FormSignIn() {
   const [email, setEmail] = useState("");
@@ -68,6 +69,7 @@ function FormSignIn() {
 
   const googleLogin = async () => {
     try {
+      dispatch(loginStart());
       window.open(
         `http://localhost:3000/api/auth/oauth2/google/${"http://localhost:8080".replaceAll(
           "/",
@@ -76,7 +78,7 @@ function FormSignIn() {
         "_self"
       );
     } catch (error) {
-      console.log(error);
+      dispatch(loginFailed(error.response.data));
     }
   };
 

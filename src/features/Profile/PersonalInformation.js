@@ -1,29 +1,42 @@
 import React, { useState } from "react";
-import { Stack, Box, Grid, TextField, Typography, Link, Divider } from "@mui/material";
+import {
+  Stack,
+  Box,
+  Grid,
+  TextField,
+  Typography,
+  IconButton,
+} from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 
 import LogoGG from "../../assets/img/google.png";
 import ImgAvatar from "../../assets/img/user.png";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import "../../assets/css/Content.scss";
 
-function PersonalInformation({ status }) {
+function PersonalInformation() {
   const [image, setImage] = useState(ImgAvatar);
   return (
-    <Stack
-      direction="column"
-      sx={{
-        display: { xs: status ? "none" : "block", sm: "block" },
-        width: { sx: "100%", sm: "70%" },
-      }}
-    >
+    <Box>
       <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ paddingRight: { xs: 5, sm: 10, md: 20 }, paddingY: 5 }}
+        sx={{
+          paddingRight: { xs: 0, sm: 10, md: 20 },
+          paddingBottom: 5,
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          justifyContent: { xs: "center", sm: "space-between" },
+          alignItems: "center",
+        }}
       >
-        <Box flex={2}>
+        <Box
+          flex={2}
+          align={"center"}
+          sx={{ paddingBottom: { xs: "10px", sm: 0 } }}
+        >
           <img src={image} alt="Avatar" width={"50%"} />
+          {/* <IconButton >
+            <EditIcon />
+          </IconButton> */}
         </Box>
         <Box flex={3}>
           <Grid className="form-personal-infor">
@@ -45,25 +58,31 @@ function PersonalInformation({ status }) {
           </Grid>
         </Box>
       </Stack>
-      <Stack direction="row" justifyContent={"flex-end"} >
+      <Stack
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: { xs: "center", sm: "flex-end" },
+        }}
+      >
         <Box
           className="form-connect-social-network"
-          sx={{ paddingRight: { xs: 5, sm: 10, md: 20 }, width: "40%" }}
+          sx={{ paddingRight: { xs: 5, sm: 10, md: 20 } }}
         >
-          <Grid className="logo-google" >
+          <Grid className="logo-google" paddingRight={3}>
             <img src={LogoGG} alt="Logo" width={25} height={25} />
             <Typography pl={2}> Tài khoản google </Typography>
           </Grid>
-          <CustomComponent.Button2 > Liên kết </CustomComponent.Button2>
+          <CustomComponent.Button2> Liên kết </CustomComponent.Button2>
         </Box>
       </Stack>
       <Box
         className="btn-save"
-        sx={{ paddingRight: { xs: 5, sm: 10, md: 20 } }}
+        sx={{ paddingRight: { xs: 0, sm: 10, md: 20 } }}
       >
-        <CustomComponent.Button1 > Lưu thay đổi </CustomComponent.Button1>
+        <CustomComponent.Button1> Lưu thay đổi </CustomComponent.Button1>
       </Box>
-    </Stack>
+    </Box>
   );
 }
 

@@ -1,9 +1,12 @@
 import React from "react";
-import { Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 function StockItem() {
   return (
-    <Stack></Stack>
+    <Box>
+      <Typography>Gói 1</Typography>
+      
+    </Box>
   );
 }
 
