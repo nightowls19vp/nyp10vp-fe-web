@@ -5,84 +5,103 @@ import {
   Grid,
   TextField,
   Typography,
-  IconButton,
+  Divider,
 } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
+import { AiOutlineEdit } from "react-icons/ai";
 
 import LogoGG from "../../assets/img/google.png";
 import ImgAvatar from "../../assets/img/user.png";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import "../../assets/css/Content.scss";
+import { Colors } from "../../config/Colors";
+import VD from "./vd.js";
 
 function PersonalInformation() {
   const [image, setImage] = useState(ImgAvatar);
   return (
-    <Box>
+    <Stack
+      sx={{
+        backgroundColor: Colors.background,
+        borderRadius: "10px",
+      }}
+    >
       <Stack
         sx={{
-          paddingRight: { xs: 0, sm: 10, md: 20 },
-          paddingBottom: 5,
+          paddingY: 5,
           display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          justifyContent: { xs: "center", sm: "space-between" },
-          alignItems: "center",
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-between",
+          alignItems: { xs: "center", md: "flex-start" },
+          width: "100%",
         }}
       >
-        <Box
-          flex={2}
-          align={"center"}
-          sx={{ paddingBottom: { xs: "10px", sm: 0 } }}
-        >
-          <img src={image} alt="Avatar" width={"50%"} />
-          {/* <IconButton >
-            <EditIcon />
-          </IconButton> */}
+        <Box flex={1} paddingX={"10px"} align={"center"}>
+          <CustomComponent.ButtonAvatar>
+            <CustomComponent.ImageSrc
+              style={{ backgroundImage: `url(${image})` }}
+            />
+            <CustomComponent.ImageBackdrop className="MuiImageBackdrop-root" />
+            <CustomComponent.Image>
+              <AiOutlineEdit color={Colors.text} size={25} />
+            </CustomComponent.Image>
+          </CustomComponent.ButtonAvatar>
         </Box>
-        <Box flex={3}>
+        <Box flex={2} paddingX={"10px"}>
           <Grid className="form-personal-infor">
-            <Typography p={2}> Họ & tên </Typography>
+            <Typography variant="overline" display="block" gutterBottom pr={2}>
+              Họ & tên
+            </Typography>
             <TextField id="name" variant="outlined" size="small" />
-            {/* <TextField id="name" variant="outlined" defaultValue={info.username} /> */}
           </Grid>
           <Grid className="form-personal-infor">
-            <Typography p={2}> Email </Typography>
+            <Typography variant="overline" display="block" gutterBottom pr={2}>
+              Email
+            </Typography>
             <TextField id="email" variant="outlined" size="small" />
           </Grid>
           <Grid className="form-personal-infor">
-            <Typography p={2}> Số điện thoại </Typography>
+            <Typography variant="overline" display="block" gutterBottom pr={2}>
+              Số điện thoại
+            </Typography>
             <TextField id="phone" variant="outlined" size="small" />
           </Grid>
           <Grid className="form-personal-infor">
-            <Typography p={2}> Ngày sinh </Typography>
+            <Typography variant="overline" display="block" gutterBottom pr={2}>
+              Ngày sinh
+            </Typography>
             <TextField id="dob" variant="outlined" size="small" />
           </Grid>
         </Box>
-      </Stack>
-      <Stack
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: { xs: "center", sm: "flex-end" },
-        }}
-      >
-        <Box
-          className="form-connect-social-network"
-          sx={{ paddingRight: { xs: 5, sm: 10, md: 20 } }}
-        >
-          <Grid className="logo-google" paddingRight={3}>
-            <img src={LogoGG} alt="Logo" width={25} height={25} />
-            <Typography pl={2}> Tài khoản google </Typography>
-          </Grid>
-          <CustomComponent.Button2> Liên kết </CustomComponent.Button2>
+        <Divider orientation="vertical" flexItem />
+        <Box flex={1} paddingX={"10px"}>
+          <Stack>
+            <Typography variant="button" display="block" gutterBottom>
+              Liên kết mạng xã hội
+            </Typography>
+            <Box className="form-connect-social-network">
+              <Stack direction="row" spacing={"5px"}>
+                <img src={LogoGG} alt="Logo" width={25} height={25} />
+                <Typography display="block" gutterBottom >
+                  Tài khoản GG
+                </Typography>
+              </Stack>
+              <CustomComponent.Button2 size="small">
+                Liên kết
+              </CustomComponent.Button2>
+            </Box>
+          </Stack>
         </Box>
       </Stack>
       <Box
         className="btn-save"
-        sx={{ paddingRight: { xs: 0, sm: 10, md: 20 } }}
       >
-        <CustomComponent.Button1> Lưu thay đổi </CustomComponent.Button1>
+        <Box flex={1} paddingX={"10px"}></Box>
+        <Box flex={2} paddingX={"10px"} align={"right"} >
+          <CustomComponent.Button1 > Lưu thay đổi </CustomComponent.Button1>
+        </Box>
+        <Box flex={1} paddingX={"10px"}></Box>
       </Box>
-    </Box>
+    </Stack>
   );
 }
 

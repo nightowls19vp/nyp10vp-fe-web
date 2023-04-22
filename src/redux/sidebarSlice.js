@@ -1,34 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import PersonalInformation from "../features/Profile/PersonalInformation";
-
 const sidebarSlice = createSlice({
     name: "sidebar",
     initialState: {
+        showSidebar: false,
         stockID: 1,
-        // stockItem: null,
-        // profileID: 1,
-        // profileItem:<PersonalInformation />,
-        profile: {
-            id: 1,
-            name: <PersonalInformation />,
-        }
+        profileID: 1,
     }, 
     reducers: {
+        updateShowSidebar: (state, action) => {
+            state.showSidebar = action.payload;
+        },
+        toggleShowSidebar: (state) => {
+            state.showSidebar =!state.showSidebar;
+        },
         updateStockId: (state, action) => {
             state.stockID = action.payload;
         },
-        // updateProfileId: (state, action) => {
-        //     state.profileID = action.payload;
-        //     // state.profileItem = action.payload.name;
-        // },
         updateProfileId: (state, action) => {
-            state.profile = action.payload;
-        }
+            state.profileID = action.payload;
+        },
     }
 });
 
 export const {
+    toggleShowSidebar,
+    updateShowSidebar,
     updateStockId,
     updateProfileId,
 } = sidebarSlice.actions;

@@ -7,6 +7,7 @@ import FooterComponent from "../component/footer/Footer";
 
 import { Colors } from "../config/Colors";
 import "../assets/css/Content.scss";
+import { useSelector } from "react-redux";
 
 function SidebarLayout({ data, title, selectedID, children }) {
   const refHeader = useRef(null);
@@ -16,11 +17,8 @@ function SidebarLayout({ data, title, selectedID, children }) {
   const [heightHeader, setHeightHeader] = useState(0);
   const [heightFooter, setHeightFooter] = useState(0);
   const [widthContent, setWidthContent] = useState(0);
-  const [openSidebar, setOpenSidebar] = useState(null);
 
-  const handleBars = (isOpenBars) => {
-    setOpenSidebar(isOpenBars);
-  };
+  const showSidebar = useSelector((state) => state.sidebar?.showSidebar);
 
   useEffect(() => {
     setHeightHeader(refHeader.current.offsetHeight);
@@ -31,36 +29,44 @@ function SidebarLayout({ data, title, selectedID, children }) {
   return (
     <Stack>
       <Box ref={refHeader} zIndex={1}>
-        <HeaderComponent handleBars={handleBars} />
+        <HeaderComponent />
       </Box>
+
       <Box
         sx={{
           minHeight: `calc(100vh - ${heightHeader}px - ${heightFooter}px)`,
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: { xs: "space-between", md: "center" },
+          alignItems: "stretch",
         }}
-        display={"flex"}
-        flexDirection={"row"}
       >
         <Box
           bgcolor={Colors.search}
           sx={{
-            display: { xs: openSidebar ? "flex" : "none", sm: "flex" },
+            display: { xs: showSidebar ? "flex" : "none", sm: "flex" },
           }}
           ref={refSidebar}
         >
           <SideBarComponent data={data} title={title} selectedID={selectedID} />
         </Box>
+
         <Box
           sx={{
-            display: { xs: openSidebar ? "none" : "flex", sm: "flex" },
-            width: `calc(100vw - ${widthContent}px)`,
+            display: { xs: showSidebar ? "none" : "flex", sm: "flex" },
+            width: `calc(100vw - ${widthContent}px - 30px)`,
+            flexDirection: "column",
+            justifyContent: "space-between",
+            alignItems: "stretch",
+            paddingX: { sx: 0, sm: "15px"},
           }}
-          justifyContent={"center"}
-          alignItems={"flex-start"}
-          paddingTop={5}
+          paddingY={5}
         >
           {children}
         </Box>
+        
       </Box>
+
       <Box ref={refFooter} zIndex={1}>
         <FooterComponent />
       </Box>

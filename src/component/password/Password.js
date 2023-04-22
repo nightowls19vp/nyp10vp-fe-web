@@ -11,7 +11,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import * as Custom from "../custom/CustomComponents.js";
 
-function Password({ title }) {
+function Password({ title, id, onChangeValue }) {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -27,8 +27,9 @@ function Password({ title }) {
         </InputLabel>
         <Custom.PasswordInput
           placeholder={title}
-          id={`adornment-password ${title}`}
+          id={`adornment-password-${id}`}
           type={showPassword ? "text" : "password"}
+          onChange={(e) => onChangeValue(e.target.value, id)}
           endAdornment={
             <InputAdornment position="end">
               <IconButton

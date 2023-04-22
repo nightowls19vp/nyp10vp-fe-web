@@ -27,18 +27,18 @@ import routesConfig from "../../config/routes.js";
 import { dataHeader1, dataHeader2 } from "../../data/index.js";
 import MenuItem from "./MenuItem.js";
 import MenuItemRow from "./MenuItemRow.js";
+import { toggleShowSidebar } from "../../redux/sidebarSlice";
 
 const topSearch = [];
 
-function Header({ handleBars }) {
+function Header() {
 
   const [path, setPath] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isOpenBars, setIsOpenBars] = useState(true);
 
   // const user = useSelector((state) => state.auth.login?.currentUser);
   // const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -52,8 +52,7 @@ function Header({ handleBars }) {
   const id = open ? "simple-popover" : undefined;
 
   const handleHeaderBars = () => {
-    setIsOpenBars(!isOpenBars);
-    handleBars(isOpenBars);
+    dispatch(toggleShowSidebar());
   };
 
   // const handleAvatar = () => {

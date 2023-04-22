@@ -7,6 +7,7 @@ import { TbPackage, TbSettings, TbLogout } from "react-icons/tb";
 
 import PersonalInformation from "../features/Profile/PersonalInformation";
 import ChangePassword from "../features/Profile/ChangePassword";
+import MyPackage from "../features/Profile/MyPackage";
 
 const profile = [
   {
@@ -25,30 +26,31 @@ const profile = [
     id: 3,
     icon: <BsFillInfoSquareFill size={20} />,
     name: "Thông tin & quyền",
-    action: "information&Rights",
+    action: <ChangePassword />,
   },
   {
     id: 4,
     icon: <TbPackage size={20} />,
     name: "Tùy chọn quảng cáo",
-    action: "advertisement",
+    action: <ChangePassword />,
   },
   {
     id: 5,
     icon: <TbPackage size={20} />,
     name: "Gói của tôi",
-    action: "myPackage",
+    action: <MyPackage />,
   },
   {
     id: 6,
     icon: <TbSettings size={20} />,
     name: "Cài đặt thông báo",
-    action: "settings",
+    action: <ChangePassword />,
   },
   {
     id: 7,
     icon: <TbLogout size={20} />,
     name: "logout",
+    action: <ChangePassword />,
   },
 ];
 

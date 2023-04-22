@@ -4,7 +4,7 @@ import { List } from "@mui/material";
 import SidebarItemCollapse from "./SidebarItemCollapse.js";
 import SidebarItem from "./SidebarItem.js";
 
-function SideBar({ status, data, title, selectedID }) {
+function SideBar({ data, title, selectedID }) {
   const dataSidebar = data;
 
   return (
