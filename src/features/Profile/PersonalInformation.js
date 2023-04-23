@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Stack,
   Box,
@@ -14,10 +14,22 @@ import ImgAvatar from "../../assets/img/user.png";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import "../../assets/css/Content.scss";
 import { Colors } from "../../config/Colors";
-import VD from "./vd.js";
+
 
 function PersonalInformation() {
+  const inputRef = useRef();
   const [image, setImage] = useState(ImgAvatar);
+
+  const handleClick = () => {
+    inputRef.current.click();
+  };
+
+  const handleFileChange = event => {
+    const fileObj = event.target.files && event.target.files[0];
+    if (!fileObj) {
+      return;
+    }
+  };
   return (
     <Stack
       sx={{
@@ -36,9 +48,15 @@ function PersonalInformation() {
         }}
       >
         <Box flex={1} paddingX={"10px"} align={"center"}>
-          <CustomComponent.ButtonAvatar>
+          <CustomComponent.ButtonAvatar onClick={handleClick}>
             <CustomComponent.ImageSrc
               style={{ backgroundImage: `url(${image})` }}
+            />
+            <input
+              style={{ display: "none" }}
+              ref={inputRef}
+              type="file"
+              onChange={handleFileChange}
             />
             <CustomComponent.ImageBackdrop className="MuiImageBackdrop-root" />
             <CustomComponent.Image>
@@ -81,7 +99,7 @@ function PersonalInformation() {
             <Box className="form-connect-social-network">
               <Stack direction="row" spacing={"5px"}>
                 <img src={LogoGG} alt="Logo" width={25} height={25} />
-                <Typography display="block" gutterBottom >
+                <Typography display="block" gutterBottom>
                   Tài khoản GG
                 </Typography>
               </Stack>
@@ -92,12 +110,10 @@ function PersonalInformation() {
           </Stack>
         </Box>
       </Stack>
-      <Box
-        className="btn-save"
-      >
+      <Box className="btn-save">
         <Box flex={1} paddingX={"10px"}></Box>
-        <Box flex={2} paddingX={"10px"} align={"right"} >
-          <CustomComponent.Button1 > Lưu thay đổi </CustomComponent.Button1>
+        <Box flex={2} paddingX={"10px"} align={"right"}>
+          <CustomComponent.Button1> Lưu thay đổi </CustomComponent.Button1>
         </Box>
         <Box flex={1} paddingX={"10px"}></Box>
       </Box>
