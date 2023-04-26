@@ -5,11 +5,11 @@ import {
   getUserInforSuccess,
 } from "./userSlice";
 
-export const getInformationUser = async (userID, dispatch) => {
+export const getInformationUser = async (userID, dispatch, axiosJWT) => {
   dispatch(getUserInforStart());
   try {
-    const res = await apiClient.get(`/users/${userID}`);
-    dispatch(getUserInforSuccess(res));
+    const res = await axiosJWT.get(`/users/${userID}`);
+    dispatch(getUserInforSuccess(res.data));
   } catch (error) {
     dispatch(getUserInforFailed());
   }

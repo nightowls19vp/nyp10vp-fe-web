@@ -19,7 +19,7 @@ function Home() {
  
   return (
     <DefaultLayout >
-      <Typography> Content </Typography>
+      <></>
     </DefaultLayout>
   );
 }

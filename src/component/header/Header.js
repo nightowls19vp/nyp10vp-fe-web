@@ -19,7 +19,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { AiOutlineBars } from "react-icons/ai";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import jwtDecode from "jwt-decode";
+import { createAxios } from "../../http/createInstance";
 
 import "../../assets/css/Header.scss";
 import { Colors } from "../../config/Colors.js";
@@ -28,6 +28,8 @@ import { dataHeader1, dataHeader2 } from "../../data/index.js";
 import MenuItem from "./MenuItem.js";
 import MenuItemRow from "./MenuItemRow.js";
 import { toggleShowSidebar } from "../../redux/sidebarSlice";
+import { getInformationUser } from "../../redux/userRequest";
+import { loginSuccess } from "../../redux/authSlice.js"
 
 const topSearch = [];
 
@@ -36,9 +38,10 @@ function Header() {
   const [path, setPath] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  // const user = useSelector((state) => state.auth.login?.currentUser);
+  const user = useSelector((state) => state.auth.login?.currentUser);
   // const navigate = useNavigate();
   const dispatch = useDispatch();
+  // let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -60,6 +63,11 @@ function Header() {
   //     navigate("/login");
   //   }
   // };
+
+  const handleClickAvatar = () => {
+    let axiosJWT = createAxios(user, dispatch, loginSuccess);
+    getInformationUser(user?.data.userInfo._id, dispatch, axiosJWT);
+  }
 
   useEffect(() => {
     setPath(window.location.pathname);
@@ -164,7 +172,7 @@ function Header() {
             <MenuItemRow item={data} key={index} path={path} />
           ))}
           <Tooltip title="Account">
-            <Button>
+            <Button onClick={handleClickAvatar}>
               <NavLink to={routesConfig.profile} className="avatar">
                 <Avatar sizes="35" className="avatarActive" />
               </NavLink>

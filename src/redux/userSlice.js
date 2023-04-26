@@ -6,6 +6,7 @@ const userSlice = createSlice({
         userInfo: null,
         isFetching: false,
         error: false,
+        mgsUser: null,
     }, 
     reducers: {
         getUserInforStart: (state) => {

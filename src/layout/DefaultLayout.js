@@ -26,7 +26,6 @@ function DefaultLayout({ Children }) {
         sx={{
             minHeight: `calc(100vh - ${heightHeader}px - ${heightFooter}px)`,
         }}
-        zIndex={-1}
       >
         {Children}
       </Box>
