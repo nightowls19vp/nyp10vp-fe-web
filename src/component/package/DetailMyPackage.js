@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import "../../assets/css/Content.scss";
 import { Colors } from "../../config/Colors";
 
-function DetailPackage({ title, detail }) {
+function DetailMyPackage({ title, detail }) {
   return (
     <Box className="form-my-package">
       <Typography
@@ -27,4 +27,4 @@ function DetailPackage({ title, detail }) {
   );
 }
 
-export default DetailPackage;
+export default DetailMyPackage;

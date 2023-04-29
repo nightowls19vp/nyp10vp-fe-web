@@ -46,6 +46,7 @@ export const ButtonAvatar = styled(ButtonBase)(({ theme }) => ({
 
 export const ImageSrc = styled('span')({
   position: 'absolute',
+  borderRadius: '50%',
   left: 0,
   right: 0,
   top: 0,

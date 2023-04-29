@@ -24,7 +24,7 @@ export const dataHeader1 = [
   {
     id: 2,
     title: "Package",
-    route: "#",
+    route: routesConfig.package,
     iconFill: <MdPersonAddAlt1 size={25} color={Colors.primary} />,
     iconOutline: <MdPersonAddAlt size={25} color={Colors.icon} />,
   },

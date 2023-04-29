@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Stack, Typography, Box } from "@mui/material";
 
 import { Colors } from "../../config/Colors";
-import DetailPackage from "../../component/package/DetailPackage";
+import DetailMyPackage from "../../component/package/DetailMyPackage.js";
 
 function MyPackage() {
   const [name, setName] = useState(null);
@@ -21,11 +21,11 @@ function MyPackage() {
       >
         Gói đang sử dụng
       </Typography>
-      <DetailPackage title="Tên gói: " detail={name} />
-      <DetailPackage title="Ngày mua: " detail={dateBuy} />
-      <DetailPackage title="Hạn sử dụng: " detail={exp} />
-      <DetailPackage title="Số tiền: " detail={money} />
-      <DetailPackage title="Số lượng thành viên: " detail={member} />
+      <DetailMyPackage title="Tên gói: " detail={name} />
+      <DetailMyPackage title="Ngày mua: " detail={dateBuy} />
+      <DetailMyPackage title="Hạn sử dụng: " detail={exp} />
+      <DetailMyPackage title="Số tiền: " detail={money} />
+      <DetailMyPackage title="Số lượng thành viên: " detail={member} />
       <Typography
         variant="button"
         display="block"

@@ -1,49 +1,52 @@
-// import { combineReducers, configureStore } from "@reduxjs/toolkit";
-// import {
-//   persistStore,
-//   persistReducer,
-//   FLUSH,
-//   REHYDRATE,
-//   PAUSE,
-//   PERSIST,
-//   PURGE,
-//   REGISTER,
-// } from "redux-persist";
-// import storage from "redux-persist/lib/storage";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-import { configureStore } from "@reduxjs/toolkit";
+// import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 import sidebarSlice from "./sidebarSlice";
 import userSlice from "./userSlice";
 
-export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    sidebar: sidebarSlice,
-    user: userSlice,
-  }
-});
-
-
-// const persistConfig = {
-//   key: "root",
-//   version: 1,
-//   storage,
-// };
-
-// const rootReducer = combineReducers({
-//   auth: authReducer,
-// });
-// const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 // export const store = configureStore({
-//   reducer: persistedReducer,
-//   middleware: (getDefaultMiddleware) =>
-//     getDefaultMiddleware({
-//       serializableCheck: {
-//         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-//       },
-//     }),
+//   reducer: {
+//     auth: authReducer,
+//     sidebar: sidebarSlice,
+//     user: userSlice,
+//   }
 // });
 
-// export let persistor = persistStore(store);
+
+const persistConfig = {
+  key: "root",
+  version: 1,
+  storage,
+};
+
+const rootReducer = combineReducers({
+  auth: authReducer,
+  sidebar: sidebarSlice,
+  user: userSlice,
+});
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
+
+export let persistor = persistStore(store);

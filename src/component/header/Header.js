@@ -19,6 +19,8 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { AiOutlineBars } from "react-icons/ai";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import jwtDecode from "jwt-decode";
+
 import { createAxios } from "../../http/createInstance";
 
 import "../../assets/css/Header.scss";
@@ -38,8 +40,13 @@ function Header() {
   const [path, setPath] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  // const navigate = useNavigate();
+  let user = useSelector((state) => state.auth.login?.currentUser);
+  let day = new Date();
+  const decodedToken = jwtDecode(user?.accessToken);
+  if (decodedToken.exp < (day.getTime() -  decodedToken.iat)) {
+    user = null;
+  }
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   // let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
@@ -57,17 +64,6 @@ function Header() {
   const handleHeaderBars = () => {
     dispatch(toggleShowSidebar());
   };
-
-  // const handleAvatar = () => {
-  //   if (!user) {
-  //     navigate("/login");
-  //   }
-  // };
-
-  const handleClickAvatar = () => {
-    let axiosJWT = createAxios(user, dispatch, loginSuccess);
-    getInformationUser(user?.data.userInfo._id, dispatch, axiosJWT);
-  }
 
   useEffect(() => {
     setPath(window.location.pathname);
@@ -144,11 +140,11 @@ function Header() {
           >
             <Stack direction="column">
               {dataHeader1.map((data, index) => (
-                <MenuItem item={data} key={index} path={path} />
+                <MenuItem item={data} key={index} path={path} user={user} />
               ))}
               <Tooltip title="Account">
-                <IconButton>
-                  <NavLink to={routesConfig.profile} className="avatar">
+                <IconButton >
+                  <NavLink to={user ? routesConfig.profile : routesConfig.login} className="avatar">
                     <Avatar
                       sx={{ width: "27px", height: "27px" }}
                       className="avatarActive"
@@ -169,11 +165,11 @@ function Header() {
           className="nav-bar"
         >
           {dataHeader2.map((data, index) => (
-            <MenuItemRow item={data} key={index} path={path} />
+            <MenuItemRow item={data} key={index} path={path} user={user} />
           ))}
           <Tooltip title="Account">
-            <Button onClick={handleClickAvatar}>
-              <NavLink to={routesConfig.profile} className="avatar">
+            <Button >
+              <NavLink to={user ? routesConfig.profile : routesConfig.login} className="avatar">
                 <Avatar sizes="35" className="avatarActive" />
               </NavLink>
             </Button>
