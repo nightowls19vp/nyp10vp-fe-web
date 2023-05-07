@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 
 import { Colors } from "../../config/Colors";
-import { updateProfileId, updateShowSidebar, updateStockId } from "../../redux/sidebarSlice";
+import { updateProfileId, updateShowSidebar, updatePackageId } from "../../redux/sidebarSlice";
 
 function SidebarItem({ item, title, selectedID }) {
 
@@ -17,8 +17,8 @@ function SidebarItem({ item, title, selectedID }) {
   const dispacth = useDispatch();
 
   const handleButtonItemID = (ID) => {
-    if (title === "stock") {
-      dispacth(updateStockId(ID));
+    if (title === "package") {
+      dispacth(updatePackageId(ID));
     } else if (title === "profile") {
       dispacth(updateProfileId(ID));
     }

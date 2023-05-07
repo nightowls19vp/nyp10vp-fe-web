@@ -17,11 +17,9 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { AiOutlineBars } from "react-icons/ai";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
-
-import { createAxios } from "../../http/createInstance";
 
 import "../../assets/css/Header.scss";
 import { Colors } from "../../config/Colors.js";
@@ -29,13 +27,12 @@ import routesConfig from "../../config/routes.js";
 import { dataHeader1, dataHeader2 } from "../../data/index.js";
 import MenuItem from "./MenuItem.js";
 import MenuItemRow from "./MenuItemRow.js";
-import { toggleShowSidebar } from "../../redux/sidebarSlice";
-import { getInformationUser } from "../../redux/userRequest";
-import { loginSuccess } from "../../redux/authSlice.js"
+import { toggleShowSidebar, updatePackageId, updateProfileId } from "../../redux/sidebarSlice";
 
 const topSearch = [];
 
 function Header() {
+  const dispatch = useDispatch();
 
   const [path, setPath] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -43,11 +40,11 @@ function Header() {
   let user = useSelector((state) => state.auth.login?.currentUser);
   let day = new Date();
   const decodedToken = jwtDecode(user?.accessToken);
-  if (decodedToken.exp < (day.getTime() -  decodedToken.iat)) {
+  if (decodedToken.exp < (day.getTime())/1000) {
     user = null;
   }
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+
+  // const navigate = useNavigate();
   // let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const handleClick = (event) => {
@@ -67,7 +64,12 @@ function Header() {
 
   useEffect(() => {
     setPath(window.location.pathname);
-  }, []);
+    if (window.location.pathname === '/package') {
+      dispatch(updatePackageId(1));
+    } else if (window.location.pathname === '/profile') {
+      dispatch(updateProfileId(1));
+    }
+  }, [dispatch]);
 
   return (
     <AppBar

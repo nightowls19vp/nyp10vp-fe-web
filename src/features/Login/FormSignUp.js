@@ -254,7 +254,7 @@ export default function FormSignUp() {
               error={rePasswordError}
               helperText={rePasswordText}
             />
-            <DateTimePicker handleDateTimePicker={handleDateTimePicker} />
+            <DateTimePicker valueDay={null} handleDateTimePicker={handleDateTimePicker} />
             <CustomButton.Button1
               variant="contained"
               fullWidth

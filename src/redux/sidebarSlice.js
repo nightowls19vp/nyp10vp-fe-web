@@ -4,7 +4,7 @@ const sidebarSlice = createSlice({
     name: "sidebar",
     initialState: {
         showSidebar: false,
-        stockID: 1,
+        packageID: 1,
         profileID: 1,
     }, 
     reducers: {
@@ -14,8 +14,8 @@ const sidebarSlice = createSlice({
         toggleShowSidebar: (state) => {
             state.showSidebar =!state.showSidebar;
         },
-        updateStockId: (state, action) => {
-            state.stockID = action.payload;
+        updatePackageId: (state, action) => {
+            state.packageID = action.payload;
         },
         updateProfileId: (state, action) => {
             state.profileID = action.payload;
@@ -26,7 +26,7 @@ const sidebarSlice = createSlice({
 export const {
     toggleShowSidebar,
     updateShowSidebar,
-    updateStockId,
+    updatePackageId,
     updateProfileId,
 } = sidebarSlice.actions;
 

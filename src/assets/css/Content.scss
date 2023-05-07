@@ -41,6 +41,12 @@
     }
 }
 
+.box-noti {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
 .map-container {
     height: 400px;
 }

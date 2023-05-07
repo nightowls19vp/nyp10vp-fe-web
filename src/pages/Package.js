@@ -7,10 +7,10 @@ import dataPackage from "../data/dataPackage.js";
 import DetailItem from "../component/package/DetailItem.js";
 
 function Package() {
-  const selectedStock = useSelector((state) => state.sidebar?.stockID);
+  const selectedPackage = useSelector((state) => state.sidebar?.packageID);
 
   return (
-    <SidebarLayout data={dataPackage} title="stock" selectedID={selectedStock}>
+    <SidebarLayout data={dataPackage} title="package" selectedID={selectedPackage}>
       <DetailItem />
     </SidebarLayout>
   );

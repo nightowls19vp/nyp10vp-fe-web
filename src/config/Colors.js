@@ -10,4 +10,5 @@ export const Colors = {
     itemSidebar: "#00b300",
     btnFill: "#FFAA33",
     btnOutline: "#ffeacc",
+    black: "#000000",
 };

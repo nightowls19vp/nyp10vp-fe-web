@@ -7,7 +7,7 @@ import {
   Typography,
   Divider,
 } from "@mui/material";
-import { AiOutlineEdit } from "react-icons/ai";
+import { AiFillCamera } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 
 import LogoGG from "../../assets/img/google.png";
@@ -15,16 +15,20 @@ import ImgAvatar from "../../assets/img/user.png";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import "../../assets/css/Content.scss";
 import { Colors } from "../../config/Colors";
-import { updateInformationUser } from "../../redux/userRequest";
+import {
+  updateInformationUser,
+  updateAvatarUser,
+} from "../../redux/userRequest";
 import { createAxios } from "../../http/createInstance";
 import { loginSuccess } from "../../redux/authSlice.js";
+import DateTimePicker from "../../component/Date/DateTimePicker";
 
 function PersonalInformation() {
+  const inputRef = useRef();
   const user = useSelector((state) => state.auth.login?.currentUser);
   const dispatch = useDispatch();
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  const inputRef = useRef();
   const [image, setImage] = useState(
     user ? user.data.userInfo.avatar : ImgAvatar
   );
@@ -45,6 +49,22 @@ function PersonalInformation() {
     if (!fileObj) {
       return;
     }
+    // setImage(URL.createObjectURL(fileObj));
+
+    var render = new FileReader();
+    render.readAsDataURL(fileObj);
+    render.onload = () => {
+      setImage(render.result);
+      console.log(render.result);
+      updateAvatarUser(user?.data.userInfo._id, render.result, axiosJWT);
+    };
+    render.onerror = (error) => {
+      console.log("Error: ", error);
+    };
+  };
+
+  const handleDateTimePicker = (dateValue) => {
+    setDob(dateValue);
   };
 
   const handleButtonChange = () => {
@@ -87,11 +107,14 @@ function PersonalInformation() {
               style={{ display: "none" }}
               ref={inputRef}
               type="file"
+              accept="image/*"
               onChange={handleFileChange}
             />
             <CustomComponent.ImageBackdrop className="MuiImageBackdrop-root" />
             <CustomComponent.Image>
-              <AiOutlineEdit color={Colors.text} size={25} />
+              <Box bgcolor={Colors.gray} borderRadius={"50%"} padding={"8px"}>
+                <AiFillCamera color={Colors.black} size={25} />
+              </Box>
             </CustomComponent.Image>
           </CustomComponent.ButtonAvatar>
         </Box>
@@ -136,12 +159,16 @@ function PersonalInformation() {
             <Typography variant="overline" display="block" gutterBottom pr={2}>
               Ngày sinh
             </Typography>
-            <TextField
+            {/* <TextField
               id="dob"
               variant="outlined"
               size="small"
               defaultValue={dob}
               onChange={(e) => setDob(e.target.value)}
+            /> */}
+            <DateTimePicker
+              valueDay={dob}
+              handleDateTimePicker={handleDateTimePicker}
             />
           </Grid>
         </Box>
