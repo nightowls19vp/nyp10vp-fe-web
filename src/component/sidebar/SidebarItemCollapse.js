@@ -24,14 +24,14 @@ function SidebarItemCollapse({ item, title, selectedID }) {
         }}
         onClick={() => setOpen(!open)}
       >
-        <ListItemIcon
+        {/* <ListItemIcon
           sx={{
             color: open ? Colors.textPrimary : Colors.text,
             fontWeight: open ? 600 : null,
           }}
         >
           {item.icon && item.icon}
-        </ListItemIcon>
+        </ListItemIcon> */}
         <ListItemText>
           <Typography
             sx={{

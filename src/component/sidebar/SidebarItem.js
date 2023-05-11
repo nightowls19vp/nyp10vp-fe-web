@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { useDispatch } from "react-redux";
 import {
   ListItemButton,
@@ -8,10 +8,13 @@ import {
 } from "@mui/material";
 
 import { Colors } from "../../config/Colors";
-import { updateProfileId, updateShowSidebar, updatePackageId } from "../../redux/sidebarSlice";
+import {
+  updateProfileId,
+  updateShowSidebar,
+  updatePackageId,
+} from "../../redux/packageSlice";
 
 function SidebarItem({ item, title, selectedID }) {
-
   const selectedIdx = selectedID;
 
   const dispacth = useDispatch();
@@ -23,27 +26,32 @@ function SidebarItem({ item, title, selectedID }) {
       dispacth(updateProfileId(ID));
     }
     dispacth(updateShowSidebar(false));
-  }
-  
+  };
+
   return (
     <>
       <ListItemButton
         sx={{
-          backgroundColor: selectedIdx === item.id ? Colors.primary : null,
+          backgroundColor: selectedIdx === item._id ? Colors.primary : null,
           "&: hover": { backgroundColor: Colors.gray },
         }}
         onClick={() => {
-          handleButtonItemID(item.id);
+          handleButtonItemID(item._id);
         }}
       >
-        <ListItemIcon sx={{ color: selectedIdx === item.id ? Colors.background : null }}>
-          {item.icon && item.icon}
-        </ListItemIcon>
+        {item.icon ? (
+          <ListItemIcon
+            sx={{ color: selectedIdx === item._id ? Colors.background : null }}
+          >
+            {item.icon && item.icon}
+          </ListItemIcon>
+        ) : null}
         <ListItemText>
           <Typography
             sx={{
-              color: selectedIdx === item.id ? Colors.background : null,
-              fontWeight: selectedIdx === item.id ? 800 : null,
+              color: selectedIdx === item._id ? Colors.background : null,
+              fontWeight: selectedIdx === item._id ? 800 : null,
+              paddingLeft: item.icon ? "10px" : null,
             }}
           >
             {item.name}

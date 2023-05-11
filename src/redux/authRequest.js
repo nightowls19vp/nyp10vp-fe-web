@@ -36,6 +36,15 @@ export const registerUser = async (user, dispatch, navigate) => {
   }
 };
 
+export const loginGG = async (dispatch) => {
+  try {
+    const res = await apiClient.get("/auth/validate");
+    console.log(res.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const logoutUser = async (dispatch, navigate) => {
   dispatch(logoutStart());
   try {

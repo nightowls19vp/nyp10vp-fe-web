@@ -20,6 +20,7 @@ import { AiOutlineBars } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
+import { createAxios } from "../../http/createInstance.js";
 
 import "../../assets/css/Header.scss";
 import { Colors } from "../../config/Colors.js";
@@ -27,7 +28,9 @@ import routesConfig from "../../config/routes.js";
 import { dataHeader1, dataHeader2 } from "../../data/index.js";
 import MenuItem from "./MenuItem.js";
 import MenuItemRow from "./MenuItemRow.js";
-import { toggleShowSidebar, updatePackageId, updateProfileId } from "../../redux/sidebarSlice";
+import { toggleShowSidebar, updatePackageId, updateProfileId } from "../../redux/packageSlice";
+import { getAllPackage, getUserCart } from "../../redux/packageRequest";
+import { loginSuccess } from "../../redux/authSlice";
 
 const topSearch = [];
 
@@ -45,7 +48,7 @@ function Header() {
   }
 
   // const navigate = useNavigate();
-  // let axiosJWT = createAxios(user, dispatch, loginSuccess);
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -64,12 +67,14 @@ function Header() {
 
   useEffect(() => {
     setPath(window.location.pathname);
-    if (window.location.pathname === '/package') {
-      dispatch(updatePackageId(1));
-    } else if (window.location.pathname === '/profile') {
-      dispatch(updateProfileId(1));
-    }
-  }, [dispatch]);
+    // getAllPackage(dispatch);
+    // getShoppingCart().then((cart) => {
+    //   setShopping(cart);
+    // });
+    // return function cleanup() {
+    //   getShoppingCart();
+    // }
+  }, []);
 
   return (
     <AppBar

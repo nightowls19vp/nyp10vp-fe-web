@@ -13,7 +13,7 @@ import storage from "redux-persist/lib/storage";
 
 // import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
-import sidebarSlice from "./sidebarSlice";
+import packageSlice from "./packageSlice";
 import userSlice from "./userSlice";
 
 
@@ -34,7 +34,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  sidebar: sidebarSlice,
+  sidebar: packageSlice,
   user: userSlice,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);

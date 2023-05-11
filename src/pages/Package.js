@@ -3,17 +3,15 @@ import { useSelector } from "react-redux";
 
 import SidebarLayout from "../layout/SidebarLayout.js";
 
-import dataPackage from "../data/dataPackage.js";
-import DetailItem from "../component/package/DetailItem.js";
-import { getAllPackage } from "../redux/packageRequest.js";
+import Item from "../component/package/Item.js";
 
 function Package() {
-  getAllPackage();
   const selectedPackage = useSelector((state) => state.sidebar?.packageID);
+  const dataPackage = useSelector((state) => state.sidebar?.package)
 
   return (
     <SidebarLayout data={dataPackage} title="package" selectedID={selectedPackage}>
-      <DetailItem />
+      <Item />
     </SidebarLayout>
   );
 }

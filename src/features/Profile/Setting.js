@@ -10,7 +10,7 @@ import "../../assets/css/Content.scss";
 import { Colors } from "../../config/Colors.js";
 import ButtonSetting from "../../component/noti/ButtonSetting";
 import * as Custom from "../../component/custom/CustomComponents.js";
-import { updateSettingUser } from "../../redux/userRequest";
+import { getSettingUser, updateSettingUser } from "../../redux/userRequest";
 
 function Setting() {
   const user = useSelector((state) => state.auth.login?.currentUser);
@@ -25,7 +25,12 @@ function Setting() {
     user?.data.userInfo.setting.stockNoti
   );
 
-  useEffect(() => {
+  const getSetting = async(userID) => {
+    const res = await getSettingUser(userID);
+    console.log(res);
+  };
+
+  const updateSetting = async() => {
     let formData = {
       stockNoti: stockNoti,
       newsNoti: newsNoti,
@@ -33,17 +38,41 @@ function Setting() {
       msgNoti: chatNoti
     }
     console.log(formData);
-    // const updateSetting = async(formData) => {
-    //   if (user) {
-    //     const res = await updateSettingUser(user?.data.userInfo._id, formData);
-    //     console.log(res);
-    //   }
-    // }
-    // return () => {
-    //   updateSetting(formData);
-    // }
-    updateSettingUser(user?.data.userInfo._id, formData);
-  }, [stockNoti, newsNoti, callNoti, chatNoti, user])
+    await updateSettingUser(user?.data.userInfo._id, formData);
+    // getSetting(user?.data.userInfo._id)
+  }
+
+  const handlButtonStock = () => {
+    setStockNoti(() => !stockNoti);
+    updateSetting();
+  };
+
+  const handlButtonNews = () => {
+    setNewsNoti(() => !newsNoti);
+    updateSetting();
+  };
+
+  const handlButtonCall = () => {
+    setCallNoti(() => !callNoti);
+    updateSetting();
+  };
+
+  const handlButtonChat = () => {
+    setChatNoti(() => !chatNoti);
+    updateSetting();
+  };
+
+  // useEffect(() => {
+  //   let formData = {
+  //     stockNoti: stockNoti,
+  //     newsNoti: newsNoti,
+  //     callNoti: callNoti,
+  //     msgNoti: chatNoti
+  //   }
+  //   updateSettingUser(user?.data.userInfo._id, formData);
+  //   getSetting(user?.data.userInfo._id)
+
+  // }, [stockNoti, newsNoti, callNoti, chatNoti, user])
 
 
   return (
@@ -64,7 +93,8 @@ function Setting() {
           flexDirection: "row",
           justifyContent: "space-between",
         }}
-        onClick={() => setStockNoti(!stockNoti)}
+        // onClick={() => setStockNoti(!stockNoti)}
+        onClick={handlButtonStock}
       >
         <ButtonSetting
           title="Kho hàng"
@@ -82,6 +112,7 @@ function Setting() {
           justifyContent: "space-between",
         }}
         onClick={() => setNewsNoti(!newsNoti)}
+        // onClick={handlButtonNews}
       >
         <ButtonSetting
           title="Quảng cáo"
@@ -98,7 +129,8 @@ function Setting() {
           flexDirection: "row",
           justifyContent: "space-between",
         }}
-        onClick={() => setCallNoti(!callNoti)}
+        // onClick={() => setCallNoti(!callNoti)}
+        onClick={handlButtonCall}
       >
         <ButtonSetting
           title="Gọi điện"
@@ -115,7 +147,8 @@ function Setting() {
           flexDirection: "row",
           justifyContent: "space-between",
         }}
-        onClick={() => setChatNoti(!chatNoti)}
+        // onClick={() => setChatNoti(!chatNoti)}
+        onClick={handlButtonChat}
       >
         <ButtonSetting
           title="Tin nhắn"

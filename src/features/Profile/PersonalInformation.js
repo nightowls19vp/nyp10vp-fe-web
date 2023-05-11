@@ -18,6 +18,7 @@ import { Colors } from "../../config/Colors";
 import {
   updateInformationUser,
   updateAvatarUser,
+  uploadFile,
 } from "../../redux/userRequest";
 import { createAxios } from "../../http/createInstance";
 import { loginSuccess } from "../../redux/authSlice.js";
@@ -44,23 +45,20 @@ function PersonalInformation() {
     inputRef.current.click();
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async(event) => {
     const fileObj = event.target.files && event.target.files[0];
     if (!fileObj) {
       return;
     }
-    // setImage(URL.createObjectURL(fileObj));
+    const form = new FormData();
+    form.append('file', fileObj);
+    const res = await uploadFile(user?.accessToken, form);
+    
+    const formAvatar = new FormData();
+    formAvatar.append('avatar', res.data);
+    await updateAvatarUser(user?.data.userInfo._id, formAvatar, axiosJWT);
 
-    var render = new FileReader();
-    render.readAsDataURL(fileObj);
-    render.onload = () => {
-      setImage(render.result);
-      console.log(render.result);
-      updateAvatarUser(user?.data.userInfo._id, render.result, axiosJWT);
-    };
-    render.onerror = (error) => {
-      console.log("Error: ", error);
-    };
+    setImage(res.data);
   };
 
   const handleDateTimePicker = (dateValue) => {
@@ -79,6 +77,20 @@ function PersonalInformation() {
       dispatch,
       axiosJWT
     );
+  };
+
+  const handleConnectSocialAcc = () => {
+    try {
+      window.open(
+        `http://localhost:3000/api/auth/oauth2/google/${"http://localhost:8080/profile".replaceAll(
+          "/",
+          "@"
+        )}/${user.data.userInfo._id}`,
+        "_self"
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -185,7 +197,7 @@ function PersonalInformation() {
                   Tài khoản GG
                 </Typography>
               </Stack>
-              <CustomComponent.Button2 size="small" disabled={socialAcc}>
+              <CustomComponent.Button2 size="small" disabled={socialAcc} onClick={handleConnectSocialAcc}>
                 Liên kết
               </CustomComponent.Button2>
             </Box>
@@ -196,8 +208,7 @@ function PersonalInformation() {
         <Box flex={1} paddingX={"10px"}></Box>
         <Box flex={2} paddingX={"10px"} align={"right"}>
           <CustomComponent.Button1 onClick={handleButtonChange}>
-            {" "}
-            Lưu thay đổi{" "}
+            Lưu thay đổi
           </CustomComponent.Button1>
         </Box>
         <Box flex={1} paddingX={"10px"}></Box>

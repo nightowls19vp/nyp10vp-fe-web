@@ -12,43 +12,43 @@ import Setting from "../features/Profile/Setting";
 
 const profile = [
   {
-    id: 1,
+    _id: 1,
     icon: <BsPersonBoundingBox size={20} />,
     name: "Thông tin cá nhân",
     action: <PersonalInformation />,
   },
   {
-    id: 2,
+    _id: 2,
     icon: <BsFillLockFill size={20} />,
     name: "Đổi mật khẩu",
     action: <ChangePassword />,
   },
   {
-    id: 3,
+    _id: 3,
     icon: <BsFillInfoSquareFill size={20} />,
     name: "Thông tin & quyền",
     action: <ChangePassword />,
   },
   {
-    id: 4,
+    _id: 4,
     icon: <TbPackage size={20} />,
     name: "Tùy chọn quảng cáo",
     action: <ChangePassword />,
   },
   {
-    id: 5,
+    _id: 5,
     icon: <TbPackage size={20} />,
     name: "Gói của tôi",
     action: <MyPackage />,
   },
   {
-    id: 6,
+    _id: 6,
     icon: <TbSettings size={20} />,
     name: "Cài đặt thông báo",
     action: <Setting />,
   },
   {
-    id: 7,
+    _id: 7,
     icon: <TbLogout size={20} />,
     name: "logout",
     action: <ChangePassword />,

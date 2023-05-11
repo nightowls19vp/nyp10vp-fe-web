@@ -12,9 +12,9 @@ function Profile() {
       title="profile"
       selectedID={selectedProfile}
     >
-      {dataProfile.map((route) =>
+      {dataProfile.map((route, index) =>
         route ? (
-          route.id === selectedProfile ? (
+          route._id === selectedProfile ? (
             <Fragment key={route.id}> {route.action} </Fragment>
           ) : null
         ) : null
