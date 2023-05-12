@@ -6,16 +6,17 @@ import dataProfile from "../data/profile.js";
 
 function Profile() {
   const selectedProfile = useSelector((state) => state.sidebar?.profileID);
+
   return (
     <SidebarLayout
       data={dataProfile}
       title="profile"
       selectedID={selectedProfile}
     >
-      {dataProfile.map((route, index) =>
+      {dataProfile.map((route) =>
         route ? (
           route._id === selectedProfile ? (
-            <Fragment key={route.id}> {route.action} </Fragment>
+            <Fragment key={route._id}> {route.action} </Fragment>
           ) : null
         ) : null
       )}

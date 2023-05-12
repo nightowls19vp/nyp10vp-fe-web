@@ -1,7 +1,7 @@
 import apiClient from "../http/http-common.js";
 
 // import dataPackage from "../data/dataPackage.js";
-import { setInitialPackage, updatePackageId } from "./packageSlice.js";
+import { setInitialCart, setInitialPackage, updateNumberCart, updatePackageId } from "./packageSlice.js";
 
 export const getAllPackage = async (dispatch) => {
   try {
@@ -23,7 +23,6 @@ export const getAllPackage = async (dispatch) => {
     for (let item of res.data.data) {
       dataPackage[0].child.push(item);
     }
-
     dispatch(setInitialPackage(dataPackage));
 
     dispatch(updatePackageId(dataPackage[0].child[0]._id));
@@ -42,10 +41,32 @@ export const getDetailPackage = async (pakageID) => {
   }
 };
 
-export const getUserCart = async (userID, axiosJWT) => {
+export const getUserCart = async (userID, token, dispatch, axiosJWT) => {
   try {
-    const res = await axiosJWT.get(`/users/${userID}/cart`);
-    return res.data;
+    const res = await axiosJWT.get(`/users/${userID}/cart`, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+        
+      },
+    });
+    dispatch(setInitialCart(res.data.cart));
+    dispatch(updateNumberCart(res.data.cart.length));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateUserCart = async (userID, cart, token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.put(`/users/${userID}/cart`, cart, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+        
+      },
+    });
+    dispatch(setInitialCart(res.data.cart));
   } catch (error) {
     console.log(error);
   }

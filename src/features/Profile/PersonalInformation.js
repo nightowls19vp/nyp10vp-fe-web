@@ -52,11 +52,11 @@ function PersonalInformation() {
     }
     const form = new FormData();
     form.append('file', fileObj);
-    const res = await uploadFile(user?.accessToken, form);
+    const res = await uploadFile(user?.data.userInfo._id, user?.accessToken, form);
     
     const formAvatar = new FormData();
     formAvatar.append('avatar', res.data);
-    await updateAvatarUser(user?.data.userInfo._id, formAvatar, axiosJWT);
+    await updateAvatarUser(user?.data.userInfo._id, user?.accessToken, formAvatar, axiosJWT);
 
     setImage(res.data);
   };

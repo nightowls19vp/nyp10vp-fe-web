@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -20,7 +20,7 @@ import { AiOutlineBars } from "react-icons/ai";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
-import { createAxios } from "../../http/createInstance.js";
+// import { createAxios } from "../../http/createInstance.js";
 
 import "../../assets/css/Header.scss";
 import { Colors } from "../../config/Colors.js";
@@ -28,27 +28,26 @@ import routesConfig from "../../config/routes.js";
 import { dataHeader1, dataHeader2 } from "../../data/index.js";
 import MenuItem from "./MenuItem.js";
 import MenuItemRow from "./MenuItemRow.js";
-import { toggleShowSidebar, updatePackageId, updateProfileId } from "../../redux/packageSlice";
-import { getAllPackage, getUserCart } from "../../redux/packageRequest";
-import { loginSuccess } from "../../redux/authSlice";
+import { toggleShowSidebar } from "../../redux/packageSlice";
+// import { loginSuccess } from "../../redux/authSlice";
 
 const topSearch = [];
 
 function Header() {
   const dispatch = useDispatch();
-
-  const [path, setPath] = useState(null);
-  const [anchorEl, setAnchorEl] = useState(null);
-
+  
   let user = useSelector((state) => state.auth.login?.currentUser);
+  
   let day = new Date();
   const decodedToken = jwtDecode(user?.accessToken);
   if (decodedToken.exp < (day.getTime())/1000) {
     user = null;
   }
+  
+  const [anchorEl, setAnchorEl] = useState(null);
 
   // const navigate = useNavigate();
-  let axiosJWT = createAxios(user, dispatch, loginSuccess);
+  // let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -65,16 +64,6 @@ function Header() {
     dispatch(toggleShowSidebar());
   };
 
-  useEffect(() => {
-    setPath(window.location.pathname);
-    // getAllPackage(dispatch);
-    // getShoppingCart().then((cart) => {
-    //   setShopping(cart);
-    // });
-    // return function cleanup() {
-    //   getShoppingCart();
-    // }
-  }, []);
 
   return (
     <AppBar
@@ -147,7 +136,7 @@ function Header() {
           >
             <Stack direction="column">
               {dataHeader1.map((data, index) => (
-                <MenuItem item={data} key={index} path={path} user={user} />
+                <MenuItem item={data} key={index}  user={user} />
               ))}
               <Tooltip title="Account">
                 <IconButton >
@@ -172,7 +161,7 @@ function Header() {
           className="nav-bar"
         >
           {dataHeader2.map((data, index) => (
-            <MenuItemRow item={data} key={index} path={path} user={user} />
+            <MenuItemRow item={data} key={index} user={user} />
           ))}
           <Tooltip title="Account">
             <Button >

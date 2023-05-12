@@ -45,10 +45,16 @@ export const loginGG = async (dispatch) => {
   }
 };
 
-export const logoutUser = async (dispatch, navigate) => {
+export const logoutUser = async (token, dispatch, navigate) => {
   dispatch(logoutStart());
   try {
-    await apiClient.post("/auth/logout");
+    await apiClient.post("/auth/logout", {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
     dispatch(logoutSuccess());
     navigate("/login");
   } catch (error) {

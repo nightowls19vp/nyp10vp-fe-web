@@ -7,10 +7,18 @@ const packageSlice = createSlice({
     packageID: 1,
     profileID: 1,
     package: [],
+    numberCart: 0,
+    cart: null,
   },
   reducers: {
     setInitialPackage: (state, action) => {
       state.package = action.payload;
+    },
+    setInitialCart: (state, action) => {
+      state.cart = action.payload;
+    },
+    updateNumberCart: (state, action) => {
+      state.numberCart = action.payload;
     },
     updateShowSidebar: (state, action) => {
       state.showSidebar = action.payload;
@@ -29,6 +37,8 @@ const packageSlice = createSlice({
 
 export const {
   setInitialPackage,
+  setInitialCart,
+  updateNumberCart,
   toggleShowSidebar,
   updateShowSidebar,
   updatePackageId,

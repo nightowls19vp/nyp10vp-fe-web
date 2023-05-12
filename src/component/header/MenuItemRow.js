@@ -1,10 +1,25 @@
-import React from "react";
-import { IconButton, Tooltip, Badge } from "@mui/material";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
+import { IconButton, Tooltip, Badge } from "@mui/material";
+
 import configRoutes from "../../config/routes.js";
 import { privateRoutes } from "../../routes/index.js";
+import { getAllPackage } from "../../redux/packageRequest.js";
 
-function MenuItemRow({ item, path, user }) {
+function MenuItemRow({ item, user }) {
+  const dispatch = useDispatch();
+
+  const numberCart = useSelector((state) => state.sidebar.numberCart);
+  
+  const [path, setPath] = useState(window.location.pathname);
+
+  const handleButtonHeader = () => {
+    if (item.title === "Package") {
+      getAllPackage(dispatch);
+    } 
+    setPath(window.location.pathname);
+  }
   return (
     <Tooltip title={item.title}>
       <IconButton
@@ -12,11 +27,12 @@ function MenuItemRow({ item, path, user }) {
         sx={{
           alignItems: "center",
         }}
+        onClick={handleButtonHeader}
       >
         <Badge
-          badgeContent={4}
+          badgeContent={numberCart}
           color="primary"
-          invisible={item.title === "Shopping" ? false : true}
+          invisible={item.title === "Shopping" && user ? false : true}
         >
           {privateRoutes.map(({ path }) => path).includes(item.route) ? (
             <NavLink to={user ? item.route : configRoutes.login}>
