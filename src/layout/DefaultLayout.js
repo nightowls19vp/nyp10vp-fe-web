@@ -4,8 +4,7 @@ import { Stack, Box } from "@mui/material";
 import HeaderComponent from "../component/header/Header";
 import FooterComponent from "../component/footer/Footer";
 
-
-function DefaultLayout({ Children }) {
+function DefaultLayout({ children }) {
   const refHeader = useRef(null);
   const refFooter = useRef(null);
 
@@ -19,17 +18,17 @@ function DefaultLayout({ Children }) {
 
   return (
     <Stack>
-      <Box ref={refHeader} zIndex={1} >
+      <Box ref={refHeader} zIndex={1}>
         <HeaderComponent />
       </Box>
       <Box
         sx={{
-            minHeight: `calc(100vh - ${heightHeader}px - ${heightFooter}px)`,
+          minHeight: `calc(100vh - ${heightHeader}px - ${heightFooter}px)`,
         }}
       >
-        {Children}
+        {children}
       </Box>
-      <Box ref={refFooter} zIndex={1} >
+      <Box ref={refFooter} zIndex={1}>
         <FooterComponent />
       </Box>
     </Stack>

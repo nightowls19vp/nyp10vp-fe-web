@@ -1,6 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Stack, Box, Typography, Divider } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardActions,
+  Typography,
+  Stack,
+  Box,
+  IconButton,
+  Divider,
+} from "@mui/material";
+import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 
 import { createAxios } from "../../http/createInstance.js";
 
@@ -18,6 +28,30 @@ function DetailItem({ item }) {
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
+  const [member, setMember] = useState(0);
+  const [arrowLeftMem, setArrowLeftMem] = useState(false);
+  const [arrowRightMem, setArrowRightMem] = useState(false);
+
+  const [duration, setDuration] = useState(0);
+  const [arrowLeftDura, setArrowLeftDura] = useState(false);
+  const [arrowRightDura, setArrowRightDura] = useState(false);
+
+  const [money, setMoney] = useState(0);
+
+  const handleArrowLeftMem = () => {
+    setMember(member - 1);
+  };
+  const handleArrowRightMem = () => {
+    setMember(member + 1);
+  };
+
+  const handleArrowLeftDura = () => {
+    //
+  };
+  const handleArrowRightDura = () => {
+    //
+  };
+
   const handleButtonShoppingCart = () => {
     let shoppingCart = userCart;
     console.log(shoppingCart);
@@ -30,97 +64,85 @@ function DetailItem({ item }) {
         formData.quantity = ele.quantity + 1;
       }
     }
-    shoppingCart = [...shoppingCart.filter(data => data.package !== item._id), formData];
+    shoppingCart = [
+      ...shoppingCart.filter((data) => data.package !== item._id),
+      formData,
+    ];
     let formCart = {
       cart: shoppingCart,
-    }
+    };
     console.log(formCart);
-    updateUserCart(user?.data.userInfo._id, formCart, user?.accessToken, dispatch, axiosJWT);
+    updateUserCart(
+      user?.data.userInfo._id,
+      formCart,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
   };
 
+  useEffect(() => {
+    if (member <= 0) {
+      setArrowLeftMem(true);
+    } else {
+      setArrowLeftMem(false);
+    }
+  }, [member]);
+
   return (
-    <>
-      <Typography
-        variant="button"
-        display="block"
-        fontSize={18}
-        color={Colors.textPrimary}
-        gutterBottom
-      >
-        {item.name}
-      </Typography>
-
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="flex-start"
-        spacing={2}
-      >
-        <Box flex={3}>
-          <Typography variant="h6" gutterBottom>
-            Mô tả
+    <Card sx={{ width: "25%", backgroundColor: Colors.search, marginX: '10px' }}>
+      <CardContent>
+        <Typography variant="button" display="block" gutterBottom align="center" >
+          {item.name}
+        </Typography>
+        <Typography variant="body2" gutterBottom align="justify">
+          {item.description}
+        </Typography>
+        <Divider flexItem sx={{ paddingY: "10px" }} />
+        <Stack>
+          <Typography variant="overline" display="block" gutterBottom>
+            Số người
           </Typography>
-          <Typography variant="body2" align="justify" gutterBottom>
-            {item.description}
+          <Box className="item">
+            <IconButton disabled={arrowLeftMem} onClick={handleArrowLeftMem}>
+              <BsArrowLeftShort />
+            </IconButton>
+            <CustomComponents.CssTextField size="small" value={member} />
+            <IconButton disabled={arrowRightMem} onClick={handleArrowRightMem}>
+              <BsArrowRightShort />
+            </IconButton>
+          </Box>
+        </Stack>
+        <Divider flexItem sx={{ paddingY: "10px" }} />
+        <Stack>
+          <Typography variant="overline" display="block" gutterBottom>
+            Thời gian
           </Typography>
-        </Box>
-        <Divider orientation="vertical" flexItem />
-        <Box flex={2}>
-          <Stack
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
-            spacing={2}
-          >
-            <Typography variant="h6" gutterBottom>
-              Thời gian:
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              {item.duration}/ngày
-            </Typography>
-          </Stack>
-          <Stack
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
-            spacing={2}
-          >
-            <Typography variant="h6" gutterBottom>
-              Số lượng thành viên:
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              {item.noOfMember}/người
-            </Typography>
-          </Stack>
-          <Stack
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
-            spacing={2}
-          >
-            <Typography variant="h6" gutterBottom>
-              Giá tiền:
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              {item.price}/đồng
-            </Typography>
-          </Stack>
-        </Box>
-      </Stack>
-
-      <div className="group-btn">
-        <div className="btn-package">
-          <CustomComponents.Button2
-            onClick={handleButtonShoppingCart}
-          >
-            Thêm vào giỏ hàng
-          </CustomComponents.Button2>
-        </div>
-        <div className="btn-package">
-          <CustomComponents.Button1>Mua gói</CustomComponents.Button1>
-        </div>
-      </div>
-    </>
+          <Box className="item">
+            <IconButton disabled={arrowLeftDura} onClick={handleArrowLeftDura}>
+              <BsArrowLeftShort />
+            </IconButton>
+            <CustomComponents.CssTextField size="small" value={duration} />
+            <IconButton
+              disabled={arrowRightDura}
+              onClick={handleArrowRightDura}
+            >
+              <BsArrowRightShort />
+            </IconButton>
+          </Box>
+        </Stack>
+        <Divider flexItem sx={{ paddingY: "10px" }} />
+        <Typography variant="subtitle2" gutterBottom className="item">
+          {money}
+        </Typography>
+      </CardContent>
+      <CardActions
+        sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}
+      >
+        <CustomComponents.Button2>Thêm vào giỏ hàng</CustomComponents.Button2>
+        <CustomComponents.Button1>Mua gói</CustomComponents.Button1>
+      </CardActions>
+    </Card>
   );
 }
 

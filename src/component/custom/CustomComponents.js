@@ -1,4 +1,4 @@
-import { Button, OutlinedInput, styled, ButtonBase, Switch } from "@mui/material";
+import { Button, OutlinedInput, styled, ButtonBase, Switch, TextField } from "@mui/material";
 
 import { Colors } from "../../config/Colors";
 
@@ -159,3 +159,23 @@ export const IOSSwitch = styled((props) => (
     }),
   },
 }));
+
+export const CssTextField = styled(TextField)({
+  backgroundColor: '#ffffff',
+  minWidth: '20px',
+  width: '60px',
+  '& .MuiInput-underline:after': {
+    borderBottomColor: '#B2BAC2',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: '#B2BAC2',
+    },
+    '&:hover fieldset': {
+      borderColor: '#B2BAC2',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#6F7E8C',
+    },
+  },
+});
