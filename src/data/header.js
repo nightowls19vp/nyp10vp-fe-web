@@ -45,7 +45,7 @@ export const dataHeader2 = [
   {
     id: 5,
     title: "Shopping",
-    route: "#",
+    route:  routesConfig.shopping,
     iconFill: <MdShoppingCart size={35} color={Colors.primary} />,
     iconOutline: <MdOutlineShoppingCart size={35} color={Colors.icon} />,
   },

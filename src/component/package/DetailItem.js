@@ -11,6 +11,7 @@ import {
   Divider,
 } from "@mui/material";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
+import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
 import { createAxios } from "../../http/createInstance.js";
 
@@ -90,14 +91,25 @@ function DetailItem({ item }) {
   }, [member]);
 
   return (
-    <Card sx={{ width: "25%", backgroundColor: Colors.search, marginX: '10px' }}>
+    <Card
+      sx={{ width: "25%", backgroundColor: Colors.search, marginX: "10px" }}
+    >
       <CardContent>
-        <Typography variant="button" display="block" gutterBottom align="center" >
+        <Typography
+          variant="button"
+          display="block"
+          gutterBottom
+          align="center"
+          fontSize={18}
+          color={Colors.textPrimary}
+        >
           {item.name}
         </Typography>
-        <Typography variant="body2" gutterBottom align="justify">
-          {item.description}
-        </Typography>
+        {item.description.split("\n").map((el, index) => (
+          <Typography variant="body2" key={index} gutterBottom align="justify" >
+            + {el}
+          </Typography>
+        ))}
         <Divider flexItem sx={{ paddingY: "10px" }} />
         <Stack>
           <Typography variant="overline" display="block" gutterBottom>
@@ -105,11 +117,11 @@ function DetailItem({ item }) {
           </Typography>
           <Box className="item">
             <IconButton disabled={arrowLeftMem} onClick={handleArrowLeftMem}>
-              <BsArrowLeftShort />
+              <CiSquareMinus />
             </IconButton>
             <CustomComponents.CssTextField size="small" value={member} />
             <IconButton disabled={arrowRightMem} onClick={handleArrowRightMem}>
-              <BsArrowRightShort />
+              <CiSquarePlus />
             </IconButton>
           </Box>
         </Stack>
@@ -120,19 +132,19 @@ function DetailItem({ item }) {
           </Typography>
           <Box className="item">
             <IconButton disabled={arrowLeftDura} onClick={handleArrowLeftDura}>
-              <BsArrowLeftShort />
+              <CiSquareMinus />
             </IconButton>
             <CustomComponents.CssTextField size="small" value={duration} />
             <IconButton
               disabled={arrowRightDura}
               onClick={handleArrowRightDura}
             >
-              <BsArrowRightShort />
+              <CiSquarePlus />
             </IconButton>
           </Box>
         </Stack>
         <Divider flexItem sx={{ paddingY: "10px" }} />
-        <Typography variant="subtitle2" gutterBottom className="item">
+        <Typography variant="subtitle2" gutterBottom className="item" fontSize={25} paddingTop={2}>
           {money}
         </Typography>
       </CardContent>
