@@ -30,20 +30,21 @@ import MenuItem from "./MenuItem.js";
 import MenuItemRow from "./MenuItemRow.js";
 import { toggleShowSidebar } from "../../redux/packageSlice";
 // import { loginSuccess } from "../../redux/authSlice";
+// import { getUserCart } from "../../redux/packageRequest";
 
 const topSearch = [];
 
 function Header() {
   const dispatch = useDispatch();
-  
+
   let user = useSelector((state) => state.auth.login?.currentUser);
-  
+
   let day = new Date();
   const decodedToken = jwtDecode(user?.accessToken);
-  if (decodedToken.exp < (day.getTime())/1000) {
+  if (decodedToken.exp < day.getTime() / 1000) {
     user = null;
   }
-  
+
   const [anchorEl, setAnchorEl] = useState(null);
 
   // const navigate = useNavigate();
@@ -63,7 +64,6 @@ function Header() {
   const handleHeaderBars = () => {
     dispatch(toggleShowSidebar());
   };
-
 
   return (
     <AppBar
@@ -136,11 +136,14 @@ function Header() {
           >
             <Stack direction="column">
               {dataHeader1.map((data, index) => (
-                <MenuItem item={data} key={index}  user={user} />
+                <MenuItem item={data} key={index} user={user} />
               ))}
               <Tooltip title="Account">
-                <IconButton >
-                  <NavLink to={user ? routesConfig.profile : routesConfig.login} className="avatar">
+                <IconButton>
+                  <NavLink
+                    to={user ? routesConfig.profile : routesConfig.login}
+                    className="avatar"
+                  >
                     <Avatar
                       sx={{ width: "27px", height: "27px" }}
                       className="avatarActive"
@@ -164,8 +167,11 @@ function Header() {
             <MenuItemRow item={data} key={index} user={user} />
           ))}
           <Tooltip title="Account">
-            <Button >
-              <NavLink to={user ? routesConfig.profile : routesConfig.login} className="avatar">
+            <Button>
+              <NavLink
+                to={user ? routesConfig.profile : routesConfig.login}
+                className="avatar"
+              >
                 <Avatar sizes="35" className="avatarActive" />
               </NavLink>
             </Button>

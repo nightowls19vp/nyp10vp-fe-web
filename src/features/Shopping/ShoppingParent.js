@@ -1,22 +1,16 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Stack,
-  Typography,
-  FormControlLabel,
-  Checkbox,
-} from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { CiShoppingCart } from "react-icons/ci";
 
 import { Colors } from "../../config/Colors";
 import "../../assets/css/Shopping.scss";
-import { CheckBox } from "@mui/icons-material";
 import ShoppingChildren from "./ShoppingChildren";
+import { useSelector } from "react-redux";
+import ShoppingCartEmpty from "./ShoppingCartEmpty";
 
 function ShoppingParent() {
-  const [checked, setChecked] = React.useState([true, false]);
-
-  
+  const userCart = useSelector((state) => state.sidebar?.cart);
+  const number = useSelector((state) => state.sidebar?.numberCart);
   return (
     <Stack paddingY={3} paddingLeft={"2%"} paddingRight={"5%"}>
       <Box className="shopping-cart">
@@ -25,9 +19,13 @@ function ShoppingParent() {
           Giỏ hàng
         </Typography>
       </Box>
-      <Stack>
-        <ShoppingChildren />
-      </Stack>
+      <Box sx={{ width: "100%" }}>
+        {number > 0 ? (
+          <ShoppingChildren item={userCart} />
+        ) : (
+          <ShoppingCartEmpty />
+        )}
+      </Box>
     </Stack>
   );
 }

@@ -77,3 +77,18 @@ export const updateSettingUser = async (userID, user) => {
     console.log(error);
   }
 };
+
+export const userCheckout = async (userID, token, user) => {
+  try {
+    const res = await apiClient.post(`/users/${userID}/checkout`, user, {
+      headers: {
+        'accept': '*/*',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -50,8 +50,9 @@ export const getUserCart = async (userID, token, dispatch, axiosJWT) => {
         
       },
     });
+    
     dispatch(setInitialCart(res.data.cart));
-    dispatch(updateNumberCart(res.data.cart.length));
+    dispatch(updateNumberCart(res.data.cart?.length));
   } catch (error) {
     console.log(error);
   }
@@ -66,7 +67,9 @@ export const updateUserCart = async (userID, cart, token, dispatch, axiosJWT) =>
         
       },
     });
+    
     dispatch(setInitialCart(res.data.cart));
+    dispatch(updateNumberCart(res.data.cart?.length));
   } catch (error) {
     console.log(error);
   }

@@ -8,7 +8,7 @@ const packageSlice = createSlice({
     profileID: 1,
     package: [],
     numberCart: 0,
-    cart: null,
+    cart: [],
   },
   reducers: {
     setInitialPackage: (state, action) => {
