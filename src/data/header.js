@@ -38,7 +38,7 @@ export const dataHeader2 = [
   {
     id: 4,
     title: "Chat",
-    route: "#",
+    route: routesConfig.group,
     iconFill: <MdChat size={35} color={Colors.primary} />,
     iconOutline: <MdOutlineChat size={35} color={Colors.icon} />,
   },

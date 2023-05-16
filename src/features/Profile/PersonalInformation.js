@@ -56,8 +56,8 @@ function PersonalInformation() {
     
     const formAvatar = new FormData();
     formAvatar.append('avatar', res.data);
-    await updateAvatarUser(user?.data.userInfo._id, user?.accessToken, formAvatar, axiosJWT);
-
+    const resImg = await updateAvatarUser(user?.data.userInfo._id, user?.accessToken, formAvatar, axiosJWT);
+    console.log(resImg);
     setImage(res.data);
   };
 

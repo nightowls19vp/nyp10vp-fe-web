@@ -10,7 +10,6 @@ import {
   IconButton,
   Divider,
 } from "@mui/material";
-import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
 import { useNavigate } from "react-router-dom";
@@ -56,35 +55,48 @@ function DetailItem({ item }) {
   };
 
   const handleButtonAdd = async () => {
-    let shoppingCart = userCart;
+    let shoppingCart = [];
+    for (let ele of userCart) {
+      let data = {
+        package: ele._id,
+        quantity: ele.quantity,
+        noOfMember: ele.noOfMember,
+        duration: ele.duration,
+      };
+      shoppingCart.push(data);
+    }
+
     let formData = {
       package: item._id,
       quantity: 1,
-      noOfMemb: member,
-      duration: duration,
+      noOfMember: item.noOfMember,
+      duration: item.duration,
     };
+
     for (let ele of shoppingCart) {
       if (
         ele.package === item._id &&
-        ele.noOfMemb === member &&
-        ele.duration === duration
+        ele.noOfMember === item.noOfMember &&
+        ele.duration === item.duration
       ) {
         formData.quantity = ele.quantity + 1;
       }
     }
+
     shoppingCart = [
       ...shoppingCart.filter(
         (data) =>
           data.package !== item._id ||
-          data.noOfMemb !== member ||
-          data.duration !== duration
+          data.noOfMember !== item.noOfMember ||
+          data.duration !== item.duration
       ),
       formData,
     ];
+
     let formCart = {
       cart: shoppingCart,
     };
-    console.log(formCart);
+
     await updateUserCart(
       user?.data.userInfo._id,
       formCart,
@@ -101,49 +113,7 @@ function DetailItem({ item }) {
   };
 
   const handleButtonBuy = async () => {
-    let shoppingCart = userCart;
-    console.log(shoppingCart);
-    let formData = {
-      package: item._id,
-      quantity: 1,
-      noOfMemb: member,
-      duration: duration,
-    };
-    for (let ele of shoppingCart) {
-      if (
-        ele.package === item._id &&
-        ele.noOfMemb === item.noOfMember &&
-        ele.duration === item.duration
-      ) {
-        formData.quantity = ele.quantity + 1;
-      }
-    }
-    shoppingCart = [
-      ...shoppingCart.filter(
-        (data) =>
-          data.package !== item._id ||
-          data.noOfMemb !== member ||
-          data.duration !== duration
-      ),
-      formData,
-    ];
-    let formCart = {
-      cart: shoppingCart,
-    };
-    console.log(formCart);
-    await updateUserCart(
-      user?.data.userInfo._id,
-      formCart,
-      user?.accessToken,
-      dispatch,
-      axiosJWT
-    );
-    await getUserCart(
-      user?.data.userInfo._id,
-      user?.accessToken,
-      dispatch,
-      axiosJWT
-    );
+    await handleButtonAdd();
     navigate("/shopping-cart");
   };
 
@@ -203,11 +173,18 @@ function DetailItem({ item }) {
         >
           {item.name}
         </Typography>
-        {item.description.split("\n").map((el, index) => (
-          <Typography variant="body2" key={index} gutterBottom align="justify">
-            + {el}
-          </Typography>
-        ))}
+        <Box sx={{ height: "145px" }}>
+          {item.description.split("\n").map((el, index) => (
+            <Typography
+              variant="body2"
+              key={index}
+              gutterBottom
+              align="justify"
+            >
+              + {el}
+            </Typography>
+          ))}
+        </Box>
         <Divider flexItem sx={{ paddingY: "10px" }} />
         <Stack>
           <Typography variant="overline" display="block" gutterBottom>
@@ -215,19 +192,24 @@ function DetailItem({ item }) {
           </Typography>
           {item.name === "Family Package" ? (
             <Box className="item">
-              <CustomComponents.CssTextField size="small" value={member} />
+              {/* <CustomComponents.CssTextField size="small" value={member} /> */}
+              <Typography variant="subtitle1" fontSize={18} gutterBottom>
+                {member}
+              </Typography>
             </Box>
           ) : (
             <Box className="item">
               <IconButton disabled={arrowLeftMem} onClick={handleArrowLeftMem}>
-                <CiSquareMinus />
+                <CiSquareMinus color={ arrowLeftMem ? null : Colors.textPrimary} size={30} />
               </IconButton>
-              <CustomComponents.CssTextField size="small" value={member} />
+              <Typography variant="subtitle1" fontSize={18} >
+                {member}
+              </Typography>
               <IconButton
                 disabled={arrowRightMem}
                 onClick={handleArrowRightMem}
               >
-                <CiSquarePlus />
+                <CiSquarePlus color={ arrowRightMem ? null : Colors.textPrimary} size={30} />
               </IconButton>
             </Box>
           )}
@@ -241,7 +223,9 @@ function DetailItem({ item }) {
           item.name === "Annual Package" ||
           item.name === "Family Package" ? (
             <Box className="item">
-              <CustomComponents.CssTextField size="small" value={duration} />
+              <Typography variant="subtitle1" fontSize={18} gutterBottom>
+                {duration}
+              </Typography>
             </Box>
           ) : (
             <Box className="item">
@@ -249,14 +233,16 @@ function DetailItem({ item }) {
                 disabled={arrowLeftDura}
                 onClick={handleArrowLeftDura}
               >
-                <CiSquareMinus />
+                <CiSquareMinus color={ arrowLeftDura ? null : Colors.textPrimary} size={30} />
               </IconButton>
-              <CustomComponents.CssTextField size="small" value={duration} />
+              <Typography variant="subtitle1" fontSize={18} >
+                {duration}
+              </Typography>
               <IconButton
                 disabled={arrowRightDura}
                 onClick={handleArrowRightDura}
               >
-                <CiSquarePlus />
+                <CiSquarePlus color={ arrowRightDura ? null : Colors.textPrimary} size={30} />
               </IconButton>
             </Box>
           )}
@@ -269,7 +255,7 @@ function DetailItem({ item }) {
           fontSize={25}
           paddingTop={2}
         >
-          {Math.round(money)}
+          {Math.round(money)} VNĐ
         </Typography>
       </CardContent>
       <CardActions

@@ -7,6 +7,7 @@ import PackagePage from '../pages/Package.js';
 import StockPage from '../pages/Stock.js';
 import ProfilePage from '../pages/Profile.js';
 import ShoppingCartPage from '../pages/ShoppingCart.js';
+import GroupPage from '../pages/Group.js';
 
 const publicRoutes = [
     { path: routesConfig.home, component: HomePage},
@@ -17,6 +18,7 @@ const privateRoutes = [
     { path: routesConfig.stock, component: StockPage},
     { path: routesConfig.profile, component: ProfilePage},
     { path: routesConfig.shopping, component: ShoppingCartPage},
+    { path: routesConfig.group, component: GroupPage},
 ];
 
 const loginRoute = [

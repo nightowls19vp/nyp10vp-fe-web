@@ -23,6 +23,7 @@ export const getAllPackage = async (dispatch) => {
     for (let item of res.data.data) {
       dataPackage[0].child.push(item);
     }
+    
     dispatch(setInitialPackage(dataPackage));
 
     dispatch(updatePackageId(dataPackage[0].child[0]._id));

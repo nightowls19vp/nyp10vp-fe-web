@@ -4,7 +4,8 @@ const routes = {
     package: '/package',
     stock: '/stock',
     profile: '/profile',
-    shopping: '/shopping-cart'
+    shopping: '/shopping-cart',
+    group: '/group',
 };
 
 export default routes;

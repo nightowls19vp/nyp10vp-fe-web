@@ -1,5 +1,7 @@
 import apiClient from "../http/http-common.js";
+import { setOrder } from "./authSlice.js";
 import {
+  getGroupSuperUser,
   getUserInforFailed,
   getUserInforStart,
   getUserInforSuccess,
@@ -29,6 +31,20 @@ export const updateInformationUser = async (
   }
 };
 
+export const getUserById = async (id, token, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get(`/users/${id}`, {
+      headers: {
+        accept: '*/*',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const uploadFile = async (id, token, file) => {
   try {
     const res = await apiClient.post(`/file/${id}/upload-avatar`, file, {
@@ -44,9 +60,9 @@ export const uploadFile = async (id, token, file) => {
   }
 };
 
-export const updateAvatarUser = async (userID, token, user, axiosJWT) => {
+export const updateAvatarUser = async (userID, token, data, axiosJWT) => {
   try {
-    const res = await axiosJWT.post(`/users/${userID}/avatar`, user, {
+    const res = await axiosJWT.post(`/users/${userID}/avatar`, data, {
       headers: {
         'accept': '*/*',
         Authorization: `Bearer ${token}`,
@@ -54,7 +70,6 @@ export const updateAvatarUser = async (userID, token, user, axiosJWT) => {
       },
     });
     return res.data;
-    // dispatch(getUserInforSuccess(res.data));
   } catch (error) {
     console.log(error);
   }
@@ -78,16 +93,54 @@ export const updateSettingUser = async (userID, user) => {
   }
 };
 
-export const userCheckout = async (userID, token, user) => {
+export const userCheckout = async (userID, token, dispatch, user, axiosJWT) => {
   try {
-    const res = await apiClient.post(`/users/${userID}/checkout`, user, {
+    const res = await axiosJWT.post(`/users/${userID}/checkout`, user, {
       headers: {
-        'accept': '*/*',
+        accept: '*/*',
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
       },
     });
-    return res?.data;
+    console.log(res?.data.order);
+    dispatch(setOrder(res?.data.order))
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getGroupByUserId = async (token, user_id, role, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get("/pkg-mgmt/gr/user_id", {
+      params: {
+        user_id: user_id,
+        role: role
+      }, 
+      headers: {
+        accept: '*/*',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    console.log(res?.data.groups);
+    
+    dispatch(getGroupSuperUser(res?.data.groups));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const usersSearch = async (token, search, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get("/users/search", {
+      params: {
+        keyword: search,
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return(res?.data);
   } catch (error) {
     console.log(error);
   }

@@ -20,9 +20,6 @@ function Package() {
   }, [dispatch]);
 
   return (
-    // <SidebarLayout data={dataPackage} title="package" selectedID={selectedPackage}>
-    //   <Item />
-    // </SidebarLayout>
     <DefaultLayout>
       <PackageItem data={dataPackage[0]} title="package" selectedID={selectedPackage} />
     </DefaultLayout>

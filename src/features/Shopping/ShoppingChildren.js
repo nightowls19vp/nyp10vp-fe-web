@@ -1,34 +1,46 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  Toolbar,
+  Typography,
+  Paper,
+  Checkbox,
+  IconButton,
+  FormControlLabel,
+  Tooltip,
+  Switch,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { Stack, Button } from "@mui/material";
-import { useSelector } from "react-redux";
-import { userCheckout } from "../../redux/userRequest";
+import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
-function createData(id, name, quantity, money) {
+import { Stack, Button } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserById, userCheckout } from "../../redux/userRequest";
+import { useNavigate } from "react-router-dom";
+
+import { createAxios } from "../../http/createInstance.js";
+
+import "../../assets/css/Shopping.scss";
+import { loginSuccess } from "../../redux/authSlice";
+import { getUserCart } from "../../redux/packageRequest";
+
+function createData(id, name, quantity, member, duration, money) {
   return {
     id,
     name,
     quantity,
+    member,
+    duration,
     money,
   };
 }
@@ -77,10 +89,10 @@ function EnhancedTableHead(props) {
             align={headCell.numeric ? "center" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
           >
-            <TableSortLabel
-            //   active={orderBy === headCell.id}
-            >
-              {headCell.label}
+            <TableSortLabel>
+              <Typography variant="subtitle2" fontSize={18}>
+                {headCell.label}
+              </Typography>
             </TableSortLabel>
           </TableCell>
         ))}
@@ -122,15 +134,7 @@ function EnhancedTableToolbar(props) {
         >
           {numSelected} selected
         </Typography>
-      ) : // <Typography
-      //   sx={{ flex: "1 1 100%" }}
-      //   variant="h6"
-      //   id="tableTitle"
-      //   component="div"
-      // >
-
-      // </Typography>
-      null}
+      ) : null}
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
@@ -138,13 +142,7 @@ function EnhancedTableToolbar(props) {
             <DeleteIcon />
           </IconButton>
         </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+      ) : null}
     </Toolbar>
   );
 }
@@ -154,17 +152,30 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EnhancedTable({ item }) {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.login?.currentUser);
+  const order = useSelector((state) => state.auth.order);
+
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
+
   const rows = item.map((row) =>
-    createData(row.package, row.name, row.quantity, 1)
+    createData(
+      row._id,
+      row.name,
+      row.quantity,
+      row.noOfMember,
+      row.duration,
+      row.price
+    )
   );
+
   const [selected, setSelected] = React.useState([]);
   // const [dense, setDense] = React.useState(false);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = rows.map((n) => n);
-      // console.log(newSelected);
+      console.log(newSelected);
       setSelected(newSelected);
       return;
     }
@@ -172,22 +183,6 @@ export default function EnhancedTable({ item }) {
   };
 
   const handleClick = (event, row) => {
-    // const selectedIndex = selected.filter(row);
-    // console.log(selectedIndex);
-    // let newSelected = [];
-
-    // if (selectedIndex === -1) {
-    //   newSelected = newSelected.concat(selected, row);
-    // } else if (selectedIndex === 0) {
-    //   newSelected = newSelected.concat(selected.slice(1));
-    // } else if (selectedIndex === selected.length - 1) {
-    //   newSelected = newSelected.concat(selected.slice(0, -1));
-    // } else if (selectedIndex > 0) {
-    //   newSelected = newSelected.concat(
-    //     selected.slice(0, selectedIndex),
-    //     selected.slice(selectedIndex + 1)
-    //   );
-    // }
     const selectedIndex = selected.some((element) => {
       if (
         element.id === row.id &&
@@ -205,9 +200,11 @@ export default function EnhancedTable({ item }) {
       newSelected = [
         ...selected.filter(
           (data) =>
-            !(data.id === row.id &&
-            data.quantity === row.quantity &&
-            data.money === row.money)
+            !(
+              data.id === row.id &&
+              data.quantity === row.quantity &&
+              data.money === row.money
+            )
         ),
       ];
     } else {
@@ -216,12 +213,6 @@ export default function EnhancedTable({ item }) {
 
     setSelected(newSelected);
   };
-
-  // const handleChangeDense = (event) => {
-  //   setDense(event.target.checked);
-  // };
-
-  // const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const isSelected = (name) => {
     for (let element of selected) {
@@ -236,22 +227,57 @@ export default function EnhancedTable({ item }) {
     return false;
   };
 
-  const handleButtonCheckout = async () => {
-    let formData = [];
-    for (let el1 of selected) {
-      for (let el2 of item) {
-        if (el1 === el2.package) {
-          // delete el2.name;
-          formData.push(el2);
-        }
+  const delay = (ms) =>
+    new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+
+  function task(i) {
+    setTimeout(async function () {
+      const res = await getUserById(user?.data.userInfo._id, user?.accessToken, axiosJWT);
+      console.log(res.user.trxHist);
+      if (res.user.trxHist.length > 0) {
+        i = 10;
       }
+    }, 5000 * i);
+  }
+
+  const handleButtonCheckout = async () => {
+    let cart = [];
+    for (let el of selected) {
+      let formData = {
+        package: el.id,
+        quantity: el.quantity,
+        noOfMember: el.member,
+        duration: el.duration,
+      };
+      cart.push(formData);
     }
     let data = {
-      cart: formData,
+      cart: cart,
     };
-    console.log(data);
-    // const res = userCheckout(user?.data.userInfo._id, user?.accessToken, data);
-    // console.log(res);
+
+    await userCheckout(
+      user?.data.userInfo._id,
+      user?.accessToken,
+      dispatch,
+      data,
+      axiosJWT
+    );
+    window.open(order.order_url);
+    
+    let i = 0;
+    while (i < 20) {
+      task(i);
+      i++;
+    }
+
+    await getUserCart(
+      user?.data.userInfo._id,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
   };
 
   return (
@@ -283,7 +309,7 @@ export default function EnhancedTable({ item }) {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
+                      key={index}
                       selected={isItemSelected}
                       sx={{ cursor: "pointer" }}
                     >
@@ -304,7 +330,19 @@ export default function EnhancedTable({ item }) {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="center">{row.quantity}</TableCell>
+                      <TableCell align="center">
+                        <Box className="quantity">
+                          <IconButton>
+                            <CiSquareMinus />
+                          </IconButton>
+                          <Typography variant="subtitle1" fontSize={18}>
+                            {row.quantity}
+                          </Typography>
+                          <IconButton>
+                            <CiSquarePlus />
+                          </IconButton>
+                        </Box>
+                      </TableCell>
                       <TableCell align="center">{row.money}</TableCell>
                     </TableRow>
                   );
@@ -313,10 +351,6 @@ export default function EnhancedTable({ item }) {
             </Table>
           </TableContainer>
         </Paper>
-        {/* <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      /> */}
       </Box>
       <Button onClick={handleButtonCheckout}> Thanh toán </Button>
     </Stack>

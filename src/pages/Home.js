@@ -8,6 +8,7 @@ import Mapbox from "../component/mapbox/Mapbox.js";
 import { loginGG } from "../redux/authRequest.js";
 import { useNavigate } from "react-router-dom";
 import { getUserCart } from "../redux/packageRequest.js";
+import { getGroupByUserId } from "../redux/userRequest.js";
 
 function Home() {
   const dispatch = useDispatch();
@@ -26,6 +27,8 @@ function Home() {
 
   useEffect(() => {
     getUserCart(user?.data.userInfo._id, user?.accessToken, dispatch, axiosJWT);
+    //
+    getGroupByUserId(user?.accessToken, user?.data.userInfo._id, "Super User", dispatch, axiosJWT);
   }, [axiosJWT, dispatch, user]);
 
   return (

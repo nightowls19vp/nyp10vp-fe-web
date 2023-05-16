@@ -54,7 +54,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
         <Box
           sx={{
             display: { xs: showSidebar ? "none" : "flex", sm: "flex" },
-            width: `calc(100vw - ${widthContent}px - 30px)`,
+            width: `calc(100vw - ${widthContent}px - 50px)`,
             flexDirection: "column",
             justifyContent: "space-between",
             alignItems: "stretch",

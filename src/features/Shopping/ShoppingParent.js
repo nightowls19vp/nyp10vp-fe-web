@@ -19,7 +19,7 @@ function ShoppingParent() {
           Giỏ hàng
         </Typography>
       </Box>
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", paddingY: "20px" }}>
         {number > 0 ? (
           <ShoppingChildren item={userCart} />
         ) : (

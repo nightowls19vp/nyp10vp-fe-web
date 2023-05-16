@@ -14,6 +14,7 @@ import { Colors } from "../../config/Colors";
 
 function SidebarItemCollapse({ item, title, selectedID }) {
   const [open, setOpen] = useState(item.status);
+  
   return (
     <>
       <ListItemButton
@@ -22,6 +23,7 @@ function SidebarItemCollapse({ item, title, selectedID }) {
             backgroundColor: Colors.gray,
           },
         }}
+        disabled={item.child?.length > 0 ? false : true}
         onClick={() => setOpen(!open)}
       >
         {/* <ListItemIcon

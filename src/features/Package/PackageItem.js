@@ -24,7 +24,7 @@ function PackageItem({ data, title, selectedPackage }) {
           </TabList>
         </Box>
         <TabPanel value="1">
-          <Box className="container" >
+          <Box className="containerPackage" >
             {data.child?.map((route) =>
               route ? 
                 <DetailItem item={route} key={route._id} />

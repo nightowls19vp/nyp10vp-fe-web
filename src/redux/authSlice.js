@@ -14,6 +14,7 @@ const authSlice = createSlice({
             error: false,
             msg: null,
         },
+        order: null,
     }, 
     reducers: {
         loginStart: (state) => {
@@ -56,6 +57,9 @@ const authSlice = createSlice({
             state.login.isFetching = false;
             state.login.error = true;
         },
+        setOrder: (state, action) => {
+            state.order = action.payload;
+        }
     }
 });
 
@@ -69,6 +73,7 @@ export const {
     logoutStart,
     logoutSuccess,
     logoutFailed,
+    setOrder,
 } = authSlice.actions;
 
 export default authSlice.reducer;

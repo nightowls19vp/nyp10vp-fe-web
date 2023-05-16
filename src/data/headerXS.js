@@ -38,14 +38,14 @@ export const dataHeader1 = [
   {
     id: 4,
     title: "Chat",
-    route: routesConfig.shopping,
+    route: routesConfig.group,
     iconFill: <MdChat size={25} color={Colors.primary} />,
     iconOutline: <MdOutlineChat size={25} color={Colors.icon} />,
   },
   {
     id: 5,
     title: "Shopping",
-    route: "#",
+    route: routesConfig.shopping,
     iconFill: <MdShoppingCart size={25} color={Colors.primary} />,
     iconOutline: <MdOutlineShoppingCart size={25} color={Colors.icon} />,
   },

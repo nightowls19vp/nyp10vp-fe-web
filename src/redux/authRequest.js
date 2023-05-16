@@ -19,7 +19,7 @@ export const loginUser = async (user, dispatch, navigate) => {
     });
     // localStorage.setItem("accessToken", res.data.accessToken);
     dispatch(loginSuccess(res.data));
-    navigate("/profile");
+    navigate("/");
   } catch (error) {
     dispatch(loginFailed(error.response.data));
   }
