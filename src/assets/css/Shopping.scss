@@ -10,3 +10,20 @@
     justify-content: center;
     align-items: center;
 }
+
+.method-total {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-left: 5px;
+    #radio-buttons-method-total {
+        font-size: large;
+    }
+}
+
+.total {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}

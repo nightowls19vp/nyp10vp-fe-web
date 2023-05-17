@@ -6,6 +6,7 @@ const routes = {
     profile: '/profile',
     shopping: '/shopping-cart',
     group: '/group',
+    joinGr: '/pkg-mgmt/gr/join',
 };
 
 export default routes;

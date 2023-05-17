@@ -8,10 +8,12 @@ import StockPage from '../pages/Stock.js';
 import ProfilePage from '../pages/Profile.js';
 import ShoppingCartPage from '../pages/ShoppingCart.js';
 import GroupPage from '../pages/Group.js';
+import UserJoinPage from '../pages/UserJoin.js';
 
 const publicRoutes = [
     { path: routesConfig.home, component: HomePage},
     { path: routesConfig.package, component: PackagePage},
+    { path: routesConfig.joinGr, component: UserJoinPage},
 ];
 
 const privateRoutes = [

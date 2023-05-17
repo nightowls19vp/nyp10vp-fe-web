@@ -6,19 +6,31 @@ import {
   Avatar,
   Paper,
   IconButton,
+  TextField,
 } from "@mui/material";
 
 import "../../assets/css/Group.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { AiOutlineEdit } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
+import ModalInvitePeople from "./ModalInvitePeople";
+import { usersInvitePeople } from "../../redux/userRequest";
 import { createAxios } from "../../http/createInstance";
 import { loginSuccess } from "../../redux/authSlice";
-import { getGroupByUserId } from "../../redux/userRequest";
-import ModalInvitePeople from "./ModalInvitePeople";
 
-function SuperUser() {
-  const groupSU = useSelector((state) => state.user.groupSuperUser);
+function SuperUser({ item }) {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
+
+  const [linkInvite, setLinkInvite] = useState("");
+
+  const handleButtonInvite = async () => {
+    const res = await usersInvitePeople(user?.accessToken, item._id, axiosJWT);
+    let link = "http://localhost:8080";
+    link += res.data;
+    setLinkInvite(link);
+  };
 
   return (
     <Stack spacing={3} padding={5}>
@@ -28,7 +40,7 @@ function SuperUser() {
           src=""
           sx={{ width: "150px", height: "150px", marginRight: "20px" }}
         />
-        <Typography variant="h6"> {groupSU[0].name} </Typography>
+        <Typography variant="h6"> ten goi </Typography>
         <IconButton>
           <AiOutlineEdit />
         </IconButton>
@@ -65,15 +77,22 @@ function SuperUser() {
           </Box>
         </Stack>
       </Box>
-      <Box flex={2}>
-        <Paper >
-          <Stack>
-            <Typography variant="subtitle2" gutterBottom>
-              Các thành viên
-            </Typography>
-            <ModalInvitePeople />
-          </Stack>
-        </Paper>
+      <Box className="btn-invite">
+        <CustomComponent.Button1
+          sx={{ marginBottom: "10px" }}
+          onClick={handleButtonInvite}
+        >
+          Mời thành viên
+        </CustomComponent.Button1>
+        {linkInvite ? (
+          <TextField
+            id="outlined-basic"
+            fullWidth
+            variant="outlined"
+            value={linkInvite}
+            sx={{ textOverflow: "ellipsis" }}
+          />
+        ) : null}
       </Box>
     </Stack>
   );

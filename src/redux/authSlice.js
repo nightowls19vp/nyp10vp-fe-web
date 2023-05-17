@@ -15,6 +15,7 @@ const authSlice = createSlice({
             msg: null,
         },
         order: null,
+        tokenJoinGr: null,
     }, 
     reducers: {
         loginStart: (state) => {
@@ -59,6 +60,9 @@ const authSlice = createSlice({
         },
         setOrder: (state, action) => {
             state.order = action.payload;
+        },
+        setTokenJoinGroup: (state, action) => {
+            state.tokenJoinGr = action.payload;
         }
     }
 });
@@ -74,6 +78,7 @@ export const {
     logoutSuccess,
     logoutFailed,
     setOrder,
+    setTokenJoinGroup,
 } = authSlice.actions;
 
 export default authSlice.reducer;

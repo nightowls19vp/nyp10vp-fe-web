@@ -25,12 +25,13 @@ import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
 import { Stack, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserById, userCheckout } from "../../redux/userRequest";
+import { getInformationUser, getUserById, userCheckout } from "../../redux/userRequest";
 import { useNavigate } from "react-router-dom";
 
 import { createAxios } from "../../http/createInstance.js";
 
 import "../../assets/css/Shopping.scss";
+import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { loginSuccess } from "../../redux/authSlice";
 import { getUserCart } from "../../redux/packageRequest";
 
@@ -51,6 +52,18 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: "Các gói người dùng",
+  },
+  {
+    id: "member",
+    numeric: true,
+    disablePadding: false,
+    label: "Số thành viên",
+  },
+  {
+    id: "duration",
+    numeric: true,
+    disablePadding: false,
+    label: "Thời gian",
   },
   {
     id: "quantity",
@@ -170,12 +183,17 @@ export default function EnhancedTable({ item }) {
   );
 
   const [selected, setSelected] = React.useState([]);
-  // const [dense, setDense] = React.useState(false);
+  const [quantityCart, setQuantityCart] = React.useState(
+    rows.map((row) => row.quantity)
+  );
+  const [total, setTotal] = React.useState(0);
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = rows.map((n) => n);
-      console.log(newSelected);
+      let totalSelected = 0;
+      newSelected.map((n) => (totalSelected += n.money));
+      setTotal(totalSelected);
       setSelected(newSelected);
       return;
     }
@@ -211,6 +229,10 @@ export default function EnhancedTable({ item }) {
       newSelected = newSelected.concat(selected, row);
     }
 
+    let totalSelected = 0;
+    newSelected.map((n) => (totalSelected += n.money));
+    setTotal(totalSelected);
+
     setSelected(newSelected);
   };
 
@@ -227,14 +249,26 @@ export default function EnhancedTable({ item }) {
     return false;
   };
 
-  const delay = (ms) =>
-    new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
+  const handleButtonMinus = (event, id) => {
+    // let idx = id.slice(id.length - 1);
+    // let newQuantity = quantityCart;
+    // newQuantity[idx] -= 1;
+    // console.log(newQuantity);
+    // setQuantityCart(newQuantity);
+  };
+
+  const handleButtonPlus = () => {
+    //
+  };
 
   function task(i) {
     setTimeout(async function () {
-      const res = await getUserById(user?.data.userInfo._id, user?.accessToken, axiosJWT);
+      const res = await getInformationUser(
+        user?.data.userInfo._id,
+        user?.accessToken,
+        dispatch,
+        axiosJWT
+      );
       console.log(res.user.trxHist);
       if (res.user.trxHist.length > 0) {
         i = 10;
@@ -243,6 +277,7 @@ export default function EnhancedTable({ item }) {
   }
 
   const handleButtonCheckout = async () => {
+    console.log(selected);
     let cart = [];
     for (let el of selected) {
       let formData = {
@@ -264,20 +299,21 @@ export default function EnhancedTable({ item }) {
       data,
       axiosJWT
     );
-    window.open(order.order_url);
     
-    let i = 0;
-    while (i < 20) {
-      task(i);
-      i++;
-    }
+    // window.open(order.order_url);
 
-    await getUserCart(
-      user?.data.userInfo._id,
-      user?.accessToken,
-      dispatch,
-      axiosJWT
-    );
+    // let i = 0;
+    // while (i < 20) {
+    //   task(i);
+    //   i++;
+    // }
+
+    // await getUserCart(
+    //   user?.data.userInfo._id,
+    //   user?.accessToken,
+    //   dispatch,
+    //   axiosJWT
+    // );
   };
 
   return (
@@ -293,7 +329,6 @@ export default function EnhancedTable({ item }) {
             >
               <EnhancedTableHead
                 numSelected={selected.length}
-                //   orderBy={orderBy}
                 onSelectAllClick={handleSelectAllClick}
                 rowCount={rows.length}
               />
@@ -305,8 +340,8 @@ export default function EnhancedTable({ item }) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row)}
-                      role="checkbox"
+                      // onClick={(event) => handleClick(event, row)}
+                      // role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={index}
@@ -320,6 +355,7 @@ export default function EnhancedTable({ item }) {
                           inputProps={{
                             "aria-labelledby": labelId,
                           }}
+                          onClick={(event) => handleClick(event, row)}
                         />
                       </TableCell>
                       <TableCell
@@ -330,15 +366,21 @@ export default function EnhancedTable({ item }) {
                       >
                         {row.name}
                       </TableCell>
+                      <TableCell align="center">{row.member} người</TableCell>
+                      <TableCell align="center">{row.duration} tháng</TableCell>
                       <TableCell align="center">
                         <Box className="quantity">
-                          <IconButton>
+                          <IconButton
+                            onClick={(event) =>
+                              handleButtonMinus(event, labelId)
+                            }
+                          >
                             <CiSquareMinus />
                           </IconButton>
                           <Typography variant="subtitle1" fontSize={18}>
                             {row.quantity}
                           </Typography>
-                          <IconButton>
+                          <IconButton onClick={handleButtonPlus}>
                             <CiSquarePlus />
                           </IconButton>
                         </Box>
@@ -352,7 +394,20 @@ export default function EnhancedTable({ item }) {
           </TableContainer>
         </Paper>
       </Box>
-      <Button onClick={handleButtonCheckout}> Thanh toán </Button>
+      <Box className="total">
+        <Typography variant="subtitle2">
+          Tổng thanh toán ({selected.length} sản phẩm):
+        </Typography>
+        <Typography variant="subtitle2" color={"#ff3333"}>
+          {total}đ
+        </Typography>
+        <CustomComponent.Button1
+          sx={{ marginX: "10px" }}
+          onClick={handleButtonCheckout}
+        >
+          Thanh toán
+        </CustomComponent.Button1>
+      </Box>
     </Stack>
   );
 }

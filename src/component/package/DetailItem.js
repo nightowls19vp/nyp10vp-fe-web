@@ -54,7 +54,7 @@ function DetailItem({ item }) {
     setDuration(duration + 1);
   };
 
-  const handleButtonAdd = async () => {
+  const handleButtonAdd = async (event, item) => {
     let shoppingCart = [];
     for (let ele of userCart) {
       let data = {
@@ -69,15 +69,15 @@ function DetailItem({ item }) {
     let formData = {
       package: item._id,
       quantity: 1,
-      noOfMember: item.noOfMember,
-      duration: item.duration,
+      noOfMember: member,
+      duration: duration,
     };
 
     for (let ele of shoppingCart) {
       if (
         ele.package === item._id &&
-        ele.noOfMember === item.noOfMember &&
-        ele.duration === item.duration
+        ele.noOfMember === member &&
+        ele.duration === duration
       ) {
         formData.quantity = ele.quantity + 1;
       }
@@ -87,8 +87,8 @@ function DetailItem({ item }) {
       ...shoppingCart.filter(
         (data) =>
           data.package !== item._id ||
-          data.noOfMember !== item.noOfMember ||
-          data.duration !== item.duration
+          data.noOfMember !== member ||
+          data.duration !== duration
       ),
       formData,
     ];
@@ -96,6 +96,8 @@ function DetailItem({ item }) {
     let formCart = {
       cart: shoppingCart,
     };
+
+    console.log(formCart);
 
     await updateUserCart(
       user?.data.userInfo._id,
@@ -144,10 +146,10 @@ function DetailItem({ item }) {
 
     if (duration >= 12) {
       setMoney(
-        (item.price + member * duration * (item.coefficient ?? 0)) * 0.7
+        (item.price + (member - 2) * duration * (item.coefficient ?? 0)) * 0.7
       );
     } else {
-      setMoney(item.price + member * duration * (item.coefficient ?? 0));
+      setMoney(item.price + (member - 2) * duration * (item.coefficient ?? 0));
     }
   }, [
     duration,
@@ -261,7 +263,7 @@ function DetailItem({ item }) {
       <CardActions
         sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}
       >
-        <CustomComponents.Button2 onClick={handleButtonAdd}>
+        <CustomComponents.Button2 onClick={(event) => handleButtonAdd(event, item)}>
           Thêm vào giỏ hàng
         </CustomComponents.Button2>
         <CustomComponents.Button1 onClick={handleButtonBuy}>

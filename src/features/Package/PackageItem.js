@@ -16,7 +16,7 @@ function PackageItem({ data, title, selectedPackage }) {
       <TabContext value={value}>
         <Box
           sx={{ borderBottom: 1, borderColor: "divider" }}
-          className="container"
+          className="containerPackage"
         >
           <TabList onChange={handleChange} aria-label="lab API tabs example">
             <Tab label="GÓI NGƯỜI DÙNG" value="1" sx={{ marginX: "50px" }} />

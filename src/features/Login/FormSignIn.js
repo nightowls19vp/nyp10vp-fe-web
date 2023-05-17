@@ -12,7 +12,9 @@ import {
 
 import { loginUser } from "../../redux/authRequest";
 import { useDispatch, useSelector } from "react-redux";
-import { loginFailed, loginStart } from "../../redux/authSlice";
+import { loginFailed, loginStart, loginSuccess } from "../../redux/authSlice";
+
+import { createAxios } from "../../http/createInstance.js";
 
 import FormSignUp from "./FormSignUp";
 import LogoGG from "../../assets/img/google.png";
@@ -20,8 +22,10 @@ import LogoFB from "../../assets/img/facebook.png";
 import * as CustomButton from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 import "../../assets/css/FormSignIn.scss";
+import { getInformationUser } from "../../redux/userRequest";
 
 function FormSignIn() {
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
@@ -30,10 +34,15 @@ function FormSignIn() {
   const [passwordHelperText, setPasswordHelperText] = useState("");
 
   const loginMsg = useSelector((state) => state.auth.login?.msg);
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  const tokenJoinGr = useSelector((state) => state.auth.tokenJoinGr);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     var checkEmail = false;
     var checkPass = false;
@@ -63,8 +72,11 @@ function FormSignIn() {
     };
 
     if (checkEmail === true && checkPass === true) {
-      loginUser(formData, dispatch, navigate);
+      await loginUser(formData, dispatch, navigate, tokenJoinGr);
     }
+
+    await getInformationUser(user?.data.userInfo._id, user?.accessToken, dispatch, axiosJWT);
+
   };
 
   const googleLogin = async () => {

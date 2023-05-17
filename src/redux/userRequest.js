@@ -7,10 +7,15 @@ import {
   getUserInforSuccess,
 } from "./userSlice";
 
-export const getInformationUser = async (userID, dispatch, axiosJWT) => {
+export const getInformationUser = async (userID, token, dispatch, axiosJWT) => {
   dispatch(getUserInforStart());
   try {
-    const res = await axiosJWT.get(`/users/${userID}`);
+    const res = await axiosJWT.get(`/users/${userID}`, {
+      headers: {
+        accept: '*/*',
+        Authorization: `Bearer ${token}`,
+      },
+    });
     dispatch(getUserInforSuccess(res.data));
   } catch (error) {
     dispatch(getUserInforFailed());
@@ -28,20 +33,6 @@ export const updateInformationUser = async (
     dispatch(getUserInforSuccess(res.data));
   } catch (error) {
     dispatch(getUserInforFailed());
-  }
-};
-
-export const getUserById = async (id, token, axiosJWT) => {
-  try {
-    const res = await axiosJWT.get(`/users/${id}`, {
-      headers: {
-        accept: '*/*',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    return res.data;
-  } catch (error) {
-    console.log(error);
   }
 };
 
@@ -108,11 +99,10 @@ export const userCheckout = async (userID, token, dispatch, user, axiosJWT) => {
   }
 };
 
-export const getGroupByUserId = async (token, user_id, role, dispatch, axiosJWT) => {
+export const getGroupByUserId = async (token, role, dispatch, axiosJWT) => {
   try {
     const res = await axiosJWT.get("/pkg-mgmt/gr/user_id", {
       params: {
-        user_id: user_id,
         role: role
       }, 
       headers: {
@@ -141,6 +131,23 @@ export const usersSearch = async (token, search, axiosJWT) => {
       },
     });
     return(res?.data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const usersInvitePeople = async (token, grId, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get("/pkg-mgmt/gr/inv", {
+      params: {
+        grId: grId,
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res?.data;
   } catch (error) {
     console.log(error);
   }

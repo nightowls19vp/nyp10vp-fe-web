@@ -1,7 +1,17 @@
 import React, { useState } from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Stack,
+  Typography,
+  Radio,
+  FormControlLabel,
+  RadioGroup,
+  FormLabel,
+  FormControl,
+} from "@mui/material";
 import { CiShoppingCart } from "react-icons/ci";
 
+import { MoMoIcon, ATMIcon } from "../../assets/icons";
 import { Colors } from "../../config/Colors";
 import "../../assets/css/Shopping.scss";
 import ShoppingChildren from "./ShoppingChildren";
@@ -19,13 +29,43 @@ function ShoppingParent() {
           Giỏ hàng
         </Typography>
       </Box>
-      <Box sx={{ width: "100%", paddingY: "20px" }}>
-        {number > 0 ? (
-          <ShoppingChildren item={userCart} />
-        ) : (
-          <ShoppingCartEmpty />
-        )}
-      </Box>
+      {number > 0 ? (
+        <Box sx={{ display: "flex", flexDirection: "row" }}>
+          <Box sx={{ width: "70%", paddingY: "20px" }}>
+            <ShoppingChildren item={userCart} />
+          </Box>
+          <Box sx={{ width: "30%", paddingY: "20px" }} className="method-total">
+            <FormControl>
+              <FormLabel id="radio-buttons-method-total">
+                Chọn phương thức thanh toán
+              </FormLabel>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                defaultValue="zalo"
+                name="radio-buttons-group"
+              >
+                <FormControlLabel
+                  value="zalo"
+                  control={<Radio />}
+                  label="Zalo"
+                />
+                <FormControlLabel
+                  value="momo"
+                  control={<Radio />}
+                  label="Momo"
+                />
+                <FormControlLabel
+                  value="other"
+                  control={<Radio />}
+                  label="Other"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Box>
+        </Box>
+      ) : (
+        <ShoppingCartEmpty />
+      )}
     </Stack>
   );
 }

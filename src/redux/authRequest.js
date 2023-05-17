@@ -11,7 +11,24 @@ import {
   logoutFailed,
 } from "./authSlice";
 
-export const loginUser = async (user, dispatch, navigate) => {
+export const getJoinGroup = async (token, tokenJoinGr) => {
+  try {
+    const res = await apiClient.get("/pkg-mgmt/gr/join", {
+      params: {
+        token : tokenJoinGr,
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const loginUser = async (user, dispatch, navigate, tokenJoinGr) => {
   dispatch(loginStart());
   try {
     const res = await apiClient.post("/auth/login", user, {
@@ -19,6 +36,11 @@ export const loginUser = async (user, dispatch, navigate) => {
     });
     // localStorage.setItem("accessToken", res.data.accessToken);
     dispatch(loginSuccess(res.data));
+    
+    if (tokenJoinGr) {
+      const resJoin = await getJoinGroup(res.data.accessToken, tokenJoinGr);
+      console.log(resJoin);
+    }
     navigate("/");
   } catch (error) {
     dispatch(loginFailed(error.response.data));

@@ -19,11 +19,11 @@ function ShoppingCartEmpty() {
       spacing={2}
       paddingY={5}
     >
-      <RiShoppingBasket2Line color={Colors.textPrimary} size={"30%"} />
+      <RiShoppingBasket2Line color={Colors.textPrimary} size={"15%"} />
       <Typography variant="h5" gutterBottom>
         Không có sản phẩm nào trong giỏ hàng của bạn
       </Typography>
-      <CustomComponents.Button1 sx={{ width: "20%" }} onClick={handleButton}>
+      <CustomComponents.Button1 sx={{ width: "10%" }} onClick={handleButton}>
         Mua ngay
       </CustomComponents.Button1>
     </Stack>

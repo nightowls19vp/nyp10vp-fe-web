@@ -26,9 +26,7 @@ function Home() {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   useEffect(() => {
-    getUserCart(user?.data.userInfo._id, user?.accessToken, dispatch, axiosJWT);
-    //
-    getGroupByUserId(user?.accessToken, user?.data.userInfo._id, "Super User", dispatch, axiosJWT);
+    getUserCart(user?.data.userInfo?._id, user?.accessToken, dispatch, axiosJWT);
   }, [axiosJWT, dispatch, user]);
 
   return (
