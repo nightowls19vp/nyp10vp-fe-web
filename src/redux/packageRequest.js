@@ -52,14 +52,16 @@ export const getUserCart = async (userID, token, dispatch, axiosJWT) => {
       },
     });
     
-    dispatch(setInitialCart(res.data.cart));
-    dispatch(updateNumberCart(res.data.cart?.length));
+    dispatch(setInitialCart(res?.data.cart));
+    
+    dispatch(updateNumberCart(res?.data.cart.length));
+
   } catch (error) {
     console.log(error);
   }
 };
 
-export const updateUserCart = async (userID, cart, token, dispatch, axiosJWT) => {
+export const updateUserCart = async (userID, cart, token, axiosJWT) => {
   try {
     const res = await axiosJWT.put(`/users/${userID}/cart`, cart, {
       headers: {
@@ -69,8 +71,12 @@ export const updateUserCart = async (userID, cart, token, dispatch, axiosJWT) =>
       },
     });
     
-    dispatch(setInitialCart(res.data.cart));
-    dispatch(updateNumberCart(res.data.cart?.length));
+    // dispatch(setInitialCart(res.data.cart));
+
+    // dispatch(updateNumberCart(res.data.cart?.length));
+
+    return res?.data;
+    
   } catch (error) {
     console.log(error);
   }

@@ -99,13 +99,14 @@ function DetailItem({ item }) {
 
     console.log(formCart);
 
-    await updateUserCart(
+    const res = await updateUserCart(
       user?.data.userInfo._id,
       formCart,
       user?.accessToken,
-      dispatch,
       axiosJWT
     );
+    console.log(res);
+    
     await getUserCart(
       user?.data.userInfo._id,
       user?.accessToken,

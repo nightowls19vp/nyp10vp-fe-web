@@ -25,7 +25,11 @@ import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
 import { Stack, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getInformationUser, getUserById, userCheckout } from "../../redux/userRequest";
+import {
+  getInformationUser,
+  getUserById,
+  userCheckout,
+} from "../../redux/userRequest";
 import { useNavigate } from "react-router-dom";
 
 import { createAxios } from "../../http/createInstance.js";
@@ -33,7 +37,7 @@ import { createAxios } from "../../http/createInstance.js";
 import "../../assets/css/Shopping.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { loginSuccess } from "../../redux/authSlice";
-import { getUserCart } from "../../redux/packageRequest";
+import { getUserCart, updateUserCart } from "../../redux/packageRequest";
 
 function createData(id, name, quantity, member, duration, money) {
   return {
@@ -117,12 +121,61 @@ function EnhancedTableHead(props) {
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  //   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
 
 function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
+  const { numSelected, data, arrSelected, onSetSelected } = props;
+
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.auth.login?.currentUser);
+  let axiosJWT = createAxios(user, dispatch, loginSuccess); 
+
+  const handleButtonDelete = async () => {
+    let shoppingCart = [];
+    for (let ele of data) {
+      let formData = {
+        package: ele.id,
+        quantity: ele.quantity,
+        noOfMember: ele.member,
+        duration: ele.duration,
+      };
+      shoppingCart.push(formData);
+    }
+
+    for (let ele of arrSelected) {
+      shoppingCart = [
+        ...shoppingCart.filter(
+          (data) =>
+            data.package !== ele.id ||
+            data.noOfMember !== ele.member ||
+            data.duration !== ele.duration
+        ),
+      ];
+    }
+
+    let formCart = {
+      cart: shoppingCart,
+    };
+
+    onSetSelected(formCart);
+
+    // const res = await updateUserCart(
+    //   user?.data.userInfo._id,
+    //   formCart,
+    //   user?.accessToken,
+    //   axiosJWT
+    // );
+    // console.log(res);
+    
+    // await getUserCart(
+    //   user?.data.userInfo._id,
+    //   user?.accessToken,
+    //   dispatch,
+    //   axiosJWT
+    // );
+  };
 
   return (
     <Toolbar
@@ -151,7 +204,7 @@ function EnhancedTableToolbar(props) {
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleButtonDelete}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -162,6 +215,9 @@ function EnhancedTableToolbar(props) {
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
+  data: PropTypes.array.isRequired,
+  arrSelected: PropTypes.array.isRequired,
+  onSetSelected: PropTypes.func.isRequired,
 };
 
 export default function EnhancedTable({ item }) {
@@ -183,9 +239,7 @@ export default function EnhancedTable({ item }) {
   );
 
   const [selected, setSelected] = React.useState([]);
-  const [quantityCart, setQuantityCart] = React.useState(
-    rows.map((row) => row.quantity)
-  );
+
   const [total, setTotal] = React.useState(0);
 
   const handleSelectAllClick = (event) => {
@@ -250,11 +304,44 @@ export default function EnhancedTable({ item }) {
   };
 
   const handleButtonMinus = (event, id) => {
-    // let idx = id.slice(id.length - 1);
-    // let newQuantity = quantityCart;
-    // newQuantity[idx] -= 1;
-    // console.log(newQuantity);
-    // setQuantityCart(newQuantity);
+    let idx = id.slice(id.length - 1);
+    let newQuantity = rows[idx].quantity - 1;
+
+    let shoppingCart = [];
+    for (let ele of rows) {
+      let data = {
+        package: ele.id,
+        quantity: ele.quantity,
+        noOfMember: ele.member,
+        duration: ele.duration,
+      };
+      shoppingCart.push(data);
+    }
+
+    console.log(shoppingCart);
+
+    let formData = {
+      package: rows[idx].id,
+      quantity: newQuantity,
+      noOfMember: rows[idx].member,
+      duration: rows[idx].duration,
+    };
+
+    shoppingCart = [
+      ...shoppingCart.filter(
+        (data) =>
+          data.package !== rows[idx].id ||
+          data.noOfMember !== rows[idx].member ||
+          data.duration !== rows[idx].duration
+      ),
+      formData,
+    ];
+
+    console.log(shoppingCart);
+
+    // let formCart = {
+    //   cart: shoppingCart,
+    // };
   };
 
   const handleButtonPlus = () => {
@@ -299,7 +386,7 @@ export default function EnhancedTable({ item }) {
       data,
       axiosJWT
     );
-    
+
     // window.open(order.order_url);
 
     // let i = 0;
@@ -316,11 +403,20 @@ export default function EnhancedTable({ item }) {
     // );
   };
 
+  const onSetSelected = (arr) => {
+    console.log(arr);
+  }
+
   return (
     <Stack>
       <Box sx={{ width: "100%" }}>
         <Paper sx={{ width: "100%", mb: 2 }}>
-          <EnhancedTableToolbar numSelected={selected.length} />
+          <EnhancedTableToolbar
+            numSelected={selected.length}
+            data={rows}
+            arrSelected={selected}
+            onSetSelected={onSetSelected}
+          />
           <TableContainer>
             <Table
               sx={{ minWidth: 750 }}
