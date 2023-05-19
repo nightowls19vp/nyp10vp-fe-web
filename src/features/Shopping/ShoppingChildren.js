@@ -144,6 +144,8 @@ function EnhancedTableToolbar(props) {
       shoppingCart.push(formData);
     }
 
+    let newSelected = [];
+
     for (let ele of arrSelected) {
       shoppingCart = [
         ...shoppingCart.filter(
@@ -159,22 +161,24 @@ function EnhancedTableToolbar(props) {
       cart: shoppingCart,
     };
 
-    onSetSelected(formCart);
+    const res = await updateUserCart(
+      user?.data.userInfo._id,
+      formCart,
+      user?.accessToken,
+      axiosJWT
+    );
+    console.log(res);
 
-    // const res = await updateUserCart(
-    //   user?.data.userInfo._id,
-    //   formCart,
-    //   user?.accessToken,
-    //   axiosJWT
-    // );
-    // console.log(res);
+    if (res.statusCode === 200) {
+      onSetSelected(newSelected);
+    }
     
-    // await getUserCart(
-    //   user?.data.userInfo._id,
-    //   user?.accessToken,
-    //   dispatch,
-    //   axiosJWT
-    // );
+    await getUserCart(
+      user?.data.userInfo._id,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
   };
 
   return (
@@ -404,7 +408,7 @@ export default function EnhancedTable({ item }) {
   };
 
   const onSetSelected = (arr) => {
-    console.log(arr);
+    setSelected(arr)
   }
 
   return (
