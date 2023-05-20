@@ -9,9 +9,9 @@ import {
 
 import { Colors } from "../../config/Colors";
 import {
+  updateGroupId,
   updateProfileId,
   updateShowSidebar,
-  updatePackageId,
 } from "../../redux/packageSlice";
 
 function SidebarItem({ item, title, selectedID }) {
@@ -20,10 +20,10 @@ function SidebarItem({ item, title, selectedID }) {
   const dispacth = useDispatch();
 
   const handleButtonItemID = (ID) => {
-    if (title === "package") {
-      dispacth(updatePackageId(ID));
-    } else if (title === "profile") {
+    if (title === "profile") {
       dispacth(updateProfileId(ID));
+    } else if (title === "group") {
+      dispacth(updateGroupId(ID));
     }
     dispacth(updateShowSidebar(false));
   };

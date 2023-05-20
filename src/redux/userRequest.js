@@ -1,5 +1,6 @@
 import apiClient from "../http/http-common.js";
 import { setOrder } from "./authSlice.js";
+import { updateGroupId } from "./packageSlice.js";
 import {
   getGroupSuperUser,
   getUserInforFailed,
@@ -75,10 +76,15 @@ export const getSettingUser = async (userID) => {
   }
 };
 
-export const updateSettingUser = async (userID, user) => {
+export const updateSettingUser = async (userID, token, user, dispatch, axiosJWT) => {
   try {
-    const res = await apiClient.put(`/users/${userID}/setting`, user);
-    return res?.data;
+    await axiosJWT.put(`/users/${userID}/setting`, user, {
+      headers: {
+        accept: '*/*',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    await getInformationUser(userID, token, dispatch, axiosJWT)
   } catch (error) {
     console.log(error);
   }
@@ -110,10 +116,10 @@ export const getGroupByUserId = async (token, role, dispatch, axiosJWT) => {
         Authorization: `Bearer ${token}`,
       },
     })
-
-    console.log(res?.data.groups);
     
     dispatch(getGroupSuperUser(res?.data.groups));
+    
+    dispatch(updateGroupId(res?.data.groups[0]?._id))
   } catch (error) {
     console.log(error);
   }

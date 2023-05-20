@@ -1,7 +1,7 @@
 import apiClient from "../http/http-common.js";
 
 // import dataPackage from "../data/dataPackage.js";
-import { setInitialCart, setInitialPackage, updateNumberCart, updatePackageId } from "./packageSlice.js";
+import { setCarts, setInitialPackage, updateNumberCart, updatePackageId } from "./packageSlice.js";
 
 export const getAllPackage = async (dispatch) => {
   try {
@@ -25,8 +25,6 @@ export const getAllPackage = async (dispatch) => {
     }
     
     dispatch(setInitialPackage(dataPackage));
-
-    dispatch(updatePackageId(dataPackage[0].child[0]._id));
 
   } catch (error) {
     console.log(error);
@@ -52,7 +50,7 @@ export const getUserCart = async (userID, token, dispatch, axiosJWT) => {
       },
     });
     
-    dispatch(setInitialCart(res?.data.cart));
+    dispatch(setCarts(res?.data.cart));
     
     dispatch(updateNumberCart(res?.data.cart.length));
 
@@ -71,7 +69,7 @@ export const updateUserCart = async (userID, cart, token, axiosJWT) => {
       },
     });
     
-    // dispatch(setInitialCart(res.data.cart));
+    // dispatch(setCarts(res.data.cart));
 
     // dispatch(updateNumberCart(res.data.cart?.length));
 

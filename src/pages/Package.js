@@ -12,7 +12,6 @@ import { Typography } from "@mui/material";
 function Package() {
   const dispatch = useDispatch();
 
-  const selectedPackage = useSelector((state) => state.sidebar?.packageID);
   const dataPackage = useSelector((state) => state.sidebar?.package);
 
   useEffect(() => {
@@ -21,7 +20,7 @@ function Package() {
 
   return (
     <DefaultLayout>
-      <PackageItem data={dataPackage[0]} title="package" selectedID={selectedPackage} />
+      <PackageItem data={dataPackage[0]} />
     </DefaultLayout>
   );
 }

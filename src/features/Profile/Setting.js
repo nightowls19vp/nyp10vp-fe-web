@@ -1,65 +1,114 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Typography } from "@mui/material";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
 import SettingsPhoneOutlinedIcon from "@mui/icons-material/SettingsPhoneOutlined";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 
+import { createAxios } from "../../http/createInstance";
+
 import "../../assets/css/Content.scss";
 import { Colors } from "../../config/Colors.js";
 import ButtonSetting from "../../component/noti/ButtonSetting";
 import * as Custom from "../../component/custom/CustomComponents.js";
-import { getSettingUser, updateSettingUser } from "../../redux/userRequest";
+import { updateSettingUser } from "../../redux/userRequest";
+import { loginSuccess } from "../../redux/authSlice";
 
 function Setting() {
   const user = useSelector((state) => state.auth.login?.currentUser);
-  const [stockNoti, setStockNoti] = useState(
-    user?.data.userInfo.setting.stockNoti
-  );
-  const [newsNoti, setNewsNoti] = useState(
-    user?.data.userInfo.setting.newsNoti
-  );
-  const [callNoti, setCallNoti] = useState(user?.data.userInfo.setting.msgNoti);
-  const [chatNoti, setChatNoti] = useState(
-    user?.data.userInfo.setting.stockNoti
-  );
+  const userInfo = useSelector((state) => state.user?.userInfo.user);
 
-  const getSetting = async(userID) => {
-    const res = await getSettingUser(userID);
-    console.log(res);
+  const dispatch = useDispatch();
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
+
+  const [stockNoti, setStockNoti] = useState(userInfo?.setting.stockNoti);
+  const [newsNoti, setNewsNoti] = useState(userInfo?.setting.newsNoti);
+  const [callNoti, setCallNoti] = useState(userInfo?.setting.callNoti);
+  const [chatNoti, setChatNoti] = useState(userInfo?.setting.msgNoti);
+
+  const handleButtonStock = async () => {
+    setStockNoti(!stockNoti);
+
+    let formData = {
+      stockNoti: !stockNoti,
+      newsNoti: newsNoti,
+      callNoti: callNoti,
+      msgNoti: chatNoti,
+    };
+
+    console.log(formData);
+
+    await updateSettingUser(
+      user?.data.userInfo._id,
+      user?.accessToken,
+      formData,
+      dispatch,
+      axiosJWT
+    );
   };
 
-  const updateSetting = async() => {
+  const handleButtonNews = async () => {
+    setNewsNoti(!newsNoti);
+
+    let formData = {
+      stockNoti: stockNoti,
+      newsNoti: !newsNoti,
+      callNoti: callNoti,
+      msgNoti: chatNoti,
+    };
+
+    console.log(formData);
+
+    await updateSettingUser(
+      user?.data.userInfo._id,
+      user?.accessToken,
+      formData,
+      dispatch,
+      axiosJWT
+    );
+  };
+
+  const handleButtonCall = async () => {
+    setCallNoti(!callNoti);
+
+    let formData = {
+      stockNoti: stockNoti,
+      newsNoti: newsNoti,
+      callNoti: !callNoti,
+      msgNoti: chatNoti,
+    };
+
+    console.log(formData);
+
+    await updateSettingUser(
+      user?.data.userInfo._id,
+      user?.accessToken,
+      formData,
+      dispatch,
+      axiosJWT
+    );
+  };
+
+  const handleButtonChat = async () => {
+    setChatNoti(!chatNoti);
+
     let formData = {
       stockNoti: stockNoti,
       newsNoti: newsNoti,
       callNoti: callNoti,
-      msgNoti: chatNoti
-    }
+      msgNoti: !chatNoti,
+    };
+
     console.log(formData);
-    await updateSettingUser(user?.data.userInfo._id, formData);
-    // getSetting(user?.data.userInfo._id)
-  }
 
-  const handlButtonStock = () => {
-    setStockNoti(() => !stockNoti);
-    updateSetting();
-  };
-
-  const handlButtonNews = () => {
-    setNewsNoti(() => !newsNoti);
-    updateSetting();
-  };
-
-  const handlButtonCall = () => {
-    setCallNoti(() => !callNoti);
-    updateSetting();
-  };
-
-  const handlButtonChat = () => {
-    setChatNoti(() => !chatNoti);
-    updateSetting();
+    await updateSettingUser(
+      user?.data.userInfo._id,
+      user?.accessToken,
+      formData,
+      dispatch,
+      axiosJWT
+    );
   };
 
   // useEffect(() => {
@@ -73,7 +122,6 @@ function Setting() {
   //   getSetting(user?.data.userInfo._id)
 
   // }, [stockNoti, newsNoti, callNoti, chatNoti, user])
-
 
   return (
     <Box>
@@ -94,7 +142,7 @@ function Setting() {
           justifyContent: "space-between",
         }}
         // onClick={() => setStockNoti(!stockNoti)}
-        onClick={handlButtonStock}
+        onClick={handleButtonStock}
       >
         <ButtonSetting
           title="Kho hàng"
@@ -111,8 +159,8 @@ function Setting() {
           flexDirection: "row",
           justifyContent: "space-between",
         }}
-        onClick={() => setNewsNoti(!newsNoti)}
-        // onClick={handlButtonNews}
+        // onClick={() => setNewsNoti(!newsNoti)}
+        onClick={handleButtonNews}
       >
         <ButtonSetting
           title="Quảng cáo"
@@ -130,7 +178,7 @@ function Setting() {
           justifyContent: "space-between",
         }}
         // onClick={() => setCallNoti(!callNoti)}
-        onClick={handlButtonCall}
+        onClick={handleButtonCall}
       >
         <ButtonSetting
           title="Gọi điện"
@@ -148,7 +196,7 @@ function Setting() {
           justifyContent: "space-between",
         }}
         // onClick={() => setChatNoti(!chatNoti)}
-        onClick={handlButtonChat}
+        onClick={handleButtonChat}
       >
         <ButtonSetting
           title="Tin nhắn"

@@ -40,7 +40,7 @@ function SuperUser({ item }) {
           src=""
           sx={{ width: "150px", height: "150px", marginRight: "20px" }}
         />
-        <Typography variant="h6"> ten goi </Typography>
+        <Typography variant="h6"> {item.name} </Typography>
         <IconButton>
           <AiOutlineEdit />
         </IconButton>

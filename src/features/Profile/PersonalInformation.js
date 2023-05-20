@@ -11,7 +11,6 @@ import { AiFillCamera } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 
 import LogoGG from "../../assets/img/google.png";
-import ImgAvatar from "../../assets/img/user.png";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import "../../assets/css/Content.scss";
 import { Colors } from "../../config/Colors";
@@ -26,20 +25,19 @@ import DateTimePicker from "../../component/Date/DateTimePicker";
 
 function PersonalInformation() {
   const inputRef = useRef();
+
   const user = useSelector((state) => state.auth.login?.currentUser);
+  const userInfo = useSelector((state) => state.user?.userInfo.user);
+
   const dispatch = useDispatch();
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  const [image, setImage] = useState(
-    user ? user.data.userInfo.avatar : ImgAvatar
-  );
-  const email = user ? user.data.userInfo.email : null;
-  const [name, setName] = useState(user ? user.data.userInfo.name : null);
-  const [phone, setPhone] = useState(user ? user.data.userInfo.phone : null);
-  const [dob, setDob] = useState(user ? user.data.userInfo.dob : null);
-  const [socialAcc, setSocialAcc] = useState(
-    user?.data.auth.socialAccounts ? false : true
-  );
+  const [image, setImage] = useState(userInfo.avatar);
+  const email = userInfo.email;
+  const [name, setName] = useState(userInfo.name);
+  const [phone, setPhone] = useState(userInfo.phone ?? "");
+  const [dob, setDob] = useState(userInfo.dob ?? "");
+  const [socialAcc, setSocialAcc] = useState(userInfo?.socialAccounts ? true : false);
 
   const handleClick = () => {
     inputRef.current.click();

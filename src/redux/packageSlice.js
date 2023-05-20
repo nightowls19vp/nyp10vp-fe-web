@@ -4,7 +4,8 @@ const packageSlice = createSlice({
   name: "sidebar",
   initialState: {
     showSidebar: false,
-    packageID: 1,
+    groupID: 0,
+    groups: [],
     profileID: 1,
     package: [],
     numberCart: 0,
@@ -14,8 +15,11 @@ const packageSlice = createSlice({
     setInitialPackage: (state, action) => {
       state.package = action.payload;
     },
-    setInitialCart: (state, action) => {
+    setCarts: (state, action) => {
       state.cart = action.payload;
+    },
+    setGroups: (state, action) => {
+      state.groups = action.payload;
     },
     updateNumberCart: (state, action) => {
       state.numberCart = action.payload;
@@ -26,8 +30,8 @@ const packageSlice = createSlice({
     toggleShowSidebar: (state) => {
       state.showSidebar = !state.showSidebar;
     },
-    updatePackageId: (state, action) => {
-      state.packageID = action.payload;
+    updateGroupId: (state, action) => {
+      state.groupID = action.payload;
     },
     updateProfileId: (state, action) => {
       state.profileID = action.payload;
@@ -37,11 +41,12 @@ const packageSlice = createSlice({
 
 export const {
   setInitialPackage,
-  setInitialCart,
+  setCarts,
+  setGroups,
   updateNumberCart,
   toggleShowSidebar,
   updateShowSidebar,
-  updatePackageId,
+  updateGroupId,
   updateProfileId,
 } = packageSlice.actions;
 

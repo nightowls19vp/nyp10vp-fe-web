@@ -2,14 +2,18 @@ import React from "react";
 import SuperUser from "./SuperUser";
 import { useDispatch, useSelector } from "react-redux";
 
-function GroupItem() {
-  const groupSU = useSelector((state) => state.user.groupSuperUser);
+import { dataGroup } from "../../data/group";
 
+function GroupItem({ item, title, selected }) {
   return (
-    <>
-      {/* {groupSU.map((gr) => (gr ? <SuperUser item={gr} key={gr._id} /> : null))} */}
-      <SuperUser item={groupSU[0]} />
-    </>
+    <div>
+      {title === "Group SUPER USER" &&
+        item.map((route) =>
+          route._id === selected ? (
+            <SuperUser item={route} key={route._id} />
+          ) : null
+        )}
+    </div>
   );
 }
 

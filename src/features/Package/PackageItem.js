@@ -5,7 +5,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import "../../assets/css/Package.scss";
 import DetailItem from "../../component/package/DetailItem";
 
-function PackageItem({ data, title, selectedPackage }) {
+function PackageItem({ data }) {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event, newValue) => {
