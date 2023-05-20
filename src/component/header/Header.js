@@ -38,6 +38,7 @@ function Header() {
   const dispatch = useDispatch();
 
   let user = useSelector((state) => state.auth.login?.currentUser);
+  const userInfo = useSelector((state) => state.user?.userInfo.user);
 
   let day = new Date();
   const decodedToken = jwtDecode(user?.accessToken);
@@ -46,7 +47,7 @@ function Header() {
   }
 
   const [anchorEl, setAnchorEl] = useState(null);
-  // const [img, setImg] = useState(user ? user.data.userInfo.avatar : "")
+  const image = userInfo.avatar ?? "";
 
   // const navigate = useNavigate();
   // let axiosJWT = createAxios(user, dispatch, loginSuccess);
@@ -145,7 +146,7 @@ function Header() {
                     to={user ? routesConfig.profile : routesConfig.login}
                     className="avatar"
                   >
-                    <Avatar src=""
+                    <Avatar src={image}
                       sx={{ width: "27px", height: "27px" }}
                       className="avatarActive"
                     />
@@ -173,7 +174,7 @@ function Header() {
                 to={user ? routesConfig.profile : routesConfig.login}
                 className="avatar"
               >
-                <Avatar src="" sizes="35" className="avatarActive" />
+                <Avatar src={image} sizes="35" className="avatarActive" />
               </NavLink>
             </Button>
           </Tooltip>

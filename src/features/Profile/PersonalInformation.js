@@ -6,14 +6,11 @@ import {
   TextField,
   Typography,
   Divider,
+  Paper,
 } from "@mui/material";
 import { AiFillCamera } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 
-import LogoGG from "../../assets/img/google.png";
-import * as CustomComponent from "../../component/custom/CustomComponents.js";
-import "../../assets/css/Content.scss";
-import { Colors } from "../../config/Colors";
 import {
   updateInformationUser,
   updateAvatarUser,
@@ -21,6 +18,12 @@ import {
 } from "../../redux/userRequest";
 import { createAxios } from "../../http/createInstance";
 import { loginSuccess } from "../../redux/authSlice.js";
+
+import LogoGG from "../../assets/img/google.png";
+import ImgAvatar from "../../assets/img/user.png";
+import "../../assets/css/Content.scss";
+import { Colors } from "../../config/Colors";
+import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker";
 
 function PersonalInformation() {
@@ -32,29 +35,40 @@ function PersonalInformation() {
   const dispatch = useDispatch();
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  const [image, setImage] = useState(userInfo.avatar);
+  const [image, setImage] = useState(userInfo.avatar ?? ImgAvatar);
   const email = userInfo.email;
   const [name, setName] = useState(userInfo.name);
   const [phone, setPhone] = useState(userInfo.phone ?? "");
   const [dob, setDob] = useState(userInfo.dob ?? "");
-  const [socialAcc, setSocialAcc] = useState(userInfo?.socialAccounts ? true : false);
+  const [socialAcc, setSocialAcc] = useState(
+    userInfo?.socialAccounts ? true : false
+  );
 
   const handleClick = () => {
     inputRef.current.click();
   };
 
-  const handleFileChange = async(event) => {
+  const handleFileChange = async (event) => {
     const fileObj = event.target.files && event.target.files[0];
     if (!fileObj) {
       return;
     }
     const form = new FormData();
-    form.append('file', fileObj);
-    const res = await uploadFile(user?.data.userInfo._id, user?.accessToken, form);
-    
+    form.append("file", fileObj);
+    const res = await uploadFile(
+      user?.data.userInfo._id,
+      user?.accessToken,
+      form
+    );
+
     const formAvatar = new FormData();
-    formAvatar.append('avatar', res.data);
-    const resImg = await updateAvatarUser(user?.data.userInfo._id, user?.accessToken, formAvatar, axiosJWT);
+    formAvatar.append("avatar", res.data);
+    const resImg = await updateAvatarUser(
+      user?.data.userInfo._id,
+      user?.accessToken,
+      formAvatar,
+      axiosJWT
+    );
     console.log(resImg);
     setImage(res.data);
   };
@@ -128,9 +142,14 @@ function PersonalInformation() {
             </CustomComponent.Image>
           </CustomComponent.ButtonAvatar>
         </Box>
-        <Box flex={2} paddingX={"10px"}>
+        <Box flex={3} paddingX={"10px"}>
           <Grid className="form-personal-infor">
-            <Typography variant="overline" display="block" gutterBottom pr={2}>
+            <Typography
+              width={"100px"}
+              variant="overline"
+              display="block"
+              gutterBottom
+            >
               Họ & tên
             </Typography>
             <TextField
@@ -142,7 +161,12 @@ function PersonalInformation() {
             />
           </Grid>
           <Grid className="form-personal-infor">
-            <Typography variant="overline" display="block" gutterBottom pr={2}>
+            <Typography
+              width={"100px"}
+              variant="overline"
+              display="block"
+              gutterBottom
+            >
               Email
             </Typography>
             <TextField
@@ -154,7 +178,12 @@ function PersonalInformation() {
             />
           </Grid>
           <Grid className="form-personal-infor">
-            <Typography variant="overline" display="block" gutterBottom pr={2}>
+            <Typography
+              width={"100px"}
+              variant="overline"
+              display="block"
+              gutterBottom
+            >
               Số điện thoại
             </Typography>
             <TextField
@@ -166,36 +195,43 @@ function PersonalInformation() {
             />
           </Grid>
           <Grid className="form-personal-infor">
-            <Typography variant="overline" display="block" gutterBottom pr={2}>
+            <Typography
+              width={"100px"}
+              variant="overline"
+              display="block"
+              gutterBottom
+            >
               Ngày sinh
             </Typography>
-            {/* <TextField
-              id="dob"
-              variant="outlined"
-              size="small"
-              defaultValue={dob}
-              onChange={(e) => setDob(e.target.value)}
-            /> */}
             <DateTimePicker
               valueDay={dob}
               handleDateTimePicker={handleDateTimePicker}
             />
           </Grid>
         </Box>
-        <Divider orientation="vertical" flexItem />
-        <Box flex={1} paddingX={"10px"}>
-          <Stack>
+
+        <Box
+          flex={2}
+          paddingX={"10px"}
+          bgcolor={Colors.search}
+          className="form-connect-social-network"
+        >
+          <Stack paddingX={"5px"} paddingTop={"10px"} paddingBottom={"15px"}>
             <Typography variant="button" display="block" gutterBottom>
               Liên kết mạng xã hội
             </Typography>
-            <Box className="form-connect-social-network">
+            <Box className="connect-social-network">
               <Stack direction="row" spacing={"5px"}>
                 <img src={LogoGG} alt="Logo" width={25} height={25} />
                 <Typography display="block" gutterBottom>
                   Tài khoản GG
                 </Typography>
               </Stack>
-              <CustomComponent.Button2 size="small" disabled={socialAcc} onClick={handleConnectSocialAcc}>
+              <CustomComponent.Button2
+                size="small"
+                disabled={socialAcc}
+                onClick={handleConnectSocialAcc}
+              >
                 Liên kết
               </CustomComponent.Button2>
             </Box>
@@ -204,12 +240,12 @@ function PersonalInformation() {
       </Stack>
       <Box className="btn-save">
         <Box flex={1} paddingX={"10px"}></Box>
-        <Box flex={2} paddingX={"10px"} align={"right"}>
+        <Box flex={3} paddingX={"10px"} align={"center"}>
           <CustomComponent.Button1 onClick={handleButtonChange}>
             Lưu thay đổi
           </CustomComponent.Button1>
         </Box>
-        <Box flex={1} paddingX={"10px"}></Box>
+        <Box flex={2} paddingX={"10px"}></Box>
       </Box>
     </Stack>
   );

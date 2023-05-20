@@ -9,7 +9,19 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-end;
+}
+
+.packages-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.package-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .btn-invite {

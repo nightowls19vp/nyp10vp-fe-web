@@ -23,7 +23,7 @@ function ShoppingCartEmpty() {
       <Typography variant="h5" gutterBottom>
         Không có sản phẩm nào trong giỏ hàng của bạn
       </Typography>
-      <CustomComponents.Button1 sx={{ width: "10%" }} onClick={handleButton}>
+      <CustomComponents.Button1 sx={{ width: {xs: '30%', sm: '20%', md: '10%'} }} onClick={handleButton}>
         Mua ngay
       </CustomComponents.Button1>
     </Stack>

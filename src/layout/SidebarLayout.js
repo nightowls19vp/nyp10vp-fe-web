@@ -37,7 +37,8 @@ function SidebarLayout({ data, title, selectedID, children }) {
           minHeight: `calc(100vh - ${heightHeader}px - ${heightFooter}px)`,
           display: "flex",
           flexDirection: "row",
-          justifyContent: { xs: "space-between", md: "center" },
+          // justifyContent: { sm: "center", md: "space-between" },
+          justifyContent: "center",
           alignItems: "stretch",
         }}
       >
@@ -45,6 +46,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
           bgcolor={Colors.search}
           sx={{
             display: { xs: showSidebar ? "flex" : "none", sm: "flex" },
+            maxWidth: '300px',
           }}
           ref={refSidebar}
         >
