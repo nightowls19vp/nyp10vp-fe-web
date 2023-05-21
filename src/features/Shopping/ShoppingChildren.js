@@ -15,15 +15,20 @@ import {
   Paper,
   Checkbox,
   IconButton,
-  FormControlLabel,
   Tooltip,
-  Switch,
+  Radio,
+  FormControlLabel,
+  RadioGroup,
+  FormLabel,
+  FormControl,
+  Stack,
+  CircularProgress,
+  Modal,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
-import { Stack, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getInformationUser,
@@ -38,6 +43,27 @@ import "../../assets/css/Shopping.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { loginSuccess } from "../../redux/authSlice";
 import { getUserCart, updateUserCart } from "../../redux/packageRequest";
+import { setCarts, updateNumberCart } from "../../redux/packageSlice";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "1px solid #d9d9d9",
+  boxShadow: 24,
+  p: 4,
+};
+
+const styleProgress = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+};
 
 function createData(id, name, quantity, member, duration, money) {
   return {
@@ -130,7 +156,7 @@ function EnhancedTableToolbar(props) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
-  let axiosJWT = createAxios(user, dispatch, loginSuccess); 
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const handleButtonDelete = async () => {
     let shoppingCart = [];
@@ -172,7 +198,7 @@ function EnhancedTableToolbar(props) {
     if (res.statusCode === 200) {
       onSetSelected(newSelected);
     }
-    
+
     await getUserCart(
       user?.data.userInfo._id,
       user?.accessToken,
@@ -202,7 +228,7 @@ function EnhancedTableToolbar(props) {
           variant="subtitle1"
           component="div"
         >
-          {numSelected} selected
+          Có {numSelected} sự lựa chọn
         </Typography>
       ) : null}
 
@@ -227,9 +253,13 @@ EnhancedTableToolbar.propTypes = {
 export default function EnhancedTable({ item }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.login?.currentUser);
+  const userInfo = useSelector((state) => state.user?.userInfo);
   const order = useSelector((state) => state.auth.order);
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
+  const [openModal, setOpenModal] = React.useState(false);
+  const [openProgress, setOpenProgress] = React.useState(false);
+  const handleClose = () => setOpenModal(false);
 
   const rows = item.map((row) =>
     createData(
@@ -256,6 +286,7 @@ export default function EnhancedTable({ item }) {
       return;
     }
     setSelected([]);
+    setTotal(0);
   };
 
   const handleClick = (event, row) => {
@@ -307,68 +338,99 @@ export default function EnhancedTable({ item }) {
     return false;
   };
 
-  const handleButtonMinus = (event, id) => {
-    let idx = id.slice(id.length - 1);
-    let newQuantity = rows[idx].quantity - 1;
-
+  const handleButtonMinus = (event, row) => {
     let shoppingCart = [];
-    for (let ele of rows) {
-      let data = {
-        package: ele.id,
-        quantity: ele.quantity,
-        noOfMember: ele.member,
+    for (let ele of item) {
+      let formData = {
+        description: ele.description,
         duration: ele.duration,
+        name: ele.name,
+        noOfMember: ele.noOfMember,
+        price: ele.price,
+        quantity: ele.quantity,
+        _id: ele._id,
       };
-      shoppingCart.push(data);
+      if (
+        formData._id === row.id &&
+        formData.noOfMember === row.member &&
+        formData.duration === row.duration
+      ) {
+        formData.quantity -= 1;
+      }
+      if (formData.quantity > 0) {
+        shoppingCart.push(formData);
+      } else {
+        dispatch(updateNumberCart(item.length - 1));
+      }
     }
 
-    console.log(shoppingCart);
-
-    let formData = {
-      package: rows[idx].id,
-      quantity: newQuantity,
-      noOfMember: rows[idx].member,
-      duration: rows[idx].duration,
-    };
-
-    shoppingCart = [
-      ...shoppingCart.filter(
-        (data) =>
-          data.package !== rows[idx].id ||
-          data.noOfMember !== rows[idx].member ||
-          data.duration !== rows[idx].duration
-      ),
-      formData,
-    ];
-
-    console.log(shoppingCart);
-
-    // let formCart = {
-    //   cart: shoppingCart,
-    // };
+    dispatch(setCarts(shoppingCart));
   };
 
-  const handleButtonPlus = () => {
-    //
+  const handleButtonPlus = (event, row) => {
+    let shoppingCart = [];
+    for (let ele of item) {
+      let formData = {
+        description: ele.description,
+        duration: ele.duration,
+        name: ele.name,
+        noOfMember: ele.noOfMember,
+        price: ele.price,
+        quantity: ele.quantity,
+        _id: ele._id,
+      };
+      if (
+        formData._id === row.id &&
+        formData.noOfMember === row.member &&
+        formData.duration === row.duration
+      ) {
+        formData.quantity += 1;
+      }
+      shoppingCart.push(formData);
+    }
+
+    dispatch(setCarts(shoppingCart));
   };
 
   function task(i) {
     setTimeout(async function () {
-      const res = await getInformationUser(
+      await getInformationUser(
         user?.data.userInfo._id,
         user?.accessToken,
         dispatch,
         axiosJWT
       );
-      console.log(res.user.trxHist);
-      if (res.user.trxHist.length > 0) {
-        i = 10;
+      if (userInfo.user.trxHist.length > 0) {
+        console.log("vy");
       }
     }, 5000 * i);
   }
 
   const handleButtonCheckout = async () => {
-    console.log(selected);
+    if (selected.length === 0) {
+      setOpenModal(true);
+      return;
+    }
+    let shoppingCart = [];
+    for (let ele of item) {
+      let formData = {
+        package: ele._id,
+        quantity: ele.quantity,
+        noOfMember: ele.noOfMember,
+        duration: ele.duration,
+      };
+      shoppingCart.push(formData);
+    }
+    let formCart = {
+      cart: shoppingCart,
+    };
+    await updateUserCart(
+      user?.data.userInfo._id,
+      formCart,
+      user?.accessToken,
+      axiosJWT
+    );
+
     let cart = [];
     for (let el of selected) {
       let formData = {
@@ -383,21 +445,24 @@ export default function EnhancedTable({ item }) {
       cart: cart,
     };
 
-    await userCheckout(
-      user?.data.userInfo._id,
-      user?.accessToken,
-      dispatch,
-      data,
-      axiosJWT
-    );
+    // await userCheckout(
+    //   user?.accessToken,
+    //   dispatch,
+    //   data,
+    //   axiosJWT
+    // );
 
     // window.open(order.order_url);
 
-    // let i = 0;
-    // while (i < 20) {
-    //   task(i);
-    //   i++;
-    // }
+    let i = 0;
+    while (i < 5) {
+      task(i);
+      if (userInfo.user.trxHist.includes("230522_014234304")) {
+        console.log("1");
+        return;
+      }
+      i++;
+    }
 
     // await getUserCart(
     //   user?.data.userInfo._id,
@@ -408,106 +473,162 @@ export default function EnhancedTable({ item }) {
   };
 
   const onSetSelected = (arr) => {
-    setSelected(arr)
-  }
+    setSelected(arr);
+  };
 
   return (
-    <Stack>
-      <Box sx={{ width: "100%" }}>
-        <Paper sx={{ width: "100%", mb: 2 }}>
-          <EnhancedTableToolbar
-            numSelected={selected.length}
-            data={rows}
-            arrSelected={selected}
-            onSetSelected={onSetSelected}
-          />
-          <TableContainer>
-            <Table
-              sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
-              size={"medium"}
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                onSelectAllClick={handleSelectAllClick}
-                rowCount={rows.length}
-              />
-              <TableBody>
-                {rows.map((row, index) => {
-                  const isItemSelected = isSelected(row);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+    <Box sx={{ display: "flex", flexDirection: "row", paddingY: "30px" }}>
+      <Box sx={{ width: "70%" }}>
+        <Stack>
+          <Box sx={{ width: "100%" }}>
+            <Paper sx={{ width: "100%", mb: 2 }}>
+              {selected.length > 0 ? (
+                <EnhancedTableToolbar
+                  numSelected={selected.length}
+                  data={rows}
+                  arrSelected={selected}
+                  onSetSelected={onSetSelected}
+                />
+              ) : null}
+              <TableContainer>
+                <Table
+                  sx={{ minWidth: 750 }}
+                  aria-labelledby="tableTitle"
+                  size={"medium"}
+                >
+                  <EnhancedTableHead
+                    numSelected={selected.length}
+                    onSelectAllClick={handleSelectAllClick}
+                    rowCount={rows.length}
+                  />
+                  <TableBody>
+                    {rows.map((row, index) => {
+                      const isItemSelected = isSelected(row);
+                      const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      // onClick={(event) => handleClick(event, row)}
-                      // role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={index}
-                      selected={isItemSelected}
-                      sx={{ cursor: "pointer" }}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                          onClick={(event) => handleClick(event, row)}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="center">{row.member} người</TableCell>
-                      <TableCell align="center">{row.duration} tháng</TableCell>
-                      <TableCell align="center">
-                        <Box className="quantity">
-                          <IconButton
-                            onClick={(event) =>
-                              handleButtonMinus(event, labelId)
-                            }
+                      return (
+                        <TableRow
+                          hover
+                          // onClick={(event) => handleClick(event, row)}
+                          // role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={index}
+                          selected={isItemSelected}
+                          sx={{ cursor: "pointer" }}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              color="primary"
+                              checked={isItemSelected}
+                              inputProps={{
+                                "aria-labelledby": labelId,
+                              }}
+                              onClick={(event) => handleClick(event, row)}
+                            />
+                          </TableCell>
+                          <TableCell
+                            component="th"
+                            id={labelId}
+                            scope="row"
+                            padding="none"
                           >
-                            <CiSquareMinus />
-                          </IconButton>
-                          <Typography variant="subtitle1" fontSize={18}>
-                            {row.quantity}
-                          </Typography>
-                          <IconButton onClick={handleButtonPlus}>
-                            <CiSquarePlus />
-                          </IconButton>
-                        </Box>
-                      </TableCell>
-                      <TableCell align="center">{row.money}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
+                            {row.name}
+                          </TableCell>
+                          <TableCell align="center">
+                            {row.member} người
+                          </TableCell>
+                          <TableCell align="center">
+                            {row.duration} tháng
+                          </TableCell>
+                          <TableCell align="center">
+                            <Box className="quantity">
+                              <IconButton
+                                onClick={(event) =>
+                                  handleButtonMinus(event, row)
+                                }
+                              >
+                                <CiSquareMinus />
+                              </IconButton>
+                              <Typography variant="subtitle1" fontSize={18}>
+                                {row.quantity}
+                              </Typography>
+                              <IconButton
+                                onClick={(event) =>
+                                  handleButtonPlus(event, row)
+                                }
+                              >
+                                <CiSquarePlus />
+                              </IconButton>
+                            </Box>
+                          </TableCell>
+                          <TableCell align="center">{row.money}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
+          </Box>
+        </Stack>
       </Box>
-      <Box className="total">
-        <Typography variant="subtitle2">
-          Tổng thanh toán ({selected.length} sản phẩm):
-        </Typography>
-        <Typography variant="subtitle2" color={"#ff3333"}>
-          {total}đ
-        </Typography>
-        <CustomComponent.Button1
-          sx={{ marginX: "10px" }}
-          onClick={handleButtonCheckout}
-        >
-          Thanh toán
-        </CustomComponent.Button1>
+      <Box sx={{ width: "30%" }} className="method-total">
+        <Stack spacing={2}>
+          <FormControl>
+            <FormLabel id="radio-buttons-method-total">
+              Chọn phương thức thanh toán
+            </FormLabel>
+            <RadioGroup
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="zalo"
+              name="radio-buttons-group"
+            >
+              <FormControlLabel value="zalo" control={<Radio />} label="Zalo" />
+              <FormControlLabel value="momo" control={<Radio />} label="Momo" />
+              <FormControlLabel
+                value="other"
+                control={<Radio />}
+                label="Other"
+              />
+            </RadioGroup>
+          </FormControl>
+          <Box className="total">
+            <Typography variant="subtitle2">
+              Tổng thanh toán ({selected.length} sản phẩm):
+            </Typography>
+            <Typography
+              variant="subtitle2"
+              color={"#ff3333"}
+              paddingLeft={"2px"}
+            >
+              {total}đ
+            </Typography>
+          </Box>
+          <Box align="right">
+            <CustomComponent.Button1 onClick={handleButtonCheckout}>
+              Thanh toán
+            </CustomComponent.Button1>
+            <Modal
+              open={openModal}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <Typography variant="h5" gutterBottom>
+                  Bạn vẫn chưa chọn sản phẩm để mua
+                </Typography>
+              </Box>
+            </Modal>
+          </Box>
+        </Stack>
       </Box>
-    </Stack>
+      {openProgress ? (
+        <Box sx={styleProgress}>
+          <CircularProgress />
+        </Box>
+      ) : null}
+    </Box>
   );
 }

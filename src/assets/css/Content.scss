@@ -15,7 +15,7 @@
 
 .form-connect-social-network {
     border-radius: 5px;
-    box-shadow: 2px 2px 4px #000000;
+    box-shadow: 2px 2px 4px #666666;
     .connect-social-network {
         display: flex;
         flex-direction: row;
@@ -49,6 +49,7 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    padding-left: 50px;
 }
 
 .map-container {

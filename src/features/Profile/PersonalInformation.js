@@ -28,6 +28,7 @@ import DateTimePicker from "../../component/Date/DateTimePicker";
 
 function PersonalInformation() {
   const inputRef = useRef();
+  const refDate = useRef();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const userInfo = useSelector((state) => state.user?.userInfo.user);
@@ -43,6 +44,7 @@ function PersonalInformation() {
   const [socialAcc, setSocialAcc] = useState(
     userInfo?.socialAccounts ? true : false
   );
+  const [widthDate, setWidthDate] = useState(0);
 
   const handleClick = () => {
     inputRef.current.click();
@@ -105,6 +107,11 @@ function PersonalInformation() {
     }
   };
 
+  useEffect(() => {
+    setWidthDate(refDate.current.offsetWidth);
+    console.log(refDate.current.offsetWidth);
+  }, []);
+
   return (
     <Stack
       sx={{
@@ -152,13 +159,15 @@ function PersonalInformation() {
             >
               Họ & tên
             </Typography>
-            <TextField
-              id="name"
-              variant="outlined"
-              size="small"
-              defaultValue={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            <Box sx={{ width: `${widthDate}px` }}>
+              <TextField
+                id="name"
+                variant="outlined"
+                size="small"
+                defaultValue={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Box>
           </Grid>
           <Grid className="form-personal-infor">
             <Typography
@@ -203,10 +212,12 @@ function PersonalInformation() {
             >
               Ngày sinh
             </Typography>
-            <DateTimePicker
-              valueDay={dob}
-              handleDateTimePicker={handleDateTimePicker}
-            />
+            <Box ref={refDate}>
+              <DateTimePicker
+                valueDay={dob}
+                handleDateTimePicker={handleDateTimePicker}
+              />
+            </Box>
           </Grid>
         </Box>
 

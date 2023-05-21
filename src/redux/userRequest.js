@@ -90,16 +90,16 @@ export const updateSettingUser = async (userID, token, user, dispatch, axiosJWT)
   }
 };
 
-export const userCheckout = async (userID, token, dispatch, user, axiosJWT) => {
+export const userCheckout = async (token, dispatch, user, axiosJWT) => {
   try {
-    const res = await axiosJWT.post(`/users/${userID}/checkout`, user, {
+    const res = await axiosJWT.post("/users/checkout", user, {
       headers: {
         accept: '*/*',
         Authorization: `Bearer ${token}`,
       },
     });
     console.log(res?.data.order);
-    dispatch(setOrder(res?.data.order))
+    dispatch(setOrder(res?.data.order));
   } catch (error) {
     console.log(error);
   }

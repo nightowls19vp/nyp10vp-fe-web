@@ -3,7 +3,7 @@ import { Stack, Typography } from "@mui/material";
 
 function Noti({ title, describe }) {
   return (
-    <Stack direction="column" justifyContent="center" alignItems="flex-start" >
+    <Stack direction="column" justifyContent="center" alignItems="flex-start" paddingLeft={'5px'} >
       <Typography variant="button" fontSize={"15px"} gutterBottom >
         {title}
       </Typography>

@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Box,
+  Typography,
+} from "@mui/material";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import NewspaperOutlinedIcon from "@mui/icons-material/NewspaperOutlined";
 import SettingsPhoneOutlinedIcon from "@mui/icons-material/SettingsPhoneOutlined";
@@ -10,8 +16,8 @@ import { createAxios } from "../../http/createInstance";
 
 import "../../assets/css/Content.scss";
 import { Colors } from "../../config/Colors.js";
-import ButtonSetting from "../../component/noti/ButtonSetting";
 import * as Custom from "../../component/custom/CustomComponents.js";
+import ButtonSetting from "../../component/noti/ButtonSetting";
 import { updateSettingUser } from "../../redux/userRequest";
 import { loginSuccess } from "../../redux/authSlice";
 
@@ -110,18 +116,6 @@ function Setting() {
       axiosJWT
     );
   };
-
-  // useEffect(() => {
-  //   let formData = {
-  //     stockNoti: stockNoti,
-  //     newsNoti: newsNoti,
-  //     callNoti: callNoti,
-  //     msgNoti: chatNoti
-  //   }
-  //   updateSettingUser(user?.data.userInfo._id, formData);
-  //   getSetting(user?.data.userInfo._id)
-
-  // }, [stockNoti, newsNoti, callNoti, chatNoti, user])
 
   return (
     <Box>
