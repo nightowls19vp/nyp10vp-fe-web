@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Stack, Tab, Typography } from "@mui/material";
+import { Box, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 import "../../assets/css/Package.scss";
@@ -24,11 +24,17 @@ function PackageItem({ data }) {
           </TabList>
         </Box>
         <TabPanel value="1">
-          <Box className="containerPackage" >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: { xs: "wrap", sm: "wrap", md: "nowrap" },
+              justifyContent: "center",
+              paddingY: "3%",
+            }}
+          >
             {data.child?.map((route) =>
-              route ? 
-                <DetailItem item={route} key={route._id} />
-              : null
+              route ? <DetailItem item={route} key={route._id} /> : null
             )}
           </Box>
         </TabPanel>

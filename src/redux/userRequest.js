@@ -23,16 +23,18 @@ export const getInformationUser = async (userID, token, dispatch, axiosJWT) => {
   }
 };
 
-export const updateInformationUser = async (
-  userID,
-  user,
-  dispatch,
-  axiosJWT
-) => {
+export const updateInformationUser = async (userID, token, user, dispatch, axiosJWT) => {
   try {
-    const res = await axiosJWT.put(`/users/${userID}`, user);
+    const res = await axiosJWT.put(`/users/${userID}`, user, {
+      headers: {
+        'accept': '*/*',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     dispatch(getUserInforSuccess(res.data));
   } catch (error) {
+    console.log(error);
     dispatch(getUserInforFailed());
   }
 };
@@ -98,8 +100,8 @@ export const userCheckout = async (token, dispatch, user, axiosJWT) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res?.data.order);
-    dispatch(setOrder(res?.data.order));
+    console.log(res?.data);
+    dispatch(setOrder(res?.data));
   } catch (error) {
     console.log(error);
   }

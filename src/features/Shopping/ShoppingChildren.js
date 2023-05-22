@@ -393,16 +393,18 @@ export default function EnhancedTable({ item }) {
   };
 
   function task(i) {
-    setTimeout(async function () {
-      await getInformationUser(
-        user?.data.userInfo._id,
-        user?.accessToken,
-        dispatch,
-        axiosJWT
-      );
-      if (userInfo.user.trxHist.length > 0) {
-        console.log("vy");
-      }
+    setTimeout(function () {
+      // await getInformationUser(
+      //   user?.data.userInfo._id,
+      //   user?.accessToken,
+      //   dispatch,
+      //   axiosJWT
+      // );
+      // if (userInfo.user.trxHist.length > 0) {
+      //   console.log("vy");
+      // }
+      console.log(i);
+      setOpenProgress(true);
     }, 5000 * i);
   }
 
@@ -411,25 +413,25 @@ export default function EnhancedTable({ item }) {
       setOpenModal(true);
       return;
     }
-    let shoppingCart = [];
-    for (let ele of item) {
-      let formData = {
-        package: ele._id,
-        quantity: ele.quantity,
-        noOfMember: ele.noOfMember,
-        duration: ele.duration,
-      };
-      shoppingCart.push(formData);
-    }
-    let formCart = {
-      cart: shoppingCart,
-    };
-    await updateUserCart(
-      user?.data.userInfo._id,
-      formCart,
-      user?.accessToken,
-      axiosJWT
-    );
+    // let shoppingCart = [];
+    // for (let ele of item) {
+    //   let formData = {
+    //     package: ele._id,
+    //     quantity: ele.quantity,
+    //     noOfMember: ele.noOfMember,
+    //     duration: ele.duration,
+    //   };
+    //   shoppingCart.push(formData);
+    // }
+    // let formCart = {
+    //   cart: shoppingCart,
+    // };
+    // await updateUserCart(
+    //   user?.data.userInfo._id,
+    //   formCart,
+    //   user?.accessToken,
+    //   axiosJWT
+    // );
 
     let cart = [];
     for (let el of selected) {
@@ -445,24 +447,21 @@ export default function EnhancedTable({ item }) {
       cart: cart,
     };
 
-    // await userCheckout(
-    //   user?.accessToken,
-    //   dispatch,
-    //   data,
-    //   axiosJWT
-    // );
+    await userCheckout(
+      user?.accessToken,
+      dispatch,
+      data,
+      axiosJWT
+    );
 
     // window.open(order.order_url);
 
-    let i = 0;
-    while (i < 5) {
-      task(i);
-      if (userInfo.user.trxHist.includes("230522_014234304")) {
-        console.log("1");
-        return;
-      }
-      i++;
-    }
+    // let i = 0;
+    // while (i < 5) {
+    //   task(i);
+    //   console.log(openProgress);
+    //   i++;
+    // }
 
     // await getUserCart(
     //   user?.data.userInfo._id,
@@ -606,7 +605,7 @@ export default function EnhancedTable({ item }) {
             </Typography>
           </Box>
           <Box align="right">
-            <CustomComponent.Button1 onClick={handleButtonCheckout}>
+            <CustomComponent.Button1 fullWidth onClick={handleButtonCheckout}>
               Thanh toán
             </CustomComponent.Button1>
             <Modal
@@ -624,11 +623,11 @@ export default function EnhancedTable({ item }) {
           </Box>
         </Stack>
       </Box>
-      {openProgress ? (
+      {/* {openProgress ? (
         <Box sx={styleProgress}>
           <CircularProgress />
         </Box>
-      ) : null}
+      ) : null} */}
     </Box>
   );
 }

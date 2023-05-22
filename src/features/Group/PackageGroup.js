@@ -6,17 +6,15 @@ import "../../assets/css/Group.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 
-function PackagesGroup() {
+function PackageGroup() {
   const [btn, setBtn] = useState(true);
   return (
-    <Stack spacing={2}>
       <Stack
         spacing={2}
         sx={{
           width: "70%",
           bgcolor: Colors.box,
           padding: "20px",
-          // border: "1px solid #000",
           borderRadius: "10px",
           boxShadow: "2px 2px 5px #8c8c8c",
         }}
@@ -73,13 +71,7 @@ function PackagesGroup() {
           )}
         </Box>
       </Stack>
-      <Stack spacing={2}>
-        <Box sx={{ display: "flex", flexDirection: "row" }} >
-          <PersonOutlinedIcon />
-        </Box>
-      </Stack>
-    </Stack>
   );
 }
 
-export default PackagesGroup;
+export default PackageGroup;

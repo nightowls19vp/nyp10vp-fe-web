@@ -22,7 +22,6 @@ import LogoFB from "../../assets/img/facebook.png";
 import * as CustomButton from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 import "../../assets/css/FormSignIn.scss";
-import { getInformationUser } from "../../redux/userRequest";
 
 function FormSignIn() {
   
@@ -72,11 +71,8 @@ function FormSignIn() {
     };
 
     if (checkEmail === true && checkPass === true) {
-      await loginUser(formData, dispatch, navigate, tokenJoinGr);
+      await loginUser(formData, dispatch, navigate, tokenJoinGr, axiosJWT);
     }
-
-    await getInformationUser(user?.data.userInfo._id, user?.accessToken, dispatch, axiosJWT);
-
   };
 
   const googleLogin = async () => {

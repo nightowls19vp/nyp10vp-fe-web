@@ -106,7 +106,7 @@ function DetailItem({ item }) {
       axiosJWT
     );
     console.log(res);
-    
+
     await getUserCart(
       user?.data.userInfo._id,
       user?.accessToken,
@@ -163,7 +163,11 @@ function DetailItem({ item }) {
 
   return (
     <Card
-      sx={{ width: "25%", backgroundColor: Colors.search, marginX: "10px" }}
+      sx={{
+        width: { xs: "70%", sm: "40%", md: "25%" },
+        backgroundColor: Colors.search,
+        margin: "10px",
+      }}
     >
       <CardContent>
         <Typography
@@ -176,7 +180,7 @@ function DetailItem({ item }) {
         >
           {item.name}
         </Typography>
-        <Box sx={{ height: "145px" }}>
+        <Box sx={{ height: "150px" }}>
           {item.description.split("\n").map((el, index) => (
             <Typography
               variant="body2"
@@ -203,16 +207,22 @@ function DetailItem({ item }) {
           ) : (
             <Box className="item">
               <IconButton disabled={arrowLeftMem} onClick={handleArrowLeftMem}>
-                <CiSquareMinus color={ arrowLeftMem ? null : Colors.textPrimary} size={30} />
+                <CiSquareMinus
+                  color={arrowLeftMem ? null : Colors.textPrimary}
+                  size={30}
+                />
               </IconButton>
-              <Typography variant="subtitle1" fontSize={18} >
+              <Typography variant="subtitle1" fontSize={18}>
                 {member}
               </Typography>
               <IconButton
                 disabled={arrowRightMem}
                 onClick={handleArrowRightMem}
               >
-                <CiSquarePlus color={ arrowRightMem ? null : Colors.textPrimary} size={30} />
+                <CiSquarePlus
+                  color={arrowRightMem ? null : Colors.textPrimary}
+                  size={30}
+                />
               </IconButton>
             </Box>
           )}
@@ -236,16 +246,22 @@ function DetailItem({ item }) {
                 disabled={arrowLeftDura}
                 onClick={handleArrowLeftDura}
               >
-                <CiSquareMinus color={ arrowLeftDura ? null : Colors.textPrimary} size={30} />
+                <CiSquareMinus
+                  color={arrowLeftDura ? null : Colors.textPrimary}
+                  size={30}
+                />
               </IconButton>
-              <Typography variant="subtitle1" fontSize={18} >
+              <Typography variant="subtitle1" fontSize={18}>
                 {duration}
               </Typography>
               <IconButton
                 disabled={arrowRightDura}
                 onClick={handleArrowRightDura}
               >
-                <CiSquarePlus color={ arrowRightDura ? null : Colors.textPrimary} size={30} />
+                <CiSquarePlus
+                  color={arrowRightDura ? null : Colors.textPrimary}
+                  size={30}
+                />
               </IconButton>
             </Box>
           )}
@@ -264,7 +280,9 @@ function DetailItem({ item }) {
       <CardActions
         sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}
       >
-        <CustomComponents.Button2 onClick={(event) => handleButtonAdd(event, item)}>
+        <CustomComponents.Button2
+          onClick={(event) => handleButtonAdd(event, item)}
+        >
           Thêm vào giỏ hàng
         </CustomComponents.Button2>
         <CustomComponents.Button1 onClick={handleButtonBuy}>

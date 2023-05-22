@@ -76,17 +76,21 @@ function PersonalInformation() {
   };
 
   const handleDateTimePicker = (dateValue) => {
-    setDob(dateValue);
+    setDob(dateValue.$d);
   };
 
   const handleButtonChange = () => {
     let formData = {
       name: name,
-      dob: dob,
+      dob: String(dob),
       phone: phone,
     };
+
+    console.log(formData);
+
     updateInformationUser(
       user?.data.userInfo._id,
+      user?.accessToken,
       formData,
       dispatch,
       axiosJWT
@@ -161,6 +165,7 @@ function PersonalInformation() {
             </Typography>
             <Box sx={{ width: `${widthDate}px` }}>
               <TextField
+                fullWidth
                 id="name"
                 variant="outlined"
                 size="small"
@@ -178,13 +183,16 @@ function PersonalInformation() {
             >
               Email
             </Typography>
-            <TextField
-              disabled
-              id="email"
-              variant="outlined"
-              size="small"
-              defaultValue={email}
-            />
+            <Box sx={{ width: `${widthDate}px` }}>
+              <TextField
+                fullWidth
+                disabled
+                id="email"
+                variant="outlined"
+                size="small"
+                defaultValue={email}
+              />
+            </Box>
           </Grid>
           <Grid className="form-personal-infor">
             <Typography
@@ -195,13 +203,16 @@ function PersonalInformation() {
             >
               Số điện thoại
             </Typography>
-            <TextField
-              id="phone"
-              variant="outlined"
-              size="small"
-              defaultValue={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
+            <Box sx={{ width: `${widthDate}px` }}>
+              <TextField
+                fullWidth
+                id="phone"
+                variant="outlined"
+                size="small"
+                defaultValue={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </Box>
           </Grid>
           <Grid className="form-personal-infor">
             <Typography

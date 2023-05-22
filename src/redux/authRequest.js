@@ -10,6 +10,7 @@ import {
   logoutSuccess,
   logoutFailed,
 } from "./authSlice";
+import { getInformationUser } from "./userRequest";
 
 export const getJoinGroup = async (token, tokenJoinGr) => {
   try {
@@ -28,19 +29,22 @@ export const getJoinGroup = async (token, tokenJoinGr) => {
   }
 };
 
-export const loginUser = async (user, dispatch, navigate, tokenJoinGr) => {
+export const loginUser = async (user, dispatch, navigate, tokenJoinGr, axiosJWT) => {
   dispatch(loginStart());
   try {
     const res = await apiClient.post("/auth/login", user, {
       withCredentials: true,
     });
     // localStorage.setItem("accessToken", res.data.accessToken);
-    dispatch(loginSuccess(res.data));
+    dispatch(loginSuccess(res?.data));
     
-    if (tokenJoinGr) {
-      const resJoin = await getJoinGroup(res.data.accessToken, tokenJoinGr);
-      console.log(resJoin);
-    }
+    // if (tokenJoinGr) {
+    //   const resJoin = await getJoinGroup(res.data.accessToken, tokenJoinGr);
+    //   console.log(resJoin);
+    // }
+
+    await getInformationUser(res?.data.data.userInfo._id, res?.data.accessToken, dispatch, axiosJWT);
+
     navigate("/");
   } catch (error) {
     dispatch(loginFailed(error.response.data));

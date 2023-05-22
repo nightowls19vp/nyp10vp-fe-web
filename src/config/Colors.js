@@ -11,4 +11,5 @@ export const Colors = {
     btnFill: "#FFAA33",
     btnOutline: "#ffeacc",
     black: "#000000",
+    box: "#e6e6e6",
 };
