@@ -19,8 +19,16 @@ function PackageItem({ data }) {
           className="containerPackage"
         >
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="GÓI NGƯỜI DÙNG" value="1" sx={{ marginX: "50px" }} />
-            <Tab label="CÁC TIỆN ÍCH" value="2" sx={{ marginX: "50px" }} />
+            <Tab
+              label="GÓI NGƯỜI DÙNG"
+              value="1"
+              sx={{ marginX: { xs: "0px", sm: "20px", md: "50px" } }}
+            />
+            <Tab
+              label="CÁC TIỆN ÍCH"
+              value="2"
+              sx={{ marginX: { xs: "0px", sm: "20px", md: "50px" } }}
+            />
           </TabList>
         </Box>
         <TabPanel value="1">

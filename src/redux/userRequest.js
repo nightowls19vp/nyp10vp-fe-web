@@ -1,11 +1,11 @@
 import apiClient from "../http/http-common.js";
 import { setOrder } from "./authSlice.js";
-import { updateGroupId } from "./packageSlice.js";
 import {
   getGroupSuperUser,
   getUserInforFailed,
   getUserInforStart,
   getUserInforSuccess,
+  updateGroupId,
 } from "./userSlice";
 
 export const getInformationUser = async (userID, token, dispatch, axiosJWT) => {
@@ -48,7 +48,7 @@ export const uploadFile = async (id, token, file) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return res.data;
+    return res?.data;
   } catch (error) {
     console.log(error);
   }
@@ -63,7 +63,7 @@ export const updateAvatarUser = async (userID, token, data, axiosJWT) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    return res.data;
+    return res?.data;
   } catch (error) {
     console.log(error);
   }
@@ -118,10 +118,29 @@ export const getGroupByUserId = async (token, role, dispatch, axiosJWT) => {
         Authorization: `Bearer ${token}`,
       },
     })
+
+    let dataGroup = [
+      {
+        title: "Group SUPER USER",
+        status: true,
+        child: [],
+      },
+      {
+        title: "Group USER",
+        status: false,
+        child: [],
+      },
+    ];
+
+    for (let item of res?.data.groups) {
+      dataGroup[0].child.push(item);
+    }
+
+    dispatch(getGroupSuperUser(dataGroup));
+
+    console.log(dataGroup);
     
-    dispatch(getGroupSuperUser(res?.data.groups));
-    
-    dispatch(updateGroupId(res?.data.groups[0]?._id))
+    dispatch(updateGroupId(dataGroup[0].child[0]._id))
   } catch (error) {
     console.log(error);
   }
@@ -156,6 +175,50 @@ export const usersInvitePeople = async (token, grId, axiosJWT) => {
       },
     });
     return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const uploadAvatarGroup = async (id, token, file, axiosJWT) => {
+  try {
+    const res = await axiosJWT.post(`/file/upload-gr-avatar/${id}`, file, {
+      headers: {
+        'accept': '*/*',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateAvatarGroup = async (id, token, file, axiosJWT) => {
+  try {
+    const res = await axiosJWT.post(`/pkg-mgmt/gr/${id}/avatar`, file, {
+      headers: {
+        'accept': '*/*',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateGroupName = async (id, token, name, axiosJWT) => {
+  try {
+    const res = await axiosJWT.put(`/pkg-mgmt/gr/${id}`, name, {
+      headers: {
+        'accept': '*/*',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    console.log(res?.data);
   } catch (error) {
     console.log(error);
   }

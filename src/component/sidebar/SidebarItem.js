@@ -9,10 +9,10 @@ import {
 
 import { Colors } from "../../config/Colors";
 import {
-  updateGroupId,
   updateProfileId,
   updateShowSidebar,
 } from "../../redux/packageSlice";
+import { updateGroupId } from "../../redux/userSlice";
 
 function SidebarItem({ item, title, selectedID }) {
   const selectedIdx = selectedID;

@@ -254,11 +254,13 @@ export default function EnhancedTable({ item }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.login?.currentUser);
   const userInfo = useSelector((state) => state.user?.userInfo);
-  const order = useSelector((state) => state.auth.order);
+  const order = useSelector((state) => state.auth?.order);
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
+
   const [openModal, setOpenModal] = React.useState(false);
-  const [openProgress, setOpenProgress] = React.useState(false);
+  // const [openProgress, setOpenProgress] = React.useState(false);
+
   const handleClose = () => setOpenModal(false);
 
   const rows = item.map((row) =>
@@ -392,22 +394,6 @@ export default function EnhancedTable({ item }) {
     dispatch(setCarts(shoppingCart));
   };
 
-  function task(i) {
-    setTimeout(function () {
-      // await getInformationUser(
-      //   user?.data.userInfo._id,
-      //   user?.accessToken,
-      //   dispatch,
-      //   axiosJWT
-      // );
-      // if (userInfo.user.trxHist.length > 0) {
-      //   console.log("vy");
-      // }
-      console.log(i);
-      setOpenProgress(true);
-    }, 5000 * i);
-  }
-
   const handleButtonCheckout = async () => {
     if (selected.length === 0) {
       setOpenModal(true);
@@ -447,28 +433,37 @@ export default function EnhancedTable({ item }) {
       cart: cart,
     };
 
-    await userCheckout(
+    await userCheckout(user?.accessToken, dispatch, data, axiosJWT);
+
+    window.open(order.order.order_url);
+
+    const interValCheck = setInterval(async () => {
+      await getInformationUser(
+        user?.data.userInfo._id,
+        user?.accessToken,
+        dispatch,
+        axiosJWT
+      );
+
+      console.log(userInfo.user.trxHist, order.trans._id);
+
+      if (userInfo.user.trxHist.includes(order.trans._id)) {
+        console.log(order.trans._id, "exists in trxHist");
+
+        clearInterval(interValCheck);
+      }
+    }, 10 * 1000);
+
+    setTimeout(() => {
+      clearInterval(interValCheck);
+    }, 2 * 60 * 1000);
+
+    await getUserCart(
+      user?.data.userInfo._id,
       user?.accessToken,
       dispatch,
-      data,
       axiosJWT
     );
-
-    // window.open(order.order_url);
-
-    // let i = 0;
-    // while (i < 5) {
-    //   task(i);
-    //   console.log(openProgress);
-    //   i++;
-    // }
-
-    // await getUserCart(
-    //   user?.data.userInfo._id,
-    //   user?.accessToken,
-    //   dispatch,
-    //   axiosJWT
-    // );
   };
 
   const onSetSelected = (arr) => {

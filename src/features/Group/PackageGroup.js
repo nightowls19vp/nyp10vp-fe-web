@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { Box, Button, Stack, Typography } from "@mui/material";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 import "../../assets/css/Group.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 
-function PackageGroup() {
-  const [btn, setBtn] = useState(true);
+function PackageGroup({ item }) {
+  const [btn, setBtn] = useState(item.status === "Not Activated" ? true : false);
   return (
       <Stack
         spacing={2}
@@ -29,7 +28,7 @@ function PackageGroup() {
             Tên gói:
           </Typography>
           <Typography fontSize={16} gutterBottom>
-            XXXXX
+            {item.package._id}
           </Typography>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -42,7 +41,7 @@ function PackageGroup() {
             Thời hạn:
           </Typography>
           <Typography fontSize={16} gutterBottom>
-            XXXXX
+          {item.package.duration}
           </Typography>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -55,7 +54,7 @@ function PackageGroup() {
             Số thành viên:
           </Typography>
           <Typography fontSize={16} gutterBottom>
-            XXXXX
+          {item.package.noOfMember}
           </Typography>
         </Box>
 

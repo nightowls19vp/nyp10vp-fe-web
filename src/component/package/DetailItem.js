@@ -278,7 +278,7 @@ function DetailItem({ item }) {
         </Typography>
       </CardContent>
       <CardActions
-        sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}
+        sx={{ display: "flex", flexDirection: "row", justifyContent: "center", paddingBottom: '20px' }}
       >
         <CustomComponents.Button2
           onClick={(event) => handleButtonAdd(event, item)}

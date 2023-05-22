@@ -5,77 +5,25 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import "../../assets/css/Group.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
+import PackageGroup from "./PackageGroup";
 
-function PackagesGroup() {
-  const [btn, setBtn] = useState(true);
+function PackagesGroup({ data }) {
   return (
     <Stack spacing={2}>
+      {data.packages.map((route, index) => route ? <PackageGroup item={route} key={index} /> : null)}
       <Stack
         spacing={2}
         sx={{
           width: "70%",
           bgcolor: Colors.box,
           padding: "20px",
-          // border: "1px solid #000",
           borderRadius: "10px",
           boxShadow: "2px 2px 5px #8c8c8c",
         }}
       >
         <Box sx={{ display: "flex", flexDirection: "row" }}>
-          <Typography
-            width={"120px"}
-            variant="subtitle2"
-            fontSize={16}
-            gutterBottom
-          >
-            Tên gói:
-          </Typography>
-          <Typography fontSize={16} gutterBottom>
-            XXXXX
-          </Typography>
-        </Box>
-        <Box sx={{ display: "flex", flexDirection: "row" }}>
-          <Typography
-            width={"120px"}
-            variant="subtitle2"
-            fontSize={16}
-            gutterBottom
-          >
-            Thời hạn:
-          </Typography>
-          <Typography fontSize={16} gutterBottom>
-            XXXXX
-          </Typography>
-        </Box>
-        <Box sx={{ display: "flex", flexDirection: "row" }}>
-          <Typography
-            width={"120px"}
-            variant="subtitle2"
-            fontSize={16}
-            gutterBottom
-          >
-            Số thành viên:
-          </Typography>
-          <Typography fontSize={16} gutterBottom>
-            XXXXX
-          </Typography>
-        </Box>
-
-        <Box>
-          {btn ? (
-            <Button variant="contained" color="success" sx={{ width: "140px" }}>
-              Kích hoạt gói
-            </Button>
-          ) : (
-            <CustomComponent.Button2 sx={{ width: "140px" }}>
-              Gia hạn gói
-            </CustomComponent.Button2>
-          )}
-        </Box>
-      </Stack>
-      <Stack spacing={2}>
-        <Box sx={{ display: "flex", flexDirection: "row" }} >
           <PersonOutlinedIcon />
+          <Typography > {data.members[0].user} </Typography>
         </Box>
       </Stack>
     </Stack>

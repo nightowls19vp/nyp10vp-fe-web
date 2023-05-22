@@ -13,7 +13,7 @@ import { TabList, TabPanel, TabContext } from "@mui/lab";
 import { AiFillCamera, AiOutlineEdit } from "react-icons/ai";
 
 import { useDispatch, useSelector } from "react-redux";
-import { usersInvitePeople } from "../../redux/userRequest";
+import { getGroupByUserId, updateAvatarGroup, updateGroupName, uploadAvatarGroup, usersInvitePeople } from "../../redux/userRequest";
 import { createAxios } from "../../http/createInstance";
 import { loginSuccess } from "../../redux/authSlice";
 
@@ -44,7 +44,7 @@ function SuperUser({ item }) {
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  const [image, setImage] = useState(userInfo.avatar ?? ImgAvatar);
+  const [image, setImage] = useState(item.avatar ?? ImgAvatar);
   const [name, setName] = useState(item.name);
   const [linkInvite, setLinkInvite] = useState("");
 
@@ -66,10 +66,42 @@ function SuperUser({ item }) {
     if (!fileObj) {
       return;
     }
+    
+    const form = new FormData();
+    form.append("file", fileObj);
+    const res = await uploadAvatarGroup(
+      item._id,
+      user?.accessToken,
+      form,
+      axiosJWT
+    );
+
+    const formAvatar = new FormData();
+    formAvatar.append("avatar", res?.data);
+    const resImg = await updateAvatarGroup(
+      item._id,
+      user?.accessToken,
+      formAvatar,
+      axiosJWT
+    );
+
+    console.log(resImg);
+    
+    setImage(res.data);
+
+    // await getGroupByUserId(user?.accessToken, "Super User", dispatch, axiosJWT);
   };
 
-  const handleButtonSave = () => {
-    console.log(name.length);
+  const handleButtonSave = async () => {
+    let formData = {
+      name: name,
+    }
+
+    console.log(formData);
+
+    await updateGroupName(item._id, user?.accessToken, formData, axiosJWT);
+
+    setOpen(false);
   };
 
   const handleButtonInvite = async () => {
@@ -87,11 +119,11 @@ function SuperUser({ item }) {
       // paddingY={5}
       // paddingX={2}
       spacing={2}
-      sx={{ paddingX: { xs: '0px', sm: '5px', md: '10px'}}}
+      sx={{ paddingX: { xs: "0px", sm: "5px", md: "10px" } }}
     >
       <Box className="title-group">
-        <Box align={"center"} sx={{ paddingRight: '10px' }}>
-          <CustomComponent.ButtonAvatar onClick={handleClick} >
+        <Box align={"center"} sx={{ paddingRight: "10px" }}>
+          <CustomComponent.ButtonAvatar onClick={handleClick}>
             <CustomComponent.ImageSrc
               style={{ backgroundImage: `url(${image})` }}
             />
@@ -140,15 +172,31 @@ function SuperUser({ item }) {
         </Modal>
       </Box>
 
-      <Box sx={{ width: { xs: '100%', sm: '100%', md: '70%' }, typography: "body1" }}>
+      <Box
+        sx={{
+          width: { xs: "100%", sm: "100%", md: "70%" },
+          typography: "body1",
+        }}
+      >
         <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }} className="title-packages-group">
+          <Box
+            sx={{ borderBottom: 1, borderColor: "divider" }}
+            className="title-packages-group"
+          >
             <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab label="Item One" value="1"  sx={{ marginX: { xs: '0px', sm: '0px', md: '40px'} }} />
-              <Tab label="Item Two" value="2"  sx={{ marginX: { xs: '0px', sm: '0px', md: '40px'} }} />
+              <Tab
+                label="Item One"
+                value="1"
+                sx={{ marginX: { xs: "0px", sm: "0px", md: "40px" } }}
+              />
+              <Tab
+                label="Item Two"
+                value="2"
+                sx={{ marginX: { xs: "0px", sm: "0px", md: "40px" } }}
+              />
             </TabList>
           </Box>
-          <TabPanel value="1"> <PackagesGroup /> </TabPanel>
+          <TabPanel value="1"> <PackagesGroup data={item} /> </TabPanel>
           <TabPanel value="2">Item Two</TabPanel>
         </TabContext>
       </Box>

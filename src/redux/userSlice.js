@@ -8,6 +8,7 @@ const userSlice = createSlice({
         error: false,
         mgsUser: null,
         groupSuperUser: null,
+        groupID: 0,
     }, 
     reducers: {
         getUserInforStart: (state) => {
@@ -24,7 +25,10 @@ const userSlice = createSlice({
         },
         getGroupSuperUser: (state, action) => {
             state.groupSuperUser = action.payload;
-        }
+        },
+        updateGroupId: (state, action) => {
+            state.groupID = action.payload;
+        },
     }
 });
 
@@ -33,6 +37,7 @@ export const {
    getUserInforSuccess,
    getUserInforFailed,
    getGroupSuperUser,
+   updateGroupId,
 } = userSlice.actions;
 
 export default userSlice.reducer;
