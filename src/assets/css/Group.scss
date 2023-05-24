@@ -17,6 +17,13 @@
     justify-content: center;
 }
 
+.package-group {
+    display: flex;
+    flex-direction: row;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 .btn-invite {
     display: flex;
     flex-direction: column;

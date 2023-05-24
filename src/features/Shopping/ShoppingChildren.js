@@ -433,37 +433,39 @@ export default function EnhancedTable({ item }) {
       cart: cart,
     };
 
-    await userCheckout(user?.accessToken, dispatch, data, axiosJWT);
+    const res = await userCheckout(user?.accessToken, dispatch, data, axiosJWT);
 
     window.open(order.order.order_url);
 
-    const interValCheck = setInterval(async () => {
-      await getInformationUser(
+    if (res.statusCode === 200) {
+      const interValCheck = setInterval(async () => {
+        await getInformationUser(
+          user?.data.userInfo._id,
+          user?.accessToken,
+          dispatch,
+          axiosJWT
+        );
+
+        console.log(userInfo.user.trxHist, order.trans._id);
+
+        if (userInfo.user.trxHist.includes(order.trans._id)) {
+          console.log(order.trans._id, "exists in trxHist");
+
+          clearInterval(interValCheck);
+        }
+      }, 10 * 1000);
+
+      setTimeout(() => {
+        clearInterval(interValCheck);
+      }, 3 * 60 * 1000);
+
+      await getUserCart(
         user?.data.userInfo._id,
         user?.accessToken,
         dispatch,
         axiosJWT
       );
-
-      console.log(userInfo.user.trxHist, order.trans._id);
-
-      if (userInfo.user.trxHist.includes(order.trans._id)) {
-        console.log(order.trans._id, "exists in trxHist");
-
-        clearInterval(interValCheck);
-      }
-    }, 10 * 1000);
-
-    setTimeout(() => {
-      clearInterval(interValCheck);
-    }, 2 * 60 * 1000);
-
-    await getUserCart(
-      user?.data.userInfo._id,
-      user?.accessToken,
-      dispatch,
-      axiosJWT
-    );
+    }
   };
 
   const onSetSelected = (arr) => {
@@ -471,8 +473,16 @@ export default function EnhancedTable({ item }) {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "row", paddingY: "30px" }}>
-      <Box sx={{ width: "70%" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: { xs: "column", lg: "row" },
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingY: "30px",
+      }}
+    >
+      <Box sx={{ width: { xs: "100%", lg: "70%" } }}>
         <Stack>
           <Box sx={{ width: "100%" }}>
             <Paper sx={{ width: "100%", mb: 2 }}>
@@ -567,7 +577,14 @@ export default function EnhancedTable({ item }) {
           </Box>
         </Stack>
       </Box>
-      <Box sx={{ width: "30%" }} className="method-total">
+      <Box
+        sx={{
+          width: { xs: "100%", lg: "30%" },
+          display: "flex",
+          justifyContent: { xs: "flex-start", lg: "center" },
+        }}
+        // className="method-total"
+      >
         <Stack spacing={2}>
           <FormControl>
             <FormLabel id="radio-buttons-method-total">

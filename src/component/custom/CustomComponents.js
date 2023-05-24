@@ -17,6 +17,7 @@ export const Button1 = styled(Button) ({
   '&:hover': {
     backgroundColor: Colors.primary,
   },
+  borderRadius: '10px',
 });
 
 export const Button2 = styled(Button) ({
@@ -27,7 +28,8 @@ export const Button2 = styled(Button) ({
   '&:hover': {
     backgroundColor: Colors.btnOutline,
     border: "2px solid",
-  }
+  },
+  borderRadius: '10px',
 });
 
 export const ButtonAvatar = styled(ButtonBase)(({ theme }) => ({

@@ -7,6 +7,7 @@ const routes = {
     shopping: '/shopping-cart',
     group: '/group',
     joinGr: '/pkg-mgmt/gr/join',
+    packageGroup: '/group-package',
 };
 
 export default routes;

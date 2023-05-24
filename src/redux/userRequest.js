@@ -100,8 +100,9 @@ export const userCheckout = async (token, dispatch, user, axiosJWT) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res?.data);
+    // console.log(res?.data);
     dispatch(setOrder(res?.data));
+    return res?.data;
   } catch (error) {
     console.log(error);
   }
@@ -195,30 +196,63 @@ export const uploadAvatarGroup = async (id, token, file, axiosJWT) => {
   }
 };
 
-export const updateAvatarGroup = async (id, token, file, axiosJWT) => {
+export const updateAvatarGroup = async (id, token, file, dispatch, axiosJWT) => {
   try {
-    const res = await axiosJWT.post(`/pkg-mgmt/gr/${id}/avatar`, file, {
+    await axiosJWT.post(`/pkg-mgmt/gr/${id}/avatar`, file, {
       headers: {
         'accept': '*/*',
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
       },
     })
-    return res?.data;
+    
+    await getGroupByUserId(token, "Super User", dispatch, axiosJWT);
   } catch (error) {
     console.log(error);
   }
 };
 
-export const updateGroupName = async (id, token, name, axiosJWT) => {
+export const updateGroupName = async (id, token, name, dispatch, axiosJWT) => {
   try {
-    const res = await axiosJWT.put(`/pkg-mgmt/gr/${id}`, name, {
+    await axiosJWT.put(`/pkg-mgmt/gr/${id}`, name, {
       headers: {
         'accept': '*/*',
         Authorization: `Bearer ${token}`,
       },
     })
-    console.log(res?.data);
+
+    await getGroupByUserId(token, "Super User", dispatch, axiosJWT);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateActivatePackage = async (id, token, data, dispatch, axiosJWT) => {
+  try {
+    await axiosJWT.post(`/pkg-mgmt/gr/${id}/activate`, data, {
+      headers: {
+        'accept': '*/*',
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    await getGroupByUserId(token, "Super User", dispatch, axiosJWT);
+
+    dispatch(updateGroupId(id));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const userRenewGroup = async (grId, token, dispatch, data, axiosJWT) => {
+  try {
+    const res = await axiosJWT.post(`/users/renew/${grId}`, data, {
+      headers: {
+        accept: '*/*',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    dispatch(setOrder(res?.data));
+    return res?.data;
   } catch (error) {
     console.log(error);
   }

@@ -9,6 +9,7 @@ import ProfilePage from '../pages/Profile.js';
 import ShoppingCartPage from '../pages/ShoppingCart.js';
 import GroupPage from '../pages/Group.js';
 import UserJoinPage from '../pages/UserJoin.js';
+import PackageRenewPage from '../pages/PackageRenew.js';
 
 const publicRoutes = [
     { path: routesConfig.home, component: HomePage},
@@ -25,6 +26,7 @@ const privateRoutes = [
 
 const loginRoute = [
     { path: routesConfig.login, component: LoginPage},
+    { path: routesConfig.packageGroup, component: PackageRenewPage},
 ]
 
 export { publicRoutes, privateRoutes, loginRoute};

@@ -7,13 +7,16 @@ import {
   TextField,
   Tab,
   Modal,
-  Button,
 } from "@mui/material";
 import { TabList, TabPanel, TabContext } from "@mui/lab";
 import { AiFillCamera, AiOutlineEdit } from "react-icons/ai";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getGroupByUserId, updateAvatarGroup, updateGroupName, uploadAvatarGroup, usersInvitePeople } from "../../redux/userRequest";
+import {
+  updateAvatarGroup,
+  updateGroupName,
+  uploadAvatarGroup,
+} from "../../redux/userRequest";
 import { createAxios } from "../../http/createInstance";
 import { loginSuccess } from "../../redux/authSlice";
 
@@ -40,13 +43,12 @@ function SuperUser({ item }) {
   const inputRef = useRef();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
-  const userInfo = useSelector((state) => state.user?.userInfo.user);
+  const userGroup = useSelector((state) => state.user?.groupSuperUser);
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [image, setImage] = useState(item.avatar ?? ImgAvatar);
   const [name, setName] = useState(item.name);
-  const [linkInvite, setLinkInvite] = useState("");
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -66,7 +68,7 @@ function SuperUser({ item }) {
     if (!fileObj) {
       return;
     }
-    
+
     const form = new FormData();
     form.append("file", fileObj);
     const res = await uploadAvatarGroup(
@@ -76,39 +78,37 @@ function SuperUser({ item }) {
       axiosJWT
     );
 
+    console.log(res?.data);
+
     const formAvatar = new FormData();
     formAvatar.append("avatar", res?.data);
-    const resImg = await updateAvatarGroup(
+    await updateAvatarGroup(
       item._id,
       user?.accessToken,
       formAvatar,
+      dispatch,
       axiosJWT
     );
 
-    console.log(resImg);
-    
     setImage(res.data);
-
-    // await getGroupByUserId(user?.accessToken, "Super User", dispatch, axiosJWT);
   };
 
   const handleButtonSave = async () => {
     let formData = {
       name: name,
-    }
+    };
 
     console.log(formData);
 
-    await updateGroupName(item._id, user?.accessToken, formData, axiosJWT);
+    await updateGroupName(
+      item._id,
+      user?.accessToken,
+      formData,
+      dispatch,
+      axiosJWT
+    );
 
     setOpen(false);
-  };
-
-  const handleButtonInvite = async () => {
-    const res = await usersInvitePeople(user?.accessToken, item._id, axiosJWT);
-    let link = "http://localhost:8080";
-    link += res.data;
-    setLinkInvite(link);
   };
 
   return (
@@ -116,13 +116,11 @@ function SuperUser({ item }) {
       direction="column"
       justifyContent="flex-start"
       alignItems="center"
-      // paddingY={5}
-      // paddingX={2}
       spacing={2}
-      sx={{ paddingX: { xs: "0px", sm: "5px", md: "10px" } }}
+      sx={{ paddingX: { xs: "0px", sm: "0px", md: "10px" }, width: '100%' }}
     >
       <Box className="title-group">
-        <Box align={"center"} sx={{ paddingRight: "10px" }}>
+        <Box align={"center"} sx={{ paddingRight: "15px" }}>
           <CustomComponent.ButtonAvatar onClick={handleClick}>
             <CustomComponent.ImageSrc
               style={{ backgroundImage: `url(${image})` }}
@@ -142,7 +140,7 @@ function SuperUser({ item }) {
             </CustomComponent.Image>
           </CustomComponent.ButtonAvatar>
         </Box>
-        <Typography variant="h6"> {item.name} </Typography>
+        <Typography variant="h6" fontSize={22}> {item.name} </Typography>
         <IconButton onClick={handleOpen}>
           <AiOutlineEdit />
         </IconButton>
@@ -196,12 +194,14 @@ function SuperUser({ item }) {
               />
             </TabList>
           </Box>
-          <TabPanel value="1"> <PackagesGroup data={item} /> </TabPanel>
+          <TabPanel value="1">
+            <PackagesGroup data={item} />
+          </TabPanel>
           <TabPanel value="2">Item Two</TabPanel>
         </TabContext>
       </Box>
 
-      <Box className="btn-invite">
+      {/* <Box className="btn-invite">
         <CustomComponent.Button1
           sx={{ marginBottom: "10px" }}
           onClick={handleButtonInvite}
@@ -217,7 +217,7 @@ function SuperUser({ item }) {
             sx={{ textOverflow: "ellipsis" }}
           />
         ) : null}
-      </Box>
+      </Box> */}
     </Stack>
   );
 }

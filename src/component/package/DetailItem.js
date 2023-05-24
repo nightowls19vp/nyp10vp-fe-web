@@ -165,8 +165,10 @@ function DetailItem({ item }) {
     <Card
       sx={{
         width: { xs: "70%", sm: "40%", md: "25%" },
-        backgroundColor: Colors.search,
         margin: "10px",
+        bgcolor: Colors.background,
+        borderRadius: "10px",
+        boxShadow: "2px 2px 5px #8c8c8c",
       }}
     >
       <CardContent>
@@ -278,7 +280,12 @@ function DetailItem({ item }) {
         </Typography>
       </CardContent>
       <CardActions
-        sx={{ display: "flex", flexDirection: "row", justifyContent: "center", paddingBottom: '20px' }}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          paddingBottom: "20px",
+        }}
       >
         <CustomComponents.Button2
           onClick={(event) => handleButtonAdd(event, item)}
