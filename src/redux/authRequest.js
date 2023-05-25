@@ -10,6 +10,7 @@ import {
   logoutSuccess,
   logoutFailed,
 } from "./authSlice";
+import { updateProfileId } from "./packageSlice";
 import { getInformationUser } from "./userRequest";
 
 export const getJoinGroup = async (token, tokenJoinGr) => {
@@ -44,6 +45,8 @@ export const loginUser = async (user, dispatch, navigate, tokenJoinGr, axiosJWT)
     // }
 
     await getInformationUser(res?.data.data.userInfo._id, res?.data.accessToken, dispatch, axiosJWT);
+
+    dispatch(updateProfileId(1));
 
     navigate("/");
   } catch (error) {

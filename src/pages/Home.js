@@ -15,13 +15,6 @@ function Home() {
   const navigate = useNavigate();
   const urlParams = new URL(window.location.href).searchParams;
 
-  // if (urlParams.get("accessToken") != null) {
-  //   const token = {
-  //     accessToken: urlParams.get("accessToken"),
-  //   };
-  //   dispatch(loginSuccess(token));
-  // }
-
   const user = useSelector((state) => state.auth.login?.currentUser)
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
