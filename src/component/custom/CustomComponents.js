@@ -11,6 +11,40 @@ export const ButtonNoti = styled(Button) ({
   },
 });
 
+export const GroupChat = styled(Button)({
+  boxShadow: 'none',
+  textTransform: 'none',
+  fontSize: 16,
+  position: 'relative',
+  height: '50px',
+  fontFamily: [
+    '-apple-system',
+    'BlinkMacSystemFont',
+    '"Segoe UI"',
+    'Roboto',
+    '"Helvetica Neue"',
+    'Arial',
+    'sans-serif',
+    '"Apple Color Emoji"',
+    '"Segoe UI Emoji"',
+    '"Segoe UI Symbol"',
+  ].join(','),
+  '&:hover': {
+    backgroundColor: '#e6e6e6',
+    // borderColor: '#0062cc',
+    // boxShadow: 'none',
+  },
+  '&:active': {
+    boxShadow: 'none',
+    backgroundColor: '#e6f2ff',
+    // borderColor: '#005cbf',
+  },
+  '&:focus': {
+    // boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+    backgroundColor: '#e6f2ff',
+  },
+});
+
 export const Button1 = styled(Button) ({
   backgroundColor: Colors.btnFill,
   color: Colors.background,

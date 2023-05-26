@@ -24,6 +24,8 @@ function DefaultLayout({ children }) {
       <Box
         sx={{
           minHeight: `calc(100vh - ${heightHeader}px - ${heightFooter}px)`,
+          display: 'flex',
+          justifyContent: 'space-between',
         }}
       >
         {children}

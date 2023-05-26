@@ -7,6 +7,8 @@ import {
   MdPersonAddAlt,
   MdChat,
   MdOutlineChat,
+  MdGroups2,
+  MdOutlineGroups2,
   MdShoppingCart,
   MdOutlineShoppingCart,
 } from "react-icons/md";
@@ -38,15 +40,22 @@ export const dataHeader2 = [
   {
     id: 4,
     title: "Chat",
-    route: routesConfig.group,
+    route: routesConfig.chatGr,
     iconFill: <MdChat size={35} color={Colors.primary} />,
     iconOutline: <MdOutlineChat size={35} color={Colors.icon} />,
   },
   {
     id: 5,
+    title: "Group",
+    route: routesConfig.group,
+    iconFill: <MdGroups2 size={25} color={Colors.primary} />,
+    iconOutline: <MdOutlineGroups2 size={25} color={Colors.icon} />,
+  },
+  {
+    id: 6,
     title: "Shopping",
-    route:  routesConfig.shopping,
-    iconFill: <MdShoppingCart size={35} color={Colors.primary} />,
-    iconOutline: <MdOutlineShoppingCart size={35} color={Colors.icon} />,
+    route: routesConfig.shopping,
+    iconFill: <MdShoppingCart size={25} color={Colors.primary} />,
+    iconOutline: <MdOutlineShoppingCart size={25} color={Colors.icon} />,
   },
 ];

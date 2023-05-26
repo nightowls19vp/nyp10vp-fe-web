@@ -10,6 +10,7 @@ import ShoppingCartPage from '../pages/ShoppingCart.js';
 import GroupPage from '../pages/Group.js';
 import UserJoinPage from '../pages/UserJoin.js';
 import PackageRenewPage from '../pages/PackageRenew.js';
+import ChatPage from '../pages/Chat.js';
 
 const publicRoutes = [
     { path: routesConfig.home, component: HomePage},
@@ -22,6 +23,7 @@ const privateRoutes = [
     { path: routesConfig.profile, component: ProfilePage},
     { path: routesConfig.shopping, component: ShoppingCartPage},
     { path: routesConfig.group, component: GroupPage},
+    { path: routesConfig.chatGr, component: ChatPage},
 ];
 
 const loginRoute = [

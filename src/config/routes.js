@@ -8,6 +8,7 @@ const routes = {
     group: '/group',
     joinGr: '/pkg-mgmt/gr/join',
     packageGroup: '/group-package',
+    chatGr: '/group-chat',
 };
 
 export default routes;
