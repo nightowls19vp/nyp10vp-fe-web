@@ -36,12 +36,12 @@ export const GroupChat = styled(Button)({
   },
   '&:active': {
     boxShadow: 'none',
-    backgroundColor: '#e6f2ff',
+    backgroundColor: '#ffdfb3',
     // borderColor: '#005cbf',
   },
   '&:focus': {
     // boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
-    backgroundColor: '#e6f2ff',
+    backgroundColor: '#ffdfb3',
   },
 });
 

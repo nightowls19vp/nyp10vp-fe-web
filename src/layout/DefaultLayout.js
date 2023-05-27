@@ -25,7 +25,6 @@ function DefaultLayout({ children }) {
         sx={{
           minHeight: `calc(100vh - ${heightHeader}px - ${heightFooter}px)`,
           display: 'flex',
-          justifyContent: 'space-between',
         }}
       >
         {children}

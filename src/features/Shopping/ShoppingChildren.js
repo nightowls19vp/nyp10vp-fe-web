@@ -259,6 +259,7 @@ export default function EnhancedTable({ item }) {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [openModal, setOpenModal] = React.useState(false);
+  const [valueMethod, setValueMethod] = React.useState('zalo');
   // const [openProgress, setOpenProgress] = React.useState(false);
 
   const handleClose = () => setOpenModal(false);
@@ -394,10 +395,13 @@ export default function EnhancedTable({ item }) {
     dispatch(setCarts(shoppingCart));
   };
 
+  const handleChange = (event) => {
+    setValueMethod(event.target.value);
+  };
+
   const handleButtonCheckout = async () => {
     if (selected.length === 0) {
       setOpenModal(true);
-      return;
     }
     // let shoppingCart = [];
     // for (let ele of item) {
@@ -429,9 +433,29 @@ export default function EnhancedTable({ item }) {
       };
       cart.push(formData);
     }
+
+    let methodCheckout = {};
+
+    if (valueMethod === 'zalo') {
+      console.log(valueMethod);
+      methodCheckout = {
+        type: "EWALLET",
+        bank_code: "ZALOPAY"
+      }
+    } else {
+      console.log(valueMethod);
+      methodCheckout = {
+        type: "EWALLET",
+        bank_code: "VNPAY"
+      }
+    }
+    
     let data = {
       cart: cart,
+      method: methodCheckout
     };
+
+    console.log(data);
 
     const res = await userCheckout(user?.accessToken, dispatch, data, axiosJWT);
 
@@ -478,7 +502,7 @@ export default function EnhancedTable({ item }) {
         display: "flex",
         flexDirection: { xs: "column", lg: "row" },
         justifyContent: "space-between",
-        alignItems: "center",
+        alignItems: "flex-start",
         paddingY: "30px",
       }}
     >
@@ -592,11 +616,12 @@ export default function EnhancedTable({ item }) {
             </FormLabel>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="zalo"
+              value={valueMethod}
               name="radio-buttons-group"
+              onChange={handleChange}
             >
               <FormControlLabel value="zalo" control={<Radio />} label="Zalo" />
-              <FormControlLabel value="momo" control={<Radio />} label="Momo" />
+              <FormControlLabel value="vnpay" control={<Radio />} label="Vnpay" />
               <FormControlLabel
                 value="other"
                 control={<Radio />}

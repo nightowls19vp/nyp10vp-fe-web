@@ -40,7 +40,7 @@ function PersonalInformation() {
   const email = userInfo.email;
   const [name, setName] = useState(userInfo.name);
   const [phone, setPhone] = useState(userInfo.phone ?? "");
-  const [dob, setDob] = useState(userInfo.dob ?? "");
+  const [dob, setDob] = useState(userInfo.dob ?? null);
   const [socialAcc, setSocialAcc] = useState(
     userInfo?.socialAccounts ? true : false
   );
@@ -69,6 +69,7 @@ function PersonalInformation() {
       user?.data.userInfo._id,
       user?.accessToken,
       formAvatar,
+      dispatch,
       axiosJWT
     );
     console.log(resImg);
@@ -82,11 +83,9 @@ function PersonalInformation() {
   const handleButtonChange = () => {
     let formData = {
       name: name,
-      dob: String(dob),
+      dob: dob,
       phone: phone,
     };
-
-    console.log(formData);
 
     updateInformationUser(
       user?.data.userInfo._id,
@@ -113,7 +112,6 @@ function PersonalInformation() {
 
   useEffect(() => {
     setWidthDate(refDate.current.offsetWidth);
-    console.log(refDate.current.offsetWidth);
   }, []);
 
   return (

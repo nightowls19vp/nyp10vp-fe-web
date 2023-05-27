@@ -17,7 +17,7 @@ export const getInformationUser = async (userID, token, dispatch, axiosJWT) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    dispatch(getUserInforSuccess(res.data));
+    dispatch(getUserInforSuccess(res?.data));
   } catch (error) {
     dispatch(getUserInforFailed());
   }
@@ -25,14 +25,14 @@ export const getInformationUser = async (userID, token, dispatch, axiosJWT) => {
 
 export const updateInformationUser = async (userID, token, user, dispatch, axiosJWT) => {
   try {
-    const res = await axiosJWT.put(`/users/${userID}`, user, {
+    await axiosJWT.put(`/users/${userID}`, user, {
       headers: {
         'accept': '*/*',
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
       },
     });
-    dispatch(getUserInforSuccess(res.data));
+    
+    await getInformationUser(userID, token, dispatch, axiosJWT);
   } catch (error) {
     console.log(error);
     dispatch(getUserInforFailed());
@@ -41,7 +41,7 @@ export const updateInformationUser = async (userID, token, user, dispatch, axios
 
 export const uploadFile = async (id, token, file) => {
   try {
-    const res = await apiClient.post(`/file/${id}/upload-avatar`, file, {
+    const res = await apiClient.post("/file/upload-avatar", file, {
       headers: {
         'accept': '*/*',
         Authorization: `Bearer ${token}`,
@@ -54,15 +54,15 @@ export const uploadFile = async (id, token, file) => {
   }
 };
 
-export const updateAvatarUser = async (userID, token, data, axiosJWT) => {
+export const updateAvatarUser = async (userID, token, data, dispatch, axiosJWT) => {
   try {
     const res = await axiosJWT.post(`/users/${userID}/avatar`, data, {
       headers: {
         'accept': '*/*',
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data',
       },
     });
+    await getInformationUser(userID, token, dispatch, axiosJWT);
     return res?.data;
   } catch (error) {
     console.log(error);

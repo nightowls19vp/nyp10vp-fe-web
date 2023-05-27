@@ -7,14 +7,14 @@ import ContentChat from "./ContentChat";
 
 function ChatLayout() {
   return (
-    <div className="chat-layout">
-      <Box flex={1} className="box-menu-chat">
+    <Box className="chat-layout">
+      <Box className="box-menu-chat">
         <MenuChat />
       </Box>
-      <Box flex={3} >
+      <Box className="box-content-chat">
         <ContentChat />
       </Box>
-    </div>
+    </Box>
   );
 }
 

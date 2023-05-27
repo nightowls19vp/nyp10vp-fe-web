@@ -90,6 +90,10 @@ function DetailItemRenew({ item, grpId }) {
 
     let data = {
       cart: formData,
+      method: {
+        type: "EWALLET",
+        bank_code: "VNPAY"
+      }
     };
 
     const res = await userRenewGroup(
@@ -334,9 +338,9 @@ function DetailItemRenew({ item, grpId }) {
                   label="Zalo"
                 />
                 <FormControlLabel
-                  value="momo"
+                  value="vnpay"
                   control={<Radio />}
-                  label="Momo"
+                  label="Vnpay"
                 />
                 <FormControlLabel
                   value="other"
