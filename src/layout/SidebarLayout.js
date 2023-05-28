@@ -18,7 +18,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
   const [heightFooter, setHeightFooter] = useState(0);
   const [widthContent, setWidthContent] = useState(0);
 
-  const showSidebar = useSelector((state) => state.sidebar?.showSidebar);
+  const showSidebar = useSelector((state) => state.package?.showSidebar);
 
   useEffect(() => {
     setHeightHeader(refHeader.current.offsetHeight);

@@ -34,7 +34,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  sidebar: packageSlice,
+  package: packageSlice,
   user: userSlice,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);

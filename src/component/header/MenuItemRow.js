@@ -10,7 +10,7 @@ import { getAllPackage } from "../../redux/packageRequest.js";
 function MenuItemRow({ item, user }) {
   const dispatch = useDispatch();
 
-  const numberCart = useSelector((state) => state.sidebar.numberCart);
+  const numberCart = useSelector((state) => state.package.numberCart);
   
   const [path, setPath] = useState(window.location.pathname);
 

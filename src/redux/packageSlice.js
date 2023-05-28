@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const packageSlice = createSlice({
-  name: "sidebar",
+  name: "package",
   initialState: {
     showSidebar: false,
     groups: [],
@@ -9,6 +9,7 @@ const packageSlice = createSlice({
     package: [],
     numberCart: 0,
     cart: [],
+    noti: null,
   },
   reducers: {
     setInitialPackage: (state, action) => {
@@ -29,6 +30,9 @@ const packageSlice = createSlice({
     updateProfileId: (state, action) => {
       state.profileID = action.payload;
     },
+    updateNotiPackage: (state, action) => {
+      state.noti = action.payload;
+    }
   },
 });
 
@@ -39,6 +43,7 @@ export const {
   toggleShowSidebar,
   updateShowSidebar,
   updateProfileId,
+  updateNotiPackage,
 } = packageSlice.actions;
 
 export default packageSlice.reducer;

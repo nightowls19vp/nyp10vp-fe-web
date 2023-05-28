@@ -2,11 +2,14 @@ import React from "react";
 import { Box, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
+import { useSelector } from "react-redux";
+
 import "../../assets/css/Package.scss";
 import DetailItem from "../../component/package/DetailItem";
 import DetailItemRenew from "../../component/package/DetailItemRenew";
 
 function PackageItem({ data, grpId }) {
+
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event, newValue) => {

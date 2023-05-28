@@ -25,7 +25,7 @@ export const getInformationUser = async (userID, token, dispatch, axiosJWT) => {
 
 export const updateInformationUser = async (userID, token, user, dispatch, axiosJWT) => {
   try {
-    await axiosJWT.put(`/users/${userID}`, user, {
+    const res = await axiosJWT.put(`/users/${userID}`, user, {
       headers: {
         'accept': '*/*',
         Authorization: `Bearer ${token}`,
@@ -33,6 +33,8 @@ export const updateInformationUser = async (userID, token, user, dispatch, axios
     });
     
     await getInformationUser(userID, token, dispatch, axiosJWT);
+
+    return res?.data;
   } catch (error) {
     console.log(error);
     dispatch(getUserInforFailed());

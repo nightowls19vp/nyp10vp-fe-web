@@ -12,7 +12,7 @@ import { Typography } from "@mui/material";
 function Package() {
   const dispatch = useDispatch();
 
-  const dataPackage = useSelector((state) => state.sidebar?.package);
+  const dataPackage = useSelector((state) => state.package?.package);
 
   useEffect(() => {
     getAllPackage(dispatch);

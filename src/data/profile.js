@@ -9,6 +9,7 @@ import PersonalInformation from "../features/Profile/PersonalInformation";
 import ChangePassword from "../features/Profile/ChangePassword";
 import MyPackage from "../features/Profile/MyPackage";
 import Setting from "../features/Profile/Setting";
+import InformationRulers from "../features/Profile/InformationRulers";
 
 const profile = [
   {
@@ -27,7 +28,7 @@ const profile = [
     _id: 3,
     icon: <BsFillInfoSquareFill size={20} />,
     name: "Thông tin & quyền",
-    action: <ChangePassword />,
+    action: <InformationRulers />,
   },
   {
     _id: 4,
@@ -46,12 +47,6 @@ const profile = [
     icon: <TbSettings size={20} />,
     name: "Cài đặt thông báo",
     action: <Setting />,
-  },
-  {
-    _id: 7,
-    icon: <TbLogout size={20} />,
-    name: "logout",
-    action: <ChangePassword />,
   },
 ];
 

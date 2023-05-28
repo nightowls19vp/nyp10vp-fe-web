@@ -5,8 +5,9 @@ import {
   Grid,
   TextField,
   Typography,
-  Divider,
+  Alert,
   Paper,
+  AlertTitle,
 } from "@mui/material";
 import { AiFillCamera } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,7 +29,8 @@ import DateTimePicker from "../../component/Date/DateTimePicker";
 
 function PersonalInformation() {
   const inputRef = useRef();
-  const refDate = useRef();
+  const dateRef = useRef();
+  const avatarRef = useRef();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
   const userInfo = useSelector((state) => state.user?.userInfo.user);
@@ -45,6 +47,9 @@ function PersonalInformation() {
     userInfo?.socialAccounts ? true : false
   );
   const [widthDate, setWidthDate] = useState(0);
+  const [widthAvatar, setWidthAvatar] = useState(0);
+  const [status, setStatus] = useState(0);
+  const [msg, setMsg] = useState("");
 
   const handleClick = () => {
     inputRef.current.click();
@@ -72,28 +77,53 @@ function PersonalInformation() {
       dispatch,
       axiosJWT
     );
-    console.log(resImg);
-    setImage(res.data);
+
+    if (resImg.statusCode === 200) {
+      setImage(res.data);
+      setStatus(1);
+      setMsg("Cập nhật thông tin thành công");
+    } else {
+      setStatus(2);
+      setMsg("Cập nhật thông tin thất bại!");
+    }
+
+    setTimeout(() => {
+      setStatus(0);
+      setMsg("");
+    }, 5000);
   };
 
   const handleDateTimePicker = (dateValue) => {
     setDob(dateValue.$d);
   };
 
-  const handleButtonChange = () => {
+  const handleButtonChange = async () => {
     let formData = {
       name: name,
       dob: dob,
       phone: phone,
     };
 
-    updateInformationUser(
+    const res = await updateInformationUser(
       user?.data.userInfo._id,
       user?.accessToken,
       formData,
       dispatch,
       axiosJWT
     );
+
+    if (res.statusCode === 200) {
+      setStatus(1);
+      setMsg("Cập nhật thông tin thành công");
+    } else {
+      setStatus(2);
+      setMsg("Cập nhật thông tin thất bại!");
+    }
+
+    setTimeout(() => {
+      setStatus(0);
+      setMsg("");
+    }, 5000);
   };
 
   const handleConnectSocialAcc = () => {
@@ -102,7 +132,7 @@ function PersonalInformation() {
         `http://localhost:3000/api/auth/oauth2/google/${"http://localhost:8080/profile".replaceAll(
           "/",
           "@"
-        )}/${user.data.userInfo._id}`,
+        )}/${user?.data.userInfo._id}`,
         "_self"
       );
     } catch (error) {
@@ -111,7 +141,8 @@ function PersonalInformation() {
   };
 
   useEffect(() => {
-    setWidthDate(refDate.current.offsetWidth);
+    setWidthDate(dateRef.current.offsetWidth);
+    setWidthAvatar(avatarRef.current.offsetWidth);
   }, []);
 
   return (
@@ -130,8 +161,9 @@ function PersonalInformation() {
           alignItems: { xs: "center", md: "flex-start" },
           width: "100%",
         }}
+        spacing={2}
       >
-        <Box flex={1} paddingX={"10px"} align={"center"}>
+        <Box flex={1} paddingX={"10px"} align={"center"} ref={avatarRef}>
           <CustomComponent.ButtonAvatar onClick={handleClick}>
             <CustomComponent.ImageSrc
               style={{ backgroundImage: `url(${image})` }}
@@ -221,7 +253,7 @@ function PersonalInformation() {
             >
               Ngày sinh
             </Typography>
-            <Box ref={refDate}>
+            <Box ref={dateRef}>
               <DateTimePicker
                 valueDay={dob}
                 handleDateTimePicker={handleDateTimePicker}
@@ -234,6 +266,11 @@ function PersonalInformation() {
           flex={2}
           paddingX={"10px"}
           bgcolor={Colors.search}
+          sx={{
+            paddingX: "10px",
+            bgcolor: Colors.search,
+            width: { xs: `calc(${widthDate}px + 100px)`, md: "100%" },
+          }}
           className="form-connect-social-network"
         >
           <Stack paddingX={"5px"} paddingTop={"10px"} paddingBottom={"15px"}>
@@ -258,14 +295,29 @@ function PersonalInformation() {
           </Stack>
         </Box>
       </Stack>
-      <Box className="btn-save">
-        <Box flex={1} paddingX={"10px"}></Box>
-        <Box flex={3} paddingX={"10px"} align={"center"}>
-          <CustomComponent.Button1 onClick={handleButtonChange}>
-            Lưu thay đổi
-          </CustomComponent.Button1>
-        </Box>
-        <Box flex={2} paddingX={"10px"}></Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: {xs: "center", md: "flex-start"},
+          paddingLeft: { xs: "0px", md: `calc(${widthAvatar}px + 120px)` },
+        }}
+      >
+        <CustomComponent.Button1 onClick={handleButtonChange}>
+          Lưu thay đổi
+        </CustomComponent.Button1>
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        {status === 0 ? null : status === 1 ? (
+          <Alert severity="success">
+            <AlertTitle>Thành công</AlertTitle>
+            {msg}
+          </Alert>
+        ) : (
+          <Alert severity="error">
+            <AlertTitle>Thất bại</AlertTitle>
+            {msg}
+          </Alert>
+        )}
       </Box>
     </Stack>
   );

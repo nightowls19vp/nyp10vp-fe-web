@@ -9,6 +9,10 @@ import {
   Box,
   IconButton,
   Divider,
+  Dialog,
+  DialogContent,
+  AlertTitle,
+  Alert,
 } from "@mui/material";
 import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
@@ -26,7 +30,7 @@ function DetailItem({ item }) {
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.auth.login?.currentUser);
-  const userCart = useSelector((state) => state.sidebar?.cart);
+  const userCart = useSelector((state) => state.package?.cart);
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
@@ -39,6 +43,14 @@ function DetailItem({ item }) {
   const [arrowRightDura, setArrowRightDura] = useState(false);
 
   const [money, setMoney] = useState(item.price);
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [status, setStatus] = useState(0);
+  const [msg, setMsg] = useState("");
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   const handleArrowLeftMem = () => {
     setMember(member - 1);
@@ -105,7 +117,21 @@ function DetailItem({ item }) {
       user?.accessToken,
       axiosJWT
     );
-    console.log(res);
+
+    setOpenDialog(true);
+    if (res.statusCode === 200) {
+      setStatus(1);
+      setMsg("Cập nhật giỏ hàng thành công");
+    } else {
+      setStatus(2);
+      setMsg("Cập nhật giỏ hàng thất bại!");
+    }
+
+    setTimeout(() => {
+      setStatus(0);
+      setMsg("");
+      setOpenDialog(false);
+    }, 5000);
 
     await getUserCart(
       user?.data.userInfo._id,
@@ -115,8 +141,8 @@ function DetailItem({ item }) {
     );
   };
 
-  const handleButtonBuy = async () => {
-    await handleButtonAdd();
+  const handleButtonBuy = async (event, item) => {
+    await handleButtonAdd(event, item);
     navigate("/shopping-cart");
   };
 
@@ -292,9 +318,29 @@ function DetailItem({ item }) {
         >
           Thêm vào giỏ hàng
         </CustomComponents.Button2>
-        <CustomComponents.Button1 onClick={handleButtonBuy}>
+        <CustomComponents.Button1 onClick={(event) => handleButtonBuy(event, item)}>
           Mua gói
         </CustomComponents.Button1>
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+            <Box sx={{height: '100%', width: '100%'}}>
+              {status === 0 ? null : status === 1 ? (
+                <Alert severity="success">
+                  <AlertTitle>Thành công</AlertTitle>
+                  {msg}
+                </Alert>
+              ) : (
+                <Alert severity="error">
+                  <AlertTitle>Thất bại</AlertTitle>
+                  {msg}
+                </Alert>
+              )}
+            </Box>
+        </Dialog>
       </CardActions>
     </Card>
   );

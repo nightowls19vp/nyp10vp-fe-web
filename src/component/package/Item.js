@@ -8,8 +8,8 @@ import "../../assets/css/Content.scss";
 import DetailItem from "./DetailItem.js";
 
 function Item() {
-  const selectedPackage = useSelector((state) => state.sidebar?.packageID);
-  const dataPackage = useSelector((state) => state.sidebar?.package);
+  const selectedPackage = useSelector((state) => state.package?.packageID);
+  const dataPackage = useSelector((state) => state.package?.package);
 
   return (
     <Stack>
