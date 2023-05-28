@@ -9,6 +9,7 @@ const routes = {
     joinGr: '/pkg-mgmt/gr/join',
     packageGroup: '/group-package',
     chatGr: '/group-chat',
+    product: '/product-stock',
 };
 
 export default routes;

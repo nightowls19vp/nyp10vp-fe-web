@@ -65,14 +65,29 @@ export const registerUser = async (user, dispatch, navigate) => {
   }
 };
 
-export const loginGG = async (dispatch) => {
+export const getValidateGG = async (token, dispatch, axiosJWT) => {
   try {
-    const res = await apiClient.get("/auth/validate");
-    console.log(res.data);
+    const res = await apiClient.get("/auth/validate", {
+      headers: {
+        accept: "*/*",
+      },
+    });
+
+    console.log(res?.data);
+    
+    // let formData = {
+    //   accessToken: token,
+    //   data: res?.data
+    // }
+
+    // dispatch(loginSuccess(formData));
+
+    // await getInformationUser(res?.data?.userInfo._id, token, dispatch, axiosJWT);
+
   } catch (error) {
     console.log(error);
   }
-};
+}
 
 export const logoutUser = async (token, dispatch, navigate) => {
   dispatch(logoutStart());
@@ -81,7 +96,6 @@ export const logoutUser = async (token, dispatch, navigate) => {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
       },
     });
     dispatch(logoutSuccess());

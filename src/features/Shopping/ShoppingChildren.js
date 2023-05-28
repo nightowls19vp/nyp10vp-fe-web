@@ -296,7 +296,7 @@ export default function EnhancedTable({ item }) {
     const selectedIndex = selected.some((element) => {
       if (
         element.id === row.id &&
-        element.quantity === row.quantity &&
+        element.duration === row.duration &&
         element.money === row.money
       ) {
         return true;
@@ -312,7 +312,7 @@ export default function EnhancedTable({ item }) {
           (data) =>
             !(
               data.id === row.id &&
-              data.quantity === row.quantity &&
+              data.duration === row.duration &&
               data.money === row.money
             )
         ),
@@ -332,7 +332,7 @@ export default function EnhancedTable({ item }) {
     for (let element of selected) {
       if (
         element.id === name.id &&
-        element.quantity === name.quantity &&
+        element.duration === name.duration &&
         element.money === name.money
       ) {
         return true;
@@ -353,6 +353,7 @@ export default function EnhancedTable({ item }) {
         quantity: ele.quantity,
         _id: ele._id,
       };
+      
       if (
         formData._id === row.id &&
         formData.noOfMember === row.member &&
@@ -462,7 +463,7 @@ export default function EnhancedTable({ item }) {
     window.open(order.order.order_url);
 
     if (res.statusCode === 200) {
-      const interValCheck = setInterval(async () => {
+      const interValCheck = setInterval( async () => {
         await getInformationUser(
           user?.data.userInfo._id,
           user?.accessToken,
@@ -470,9 +471,9 @@ export default function EnhancedTable({ item }) {
           axiosJWT
         );
 
-        console.log(userInfo.user.trxHist, order.trans._id);
+        console.log(userInfo?.user.trxHist, order.trans._id);
 
-        if (userInfo.user.trxHist.includes(order.trans._id)) {
+        if (userInfo?.user.trxHist.includes(order.trans._id)) {
           console.log(order.trans._id, "exists in trxHist");
 
           clearInterval(interValCheck);
@@ -539,7 +540,7 @@ export default function EnhancedTable({ item }) {
                           hover
                           // onClick={(event) => handleClick(event, row)}
                           // role="checkbox"
-                          aria-checked={isItemSelected}
+                          // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={index}
                           selected={isItemSelected}
@@ -625,7 +626,7 @@ export default function EnhancedTable({ item }) {
               <FormControlLabel
                 value="other"
                 control={<Radio />}
-                label="Other"
+                label="Khác"
               />
             </RadioGroup>
           </FormControl>
@@ -660,11 +661,6 @@ export default function EnhancedTable({ item }) {
           </Box>
         </Stack>
       </Box>
-      {/* {openProgress ? (
-        <Box sx={styleProgress}>
-          <CircularProgress />
-        </Box>
-      ) : null} */}
     </Box>
   );
 }

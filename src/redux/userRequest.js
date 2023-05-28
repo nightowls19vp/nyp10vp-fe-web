@@ -135,15 +135,17 @@ export const getGroupByUserId = async (token, role, dispatch, axiosJWT) => {
       },
     ];
 
-    for (let item of res?.data.groups) {
-      dataGroup[0].child.push(item);
-    }
+    console.log(res?.data);
 
-    dispatch(getGroupSuperUser(dataGroup));
+    // for (let item of res?.data.groups) {
+    //   dataGroup[0].child.push(item);
+    // }
 
-    console.log(dataGroup);
+    // dispatch(getGroupSuperUser(dataGroup));
+
+    // console.log(dataGroup);
     
-    dispatch(updateGroupId(dataGroup[0].child[0]._id))
+    // dispatch(updateGroupId(dataGroup[0].child[0]._id))
   } catch (error) {
     console.log(error);
   }

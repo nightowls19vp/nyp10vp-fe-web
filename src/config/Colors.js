@@ -12,4 +12,5 @@ export const Colors = {
     btnOutline: "#ffeacc",
     black: "#000000",
     box: "#e6e6e6",
+    camera: "#e0e4eb"
 };

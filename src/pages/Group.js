@@ -16,7 +16,13 @@ function Group() {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   useEffect(() => {
-    getGroupByUserId(user?.accessToken, "Super User", dispatch, axiosJWT);
+    const groupUser = async () => {
+      await getGroupByUserId(user?.accessToken, "Super User", dispatch, axiosJWT);
+    }
+
+    groupUser()
+    .catch(console.error);
+    // getGroupByUserId(user?.accessToken, "Super User", dispatch, axiosJWT);
   }, [axiosJWT, dispatch, user]);
   
   return (

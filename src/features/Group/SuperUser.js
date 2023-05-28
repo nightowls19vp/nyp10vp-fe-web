@@ -134,7 +134,7 @@ function SuperUser({ item }) {
             />
             <CustomComponent.ImageBackdrop className="MuiImageBackdrop-root" />
             <CustomComponent.Image>
-              <Box bgcolor={Colors.gray} borderRadius={"50%"} padding={"8px"}>
+              <Box bgcolor={Colors.camera} borderRadius={"50%"} padding={"8px"}>
                 <AiFillCamera color={Colors.black} size={25} />
               </Box>
             </CustomComponent.Image>

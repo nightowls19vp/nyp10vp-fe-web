@@ -131,7 +131,7 @@ function DetailItem({ item }) {
       setStatus(0);
       setMsg("");
       setOpenDialog(false);
-    }, 5000);
+    }, 3000);
 
     await getUserCart(
       user?.data.userInfo._id,

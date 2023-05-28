@@ -1,12 +1,12 @@
 import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
+import ImageStock from "./ImageStock";
+
 
 function StockItem() {
+  
   return (
-    <Box>
-      <Typography>Gói 1</Typography>
-      
-    </Box>
+    <ImageStock />
   );
 }
 

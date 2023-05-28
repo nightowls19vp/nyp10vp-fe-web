@@ -41,7 +41,7 @@ function PersonalInformation() {
   const [image, setImage] = useState(userInfo.avatar ?? ImgAvatar);
   const email = userInfo.email;
   const [name, setName] = useState(userInfo.name);
-  const [phone, setPhone] = useState(userInfo.phone ?? "");
+  const [phone, setPhone] = useState(userInfo.phone ?? null);
   const [dob, setDob] = useState(userInfo.dob ?? null);
   const [socialAcc, setSocialAcc] = useState(
     userInfo?.socialAccounts ? true : false
@@ -123,7 +123,7 @@ function PersonalInformation() {
     setTimeout(() => {
       setStatus(0);
       setMsg("");
-    }, 5000);
+    }, 3000);
   };
 
   const handleConnectSocialAcc = () => {
@@ -177,7 +177,7 @@ function PersonalInformation() {
             />
             <CustomComponent.ImageBackdrop className="MuiImageBackdrop-root" />
             <CustomComponent.Image>
-              <Box bgcolor={Colors.gray} borderRadius={"50%"} padding={"8px"}>
+              <Box bgcolor={Colors.camera} borderRadius={"50%"} padding={"8px"}>
                 <AiFillCamera color={Colors.black} size={25} />
               </Box>
             </CustomComponent.Image>

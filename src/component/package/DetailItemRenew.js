@@ -62,6 +62,7 @@ function DetailItemRenew({ item, grpId }) {
   const [arrowRightDura, setArrowRightDura] = useState(false);
 
   const [money, setMoney] = useState(item.price);
+  const [valueMethod, setValueMethod] = useState('zalo');
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -81,6 +82,10 @@ function DetailItemRenew({ item, grpId }) {
     setDuration(duration + 1);
   };
 
+  const handleChange = (event) => {
+    setValueMethod(event.target.value);
+  };
+
   const handleCheckoutPackageRenew = async (event, item) => {
     let formData = {
       package: item._id,
@@ -88,14 +93,27 @@ function DetailItemRenew({ item, grpId }) {
       duration: item.duration,
     };
 
-    let data = {
-      cart: formData,
-      method: {
+    let methodValue = {};
+
+    if (valueMethod === 'zalo') {
+      methodValue = {
+        type: "EWALLET",
+        bank_code: "ZALOPAY"
+      }
+    } else {
+      methodValue = {
         type: "EWALLET",
         bank_code: "VNPAY"
       }
+    }
+
+    let data = {
+      cart: formData,
+      method: methodValue
     };
 
+    console.log(data);
+    
     const res = await userRenewGroup(
       grpId,
       user?.accessToken,
@@ -103,6 +121,8 @@ function DetailItemRenew({ item, grpId }) {
       data,
       axiosJWT
     );
+
+    console.log(res);
 
     window.open(order.order.order_url);
 
@@ -329,8 +349,9 @@ function DetailItemRenew({ item, grpId }) {
               </FormLabel>
               <RadioGroup
                 aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="zalo"
+                defaultValue={valueMethod}
                 name="radio-buttons-group"
+                onChange={handleChange}
               >
                 <FormControlLabel
                   value="zalo"
@@ -345,7 +366,7 @@ function DetailItemRenew({ item, grpId }) {
                 <FormControlLabel
                   value="other"
                   control={<Radio />}
-                  label="Other"
+                  label="Khác"
                 />
               </RadioGroup>
             </FormControl>

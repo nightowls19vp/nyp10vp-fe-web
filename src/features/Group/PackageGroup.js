@@ -18,7 +18,7 @@ function PackageGroup({ item, id }) {
   const user = useSelector((state) => state.auth.login?.currentUser);
 
   const [btn, setBtn] = useState(
-    item.status === "Not Activated" ? true : false
+    item.status === "Not activated" ? true : false
   );
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
@@ -84,7 +84,7 @@ function PackageGroup({ item, id }) {
             Tên gói:
           </Typography>
           <Typography fontSize={16} gutterBottom>
-            {item.package._id}
+            {item.package.name}
           </Typography>
         </Box>
         <Box className="package-group" >

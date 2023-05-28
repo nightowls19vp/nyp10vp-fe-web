@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, TextField, Stack, Typography } from "@mui/material";
+import { Box, TextField, Stack, Typography, Avatar } from "@mui/material";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -68,10 +68,14 @@ function PackagesGroup({ data }) {
             />
           ) : null}
         </Box>
-        <Box className="package-group" sx={{ paddingBottom: "10px" }}>
-          <PersonOutlinedIcon />
-          <Typography> {data.members[0].user} </Typography>
-        </Box>
+        {data.members.map((route) =>
+          route ? (
+            <Box key={route.user.user._id} className="package-group" sx={{ paddingBottom: "10px" }}>
+              <Avatar src={route.user.user.avatar} />
+              <Typography sx={{ paddingLeft: '10px'}}> {route.user.user.name} </Typography>
+            </Box>
+          ) : null
+        )}
       </Stack>
     </Stack>
   );
