@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import DefaultLayout from "../layout/DefaultLayout.js";
@@ -12,30 +12,28 @@ import { getUserCart } from "../redux/packageRequest.js";
 function Home() {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
-  const urlParams = new URL(window.location.href).searchParams;
+  // const urlQuery = new URL(window.location.href).searchParams;
 
-  const user = useSelector((state) => state.auth.login?.currentUser)
+  const user = useSelector((state) => state.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   // useEffect(() => {
   //   let token = "";
-  //   if (urlParams.get("accessToken") != null) {
-  //     token = {
-  //       accessToken: urlParams.get("accessToken"),
-  //     };
-  //     // dispatch(loginSuccess(token));
-  //   }
-
-  //   console.log(token);
-
-  //   const inforOfUser = async () => {
+  //   const inforOfUser = async (token) => {
   //     await getValidateGG(token?.accessToken, dispatch, axiosJWT);
+  //   };
+
+  //   if (urlQuery.get("accessToken") != null) {
+  //     let query = urlQuery.get("accessToken").slice(0, urlQuery.get("accessToken").indexOf('?'));
+  //     token = {
+  //       accessToken: query,
+  //     };
+
+  //     console.log(token?.accessToken);
+
+  //     inforOfUser(token).catch(console.error);
   //   }
-
-  //   inforOfUser()
-  //   .catch(console.error);
-
-  // }, [axiosJWT, dispatch, urlParams, user])
+  // }, [axiosJWT, dispatch, urlQuery, user]);
 
   useEffect(() => {
     const cartOfUser = async () => {

@@ -3,6 +3,7 @@ import routesConfig from '../config/routes.js';
 
 import LoginPage from '../pages/Login.js';
 import HomePage from '../pages/Home.js';
+import HomeGGPage from '../pages/HomeGG.js';
 import PackagePage from '../pages/Package.js';
 import StockPage from '../pages/Stock.js';
 import ProfilePage from '../pages/Profile.js';
@@ -31,6 +32,7 @@ const loginRoute = [
     { path: routesConfig.login, component: LoginPage},
     { path: routesConfig.packageGroup, component: PackageRenewPage},
     { path: routesConfig.product, component: ProductPage},
+    { path: routesConfig.homeGG, component: HomeGGPage},
 ]
 
 export { publicRoutes, privateRoutes, loginRoute};

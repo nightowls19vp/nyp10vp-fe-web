@@ -1,5 +1,6 @@
 const routes = {
     home: '/',
+    homeGG: '/google',
     login: '/login',
     package: '/package',
     stock: '/stock',

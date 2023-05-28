@@ -79,7 +79,7 @@ function FormSignIn() {
     try {
       dispatch(loginStart());
       window.open(
-        `http://localhost:3000/api/auth/oauth2/google/${"http://localhost:8080".replaceAll(
+        `http://localhost:3000/api/auth/oauth2/google/${"http://localhost:8080/google".replaceAll(
           "/",
           "@"
         )}`,

@@ -65,24 +65,27 @@ export const registerUser = async (user, dispatch, navigate) => {
   }
 };
 
-export const getValidateGG = async (token, dispatch, axiosJWT) => {
+export const getValidateGG = async (token, dispatch, navigate, axiosJWT) => {
   try {
     const res = await apiClient.get("/auth/validate", {
       headers: {
         accept: "*/*",
+        Authorization: `Bearer ${token}`,
       },
     });
 
     console.log(res?.data);
     
-    // let formData = {
-    //   accessToken: token,
-    //   data: res?.data
-    // }
+    let formData = {
+      accessToken: token,
+      data: res?.data
+    }
 
-    // dispatch(loginSuccess(formData));
+    dispatch(loginSuccess(formData));
 
-    // await getInformationUser(res?.data?.userInfo._id, token, dispatch, axiosJWT);
+    await getInformationUser(res?.data?.userInfo._id, token, dispatch, axiosJWT);
+
+    navigate('/');
 
   } catch (error) {
     console.log(error);
