@@ -16,33 +16,33 @@ function Home() {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   useEffect(() => {
-    //   const cartOfUser = async () => {
-    //     await getUserCart(user?.data.userInfo._id, user?.accessToken, dispatch, axiosJWT);
-    //   }
+      const cartOfUser = async () => {
+        await getUserCart(user?.data.userInfo._id, user?.accessToken, dispatch, axiosJWT);
+      }
 
-    //   cartOfUser()
-    //   .catch(console.error);
+      cartOfUser()
+      .catch(console.error);
 
-    // }, [axiosJWT, dispatch, user]);
+    }, [axiosJWT, dispatch, user]);
 
-    socket.connect();
+    // socket.connect();
 
-    let data = "vy";
+    // let data = "vy";
 
-    socket.emit('checkout_callback', data);
+    // socket.emit('checkout_callback', data);
 
-    socket.on('send-callback', data => {
-      console.log(data);
-    })
+    // socket.on('send-callback', data => {
+    //   console.log(data);
+    // })
 
     // socket.on('handleDisconnect');
 
-    return () => {
-      socket.off('checkout_callback');
-      // socket.off('handleDisconnect');
-      socket.disconnect();
-    };
-  }, []);
+    // return () => {
+    //   socket.off('checkout_callback');
+    //   // socket.off('handleDisconnect');
+    //   socket.disconnect();
+    // };
+  // }, []);
 
   return (
     <>

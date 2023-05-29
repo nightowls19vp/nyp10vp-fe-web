@@ -137,15 +137,15 @@ export const getGroupByUserId = async (token, role, dispatch, axiosJWT) => {
 
     console.log(res?.data);
 
-    // for (let item of res?.data.groups) {
-    //   dataGroup[0].child.push(item);
-    // }
+    for (let item of res?.data.groups) {
+      dataGroup[0].child.push(item);
+    }
 
-    // dispatch(getGroupSuperUser(dataGroup));
+    dispatch(getGroupSuperUser(dataGroup));
 
-    // console.log(dataGroup);
+    console.log(dataGroup);
     
-    // dispatch(updateGroupId(dataGroup[0].child[0]._id))
+    dispatch(updateGroupId(dataGroup[0].child[0]._id))
   } catch (error) {
     console.log(error);
   }
@@ -168,12 +168,9 @@ export const usersSearch = async (token, search, axiosJWT) => {
   }
 };
 
-export const usersInvitePeople = async (token, grId, axiosJWT) => {
+export const usersInvitePeople = async (token, data, axiosJWT) => {
   try {
-    const res = await axiosJWT.get("/pkg-mgmt/gr/inv", {
-      params: {
-        grId: grId,
-      },
+    const res = await axiosJWT.post("/pkg-mgmt/gr/inv", data, {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
