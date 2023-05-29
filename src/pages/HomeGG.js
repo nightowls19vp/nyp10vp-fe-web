@@ -15,32 +15,25 @@ function HomeGG() {
   const user = useSelector((state) => state.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  useEffect(() => {
-    let token = "";
-    const inforOfUser = async (token) => {
-      await getValidateGG(token?.accessToken, dispatch, navigate, axiosJWT);
-    };
+  // useEffect(() => {
+  //   let token = "";
+  //   const inforOfUser = async (token) => {
+  //     await getValidateGG(token?.accessToken, dispatch, navigate, axiosJWT);
+  //   };
 
-    const queryToken = urlQuery.get("accessToken");
+  //   const queryToken = urlQuery.get("accessToken");
 
-    // console.log(
-    //   queryToken.slice(
-    //     queryToken.search("statusCode"),
-    //     queryToken.indexOf("?", queryToken.search("statusCode"))
-    //   )
-    // );
+  //   if (queryToken != null) {
+  //     let query = queryToken.slice(0, queryToken.indexOf("?"));
+  //     token = {
+  //       accessToken: query,
+  //     };
 
-    if (queryToken != null) {
-      let query = queryToken.slice(0, queryToken.indexOf("?"));
-      token = {
-        accessToken: query,
-      };
+  //     console.log(token?.accessToken);
 
-      console.log(token?.accessToken);
-
-      inforOfUser(token).catch(console.error);
-    }
-  }, [axiosJWT, dispatch, navigate, urlQuery, user]);
+  //     inforOfUser(token).catch(console.error);
+  //   }
+  // }, [axiosJWT, dispatch, navigate, urlQuery, user]);
 
   return (
     <>
