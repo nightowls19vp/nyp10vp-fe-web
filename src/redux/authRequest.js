@@ -1,4 +1,5 @@
 import apiClient from "../http/http-common";
+import { setTokenJoinGroup } from "./authSlice";
 import {
   loginStart,
   loginSuccess,
@@ -39,12 +40,16 @@ export const loginUser = async (user, dispatch, navigate, tokenJoinGr, axiosJWT)
     // localStorage.setItem("accessToken", res.data.accessToken);
     dispatch(loginSuccess(res?.data));
     
-    // if (tokenJoinGr) {
-    //   const resJoin = await getJoinGroup(res.data.accessToken, tokenJoinGr);
-    //   console.log(resJoin);
-    // }
+    if (tokenJoinGr !== "") {
+      const resJoin = await getJoinGroup(res.data.accessToken, tokenJoinGr);
+      console.log(resJoin);
+    }
 
+    console.log(res?.data.data.userInfo._id);
+    
     await getInformationUser(res?.data.data.userInfo._id, res?.data.accessToken, dispatch, axiosJWT);
+
+    dispatch(setTokenJoinGroup(""));
 
     dispatch(updateProfileId(1));
 

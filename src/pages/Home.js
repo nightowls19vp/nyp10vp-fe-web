@@ -12,7 +12,7 @@ import socket from "../http/socket.js";
 function Home() {
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   useEffect(() => {

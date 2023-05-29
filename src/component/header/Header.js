@@ -37,8 +37,8 @@ const topSearch = [];
 function Header() {
   const dispatch = useDispatch();
 
-  let user = useSelector((state) => state.auth.login?.currentUser);
-  const userInfo = useSelector((state) => state.user?.userInfo.user);
+  let user = useSelector((state) => state?.auth.login?.currentUser);
+  const userInfo = useSelector((state) => state?.user?.userInfo.user);
 
   let day = new Date();
   const decodedToken = jwtDecode(user?.accessToken);
@@ -47,7 +47,7 @@ function Header() {
   }
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const image = userInfo.avatar ?? "";
+  const image =  userInfo.avatar ?? "";
 
   // const navigate = useNavigate();
   // let axiosJWT = createAxios(user, dispatch, loginSuccess);
