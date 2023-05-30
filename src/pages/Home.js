@@ -19,9 +19,11 @@ function Home() {
       const cartOfUser = async () => {
         await getUserCart(user?.data.userInfo._id, user?.accessToken, dispatch, axiosJWT);
       }
-
-      cartOfUser()
-      .catch(console.error);
+      
+      if (user !== null) {
+        cartOfUser()
+        .catch(console.error);
+      }
 
     }, [axiosJWT, dispatch, user]);
 

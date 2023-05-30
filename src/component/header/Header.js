@@ -41,13 +41,16 @@ function Header() {
   // const userInfo = useSelector((state) => state?.user?.userInfo.user);
 
   let day = new Date();
-  const decodedToken = jwtDecode(user?.accessToken);
-  if (decodedToken.exp < day.getTime() / 1000) {
-    user = null;
+
+  if (user !== null) {
+    const decodedToken = jwtDecode(user?.accessToken);
+    if (decodedToken.exp < day.getTime() / 1000) {
+      user = null;
+    }
   }
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const image =  user?.data.userInfo.avatar ?? "";
+  const image = user?.data.userInfo.avatar ?? "";
 
   // const navigate = useNavigate();
   // let axiosJWT = createAxios(user, dispatch, loginSuccess);
@@ -146,7 +149,8 @@ function Header() {
                     to={user ? routesConfig.profile : routesConfig.login}
                     className="avatar"
                   >
-                    <Avatar src={image}
+                    <Avatar
+                      src={image}
                       sx={{ width: "27px", height: "27px" }}
                       className="avatarActive"
                     />
