@@ -11,6 +11,7 @@ import {
   logoutSuccess,
   logoutFailed,
 } from "./authSlice";
+import { getAllPackage, getUserCart } from "./packageRequest";
 import { updateProfileId } from "./packageSlice";
 import { getInformationUser } from "./userRequest";
 
@@ -50,6 +51,10 @@ export const loginUser = async (user, dispatch, navigate, tokenJoinGr, axiosJWT)
     await getInformationUser(res?.data.data.userInfo._id, res?.data.accessToken, dispatch, axiosJWT);
 
     dispatch(setTokenJoinGroup(""));
+
+    await getAllPackage(dispatch);
+
+    await getUserCart(res?.data.data.userInfo._id, res?.data.accessToken, dispatch, axiosJWT);
 
     dispatch(updateProfileId(1));
 

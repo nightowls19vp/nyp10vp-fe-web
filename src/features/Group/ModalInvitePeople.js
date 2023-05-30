@@ -34,7 +34,7 @@ function ModalInvitePeople() {
   let topSearchPeople = [];
 
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);

@@ -6,11 +6,11 @@ import DefaultLayout from "../../layout/DefaultLayout.js";
 import { useSelector } from "react-redux";
 
 function GroupItem() {
-  const groups = useSelector((state) => state.user?.groupSuperUser);
-  const selectedID = useSelector((state) => state.user?.groupID);
+  const groups = useSelector((state) => state?.user?.groupAll);
+  const selectedID = useSelector((state) => state?.user?.groupID);
   return (
     <>
-      {groups[0].child === [] && groups[1].child === [] ? (
+      {selectedID === 0 ? (
         <DefaultLayout>
           <Typography variant="h5" gutterBottom>
             Bạn chưa tham gia nhóm nào!

@@ -60,7 +60,7 @@ function PackageItem({ data, grpId }) {
                 )}
           </Box>
         </TabPanel>
-        <TabPanel value="2">Item Two</TabPanel>
+        <TabPanel value="2"> </TabPanel>
       </TabContext>
     </Box>
   );

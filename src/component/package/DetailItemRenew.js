@@ -47,9 +47,9 @@ function DetailItemRenew({ item, grpId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const userInfo = useSelector((state) => state.user?.userInfo);
-  const order = useSelector((state) => state.auth?.order);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  const userInfo = useSelector((state) => state?.user?.userInfo);
+  const order = useSelector((state) => state?.auth?.order);
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 

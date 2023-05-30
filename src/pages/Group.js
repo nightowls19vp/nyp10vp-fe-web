@@ -11,18 +11,18 @@ import { createAxios } from "../http/createInstance";
 function Group() {
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
   
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   useEffect(() => {
     const groupUser = async () => {
-      await getGroupByUserId(user?.accessToken, "Super User", dispatch, axiosJWT);
+      await getGroupByUserId(user?.accessToken, dispatch, axiosJWT);
     }
 
     groupUser()
     .catch(console.error);
-    // getGroupByUserId(user?.accessToken, "Super User", dispatch, axiosJWT);
+
   }, [axiosJWT, dispatch, user]);
   
   return (

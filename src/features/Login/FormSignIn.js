@@ -32,9 +32,9 @@ function FormSignIn() {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordHelperText, setPasswordHelperText] = useState("");
 
-  const loginMsg = useSelector((state) => state.auth.login?.msg);
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const tokenJoinGr = useSelector((state) => state.auth.tokenJoinGr);
+  const loginMsg = useSelector((state) => state?.auth.login?.msg);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  const tokenJoinGr = useSelector((state) => state?.auth.tokenJoinGr);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

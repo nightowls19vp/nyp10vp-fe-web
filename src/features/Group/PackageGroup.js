@@ -15,7 +15,7 @@ function PackageGroup({ item, id }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
 
   const [btn, setBtn] = useState(
     item.status === "Not activated" ? true : false

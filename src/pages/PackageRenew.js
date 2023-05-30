@@ -8,7 +8,7 @@ import PackageItem from "../features/Package/PackageItem.js";
 function PackageRenew() {
   const dispatch = useDispatch();
 
-  const dataPackage = useSelector((state) => state.package?.package);
+  const dataPackage = useSelector((state) => state?.package?.package);
   const urlParams = new URL(window.location.href).searchParams;
 
   useEffect(() => {

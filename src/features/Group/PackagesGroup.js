@@ -26,7 +26,7 @@ import PackageGroup from "./PackageGroup";
 function PackagesGroup({ data }) {
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 

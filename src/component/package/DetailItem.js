@@ -29,8 +29,8 @@ function DetailItem({ item }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const userCart = useSelector((state) => state.package?.cart);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  const userCart = useSelector((state) => state?.package?.cart);
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 

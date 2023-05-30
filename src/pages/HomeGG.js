@@ -12,7 +12,7 @@ function HomeGG() {
   const navigate = useNavigate();
   const urlQuery = new URL(window.location.href).searchParams;
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   // useEffect(() => {

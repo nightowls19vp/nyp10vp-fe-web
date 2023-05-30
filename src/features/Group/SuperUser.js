@@ -42,8 +42,8 @@ function SuperUser({ item }) {
   const dispatch = useDispatch();
   const inputRef = useRef();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const userGroup = useSelector((state) => state.user?.groupSuperUser);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  const userGroup = useSelector((state) => state?.user?.groupSuperUser);
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 

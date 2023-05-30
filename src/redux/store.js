@@ -20,7 +20,7 @@ import userSlice from "./userSlice";
 // export const store = configureStore({
 //   reducer: {
 //     auth: authReducer,
-//     sidebar: sidebarSlice,
+//     package: packageSlice,
 //     user: userSlice,
 //   }
 // });

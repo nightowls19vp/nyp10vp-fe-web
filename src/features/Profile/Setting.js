@@ -22,8 +22,8 @@ import { updateSettingUser } from "../../redux/userRequest";
 import { loginSuccess } from "../../redux/authSlice";
 
 function Setting() {
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const userInfo = useSelector((state) => state.user?.userInfo.user);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  const userInfo = useSelector((state) => state?.user?.userInfo.user);
 
   const dispatch = useDispatch();
   let axiosJWT = createAxios(user, dispatch, loginSuccess);

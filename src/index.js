@@ -10,6 +10,7 @@ import { customTheme } from "./component/custom/customTheme";
 
 import { Provider } from "react-redux";
 import { store, persistor } from "./redux/store";
+// import { store } from "./redux/store";
 import { PersistGate } from 'redux-persist/integration/react'
 
 import 'mapbox-gl/dist/mapbox-gl.css';

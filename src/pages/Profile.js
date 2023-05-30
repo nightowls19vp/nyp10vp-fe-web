@@ -5,7 +5,7 @@ import SidebarLayout from "../layout/SidebarLayout";
 import dataProfile from "../data/profile.js";
 
 function Profile() {
-  const selectedProfile = useSelector((state) => state.package?.profileID);
+  const selectedProfile = useSelector((state) => state?.package?.profileID);
 
   return (
     <SidebarLayout

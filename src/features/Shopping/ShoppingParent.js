@@ -14,8 +14,8 @@ import ShoppingCartEmpty from "./ShoppingCartEmpty";
 
 
 function ShoppingParent() {
-  const userCart = useSelector((state) => state.package?.cart);
-  const number = useSelector((state) => state.package?.numberCart);
+  const userCart = useSelector((state) => state?.package?.cart);
+  const number = useSelector((state) => state?.package?.numberCart);
   return (
     <Stack paddingY={3} sx={{ paddingX: { xs: '2%', md: '5%', lg: '2%'}, width: '100%' }} >
       <Box className="shopping-cart">

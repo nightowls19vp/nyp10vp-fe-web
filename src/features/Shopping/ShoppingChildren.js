@@ -155,7 +155,7 @@ function EnhancedTableToolbar(props) {
 
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const handleButtonDelete = async () => {
@@ -252,9 +252,9 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable({ item }) {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const userInfo = useSelector((state) => state.user?.userInfo);
-  const order = useSelector((state) => state.auth?.order);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  const userInfo = useSelector((state) => state?.user?.userInfo);
+  const order = useSelector((state) => state?.auth?.order);
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
