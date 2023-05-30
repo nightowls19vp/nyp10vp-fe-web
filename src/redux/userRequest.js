@@ -151,6 +151,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
     });
 
     if (resSU?.data.groups.length > 0 || resU?.data.groups.length > 0) {
+      
       let dataGroup = [
         {
           title: "Group SUPER USER",
@@ -173,7 +174,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
           dataGroup[1].child.push(item);
         }
       } else if (
-        resU?.data.groups.length > 0 &&
+        resSU?.data.groups.length > 0 &&
         resU?.data.groups.length === 0
       ) {
         for (let item of resSU?.data.groups) {
@@ -184,7 +185,6 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
         for (let item of resU?.data.groups) {
           dataGroup[1].child.push(item);
         }
-
         dispatch(updateGroupId(dataGroup[1].child[0]._id));
       }
 

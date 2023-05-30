@@ -1,31 +1,95 @@
-import React, { useState } from "react";
-import { Stack, Typography, Box } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Stack,
+  Typography,
+  Box,
+  TableContainer,
+  Paper,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+  IconButton,
+  TableFooter,
+  TablePagination,
+} from "@mui/material";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import { styled, useTheme } from "@mui/material/styles";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import LastPageIcon from "@mui/icons-material/LastPage";
+
+import { useSelector } from "react-redux";
 
 import { Colors } from "../../config/Colors";
-import DetailMyPackage from "../../component/package/DetailMyPackage.js";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 function MyPackage() {
-  const [name, setName] = useState(null);
-  const [dateBuy, setDateBuy] = useState(null);
-  const [exp, setExp] = useState(null);
-  const [money, setMoney] = useState(null);
-  const [member, setMember] = useState(null);
+  const groups = useSelector((state) => state?.user?.groupAll);
+
+  const [pkgSU, setPkgSU] = useState([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - pkgSU.length) : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  useEffect(() => {
+    const groupsSuperUser = groups[0].child;
+
+    let packageSuperUser = [];
+
+    for (let group of groupsSuperUser) {
+      let i = 0;
+      for (let pkg of group.packages) {
+        let formData = {
+          _id: group._id + i,
+          name: pkg.package.name,
+          duration: pkg.package.duration,
+          price: pkg.package.price,
+          noOfMember: pkg.package.noOfMember,
+          createdAt: pkg.package.createdAt,
+          updatedAt: pkg.package.updatedAt,
+        };
+        i++;
+        packageSuperUser.push(formData);
+      }
+    }
+
+    setPkgSU(packageSuperUser);
+  }, [groups]);
+
   return (
-    <Stack paddingX={"15px"}>
-      <Typography
-        variant="button"
-        display="block"
-        fontSize={18}
-        color={Colors.textPrimary}
-        gutterBottom
-      >
-        Gói đang sử dụng
-      </Typography>
-      <DetailMyPackage title="Tên gói: " detail={name} />
-      <DetailMyPackage title="Ngày mua: " detail={dateBuy} />
-      <DetailMyPackage title="Hạn sử dụng: " detail={exp} />
-      <DetailMyPackage title="Số tiền: " detail={money} />
-      <DetailMyPackage title="Số lượng thành viên: " detail={member} />
+    <Stack paddingX={"20px"}>
       <Typography
         variant="button"
         display="block"
@@ -35,6 +99,77 @@ function MyPackage() {
       >
         Lịch sử mua gói
       </Typography>
+      <Box
+        sx={{ display: "flex", flexDirection: "row", justifyContent: "center", width: '100%' }}
+      >
+        {pkgSU.length > 0 ? (
+          <TableContainer component={Paper}>
+            <Table sx={{ width: "100%" }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ width: "30%" }}>
+                    {" "}
+                    Tên gói (đã mua){" "}
+                  </TableCell>
+                  <TableCell align="center" sx={{ width: "20%" }}>
+                    Số thành viên (người)
+                  </TableCell>
+                  <TableCell align="center" sx={{ width: "20%" }}>
+                    Giá tiền (đồng){" "}
+                  </TableCell>
+                  <TableCell align="center" sx={{ width: "30%" }}>
+                    Ngày mua
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? pkgSU.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : pkgSU
+                ).map((pkg) => (
+                  <StyledTableRow
+                    key={pkg._id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <StyledTableCell component="th" scope="row">
+                      {pkg.name}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {pkg.noOfMember}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {pkg.price}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {pkg.createdAt}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 15]}
+                  labelRowsPerPage="ssssss"
+                  count={pkgSU.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        ) : null}
+      </Box>
     </Stack>
   );
 }

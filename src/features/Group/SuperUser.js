@@ -197,7 +197,7 @@ function SuperUser({ item }) {
           <TabPanel value="1">
             <PackagesGroup data={item} />
           </TabPanel>
-          <TabPanel value="2">Item Two</TabPanel>
+          <TabPanel value="2"> </TabPanel>
         </TabContext>
       </Box>
 

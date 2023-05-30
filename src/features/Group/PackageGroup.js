@@ -62,7 +62,7 @@ function PackageGroup({ item, id }) {
               <Button
                 variant="contained"
                 color="success"
-                sx={{ width: "140px" }}
+                sx={{ width: "140px", borderRadius: '10px' }}
                 onClick={handleActivatePackage}
               >
                 Kích hoạt gói

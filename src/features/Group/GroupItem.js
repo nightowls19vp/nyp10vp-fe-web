@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import SuperUser from "./SuperUser";
 import SidebarLayout from "../../layout/SidebarLayout";
 import DefaultLayout from "../../layout/DefaultLayout.js";
@@ -12,9 +12,9 @@ function GroupItem() {
     <>
       {selectedID === 0 ? (
         <DefaultLayout>
-          <Typography variant="h5" gutterBottom>
-            Bạn chưa tham gia nhóm nào!
-          </Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+              <Typography> Hiện bạn chưa có nhóm nào </Typography>
+          </Box>
         </DefaultLayout>
       ) : (
         <SidebarLayout data={groups} title="group" selectedID={selectedID}>

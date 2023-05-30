@@ -44,7 +44,7 @@ function PersonalInformation() {
   const [phone, setPhone] = useState(userInfo.phone ?? null);
   const [dob, setDob] = useState(userInfo.dob ?? null);
   const [socialAcc, setSocialAcc] = useState(
-    userInfo?.socialAccounts ? true : false
+    userInfo.socialAccounts !== undefined ? true : false
   );
   const [widthDate, setWidthDate] = useState(0);
   const [widthAvatar, setWidthAvatar] = useState(0);
