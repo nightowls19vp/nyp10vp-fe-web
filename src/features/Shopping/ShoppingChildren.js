@@ -38,12 +38,14 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import { createAxios } from "../../http/createInstance.js";
+import SockectIO from "../../http/socket.js";
 
 import "../../assets/css/Shopping.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { loginSuccess } from "../../redux/authSlice";
 import { getUserCart, updateUserCart } from "../../redux/packageRequest";
 import { setCarts, updateNumberCart } from "../../redux/packageSlice";
+import { useEffect } from "react";
 
 const style = {
   position: "absolute",
@@ -259,8 +261,17 @@ export default function EnhancedTable({ item }) {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [openModal, setOpenModal] = React.useState(false);
-  const [valueMethod, setValueMethod] = React.useState('zalo');
+  const [valueMethod, setValueMethod] = React.useState("zalo");
   // const [openProgress, setOpenProgress] = React.useState(false);
+
+  // const socket = SockectIO();
+  // useEffect(() => {
+  //   socket.connect();
+
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, [socket]);
 
   const handleClose = () => setOpenModal(false);
 
@@ -353,7 +364,7 @@ export default function EnhancedTable({ item }) {
         quantity: ele.quantity,
         _id: ele._id,
       };
-      
+
       if (
         formData._id === row.id &&
         formData.noOfMember === row.member &&
@@ -437,23 +448,23 @@ export default function EnhancedTable({ item }) {
 
     let methodCheckout = {};
 
-    if (valueMethod === 'zalo') {
+    if (valueMethod === "zalo") {
       console.log(valueMethod);
       methodCheckout = {
         type: "EWALLET",
-        bank_code: "ZALOPAY"
-      }
+        bank_code: "ZALOPAY",
+      };
     } else {
       console.log(valueMethod);
       methodCheckout = {
         type: "EWALLET",
-        bank_code: "VNPAY"
-      }
+        bank_code: "VNPAY",
+      };
     }
-    
+
     let data = {
       cart: cart,
-      method: methodCheckout
+      method: methodCheckout,
     };
 
     console.log(data);
@@ -462,35 +473,54 @@ export default function EnhancedTable({ item }) {
 
     window.open(order.order.order_url);
 
-    if (res.statusCode === 200) {
-      const interValCheck = setInterval( async () => {
-        await getInformationUser(
-          user?.data.userInfo._id,
-          user?.accessToken,
-          dispatch,
-          axiosJWT
-        );
+    // socket.emit('checkout_callback', user?.data.userInfo._id);
 
-        console.log(userInfo?.user.trxHist, order.trans._id);
+    // socket.on("testZlCallback", (data) => {
+    //   console.log("by");
+    //   console.log(data);
+    // });
 
-        if (userInfo?.user.trxHist.includes(order.trans._id)) {
-          console.log(order.trans._id, "exists in trxHist");
+    await getUserCart(
+      user?.data.userInfo._id,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
 
-          clearInterval(interValCheck);
-        }
-      }, 10 * 1000);
+    // socket.on('zpCallback', data => {
+    //   console.log("by");
+    //   console.log(data);
+    // })
 
-      setTimeout(() => {
-        clearInterval(interValCheck);
-      }, 3 * 60 * 1000);
+    // if (res.statusCode === 200) {
+    //   const interValCheck = setInterval( async () => {
+    //     await getInformationUser(
+    //       user?.data.userInfo._id,
+    //       user?.accessToken,
+    //       dispatch,
+    //       axiosJWT
+    //     );
 
-      await getUserCart(
-        user?.data.userInfo._id,
-        user?.accessToken,
-        dispatch,
-        axiosJWT
-      );
-    }
+    //     console.log(userInfo?.user.trxHist, order.trans._id);
+
+    //     if (userInfo?.user.trxHist.includes(order.trans._id)) {
+    //       console.log(order.trans._id, "exists in trxHist");
+
+    //       clearInterval(interValCheck);
+    //     }
+    //   }, 10 * 1000);
+
+    //   setTimeout(() => {
+    //     clearInterval(interValCheck);
+    //   }, 3 * 60 * 1000);
+
+    //   await getUserCart(
+    //     user?.data.userInfo._id,
+    //     user?.accessToken,
+    //     dispatch,
+    //     axiosJWT
+    //   );
+    // }
   };
 
   const onSetSelected = (arr) => {
@@ -622,7 +652,11 @@ export default function EnhancedTable({ item }) {
               onChange={handleChange}
             >
               <FormControlLabel value="zalo" control={<Radio />} label="Zalo" />
-              <FormControlLabel value="vnpay" control={<Radio />} label="Vnpay" />
+              <FormControlLabel
+                value="vnpay"
+                control={<Radio />}
+                label="Vnpay"
+              />
               <FormControlLabel
                 value="other"
                 control={<Radio />}

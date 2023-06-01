@@ -296,7 +296,7 @@ export const updateActivatePackage = async (
       },
     });
 
-    await getGroupByUserId(token, "Super User", dispatch, axiosJWT);
+    await getGroupByUserId(token, dispatch, axiosJWT);
 
     dispatch(updateGroupId(id));
   } catch (error) {

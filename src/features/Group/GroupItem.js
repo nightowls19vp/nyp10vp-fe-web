@@ -12,8 +12,16 @@ function GroupItem() {
     <>
       {selectedID === 0 ? (
         <DefaultLayout>
-          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-              <Typography> Hiện bạn chưa có nhóm nào </Typography>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography fontSize={22}> Hiện bạn chưa có nhóm nào </Typography>
           </Box>
         </DefaultLayout>
       ) : (

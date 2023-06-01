@@ -32,8 +32,8 @@ function PersonalInformation() {
   const dateRef = useRef();
   const avatarRef = useRef();
 
-  const user = useSelector((state) => state.auth.login?.currentUser);
-  const userInfo = useSelector((state) => state.user?.userInfo.user);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  const userInfo = useSelector((state) => state?.user?.userInfo.user);
 
   const dispatch = useDispatch();
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
@@ -43,9 +43,10 @@ function PersonalInformation() {
   const [name, setName] = useState(userInfo.name);
   const [phone, setPhone] = useState(userInfo.phone ?? null);
   const [dob, setDob] = useState(userInfo.dob ?? null);
-  const [socialAcc, setSocialAcc] = useState(
-    userInfo.socialAccounts !== undefined ? true : false
-  );
+  // const [socialAcc, setSocialAcc] = useState(
+  //   userInfo.socialAccounts !== undefined ? true : false
+  // );
+  const socialAcc = userInfo.socialAccounts !== undefined ? true : false;
   const [widthDate, setWidthDate] = useState(0);
   const [widthAvatar, setWidthAvatar] = useState(0);
   const [status, setStatus] = useState(0);
@@ -112,12 +113,14 @@ function PersonalInformation() {
       axiosJWT
     );
 
-    if (res.statusCode === 200) {
+    if (res?.statusCode === 200) {
       setStatus(1);
       setMsg("Cập nhật thông tin thành công");
-    } else {
+      return;
+    }
+    else {
       setStatus(2);
-      setMsg("Cập nhật thông tin thất bại!");
+    setMsg("Cập nhật thông tin thất bại!");
     }
 
     setTimeout(() => {
@@ -298,7 +301,7 @@ function PersonalInformation() {
       <Box
         sx={{
           display: "flex",
-          justifyContent: {xs: "center", md: "flex-start"},
+          justifyContent: { xs: "center", md: "flex-start" },
           paddingLeft: { xs: "0px", md: `calc(${widthAvatar}px + 120px)` },
         }}
       >

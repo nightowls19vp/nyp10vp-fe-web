@@ -13,7 +13,7 @@ import {
 } from "./authSlice";
 import { getAllPackage, getUserCart } from "./packageRequest";
 import { updateProfileId } from "./packageSlice";
-import { getInformationUser } from "./userRequest";
+import { getGroupByUserId, getInformationUser } from "./userRequest";
 
 export const getJoinGroup = async (token, tokenJoinGr) => {
   try {

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Button, Stack, Typography } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
 import { createAxios } from "../../http/createInstance";
-import { updateActivatePackage, userRenewGroup } from "../../redux/userRequest";
+import { updateActivatePackage } from "../../redux/userRequest";
 import { loginSuccess } from "../../redux/authSlice";
 
 import "../../assets/css/Group.scss";
@@ -17,14 +17,15 @@ function PackageGroup({ item, id }) {
 
   const user = useSelector((state) => state?.auth.login?.currentUser);
 
-  const [btn, setBtn] = useState(
-    item.status === "Not activated" ? true : false
-  );
+  // const [btn, setBtn] = useState(
+  //   item.status === "Not activated" ? true : false
+  // );
+
+  const btn = item.status === "Not activated" ? true : false;
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const handleActivatePackage = async () => {
-    console.log(item, id);
     await updateActivatePackage(id, user?.accessToken, item, dispatch, axiosJWT);
   };
 

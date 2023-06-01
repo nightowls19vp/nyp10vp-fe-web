@@ -15,7 +15,7 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import { useDispatch, useSelector } from "react-redux";
 
-import { usersInvitePeople } from "../../redux/userRequest";
+import { getGroupByUserId, usersInvitePeople } from "../../redux/userRequest";
 import { createAxios } from "../../http/createInstance";
 import { loginSuccess } from "../../redux/authSlice";
 import "../../assets/css/Group.scss";
@@ -72,7 +72,10 @@ function PackagesGroup({ data }) {
     console.log(formData);
     const res = await usersInvitePeople(user?.accessToken, formData, axiosJWT);
 
+    setOpenInvite(false);
     console.log(res);
+
+    // await getGroupByUserId(user?.accessToken, dispatch, axiosJWT);
   }
 
   // const [linkInvite, setLinkInvite] = useState("");

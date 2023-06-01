@@ -64,28 +64,32 @@ function MyPackage() {
   };
 
   useEffect(() => {
-    const groupsSuperUser = groups[0].child;
+    if (groups.length > 0) {
+      const groupsSuperUser = groups[0].child;
 
-    let packageSuperUser = [];
+      let packageSuperUser = [];
 
-    for (let group of groupsSuperUser) {
-      let i = 0;
-      for (let pkg of group.packages) {
-        let formData = {
-          _id: group._id + i,
-          name: pkg.package.name,
-          duration: pkg.package.duration,
-          price: pkg.package.price,
-          noOfMember: pkg.package.noOfMember,
-          createdAt: pkg.package.createdAt,
-          updatedAt: pkg.package.updatedAt,
-        };
-        i++;
-        packageSuperUser.push(formData);
+      for (let group of groupsSuperUser) {
+        let i = 0;
+        for (let pkg of group.packages) {
+          let formData = {
+            _id: group._id + i,
+            name: pkg.package.name,
+            duration: pkg.package.duration,
+            price: pkg.package.price,
+            noOfMember: pkg.package.noOfMember,
+            createdAt: pkg.package.createdAt,
+            updatedAt: pkg.package.updatedAt,
+          };
+          i++;
+          packageSuperUser.push(formData);
+        }
       }
-    }
 
-    setPkgSU(packageSuperUser);
+      setPkgSU(packageSuperUser);
+    } else {
+      setPkgSU([]);
+    }
   }, [groups]);
 
   return (
@@ -100,22 +104,24 @@ function MyPackage() {
         Lịch sử mua gói
       </Typography>
       <Box
-        sx={{ display: "flex", flexDirection: "row", justifyContent: "center", width: '100%' }}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          width: "100%",
+        }}
       >
         {pkgSU.length > 0 ? (
           <TableContainer component={Paper}>
             <Table sx={{ width: "100%" }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ width: "30%" }}>
-                    {" "}
-                    Tên gói (đã mua){" "}
-                  </TableCell>
+                  <TableCell sx={{ width: "30%" }}>Tên gói (đã mua)</TableCell>
                   <TableCell align="center" sx={{ width: "20%" }}>
                     Số thành viên (người)
                   </TableCell>
                   <TableCell align="center" sx={{ width: "20%" }}>
-                    Giá tiền (đồng){" "}
+                    Giá tiền (đồng)
                   </TableCell>
                   <TableCell align="center" sx={{ width: "30%" }}>
                     Ngày mua

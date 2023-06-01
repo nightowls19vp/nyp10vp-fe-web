@@ -1,121 +1,137 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 
-import { Box, Stack, Typography, TextField } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import {
+  Stack,
+  Breadcrumbs,
+  Link,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableFooter,
+  TablePagination,
+} from "@mui/material";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 
-import { AiFillCamera } from "react-icons/ai";
-import ImgAvatar from "../../assets/img/user.png";
-
-import "../../assets/css/Product.scss";
 import { Colors } from "../../config/Colors";
-import * as CustomComponent from "../../component/custom/CustomComponents.js";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: Colors.textPrimary,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
+
+function createData(name, calories, fat, carbs, protein) {
+  return { name, calories, fat, carbs, protein };
+}
+
+const rows = [
+  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
+  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+  createData("Eclair", 262, 16.0, 24, 6.0),
+  createData("Cupcake", 305, 3.7, 67, 4.3),
+  createData("Gingerbread", 356, 16.0, 49, 3.9),
+];
 
 function ProductDetail() {
-  const inputRef = useRef();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [image, setImage] = useState(ImgAvatar);
-  const [name, setName] = useState("");
-  const [name1, setName1] = useState("");
-  const [name2, setName2] = useState("");
-  const [name3, setName3] = useState("");
-  const [name4, setName4] = useState("");
-  const [name5, setName5] = useState("");
-  const [name6, setName6] = useState("");
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const handleClick = () => {
-    inputRef.current.click();
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  const handleFileChange = async (event) => {
-    const fileObj = event.target.files && event.target.files[0];
-    if (!fileObj) {
-      return;
-    }
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
   return (
-    <Box className="box-product">
-      <Box sx={{ width: "30%" }}>
-        <CustomComponent.ButtonAvatar onClick={handleClick}>
-          <CustomComponent.ImageSrc
-            style={{ backgroundImage: `url(${image})` }}
-          />
-          <input
-            style={{ display: "none" }}
-            ref={inputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
-          <CustomComponent.ImageBackdrop className="MuiImageBackdrop-root" />
-          <CustomComponent.Image>
-            <Box bgcolor={Colors.camera} borderRadius={"50%"} padding={"8px"}>
-              <AiFillCamera color={Colors.black} size={25} />
-            </Box>
-          </CustomComponent.Image>
-        </CustomComponent.ButtonAvatar>
-      </Box>
-      <Stack sx={{ width: "60%" }} spacing={2}>
-        <Box className="detail-product">
-          <Typography width={"130px"} variant="overline" display="block">
-            Tên sản phẩm
-          </Typography>
-          <Box>
-            <TextField
-              fullWidth
-              id="name"
-              variant="outlined"
-              size="small"
-              defaultValue={name}
-              onChange={(e) => setName(e.target.value)}
+    <Stack
+      spacing={3}
+      sx={{
+        paddingX: { xs: "2%", md: "5%" },
+        width: "100%",
+        paddingY: "40px",
+      }}
+    >
+      <Breadcrumbs>
+        <Link underline="hover" color={Colors.textPrimary} href="/">
+          Trang chủ
+        </Link>
+        <Link underline="hover" color={Colors.textPrimary} href="/stock">
+          Kho lưu trữ
+        </Link>
+        <Typography color="text.primary"> Các sản phẩm trong kho </Typography>
+      </Breadcrumbs>
+
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Dessert (100g serving)</StyledTableCell>
+              <StyledTableCell align="right">Calories</StyledTableCell>
+              <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
+              <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
+              <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {(rowsPerPage > 0
+              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : rows
+            ).map((row) => (
+              <StyledTableRow key={row.name}>
+                <StyledTableCell component="th" scope="row">
+                  {row.name}
+                </StyledTableCell>
+                <StyledTableCell align="right">{row.calories}</StyledTableCell>
+                <StyledTableCell align="right">{row.fat}</StyledTableCell>
+                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
+                <StyledTableCell align="right">{row.protein}</StyledTableCell>
+              </StyledTableRow>
+            ))}
+
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 53 * emptyRows }}>
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+          <TableFooter >
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 15]}
+              labelRowsPerPage="ssssss"
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
             />
-          </Box>
-        </Box>
-        <Box className="detail-product">
-          <Typography width={"130px"} variant="overline" display="block">
-            Tên sản phẩm
-          </Typography>
-          <Box>
-            <TextField
-              fullWidth
-              id="name"
-              variant="outlined"
-              size="small"
-              defaultValue={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Box>
-        </Box>
-        <Box className="detail-product">
-          <Typography width={"130px"} variant="overline" display="block">
-            Tên sản phẩm
-          </Typography>
-          <Box>
-            <TextField
-              fullWidth
-              id="name"
-              variant="outlined"
-              size="small"
-              defaultValue={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Box>
-        </Box>
-        <Box className="detail-product">
-          <Typography width={"130px"} variant="overline" display="block">
-            Tên sản phẩm
-          </Typography>
-          <Box>
-            <TextField
-              fullWidth
-              id="name"
-              variant="outlined"
-              size="small"
-              defaultValue={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Box>
-        </Box>
-      </Stack>
-    </Box>
+          </TableFooter>
+        </Table>
+      </TableContainer>
+    </Stack>
   );
 }
 
