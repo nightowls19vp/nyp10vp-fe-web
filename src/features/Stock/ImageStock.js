@@ -1,9 +1,10 @@
-import React from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Stack, Typography, Slide } from "@mui/material";
 
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import ImgAvatar from "../../assets/img/panda.jpg";
 import { useNavigate } from "react-router-dom";
+import { Colors } from "../../config/Colors.js";
 
 const images = [
   {
@@ -25,53 +26,45 @@ const images = [
   },
 ];
 
-function ImageStock() {
+function ImageStock({ item }) {
   const navigate = useNavigate();
-  const handleButton = () => {
-    navigate("/stock/product-stock");
+
+  const [openDetail, setOpenDetail] = useState(false);
+
+  const handleClickImage = () => {
+    navigate(`/stock/product-stock?id=${item.title}`);
   };
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "space-between",
-        minWidth: 300,
-        width: "100%",
-      }}
-    >
-      {images.map((image, idx) => (
-        <Box key={idx} sx={{ padding: "10px", width: '30%' }}>
-          <CustomComponent.ImageButtonStock
-            focusRipple
-            style={{
-              width: "100%",
-            }}
-            onClick={handleButton}
-          >
-            <CustomComponent.ImageSrcStock
-              style={{ backgroundImage: `url(${image.url})` }}
-            />
-            <CustomComponent.ImageBackdropStock className="MuiImageBackdrop-root" />
-            <CustomComponent.ImageStock>
-              <Typography
-                component="span"
-                variant="subtitle1"
-                color="inherit"
-                sx={{
-                  position: "relative",
-                  p: 4,
-                  pt: 2,
-                  pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
-                }}
-              >
-                {image.title}
-                <CustomComponent.ImageMarkedStock className="MuiImageMarked-root" />
-              </Typography>
-            </CustomComponent.ImageStock>
-          </CustomComponent.ImageButtonStock>
-        </Box>
-      ))}
+    <Box sx={{ padding: "10px", width: { xs: "50%", sm: "40%", md: "30%" } }}>
+      <CustomComponent.ImageButtonStock
+        focusRipple
+        style={{
+          width: "100%",
+        }}
+        onClick={handleClickImage}
+        onMouseEnter={() => setOpenDetail(true)}
+        onMouseLeave={() => setOpenDetail(false)}
+      >
+        <CustomComponent.ImageSrcStock
+          style={{ backgroundImage: `url(${item.url})` }}
+        />
+        <CustomComponent.ImageBackdropStock className="MuiImageBackdrop-root" />
+        <CustomComponent.ImageStock>
+          <Slide direction="up" in={openDetail} mountOnEnter unmountOnExit>
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                bgcolor: Colors.search,
+                borderRadius: "20px",
+              }}
+            >
+              <Typography> {item.title} </Typography>
+            </Box>
+          </Slide>
+        </CustomComponent.ImageStock>
+      </CustomComponent.ImageButtonStock>
     </Box>
   );
 }

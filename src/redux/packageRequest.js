@@ -53,7 +53,6 @@ export const getUserCart = async (userID, token, dispatch, axiosJWT) => {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
-        
       },
     });
     

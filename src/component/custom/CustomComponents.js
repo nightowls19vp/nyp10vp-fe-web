@@ -218,22 +218,11 @@ export const CssTextField = styled(TextField)({
 
 export const ImageButtonStock = styled(ButtonBase)(({ theme }) => ({
   position: 'relative',
-  height: 200,
+  height: 350,
+  borderRadius: '20px',
   [theme.breakpoints.down('sm')]: {
     width: '100% !important', // Overrides inline-style
-    height: 100,
-  },
-  '&:hover, &.Mui-focusVisible': {
-    zIndex: 1,
-    '& .MuiImageBackdrop-root': {
-      opacity: 0.15,
-    },
-    '& .MuiImageMarked-root': {
-      opacity: 0,
-    },
-    '& .MuiTypography-root': {
-      border: '4px solid currentColor',
-    },
+    height: 200,
   },
 }));
 
@@ -244,6 +233,7 @@ export const ImageSrcStock = styled('span')({
   top: 0,
   bottom: 0,
   backgroundSize: 'cover',
+  borderRadius: '20px',
   backgroundPosition: 'center 40%',
 });
 
@@ -256,7 +246,7 @@ export const ImageStock = styled('span')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  color: theme.palette.common.white,
+  // color: theme.palette.common.white,
 }));
 
 export const ImageBackdropStock = styled('span')(({ theme }) => ({
@@ -265,8 +255,9 @@ export const ImageBackdropStock = styled('span')(({ theme }) => ({
   right: 0,
   top: 0,
   bottom: 0,
-  backgroundColor: theme.palette.common.black,
+  // backgroundColor: theme.palette.common.white,
   opacity: 0.4,
+  borderRadius: '20px',
   transition: theme.transitions.create('opacity'),
 }));
 

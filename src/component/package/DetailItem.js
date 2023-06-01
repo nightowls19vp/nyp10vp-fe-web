@@ -10,7 +10,6 @@ import {
   IconButton,
   Divider,
   Dialog,
-  DialogContent,
   AlertTitle,
   Alert,
 } from "@mui/material";
@@ -18,6 +17,8 @@ import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
 import { useNavigate } from "react-router-dom";
 import { createAxios } from "../../http/createInstance.js";
+
+import jwtDecode from "jwt-decode";
 
 import { Colors } from "../../config/Colors";
 import * as CustomComponents from "../custom/CustomComponents.js";
@@ -67,83 +68,95 @@ function DetailItem({ item }) {
   };
 
   const handleButtonAdd = async (event, item) => {
-    let shoppingCart = [];
-    for (let ele of userCart) {
-      let data = {
-        package: ele._id,
-        quantity: ele.quantity,
-        noOfMember: ele.noOfMember,
-        duration: ele.duration,
-      };
-      shoppingCart.push(data);
-    }
-
-    let formData = {
-      package: item._id,
-      quantity: 1,
-      noOfMember: member,
-      duration: duration,
-    };
-
-    for (let ele of shoppingCart) {
-      if (
-        ele.package === item._id &&
-        ele.noOfMember === member &&
-        ele.duration === duration
-      ) {
-        formData.quantity = ele.quantity + 1;
+    let day = new Date();
+    if (user !== null) {
+      const decodedToken = jwtDecode(user?.accessToken);
+      if (decodedToken.exp < day.getTime() / 1000) {
+        dispatch(loginSuccess(null));
       }
     }
+    if (user) {
+      let shoppingCart = [];
+      for (let ele of userCart) {
+        let data = {
+          package: ele._id,
+          quantity: ele.quantity,
+          noOfMember: ele.noOfMember,
+          duration: ele.duration,
+        };
+        shoppingCart.push(data);
+      }
 
-    shoppingCart = [
-      ...shoppingCart.filter(
-        (data) =>
-          data.package !== item._id ||
-          data.noOfMember !== member ||
-          data.duration !== duration
-      ),
-      formData,
-    ];
+      let formData = {
+        package: item._id,
+        quantity: 1,
+        noOfMember: member,
+        duration: duration,
+      };
 
-    let formCart = {
-      cart: shoppingCart,
-    };
+      for (let ele of shoppingCart) {
+        if (
+          ele.package === item._id &&
+          ele.noOfMember === member &&
+          ele.duration === duration
+        ) {
+          formData.quantity = ele.quantity + 1;
+        }
+      }
 
-    console.log(formCart);
+      shoppingCart = [
+        ...shoppingCart.filter(
+          (data) =>
+            data.package !== item._id ||
+            data.noOfMember !== member ||
+            data.duration !== duration
+        ),
+        formData,
+      ];
 
-    const res = await updateUserCart(
-      user?.data.userInfo._id,
-      formCart,
-      user?.accessToken,
-      axiosJWT
-    );
+      let formCart = {
+        cart: shoppingCart,
+      };
 
-    setOpenDialog(true);
-    if (res.statusCode === 200) {
-      setStatus(1);
-      setMsg("Cập nhật giỏ hàng thành công");
+      const res = await updateUserCart(
+        user?.data.userInfo._id,
+        formCart,
+        user?.accessToken,
+        axiosJWT
+      );
+
+      setOpenDialog(true);
+      if (res?.statusCode === 200) {
+        setStatus(1);
+        setMsg("Cập nhật giỏ hàng thành công");
+        await getUserCart(
+          user?.data.userInfo._id,
+          user?.accessToken,
+          dispatch,
+          axiosJWT
+        );
+      } else {
+        setStatus(2);
+        setMsg("Cập nhật giỏ hàng thất bại!");
+      }
+
+      setTimeout(() => {
+        setStatus(0);
+        setMsg("");
+        setOpenDialog(false);
+      }, 2000);
     } else {
-      setStatus(2);
-      setMsg("Cập nhật giỏ hàng thất bại!");
+      navigate("/login");
     }
-
-    setTimeout(() => {
-      setStatus(0);
-      setMsg("");
-      setOpenDialog(false);
-    }, 3000);
-
-    await getUserCart(
-      user?.data.userInfo._id,
-      user?.accessToken,
-      dispatch,
-      axiosJWT
-    );
   };
 
   const handleButtonBuy = async (event, item) => {
     await handleButtonAdd(event, item);
-    navigate("/shopping-cart");
+    if (user) {
+      navigate("/shopping-cart");
+    } else {
+      navigate("/login");
+    }
   };
 
   useEffect(() => {
@@ -318,7 +331,9 @@ function DetailItem({ item }) {
         >
           Thêm vào giỏ hàng
         </CustomComponents.Button2>
-        <CustomComponents.Button1 onClick={(event) => handleButtonBuy(event, item)}>
+        <CustomComponents.Button1
+          onClick={(event) => handleButtonBuy(event, item)}
+        >
           Mua gói
         </CustomComponents.Button1>
         <Dialog
@@ -327,19 +342,19 @@ function DetailItem({ item }) {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-            <Box sx={{height: '100%', width: '100%'}}>
-              {status === 0 ? null : status === 1 ? (
-                <Alert severity="success">
-                  <AlertTitle>Thành công</AlertTitle>
-                  {msg}
-                </Alert>
-              ) : (
-                <Alert severity="error">
-                  <AlertTitle>Thất bại</AlertTitle>
-                  {msg}
-                </Alert>
-              )}
-            </Box>
+          <Box sx={{ height: "100%", width: "100%" }}>
+            {status === 0 ? null : status === 1 ? (
+              <Alert severity="success">
+                <AlertTitle>Thành công</AlertTitle>
+                {msg}
+              </Alert>
+            ) : (
+              <Alert severity="error">
+                <AlertTitle>Thất bại</AlertTitle>
+                {msg}
+              </Alert>
+            )}
+          </Box>
         </Dialog>
       </CardActions>
     </Card>

@@ -12,7 +12,7 @@ import GroupPage from '../pages/Group.js';
 import UserJoinPage from '../pages/UserJoin.js';
 import PackageRenewPage from '../pages/PackageRenew.js';
 import ChatPage from '../pages/Chat.js';
-import ProductPage from '../pages/Product.js';
+import ProductPage from '../pages/ListProduct.js';
 
 const publicRoutes = [
     { path: routesConfig.home, component: HomePage},

@@ -1,18 +1,16 @@
 import React from "react";
 
-import SidebarLayout from "../layout/SidebarLayout";
 import ProductItem from "../features/Product/ProductItem";
 import DefaultLayout from "../layout/DefaultLayout";
 
-function Product() {
+function ListProduct() {
+  // const urlQuery = new URL(window.location.href).searchParams;
+  // console.log(urlQuery.get("id"));
   return (
-    // <SidebarLayout >
-    //     <ProductItem />
-    // </SidebarLayout>
     <DefaultLayout>
         <ProductItem />
     </DefaultLayout>
   );
 }
 
-export default Product;
+export default ListProduct;

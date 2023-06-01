@@ -9,16 +9,11 @@ import {
   TableHead,
   TableRow,
   TableBody,
-  IconButton,
   TableFooter,
   TablePagination,
 } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { styled, useTheme } from "@mui/material/styles";
-import FirstPageIcon from "@mui/icons-material/FirstPage";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import LastPageIcon from "@mui/icons-material/LastPage";
 
 import { useSelector } from "react-redux";
 
@@ -162,15 +157,22 @@ function MyPackage() {
                 )}
               </TableBody>
               <TableFooter>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 15]}
-                  labelRowsPerPage="ssssss"
-                  count={pkgSU.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[
+                      5,
+                      10,
+                      20,
+                      { label: "All", value: -1 },
+                    ]}
+                    labelRowsPerPage="Số hàng trên trang"
+                    count={pkgSU.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableRow>
               </TableFooter>
             </Table>
           </TableContainer>

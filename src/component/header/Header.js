@@ -29,6 +29,7 @@ import { dataHeader1, dataHeader2 } from "../../data/index.js";
 import MenuItem from "./MenuItem.js";
 import MenuItemRow from "./MenuItemRow.js";
 import { toggleShowSidebar } from "../../redux/packageSlice";
+import { loginSuccess } from "../../redux/authSlice";
 // import { loginSuccess } from "../../redux/authSlice";
 // import { getUserCart } from "../../redux/packageRequest";
 
@@ -45,7 +46,7 @@ function Header() {
   if (user !== null) {
     const decodedToken = jwtDecode(user?.accessToken);
     if (decodedToken.exp < day.getTime() / 1000) {
-      user = null;
+      dispatch(loginSuccess(null));
     }
   }
 

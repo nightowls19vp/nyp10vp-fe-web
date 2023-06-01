@@ -99,11 +99,24 @@ function PersonalInformation() {
   };
 
   const handleButtonChange = async () => {
-    let formData = {
-      name: name,
-      dob: dob,
-      phone: phone,
-    };
+    let formData = {};
+    if (dob === null) {
+      formData = {
+        name: name,
+        phone: phone,
+      };
+    } else if (phone === null) {
+      formData = {
+        name: name,
+        dob: dob,
+      };
+    } else {
+      formData = {
+        name: name,
+        dob: dob,
+        phone: phone,
+      };
+    }
 
     const res = await updateInformationUser(
       user?.data.userInfo._id,
@@ -117,10 +130,9 @@ function PersonalInformation() {
       setStatus(1);
       setMsg("Cập nhật thông tin thành công");
       return;
-    }
-    else {
+    } else {
       setStatus(2);
-    setMsg("Cập nhật thông tin thất bại!");
+      setMsg("Cập nhật thông tin thất bại!");
     }
 
     setTimeout(() => {
