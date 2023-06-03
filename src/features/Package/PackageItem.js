@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Tab } from "@mui/material";
+import { Box, Stack, Tab, Alert, AlertTitle } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 import { useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import DetailItem from "../../component/package/DetailItem";
 import DetailItemRenew from "../../component/package/DetailItemRenew";
 
 function PackageItem({ data, grpId }) {
+  const notiPkg = useSelector((state) => state?.package?.noti);
 
   const [value, setValue] = React.useState("1");
 
@@ -36,29 +37,44 @@ function PackageItem({ data, grpId }) {
           </TabList>
         </Box>
         <TabPanel value="1">
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: { xs: "wrap", sm: "wrap", md: "nowrap" },
-              justifyContent: "center",
-              paddingY: "3%",
-            }}
-          >
-            {grpId === null
-              ? data.child?.map((route) =>
-                  route ? <DetailItem item={route} key={route._id} /> : null
-                )
-              : data.child?.map((route) =>
-                  route ? (
-                    <DetailItemRenew
-                      item={route}
-                      grpId={grpId}
-                      key={route._id}
-                    />
-                  ) : null
-                )}
-          </Box>
+          <Stack>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: { xs: "wrap", sm: "wrap", lg: "nowrap" },
+                justifyContent: "center",
+                paddingY: "3%",
+              }}
+            >
+              {grpId === null
+                ? data.child?.map((route) =>
+                    route ? <DetailItem item={route} key={route._id} /> : null
+                  )
+                : data.child?.map((route) =>
+                    route ? (
+                      <DetailItemRenew
+                        item={route}
+                        grpId={grpId}
+                        key={route._id}
+                      />
+                    ) : null
+                  )}
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              {notiPkg?.statusNoti === 0 ? null : notiPkg?.statusNoti === 1 ? (
+                <Alert severity="success">
+                  <AlertTitle>Thành công</AlertTitle>
+                  {notiPkg?.msgNoti}
+                </Alert>
+              ) : (
+                <Alert severity="error">
+                  <AlertTitle>Thất bại</AlertTitle>
+                  {notiPkg?.msgNoti}
+                </Alert>
+              )}
+            </Box>
+          </Stack>
         </TabPanel>
         <TabPanel value="2"> </TabPanel>
       </TabContext>

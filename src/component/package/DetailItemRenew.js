@@ -150,7 +150,6 @@ function DetailItemRenew({ item, grpId }) {
 
       await getGroupByUserId(
         user?.accessToken,
-        "Super User",
         dispatch,
         axiosJWT
       );
@@ -204,7 +203,7 @@ function DetailItemRenew({ item, grpId }) {
     <>
       <Card
         sx={{
-          width: { xs: "70%", sm: "40%", md: "25%" },
+          width: { xs: "70%", sm: "40%", md: "30%", lg: "25%" },
           margin: "10px",
           bgcolor: Colors.background,
           borderRadius: "10px",

@@ -7,7 +7,7 @@ import { createAxios } from "../http/createInstance.js";
 // import Mapbox from "../component/mapbox/Mapbox.js";
 import { getUserCart } from "../redux/packageRequest.js";
 
-import SockectIO from "../http/socket.js";
+// import SockectIO from "../http/socket.js";
 
 function Home() {
   const dispatch = useDispatch();
@@ -15,19 +15,19 @@ function Home() {
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  const socket = SockectIO()
+  // const socket = SockectIO()
 
   useEffect(() => {
-      // const cartOfUser = async () => {
-      //   await getUserCart(user?.data.userInfo._id, user?.accessToken, dispatch, axiosJWT);
-      // }
+      const cartOfUser = async () => {
+        await getUserCart(user?.data.userInfo._id, user?.accessToken, dispatch, axiosJWT);
+      }
       
-      // if (user !== null) {
-      //   cartOfUser()
-      //   .catch(console.error);
-      // }
+      if (user !== null) {
+        cartOfUser()
+        .catch(console.error);
+      }
 
-    // }, [axiosJWT, dispatch, user]);
+    }, [axiosJWT, dispatch, user]);
 
     // socket.connect();
 
@@ -40,11 +40,11 @@ function Home() {
     //   console.log(data);
     // });
 
-    return () => {
-      // socket.off('handleDisconnect');
-      // socket.disconnect();
-    };
-  }, [socket, user]);
+    // return () => {
+    //   // socket.off('handleDisconnect');
+    //   // socket.disconnect();
+    // };
+  // }, [socket, user]);
 
   return (
     <>

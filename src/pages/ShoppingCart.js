@@ -10,6 +10,10 @@ function ShoppingCart() {
   // useEffect(() => {
   //   socket.connect();
 
+  //   // socket.on('zpCallback', data => {
+  //   //   console.log(data);
+  //   // });
+
   //   return () => {
   //     socket.disconnect();
   //   };

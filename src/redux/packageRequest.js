@@ -55,6 +55,8 @@ export const getUserCart = async (userID, token, dispatch, axiosJWT) => {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    // console.log(res?.data.cart);
     
     dispatch(setCarts(res?.data.cart));
     
@@ -65,7 +67,7 @@ export const getUserCart = async (userID, token, dispatch, axiosJWT) => {
   }
 };
 
-export const updateUserCart = async (userID, cart, token, axiosJWT) => {
+export const updateUserCart = async (userID, cart, token, dispatch, axiosJWT) => {
   try {
     const res = await axiosJWT.put(`/users/${userID}/cart`, cart, {
       headers: {
@@ -75,9 +77,13 @@ export const updateUserCart = async (userID, cart, token, axiosJWT) => {
       },
     });
     
-    // dispatch(setCarts(res.data.cart));
+    // dispatch(setCarts(res?.data.cart));
 
-    // dispatch(updateNumberCart(res.data.cart?.length));
+    // dispatch(updateNumberCart(res?.data.cart?.length));
+
+    // return res?.data;
+
+    await getUserCart(userID, token, dispatch, axiosJWT);
 
     return res?.data;
     

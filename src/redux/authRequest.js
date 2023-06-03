@@ -45,8 +45,6 @@ export const loginUser = async (user, dispatch, navigate, tokenJoinGr, axiosJWT)
       const resJoin = await getJoinGroup(res.data.accessToken, tokenJoinGr);
       console.log(resJoin);
     }
-
-    console.log(res?.data.data.userInfo._id);
     
     await getInformationUser(res?.data.data.userInfo._id, res?.data.accessToken, dispatch, axiosJWT);
 

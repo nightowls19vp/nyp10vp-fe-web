@@ -9,9 +9,7 @@ import {
   Box,
   IconButton,
   Divider,
-  Dialog,
-  AlertTitle,
-  Alert,
+  Input,
 } from "@mui/material";
 import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
@@ -23,8 +21,9 @@ import jwtDecode from "jwt-decode";
 import { Colors } from "../../config/Colors";
 import * as CustomComponents from "../custom/CustomComponents.js";
 import "../../assets/css/Content.scss";
-import { getUserCart, updateUserCart } from "../../redux/packageRequest";
+import { updateUserCart } from "../../redux/packageRequest";
 import { loginSuccess } from "../../redux/authSlice";
+import { updateNotiPackage } from "../../redux/packageSlice.js";
 
 function DetailItem({ item }) {
   const dispatch = useDispatch();
@@ -36,8 +35,8 @@ function DetailItem({ item }) {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [member, setMember] = useState(item.noOfMember);
-  const [arrowLeftMem, setArrowLeftMem] = useState(true);
-  const [arrowRightMem, setArrowRightMem] = useState(false);
+  // const [arrowLeftMem, setArrowLeftMem] = useState(true);
+  // const [arrowRightMem, setArrowRightMem] = useState(false);
 
   const [duration, setDuration] = useState(item.duration);
   const [arrowLeftDura, setArrowLeftDura] = useState(true);
@@ -45,20 +44,24 @@ function DetailItem({ item }) {
 
   const [money, setMoney] = useState(item.price);
 
-  const [openDialog, setOpenDialog] = useState(false);
-  const [status, setStatus] = useState(0);
-  const [msg, setMsg] = useState("");
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
+  const handleInputChange = (event) => {
+    setMember(event.target.value === "" ? "" : Number(event.target.value));
   };
 
-  const handleArrowLeftMem = () => {
-    setMember(member - 1);
+  const handleBlur = () => {
+    if (member < item.noOfMember) {
+      setMember(item.noOfMember);
+    } else if (member > 15) {
+      setMember(15);
+    }
   };
-  const handleArrowRightMem = () => {
-    setMember(member + 1);
-  };
+
+  // const handleArrowLeftMem = () => {
+  //   setMember(member - 1);
+  // };
+  // const handleArrowRightMem = () => {
+  //   setMember(member + 1);
+  // };
 
   const handleArrowLeftDura = () => {
     setDuration(duration - 1);
@@ -122,28 +125,31 @@ function DetailItem({ item }) {
         user?.data.userInfo._id,
         formCart,
         user?.accessToken,
+        dispatch,
         axiosJWT
       );
 
-      setOpenDialog(true);
-      if (res?.statusCode === 200) {
-        setStatus(1);
-        setMsg("Cập nhật giỏ hàng thành công");
-        await getUserCart(
-          user?.data.userInfo._id,
-          user?.accessToken,
-          dispatch,
-          axiosJWT
-        );
-      } else {
-        setStatus(2);
-        setMsg("Cập nhật giỏ hàng thất bại!");
-      }
+      let formNoti = {};
 
+      if (res?.statusCode === 200) {
+        formNoti = {
+          statusNoti: 1,
+          msgNoti: "Cập nhật giỏ hàng thành công",
+        };
+      } else {
+        formNoti = {
+          statusNoti: 2,
+          msgNoti: "Cập nhật giỏ hàng thất bại!",
+        };
+      }
+      dispatch(updateNotiPackage(formNoti));
+
+      formNoti = {
+        statusNoti: 0,
+        msgNoti: "",
+      };
       setTimeout(() => {
-        setStatus(0);
-        setMsg("");
-        setOpenDialog(false);
+        dispatch(updateNotiPackage(formNoti));
       }, 2000);
     } else {
       navigate("/login");
@@ -151,26 +157,100 @@ function DetailItem({ item }) {
   };
 
   const handleButtonBuy = async (event, item) => {
-    await handleButtonAdd(event, item);
+    let day = new Date();
+    if (user !== null) {
+      const decodedToken = jwtDecode(user?.accessToken);
+      if (decodedToken.exp < day.getTime() / 1000) {
+        dispatch(loginSuccess(null));
+      }
+    }
     if (user) {
-      navigate("/shopping-cart");
+      let shoppingCart = [];
+      for (let ele of userCart) {
+        let data = {
+          package: ele._id,
+          quantity: ele.quantity,
+          noOfMember: ele.noOfMember,
+          duration: ele.duration,
+        };
+        shoppingCart.push(data);
+      }
+
+      let formData = {
+        package: item._id,
+        quantity: 1,
+        noOfMember: member,
+        duration: duration,
+      };
+
+      for (let ele of shoppingCart) {
+        if (
+          ele.package === item._id &&
+          ele.noOfMember === member &&
+          ele.duration === duration
+        ) {
+          formData.quantity = ele.quantity + 1;
+        }
+      }
+
+      shoppingCart = [
+        ...shoppingCart.filter(
+          (data) =>
+            data.package !== item._id ||
+            data.noOfMember !== member ||
+            data.duration !== duration
+        ),
+        formData,
+      ];
+
+      let formCart = {
+        cart: shoppingCart,
+      };
+
+      const res = await updateUserCart(
+        user?.data.userInfo._id,
+        formCart,
+        user?.accessToken,
+        dispatch,
+        axiosJWT
+      );
+
+      let formNoti = {};
+
+      if (res?.statusCode === 200) {
+        navigate("/shopping-cart");
+      } else {
+        formNoti = {
+          statusNoti: 2,
+          msgNoti: "Cập nhật giỏ hàng thất bại!",
+        };
+      }
+      dispatch(updateNotiPackage(formNoti));
+
+      formNoti = {
+        statusNoti: 0,
+        msgNoti: "",
+      };
+      setTimeout(() => {
+        dispatch(updateNotiPackage(formNoti));
+      }, 2000);
     } else {
       navigate("/login");
     }
   };
 
   useEffect(() => {
-    if (member <= item.noOfMember) {
-      setArrowLeftMem(true);
-    } else {
-      setArrowLeftMem(false);
-    }
+    // if (member <= item.noOfMember) {
+    //   setArrowLeftMem(true);
+    // } else {
+    //   setArrowLeftMem(false);
+    // }
 
-    if (member > 100) {
-      setArrowRightMem(true);
-    } else {
-      setArrowRightMem(false);
-    }
+    // if (member > 100) {
+    //   setArrowRightMem(true);
+    // } else {
+    //   setArrowRightMem(false);
+    // }
 
     if (duration <= item.duration) {
       setArrowLeftDura(true);
@@ -203,12 +283,13 @@ function DetailItem({ item }) {
   return (
     <Card
       sx={{
-        width: { xs: "70%", sm: "40%", md: "25%" },
+        width: { xs: "70%", sm: "40%", md: "30%", lg: "25%" },
         margin: "10px",
         bgcolor: Colors.background,
         borderRadius: "10px",
         boxShadow: "2px 2px 5px #8c8c8c",
       }}
+      className="detail-item-pkg"
     >
       <CardContent>
         <Typography
@@ -236,7 +317,7 @@ function DetailItem({ item }) {
         <Divider flexItem sx={{ paddingY: "10px" }} />
         <Stack>
           <Typography variant="overline" display="block" gutterBottom>
-            Số người
+            Số người (người)
           </Typography>
           {item.name === "Family Package" ? (
             <Box className="item">
@@ -247,7 +328,7 @@ function DetailItem({ item }) {
             </Box>
           ) : (
             <Box className="item">
-              <IconButton disabled={arrowLeftMem} onClick={handleArrowLeftMem}>
+              {/* <IconButton disabled={arrowLeftMem} onClick={handleArrowLeftMem}>
                 <CiSquareMinus
                   color={arrowLeftMem ? null : Colors.textPrimary}
                   size={30}
@@ -264,14 +345,29 @@ function DetailItem({ item }) {
                   color={arrowRightMem ? null : Colors.textPrimary}
                   size={30}
                 />
-              </IconButton>
+              </IconButton> */}
+              <CustomComponents.PrettoSlider
+                valueLabelDisplay="auto"
+                aria-label="pretto slider"
+                min={item.noOfMember}
+                max={15}
+                value={member}
+                onChange={(event) => setMember(event.target.value)}
+              />
+              <Input
+                size="small"
+                sx={{ width: '40px', align: 'center'}}
+                value={member}
+                onBlur={handleBlur}
+                onChange={handleInputChange}
+              />
             </Box>
           )}
         </Stack>
         <Divider flexItem sx={{ paddingY: "10px" }} />
         <Stack>
           <Typography variant="overline" display="block" gutterBottom>
-            Thời gian
+            Thời gian (tháng)
           </Typography>
           {item.name === "Experience Package" ||
           item.name === "Annual Package" ||
@@ -336,26 +432,6 @@ function DetailItem({ item }) {
         >
           Mua gói
         </CustomComponents.Button1>
-        <Dialog
-          open={openDialog}
-          onClose={handleCloseDialog}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <Box sx={{ height: "100%", width: "100%" }}>
-            {status === 0 ? null : status === 1 ? (
-              <Alert severity="success">
-                <AlertTitle>Thành công</AlertTitle>
-                {msg}
-              </Alert>
-            ) : (
-              <Alert severity="error">
-                <AlertTitle>Thất bại</AlertTitle>
-                {msg}
-              </Alert>
-            )}
-          </Box>
-        </Dialog>
       </CardActions>
     </Card>
   );

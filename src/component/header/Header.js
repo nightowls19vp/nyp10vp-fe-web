@@ -108,7 +108,7 @@ function Header() {
                 ref={params.InputProps.ref}
                 inputProps={params.inputProps}
                 autoFocus
-                sx={{ flex: 1, color: Colors.text }}
+                sx={{ flex: 1, color: Colors.text, paddingLeft: '10px' }}
                 placeholder="Hinted search text"
               />
             )}

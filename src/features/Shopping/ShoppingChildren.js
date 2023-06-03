@@ -255,6 +255,7 @@ EnhancedTableToolbar.propTypes = {
 export default function EnhancedTable({ item }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.auth.login?.currentUser);
+  const userCart = useSelector((state) => state?.package?.cart);
   const userInfo = useSelector((state) => state?.user?.userInfo);
   const order = useSelector((state) => state?.auth?.order);
 
@@ -435,15 +436,24 @@ export default function EnhancedTable({ item }) {
     //   axiosJWT
     // );
 
-    let cart = [];
+    let newCart = [];
+
     for (let el of selected) {
-      let formData = {
-        package: el.id,
-        quantity: el.quantity,
-        noOfMember: el.member,
-        duration: el.duration,
-      };
-      cart.push(formData);
+      for (let cart of userCart) {
+        if (
+          cart._id === el.id &&
+          cart.duration === el.duration &&
+          cart.noOfMember === el.member
+        ) {
+          let formData = {
+            package: cart._id,
+            quantity: cart.quantity,
+            noOfMember: cart.noOfMember,
+            duration: cart.duration,
+          };
+          newCart.push(formData);
+        }
+      }
     }
 
     let methodCheckout = {};
@@ -463,7 +473,7 @@ export default function EnhancedTable({ item }) {
     }
 
     let data = {
-      cart: cart,
+      cart: newCart,
       method: methodCheckout,
     };
 
@@ -473,54 +483,51 @@ export default function EnhancedTable({ item }) {
 
     window.open(order.order.order_url);
 
-    // socket.emit('checkout_callback', user?.data.userInfo._id);
-
-    // socket.on("testZlCallback", (data) => {
-    //   console.log("by");
+    // socket.on('zpCallback', data => {
     //   console.log(data);
     // });
 
-    await getUserCart(
-      user?.data.userInfo._id,
-      user?.accessToken,
-      dispatch,
-      axiosJWT
-    );
+    // await getUserCart(
+    //   user?.data.userInfo._id,
+    //   user?.accessToken,
+    //   dispatch,
+    //   axiosJWT
+    // );
 
     // socket.on('zpCallback', data => {
     //   console.log("by");
     //   console.log(data);
     // })
 
-    // if (res.statusCode === 200) {
-    //   const interValCheck = setInterval( async () => {
-    //     await getInformationUser(
-    //       user?.data.userInfo._id,
-    //       user?.accessToken,
-    //       dispatch,
-    //       axiosJWT
-    //     );
+    if (res.statusCode === 200) {
+      const interValCheck = setInterval( async () => {
+        await getInformationUser(
+          user?.data.userInfo._id,
+          user?.accessToken,
+          dispatch,
+          axiosJWT
+        );
 
-    //     console.log(userInfo?.user.trxHist, order.trans._id);
+        console.log(userInfo?.user.trxHist, order.trans._id);
 
-    //     if (userInfo?.user.trxHist.includes(order.trans._id)) {
-    //       console.log(order.trans._id, "exists in trxHist");
+        if (userInfo?.user.trxHist.includes(order.trans._id)) {
+          console.log(order.trans._id, "exists in trxHist");
 
-    //       clearInterval(interValCheck);
-    //     }
-    //   }, 10 * 1000);
+          clearInterval(interValCheck);
+        }
+      }, 10 * 1000);
 
-    //   setTimeout(() => {
-    //     clearInterval(interValCheck);
-    //   }, 3 * 60 * 1000);
+      setTimeout(() => {
+        clearInterval(interValCheck);
+      }, 3 * 60 * 1000);
 
-    //   await getUserCart(
-    //     user?.data.userInfo._id,
-    //     user?.accessToken,
-    //     dispatch,
-    //     axiosJWT
-    //   );
-    // }
+      await getUserCart(
+        user?.data.userInfo._id,
+        user?.accessToken,
+        dispatch,
+        axiosJWT
+      );
+    }
   };
 
   const onSetSelected = (arr) => {
