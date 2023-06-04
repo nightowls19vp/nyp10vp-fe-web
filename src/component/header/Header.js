@@ -17,29 +17,32 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { AiOutlineBars } from "react-icons/ai";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
-// import { createAxios } from "../../http/createInstance.js";
+import { createAxios } from "../../http/createInstance.js";
+import { toggleShowSidebar } from "../../redux/packageSlice";
+import { loginSuccess } from "../../redux/authSlice";
 
 import "../../assets/css/Header.scss";
 import { Colors } from "../../config/Colors.js";
 import routesConfig from "../../config/routes.js";
+import * as CustomComponent from "../custom/CustomComponents.js";
 import { dataHeader1, dataHeader2 } from "../../data/index.js";
 import MenuItem from "./MenuItem.js";
 import MenuItemRow from "./MenuItemRow.js";
-import { toggleShowSidebar } from "../../redux/packageSlice";
-import { loginSuccess } from "../../redux/authSlice";
-// import { loginSuccess } from "../../redux/authSlice";
-// import { getUserCart } from "../../redux/packageRequest";
+import { logoutUser } from "../../redux/authRequest";
 
 const topSearch = [];
 
 function Header() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   let user = useSelector((state) => state?.auth.login?.currentUser);
   // const userInfo = useSelector((state) => state?.user?.userInfo.user);
+
+  const [isShown, setIsShown] = useState(false);
 
   let day = new Date();
 
@@ -53,8 +56,7 @@ function Header() {
   const [anchorEl, setAnchorEl] = useState(null);
   const image = user?.data.userInfo.avatar ?? "";
 
-  // const navigate = useNavigate();
-  // let axiosJWT = createAxios(user, dispatch, loginSuccess);
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -69,6 +71,19 @@ function Header() {
 
   const handleHeaderBars = () => {
     dispatch(toggleShowSidebar());
+  };
+
+  const handleClickProfile = () => {
+    navigate("/profile");
+  };
+
+  const handleClickLogout = async () => {
+    console.log(user?.accessToken);
+    await logoutUser(user?.accessToken, dispatch, navigate, axiosJWT);
+  };
+
+  const handleClickLogin = () => {
+    navigate("/login");
   };
 
   return (
@@ -108,7 +123,7 @@ function Header() {
                 ref={params.InputProps.ref}
                 inputProps={params.inputProps}
                 autoFocus
-                sx={{ flex: 1, color: Colors.text, paddingLeft: '10px' }}
+                sx={{ flex: 1, color: Colors.text, paddingLeft: "10px" }}
                 placeholder="Hinted search text"
               />
             )}
@@ -173,16 +188,59 @@ function Header() {
           {dataHeader2.map((data, index) => (
             <MenuItemRow item={data} key={index} user={user} />
           ))}
-          <Tooltip title="Account">
-            <Button>
-              <NavLink
+          {/* <Tooltip title="Account"> */}
+          <Box sx={{ position: "relative" }}>
+            <Button
+              onMouseEnter={() => setIsShown(true)}
+              onMouseLeave={() => setIsShown(false)}
+            >
+              {/* <NavLink
                 to={user ? routesConfig.profile : routesConfig.login}
                 className="avatar"
               >
                 <Avatar src={image} sizes="35" className="avatarActive" />
-              </NavLink>
+              </NavLink> */}
+              <Avatar src={image} sizes="35" className="avatar-header" />
             </Button>
-          </Tooltip>
+            {/* </Tooltip> */}
+            {isShown && (
+              <Box
+                onMouseEnter={() => setIsShown(true)}
+                onMouseLeave={() => setIsShown(false)}
+                sx={{
+                  position: "absolute",
+                  right: 0,
+                  top: "50px",
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "200px",
+                  boxShadow: "2px 2px 5px #8c8c8c",
+                  borderRadius: "20px",
+                }}
+              >
+                {user ? (
+                  <>
+                    <CustomComponent.ButtonPopperAvatar
+                      onClick={handleClickProfile}
+                    >
+                      Thông tin tài khoản
+                    </CustomComponent.ButtonPopperAvatar>
+                    <CustomComponent.ButtonPopperAvatar
+                      onClick={handleClickLogout}
+                    >
+                      Đăng xuất
+                    </CustomComponent.ButtonPopperAvatar>
+                  </>
+                ) : (
+                  <CustomComponent.ButtonPopperAvatar
+                    onClick={handleClickLogin}
+                  >
+                    Đăng nhập
+                  </CustomComponent.ButtonPopperAvatar>
+                )}
+              </Box>
+            )}
+          </Box>
         </Stack>
       </Toolbar>
     </AppBar>

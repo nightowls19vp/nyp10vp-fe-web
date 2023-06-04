@@ -20,6 +20,17 @@ export const ButtonNoti = styled(Button)({
   },
 });
 
+export const ButtonPopperAvatar = styled(ButtonBase)({
+  backgroundColor: Colors.background,
+  color: Colors.black,
+  padding: "10px",
+  borderRadius: "20px",
+  "&:hover": {
+    backgroundColor: Colors.search,
+    borderRadius: "20px",
+  },
+});
+
 export const GroupChat = styled(Button)({
   boxShadow: "none",
   textTransform: "none",

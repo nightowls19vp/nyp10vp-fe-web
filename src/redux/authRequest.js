@@ -100,16 +100,16 @@ export const getValidateGG = async (token, dispatch, navigate, axiosJWT) => {
   }
 }
 
-export const logoutUser = async (token, dispatch, navigate) => {
+export const logoutUser = async (token, dispatch, navigate, axiosJWT) => {
   dispatch(logoutStart());
   try {
-    await apiClient.post("/auth/logout", {
+    await axiosJWT.post("/auth/logout", {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
       },
     });
-    dispatch(logoutSuccess());
+    dispatch(logoutSuccess(null));
     navigate("/login");
   } catch (error) {
     dispatch(logoutFailed());
