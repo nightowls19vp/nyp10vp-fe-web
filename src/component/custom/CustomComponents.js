@@ -27,7 +27,7 @@ export const ButtonPopperAvatar = styled(ButtonBase)({
   borderRadius: "20px",
   "&:hover": {
     backgroundColor: Colors.search,
-    borderRadius: "20px",
+    // borderRadius: "20px",
   },
 });
 

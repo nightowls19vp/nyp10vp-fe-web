@@ -37,8 +37,8 @@ function SidebarLayout({ data, title, selectedID, children }) {
           minHeight: `calc(100vh - ${heightHeader}px - ${heightFooter}px)`,
           display: "flex",
           flexDirection: "row",
-          // justifyContent: { sm: "center", md: "space-between" },
-          justifyContent: "center",
+          justifyContent: { sm: "center", md: "space-between" },
+          // justifyContent: "center",
           alignItems: "stretch",
         }}
       >

@@ -265,14 +265,14 @@ export default function EnhancedTable({ item }) {
   const [valueMethod, setValueMethod] = React.useState("zalo");
   // const [openProgress, setOpenProgress] = React.useState(false);
 
-  // const socket = SockectIO();
-  // useEffect(() => {
-  //   socket.connect();
+  const socket = SockectIO();
+  useEffect(() => {
+    socket.connect();
 
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, [socket]);
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket]);
 
   const handleClose = () => setOpenModal(false);
 
@@ -416,25 +416,6 @@ export default function EnhancedTable({ item }) {
     if (selected.length === 0) {
       setOpenModal(true);
     }
-    // let shoppingCart = [];
-    // for (let ele of item) {
-    //   let formData = {
-    //     package: ele._id,
-    //     quantity: ele.quantity,
-    //     noOfMember: ele.noOfMember,
-    //     duration: ele.duration,
-    //   };
-    //   shoppingCart.push(formData);
-    // }
-    // let formCart = {
-    //   cart: shoppingCart,
-    // };
-    // await updateUserCart(
-    //   user?.data.userInfo._id,
-    //   formCart,
-    //   user?.accessToken,
-    //   axiosJWT
-    // );
 
     let newCart = [];
 
@@ -483,9 +464,9 @@ export default function EnhancedTable({ item }) {
 
     window.open(order.order.order_url);
 
-    // socket.on('zpCallback', data => {
-    //   console.log(data);
-    // });
+    socket.on('zpCallback', data => {
+      console.log(data);
+    });
 
     // await getUserCart(
     //   user?.data.userInfo._id,

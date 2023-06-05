@@ -1,0 +1,84 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createAxios } from "../../http/createInstance.js";
+
+import { Box, Button, Avatar } from "@mui/material";
+
+import * as CustomComponent from "../custom/CustomComponents.js";
+import MenuItemRow from "./MenuItemRow.js";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../redux/authSlice.js";
+import { logoutUser } from "../../redux/authRequest.js";
+
+function HeaderAvatar({ data, user }) {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    let axiosJWT = createAxios(user, dispatch, loginSuccess);
+
+    const image = user?.data.userInfo.avatar ?? "";
+    const [isShown, setIsShown] = useState(false);
+
+    const handleClickProfile = () => {
+        navigate("/profile");
+      };
+    
+      const handleClickLogout = async () => {
+        console.log(user?.accessToken);
+        await logoutUser(user?.accessToken, dispatch, navigate, axiosJWT);
+      };
+    
+      const handleClickLogin = () => {
+        navigate("/login");
+      };
+  return (
+    <>
+      {data.map((data, index) => (
+        <MenuItemRow item={data} key={index} user={user} />
+      ))}
+      <Box sx={{ position: "relative" }}>
+        <Button
+          onMouseEnter={() => setIsShown(true)}
+          onMouseLeave={() => setIsShown(false)}
+        >
+          <Avatar src={image} sizes="35" />
+        </Button>
+        {isShown && (
+          <Box
+            onMouseEnter={() => setIsShown(true)}
+            onMouseLeave={() => setIsShown(false)}
+            sx={{
+              position: "absolute",
+              right: 0,
+              top: "50px",
+              display: "flex",
+              flexDirection: "column",
+              width: "200px",
+              boxShadow: "2px 2px 5px #8c8c8c",
+              borderRadius: "20px",
+            }}
+          >
+            {user ? (
+              <>
+                <CustomComponent.ButtonPopperAvatar
+                  onClick={handleClickProfile}
+                >
+                  Thông tin tài khoản
+                </CustomComponent.ButtonPopperAvatar>
+                <CustomComponent.ButtonPopperAvatar onClick={handleClickLogout}>
+                  Đăng xuất
+                </CustomComponent.ButtonPopperAvatar>
+              </>
+            ) : (
+              <CustomComponent.ButtonPopperAvatar onClick={handleClickLogin}>
+                Đăng nhập
+              </CustomComponent.ButtonPopperAvatar>
+            )}
+          </Box>
+        )}
+      </Box>
+    </>
+  );
+}
+
+export default HeaderAvatar;
