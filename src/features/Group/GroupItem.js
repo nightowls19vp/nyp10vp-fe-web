@@ -4,10 +4,12 @@ import SuperUser from "./SuperUser";
 import SidebarLayout from "../../layout/SidebarLayout";
 import DefaultLayout from "../../layout/DefaultLayout.js";
 import { useSelector } from "react-redux";
+import GroupSpending from "./GroupSpending";
 
 function GroupItem() {
   const groups = useSelector((state) => state?.user?.groupAll);
   const selectedID = useSelector((state) => state?.user?.groupID);
+  const selectedItemID = useSelector((state) => state?.user?.groupItemID);
   return (
     <>
       {selectedID === 0 ? (
@@ -25,10 +27,19 @@ function GroupItem() {
           </Box>
         </DefaultLayout>
       ) : (
-        <SidebarLayout data={groups} title="group" selectedID={selectedID}>
+        <SidebarLayout
+          data={groups}
+          title="group"
+          selectedID={selectedID}
+        >
           {groups[0].child.map((route) =>
             route ? (
               route._id === selectedID ? (
+                // selectedItemID === 0 ? (
+                //   <SuperUser item={route} key={route._id} />
+                // ) : (
+                //   <GroupSpending item={route} key={route._id} />
+                // )
                 <SuperUser item={route} key={route._id} />
               ) : null
             ) : null

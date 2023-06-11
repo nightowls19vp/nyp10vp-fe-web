@@ -4,7 +4,6 @@ const packageSlice = createSlice({
   name: "package",
   initialState: {
     showSidebar: false,
-    groups: [],
     profileID: 1,
     package: [],
     numberCart: 0,

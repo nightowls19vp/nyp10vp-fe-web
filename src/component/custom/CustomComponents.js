@@ -308,7 +308,7 @@ export const ModalBox = styled(Box)(({ theme }) => ({
 }));
 
 export const PrettoSlider = styled(Slider)({
-  color: "#52af77",
+  color: "#e68600",
   height: 8,
   "& .MuiSlider-track": {
     border: "none",
@@ -333,7 +333,7 @@ export const PrettoSlider = styled(Slider)({
     width: 32,
     height: 32,
     borderRadius: "50% 50% 50% 0",
-    backgroundColor: "#52af77",
+    backgroundColor: "#e68600",
     transformOrigin: "bottom left",
     transform: "translate(50%, -100%) rotate(-45deg) scale(0)",
     "&:before": { display: "none" },

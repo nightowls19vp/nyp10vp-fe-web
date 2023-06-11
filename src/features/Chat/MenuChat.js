@@ -7,6 +7,7 @@ import "../../assets/css/Chat.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 
 function MenuChat() {
+  
   return (
     <Stack spacing={2}>
       <Typography variant="h5" gutterBottom fontWeight={600}>
@@ -22,7 +23,7 @@ function MenuChat() {
       <Box sx={{ width: "100%" }}>
         <CustomComponent.GroupChat fullWidth>
           <Box className="avatar-menu-chat">
-            <Avatar />
+            <Avatar src="" />
             <Typography
               variant="body1"
               sx={{ paddingLeft: "5px", color: Colors.text }}

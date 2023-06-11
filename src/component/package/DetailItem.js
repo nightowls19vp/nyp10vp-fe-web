@@ -39,8 +39,8 @@ function DetailItem({ item }) {
   // const [arrowRightMem, setArrowRightMem] = useState(false);
 
   const [duration, setDuration] = useState(item.duration);
-  const [arrowLeftDura, setArrowLeftDura] = useState(true);
-  const [arrowRightDura, setArrowRightDura] = useState(false);
+  // const [arrowLeftDura, setArrowLeftDura] = useState(true);
+  // const [arrowRightDura, setArrowRightDura] = useState(false);
 
   const [money, setMoney] = useState(item.price);
 
@@ -54,6 +54,12 @@ function DetailItem({ item }) {
     } else if (member > 15) {
       setMember(15);
     }
+
+    if (duration < item.duration) {
+      setDuration(item.duration);
+    } else if (duration > 10) {
+      setDuration(10);
+    }
   };
 
   // const handleArrowLeftMem = () => {
@@ -63,12 +69,12 @@ function DetailItem({ item }) {
   //   setMember(member + 1);
   // };
 
-  const handleArrowLeftDura = () => {
-    setDuration(duration - 1);
-  };
-  const handleArrowRightDura = () => {
-    setDuration(duration + 1);
-  };
+  // const handleArrowLeftDura = () => {
+  //   setDuration(duration - 1);
+  // };
+  // const handleArrowRightDura = () => {
+  //   setDuration(duration + 1);
+  // };
 
   const handleButtonAdd = async (event, item) => {
     let day = new Date();
@@ -252,17 +258,17 @@ function DetailItem({ item }) {
     //   setArrowRightMem(false);
     // }
 
-    if (duration <= item.duration) {
-      setArrowLeftDura(true);
-    } else {
-      setArrowLeftDura(false);
-    }
+    // if (duration <= item.duration) {
+    //   setArrowLeftDura(true);
+    // } else {
+    //   setArrowLeftDura(false);
+    // }
 
-    if (duration > 100) {
-      setArrowRightDura(true);
-    } else {
-      setArrowRightDura(false);
-    }
+    // if (duration > 100) {
+    //   setArrowRightDura(true);
+    // } else {
+    //   setArrowRightDura(false);
+    // }
 
     if (duration >= 12) {
       setMoney(
@@ -271,14 +277,7 @@ function DetailItem({ item }) {
     } else {
       setMoney(item.price + (member - 2) * duration * (item.coefficient ?? 0));
     }
-  }, [
-    duration,
-    item.coefficient,
-    item.duration,
-    item.noOfMember,
-    item.price,
-    member,
-  ]);
+  }, [duration, item.coefficient, item.price, member]);
 
   return (
     <Card
@@ -356,7 +355,7 @@ function DetailItem({ item }) {
               />
               <Input
                 size="small"
-                sx={{ width: '40px', align: 'center'}}
+                sx={{ width: '40px', paddingLeft: '12px' }}
                 value={member}
                 onBlur={handleBlur}
                 onChange={handleInputChange}
@@ -379,7 +378,7 @@ function DetailItem({ item }) {
             </Box>
           ) : (
             <Box className="item">
-              <IconButton
+              {/* <IconButton
                 disabled={arrowLeftDura}
                 onClick={handleArrowLeftDura}
               >
@@ -399,7 +398,22 @@ function DetailItem({ item }) {
                   color={arrowRightDura ? null : Colors.textPrimary}
                   size={30}
                 />
-              </IconButton>
+              </IconButton> */}
+              <CustomComponents.PrettoSlider
+                valueLabelDisplay="auto"
+                aria-label="pretto slider"
+                min={item.duration}
+                max={10}
+                value={duration}
+                onChange={(event) => setDuration(event.target.value)}
+              />
+              <Input
+                size="small"
+                sx={{ width: '40px', paddingLeft: '12px'}}
+                value={duration}
+                onBlur={handleBlur}
+                onChange={handleInputChange}
+              />
             </Box>
           )}
         </Stack>

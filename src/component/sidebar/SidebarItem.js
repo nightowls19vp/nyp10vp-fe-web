@@ -12,7 +12,7 @@ import {
   updateProfileId,
   updateShowSidebar,
 } from "../../redux/packageSlice";
-import { updateGroupId } from "../../redux/userSlice";
+import { updateGroupId, updateGroupItemId } from "../../redux/userSlice";
 
 function SidebarItem({ item, title, selectedID }) {
   const selectedIdx = selectedID;
@@ -23,6 +23,7 @@ function SidebarItem({ item, title, selectedID }) {
     if (title === "profile") {
       dispacth(updateProfileId(ID));
     } else if (title === "group") {
+      // dispacth(updateGroupItemId(ID));
       dispacth(updateGroupId(ID));
     }
     dispacth(updateShowSidebar(false));

@@ -32,7 +32,7 @@ function MenuItemRow({ item, user }) {
         <Badge
           badgeContent={numberCart}
           color="primary"
-          invisible={item.title === "Shopping" && user ? false : true}
+          invisible={item.name === "Shopping" && user ? false : true}
         >
           {privateRoutes.map(({ path }) => path).includes(item.route) ? (
             <NavLink to={user ? item.route : configRoutes.login}>

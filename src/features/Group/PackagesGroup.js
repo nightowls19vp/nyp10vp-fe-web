@@ -67,8 +67,8 @@ function PackagesGroup({ data }) {
     let formData = {
       grId: data._id,
       emails: selectedPeople,
-      feUrl: "http://localhost:8080/pkg-mgmt/gr/join"
-    }
+      feUrl: "http://localhost:8080/pkg-mgmt/gr/join",
+    };
     console.log(formData);
     const res = await usersInvitePeople(user?.accessToken, formData, axiosJWT);
 
@@ -76,7 +76,7 @@ function PackagesGroup({ data }) {
     console.log(res);
 
     // await getGroupByUserId(user?.accessToken, dispatch, axiosJWT);
-  }
+  };
 
   // const [linkInvite, setLinkInvite] = useState("");
 
@@ -89,7 +89,13 @@ function PackagesGroup({ data }) {
   return (
     <Stack spacing={3}>
       {data.packages.map((route, index) =>
-        route ? <PackageGroup item={route} id={data._id} key={index} /> : null
+        route ? (
+          <PackageGroup
+            item={route}
+            data={data}
+            key={index}
+          />
+        ) : null
       )}
       <Stack
         spacing={1}
@@ -197,7 +203,9 @@ function PackagesGroup({ data }) {
               )}
 
               {selectedPeople.length > 0 ? (
-                <CustomComponent.Button1 onClick={handleButtonInvitePeople}> Mời người </CustomComponent.Button1>
+                <CustomComponent.Button1 onClick={handleButtonInvitePeople}>
+                  Mời người
+                </CustomComponent.Button1>
               ) : null}
             </Stack>
           </DialogContent>

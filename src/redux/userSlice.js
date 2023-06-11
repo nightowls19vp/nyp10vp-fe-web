@@ -9,6 +9,9 @@ const userSlice = createSlice({
         mgsUser: null,
         groupAll: null,
         groupID: 0,
+        groupItemID: 0,
+        channel: null,
+        channelID: 0, 
     }, 
     reducers: {
         getUserInforStart: (state) => {
@@ -29,6 +32,15 @@ const userSlice = createSlice({
         updateGroupId: (state, action) => {
             state.groupID = action.payload;
         },
+        updateGroupItemId: (state, action) => {
+            state.groupItemID = action.payload;
+        },
+        getChannels: (state, action) => {
+            state.channel = action.payload;
+        },
+        updateChannelID: (state, action) => {
+            state.channelID = action.payload;
+        }
     }
 });
 
@@ -38,6 +50,9 @@ export const {
    getUserInforFailed,
    getGroupAll,
    updateGroupId,
+   updateGroupItemId,
+   getChannels,
+   updateChannelID,
 } = userSlice.actions;
 
 export default userSlice.reducer;

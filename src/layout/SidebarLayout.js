@@ -60,7 +60,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
             flexDirection: "column",
             justifyContent: "space-between",
             alignItems: "stretch",
-            paddingX: { sx: 0, sm: "15px"},
+            paddingX: { sx: 0, sm: "15px", md: "20px", lg: "30px"},
           }}
           paddingY={5}
         >

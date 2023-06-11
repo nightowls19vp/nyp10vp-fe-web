@@ -11,9 +11,20 @@ import { ExpandLessOutlined, ExpandMoreOutlined } from "@mui/icons-material";
 
 import SidebarItem from "./SidebarItem";
 import { Colors } from "../../config/Colors";
+import { useDispatch } from "react-redux";
+import { updateGroupId } from "../../redux/userSlice";
 
 function SidebarItemCollapse({ item, title, selectedID }) {
+
+  const dispacth = useDispatch();
   const [open, setOpen] = useState(item.status);
+
+  const handleButtonStatus = () => {
+    if (title === "group") {
+      dispacth(updateGroupId(item._id));
+      setOpen(!open);
+    }
+  }
   
   return (
     <>
@@ -24,16 +35,8 @@ function SidebarItemCollapse({ item, title, selectedID }) {
           },
         }}
         disabled={item.child?.length > 0 ? false : true}
-        onClick={() => setOpen(!open)}
+        onClick={handleButtonStatus}
       >
-        {/* <ListItemIcon
-          sx={{
-            color: open ? Colors.textPrimary : Colors.text,
-            fontWeight: open ? 600 : null,
-          }}
-        >
-          {item.icon && item.icon}
-        </ListItemIcon> */}
         <ListItemText>
           <Typography
             sx={{
@@ -41,7 +44,7 @@ function SidebarItemCollapse({ item, title, selectedID }) {
               fontWeight: open ? 600 : null,
             }}
           >
-            {item.title}
+            {item.name}
           </Typography>
         </ListItemText>
         {open ? (

@@ -43,7 +43,6 @@ function SuperUser({ item }) {
   const inputRef = useRef();
 
   const user = useSelector((state) => state?.auth.login?.currentUser);
-  const userGroup = useSelector((state) => state?.user?.groupSuperUser);
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
@@ -183,12 +182,12 @@ function SuperUser({ item }) {
           >
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab
-                label="Item One"
+                label="Thông tin"
                 value="1"
                 sx={{ marginX: { xs: "0px", sm: "0px", md: "40px" } }}
               />
               <Tab
-                label="Item Two"
+                label="Khác"
                 value="2"
                 sx={{ marginX: { xs: "0px", sm: "0px", md: "40px" } }}
               />

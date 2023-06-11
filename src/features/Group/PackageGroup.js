@@ -1,9 +1,10 @@
 import React from "react";
+
 import { Box, Button, Stack, Typography } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
 import { createAxios } from "../../http/createInstance";
-import { updateActivatePackage } from "../../redux/userRequest";
+import { updateActivatePackage, updateGroupChannel } from "../../redux/userRequest";
 import { loginSuccess } from "../../redux/authSlice";
 
 import "../../assets/css/Group.scss";
@@ -11,29 +12,110 @@ import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 import { useNavigate } from "react-router-dom";
 
-function PackageGroup({ item, id }) {
+import SendbirdChat from "@sendbird/chat";
+import {
+  GroupChannelModule,
+  GroupChannelFilter,
+  GroupChannelListOrder,
+  MessageFilter,
+  MessageCollectionInitPolicy,
+} from "@sendbird/chat/groupChannel";
+import { SENDBIRD_INFO } from "../constants/constants";
+let sb;
+
+function PackageGroup({ item, data }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const user = useSelector((state) => state?.auth.login?.currentUser);
 
-  // const [btn, setBtn] = useState(
-  //   item.status === "Not activated" ? true : false
-  // );
-
   const btn = item.status === "Not activated" ? true : false;
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
+  let groupChannelMembers = [];
+
+  const onError = (error) => {
+    console.log(error);
+  };
+
+  const setupUser = async () => {
+    const userIdInputValue = data.members[0].user.user._id;
+    const userNameInputValue = data.members[0].user.user.name;
+    const userAvatarInputValue = data.members[0].user.user.avatar;
+
+    groupChannelMembers.push(userIdInputValue);
+
+    const sendbirdChat = await SendbirdChat.init({
+      appId: SENDBIRD_INFO.appId,
+      localCacheEnabled: true,
+      modules: [new GroupChannelModule()],
+    });
+
+    await sendbirdChat.connect(userIdInputValue);
+    await sendbirdChat.setChannelInvitationPreference(true);
+
+    const userUpdateParams = {};
+    userUpdateParams.nickname = userNameInputValue;
+    userUpdateParams.userId = userIdInputValue;
+    userUpdateParams.plainProfileUrl = userAvatarInputValue;
+    await sendbirdChat.updateCurrentUserInfo(userUpdateParams);
+
+    sb = sendbirdChat;
+  };
+
+  const createChannel = async (channelName, channelAvatar, userIdsToInvite) => {
+    try {
+      const groupChannelParams = {};
+      groupChannelParams.invitedUserIds = userIdsToInvite;
+      groupChannelParams.name = channelName;
+      groupChannelParams.coverUrl = channelAvatar;
+      groupChannelParams.operatorUserIds = userIdsToInvite;
+      const groupChannel = await sb.groupChannel.createChannel(
+        groupChannelParams
+      );
+      return [groupChannel, null];
+    } catch (error) {
+      return [null, error];
+    }
+  };
+
+  const handleCreateChannel = async () => {
+    const [groupChannel, error] = await createChannel(
+      data.name,
+      data.avatar,
+      groupChannelMembers
+    );
+    
+    console.log("vy2", groupChannel);
+
+    let formData = {
+      channel: groupChannel.url,
+    };
+    await updateGroupChannel(data._id, user?.accessToken, formData, dispatch, axiosJWT);
+    if (error) {
+      return onError(error);
+    }
+  };
+
   const handleActivatePackage = async () => {
-    await updateActivatePackage(id, user?.accessToken, item, dispatch, axiosJWT);
+    const res = await updateActivatePackage(
+      data._id,
+      user?.accessToken,
+      item,
+      dispatch,
+      axiosJWT
+    );
+
+    if (res?.statusCode === 200) {
+      await setupUser();
+      await handleCreateChannel();
+    }
   };
 
   const handleRenewGroup = async () => {
-
-    navigate(`/group-package?groupID=${id}`);
-
-  }
+    navigate(`/group-package?groupID=${data._id}`);
+  };
 
   return (
     <Box>
@@ -63,13 +145,16 @@ function PackageGroup({ item, id }) {
               <Button
                 variant="contained"
                 color="success"
-                sx={{ width: "140px", borderRadius: '10px' }}
+                sx={{ width: "140px", borderRadius: "10px" }}
                 onClick={handleActivatePackage}
               >
                 Kích hoạt gói
               </Button>
             ) : (
-              <CustomComponent.Button2 sx={{ width: "140px" }} onClick={handleRenewGroup}>
+              <CustomComponent.Button2
+                sx={{ width: "140px" }}
+                onClick={handleRenewGroup}
+              >
                 Gia hạn gói
               </CustomComponent.Button2>
             )}
@@ -88,7 +173,7 @@ function PackageGroup({ item, id }) {
             {item.package.name}
           </Typography>
         </Box>
-        <Box className="package-group" >
+        <Box className="package-group">
           <Typography
             width={"120px"}
             variant="subtitle2"
@@ -98,7 +183,7 @@ function PackageGroup({ item, id }) {
             Thời hạn:
           </Typography>
           <Typography fontSize={16} gutterBottom>
-            {item.package.duration}
+            {item.package.duration*30} ngày
           </Typography>
         </Box>
         <Box className="package-group" sx={{ paddingBottom: "10px" }}>

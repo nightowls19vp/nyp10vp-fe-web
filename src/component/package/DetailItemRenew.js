@@ -15,10 +15,12 @@ import {
   FormLabel,
   FormControl,
   RadioGroup,
+  Input,
 } from "@mui/material";
 import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
 import { createAxios } from "../../http/createInstance.js";
+import SockectIO from "../../http/socket.js";
 
 import { Colors } from "../../config/Colors";
 import * as CustomComponents from "../custom/CustomComponents.js";
@@ -54,32 +56,32 @@ function DetailItemRenew({ item, grpId }) {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [member, setMember] = useState(item.noOfMember);
-  const [arrowLeftMem, setArrowLeftMem] = useState(true);
-  const [arrowRightMem, setArrowRightMem] = useState(false);
 
   const [duration, setDuration] = useState(item.duration);
-  const [arrowLeftDura, setArrowLeftDura] = useState(true);
-  const [arrowRightDura, setArrowRightDura] = useState(false);
 
   const [money, setMoney] = useState(item.price);
-  const [valueMethod, setValueMethod] = useState('zalo');
+  const [valueMethod, setValueMethod] = useState("zalo");
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleArrowLeftMem = () => {
-    setMember(member - 1);
-  };
-  const handleArrowRightMem = () => {
-    setMember(member + 1);
+  const handleInputChange = (event) => {
+    setMember(event.target.value === "" ? "" : Number(event.target.value));
   };
 
-  const handleArrowLeftDura = () => {
-    setDuration(duration - 1);
-  };
-  const handleArrowRightDura = () => {
-    setDuration(duration + 1);
+  const handleBlur = () => {
+    if (member < item.noOfMember) {
+      setMember(item.noOfMember);
+    } else if (member > 15) {
+      setMember(15);
+    }
+
+    if (duration < item.duration) {
+      setDuration(item.duration);
+    } else if (duration > 10) {
+      setDuration(10);
+    }
   };
 
   const handleChange = (event) => {
@@ -95,25 +97,25 @@ function DetailItemRenew({ item, grpId }) {
 
     let methodValue = {};
 
-    if (valueMethod === 'zalo') {
+    if (valueMethod === "zalo") {
       methodValue = {
         type: "EWALLET",
-        bank_code: "ZALOPAY"
-      }
+        bank_code: "ZALOPAY",
+      };
     } else {
       methodValue = {
         type: "EWALLET",
-        bank_code: "VNPAY"
-      }
+        bank_code: "VNPAY",
+      };
     }
 
     let data = {
       cart: formData,
-      method: methodValue
+      method: methodValue,
     };
 
     console.log(data);
-    
+
     const res = await userRenewGroup(
       grpId,
       user?.accessToken,
@@ -124,65 +126,43 @@ function DetailItemRenew({ item, grpId }) {
 
     console.log(res);
 
-    window.open(order.order.order_url);
+    if (res?.statusCode === 200) {
+      window.open(order.order.order_url);
 
-    if (res.statusCode === 200) {
-      const interValCheck = setInterval(async () => {
-        await getInformationUser(
-          user?.data.userInfo._id,
-          user?.accessToken,
-          dispatch,
-          axiosJWT
-        );
+      async function getGroup() {
+        await getGroupByUserId(user?.accessToken, dispatch, axiosJWT);
+      }
 
-        console.log(userInfo.user.trxHist, order.trans._id);
+      function stopClock() {
+        console.log("vyyyyyy");
+        clearTimeout(timeoutID);
+        getGroup();
+      }
 
-        if (userInfo.user.trxHist.includes(order.trans._id)) {
-          console.log(order.trans._id, "exists in trxHist");
+      const timeoutID = setTimeout(stopClock, 3 * 60 * 1000);
 
-          clearInterval(interValCheck);
+      socket.on("zpCallback", (data) => {
+        if (data) {
+          console.log("vy", data);
+          getGroup();
+          clearTimeout(timeoutID);
         }
-      }, 10 * 1000);
-
-      setTimeout(() => {
-        clearInterval(interValCheck);
-      }, 3 * 60 * 1000);
-
-      await getGroupByUserId(
-        user?.accessToken,
-        dispatch,
-        axiosJWT
-      );
+      });
 
       navigate("/group");
     }
   };
 
+  const socket = SockectIO();
   useEffect(() => {
-    if (member <= item.noOfMember) {
-      setArrowLeftMem(true);
-    } else {
-      setArrowLeftMem(false);
-    }
+    socket.connect();
 
-    if (member > 100) {
-      setArrowRightMem(true);
-    } else {
-      setArrowRightMem(false);
-    }
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket]);
 
-    if (duration <= item.duration) {
-      setArrowLeftDura(true);
-    } else {
-      setArrowLeftDura(false);
-    }
-
-    if (duration > 100) {
-      setArrowRightDura(true);
-    } else {
-      setArrowRightDura(false);
-    }
-
+  useEffect(() => {
     if (duration >= 12) {
       setMoney(
         (item.price + (member - 2) * duration * (item.coefficient ?? 0)) * 0.7
@@ -190,14 +170,7 @@ function DetailItemRenew({ item, grpId }) {
     } else {
       setMoney(item.price + (member - 2) * duration * (item.coefficient ?? 0));
     }
-  }, [
-    duration,
-    item.coefficient,
-    item.duration,
-    item.noOfMember,
-    item.price,
-    member,
-  ]);
+  }, [duration, item.coefficient, item.price, member]);
 
   return (
     <>
@@ -247,27 +220,21 @@ function DetailItemRenew({ item, grpId }) {
               </Box>
             ) : (
               <Box className="item">
-                <IconButton
-                  disabled={arrowLeftMem}
-                  onClick={handleArrowLeftMem}
-                >
-                  <CiSquareMinus
-                    color={arrowLeftMem ? null : Colors.textPrimary}
-                    size={30}
-                  />
-                </IconButton>
-                <Typography variant="subtitle1" fontSize={18}>
-                  {member}
-                </Typography>
-                <IconButton
-                  disabled={arrowRightMem}
-                  onClick={handleArrowRightMem}
-                >
-                  <CiSquarePlus
-                    color={arrowRightMem ? null : Colors.textPrimary}
-                    size={30}
-                  />
-                </IconButton>
+                <CustomComponents.PrettoSlider
+                  valueLabelDisplay="auto"
+                  aria-label="pretto slider"
+                  min={item.noOfMember}
+                  max={15}
+                  value={member}
+                  onChange={(event) => setMember(event.target.value)}
+                />
+                <Input
+                  size="small"
+                  sx={{ width: "40px", paddingLeft: "12px" }}
+                  value={member}
+                  onBlur={handleBlur}
+                  onChange={handleInputChange}
+                />
               </Box>
             )}
           </Stack>
@@ -286,27 +253,21 @@ function DetailItemRenew({ item, grpId }) {
               </Box>
             ) : (
               <Box className="item">
-                <IconButton
-                  disabled={arrowLeftDura}
-                  onClick={handleArrowLeftDura}
-                >
-                  <CiSquareMinus
-                    color={arrowLeftDura ? null : Colors.textPrimary}
-                    size={30}
-                  />
-                </IconButton>
-                <Typography variant="subtitle1" fontSize={18}>
-                  {duration}
-                </Typography>
-                <IconButton
-                  disabled={arrowRightDura}
-                  onClick={handleArrowRightDura}
-                >
-                  <CiSquarePlus
-                    color={arrowRightDura ? null : Colors.textPrimary}
-                    size={30}
-                  />
-                </IconButton>
+                <CustomComponents.PrettoSlider
+                  valueLabelDisplay="auto"
+                  aria-label="pretto slider"
+                  min={item.duration}
+                  max={10}
+                  value={duration}
+                  onChange={(event) => setDuration(event.target.value)}
+                />
+                <Input
+                  size="small"
+                  sx={{ width: "40px", paddingLeft: "12px" }}
+                  value={duration}
+                  onBlur={handleBlur}
+                  onChange={handleInputChange}
+                />
               </Box>
             )}
           </Stack>
@@ -329,7 +290,11 @@ function DetailItemRenew({ item, grpId }) {
             paddingBottom: "20px",
           }}
         >
-          <CustomComponents.Button1 fullWidth onClick={handleOpen} sx={{ marginX: '7px'}}>
+          <CustomComponents.Button1
+            fullWidth
+            onClick={handleOpen}
+            sx={{ marginX: "7px" }}
+          >
             Mua gói
           </CustomComponents.Button1>
         </CardActions>

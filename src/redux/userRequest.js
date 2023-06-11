@@ -5,6 +5,7 @@ import {
   getUserInforFailed,
   getUserInforStart,
   getUserInforSuccess,
+  getChannels,
   updateGroupId,
 } from "./userSlice";
 
@@ -151,26 +152,42 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
     });
 
     if (resSU?.data.groups.length > 0 || resU?.data.groups.length > 0) {
-      
       let dataGroup = [
         {
-          title: "Group SUPER USER",
+          name: "Group SUPER USER",
           status: true,
           child: [],
         },
         {
-          title: "Group USER",
+          name: "Group USER",
           status: false,
           child: [],
         },
       ];
+
+      // let childGroupItem = [
+      //   {
+      //     _id: 0,
+      //     name: "Thông tin nhóm"
+      //   },
+      //   {
+      //     _id: 1,
+      //     name: "Quản lý chi tiêu"
+      //   },
+      // ];
+
       if (resSU?.data.groups.length > 0 && resU?.data.groups.length > 0) {
         for (let item of resSU?.data.groups) {
+          // item.child = childGroupItem;
+          // item.status = false;
           dataGroup[0].child.push(item);
         }
+        // dataGroup[0].child[0].status = true;
         dispatch(updateGroupId(dataGroup[0].child[0]._id));
 
         for (let item of resU?.data.groups) {
+          // item.child = childGroupItem;
+          // item.status = false;
           dataGroup[1].child.push(item);
         }
       } else if (
@@ -178,13 +195,20 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
         resU?.data.groups.length === 0
       ) {
         for (let item of resSU?.data.groups) {
+          // item.child = childGroupItem;
+          // item.status = false;
           dataGroup[0].child.push(item);
         }
+        // dataGroup[0].child[0].status = true;
         dispatch(updateGroupId(dataGroup[0].child[0]._id));
+
       } else {
         for (let item of resU?.data.groups) {
+          // item.child = childGroupItem;
+          // item.status = false;
           dataGroup[1].child.push(item);
         }
+        // dataGroup[1].child[0].status = true;
         dispatch(updateGroupId(dataGroup[1].child[0]._id));
       }
 
@@ -275,7 +299,7 @@ export const updateGroupName = async (id, token, name, dispatch, axiosJWT) => {
       },
     });
 
-    await getGroupByUserId(token, "Super User", dispatch, axiosJWT);
+    await getGroupByUserId(token, dispatch, axiosJWT);
   } catch (error) {
     console.log(error);
   }
@@ -289,7 +313,7 @@ export const updateActivatePackage = async (
   axiosJWT
 ) => {
   try {
-    await axiosJWT.post(`/pkg-mgmt/gr/${id}/activate`, data, {
+    const res = await axiosJWT.post(`/pkg-mgmt/gr/${id}/activate`, data, {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
@@ -299,6 +323,7 @@ export const updateActivatePackage = async (
     await getGroupByUserId(token, dispatch, axiosJWT);
 
     dispatch(updateGroupId(id));
+    return res?.data;
   } catch (error) {
     console.log(error);
   }
@@ -314,6 +339,39 @@ export const userRenewGroup = async (grId, token, dispatch, data, axiosJWT) => {
     });
     dispatch(setOrder(res?.data));
     return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateGroupChannel = async (grId, token, data, dispatch, axiosJWT) => {
+  try {
+    await axiosJWT.post(`/pkg-mgmt/gr/${grId}/channel`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    
+    await getGroupByUserId(token, dispatch, axiosJWT);
+
+    await getGroupChannel(token, dispatch, axiosJWT);
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getGroupChannel = async (token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get("/pkg-mgmt/gr/user_id/channel", {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    dispatch(getChannels(res?.data.channels));
   } catch (error) {
     console.log(error);
   }

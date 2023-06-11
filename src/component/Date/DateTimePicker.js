@@ -10,7 +10,7 @@ export default function DateTimePicker({ valueDay, handleDateTimePicker }) {
   );
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDayjs} >
       <DatePicker
         slotProps={{ textField: { size: "small" } }}
         value={dateTime}
@@ -18,6 +18,7 @@ export default function DateTimePicker({ valueDay, handleDateTimePicker }) {
           setDateTime(newValue);
           handleDateTimePicker(newValue);
         }}
+        sx={{ width: "100%" }}
       />
     </LocalizationProvider>
   );

@@ -6,7 +6,6 @@ import {
   TextField,
   Typography,
   Alert,
-  Paper,
   AlertTitle,
 } from "@mui/material";
 import { AiFillCamera } from "react-icons/ai";
@@ -279,8 +278,6 @@ function PersonalInformation() {
 
         <Box
           flex={2}
-          paddingX={"10px"}
-          bgcolor={Colors.search}
           sx={{
             paddingX: "10px",
             bgcolor: Colors.search,

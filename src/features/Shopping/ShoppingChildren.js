@@ -462,52 +462,33 @@ export default function EnhancedTable({ item }) {
 
     const res = await userCheckout(user?.accessToken, dispatch, data, axiosJWT);
 
-    window.open(order.order.order_url);
+    if (res?.statusCode === 200) {
+      window.open(order.order.order_url);
 
-    socket.on('zpCallback', data => {
-      console.log(data);
-    });
-
-    // await getUserCart(
-    //   user?.data.userInfo._id,
-    //   user?.accessToken,
-    //   dispatch,
-    //   axiosJWT
-    // );
-
-    // socket.on('zpCallback', data => {
-    //   console.log("by");
-    //   console.log(data);
-    // })
-
-    if (res.statusCode === 200) {
-      const interValCheck = setInterval( async () => {
-        await getInformationUser(
+      async function getCart() {
+        await getUserCart(
           user?.data.userInfo._id,
           user?.accessToken,
           dispatch,
           axiosJWT
         );
+      }
 
-        console.log(userInfo?.user.trxHist, order.trans._id);
+      function stopClock() {
+        console.log("vyyyyyy");
+        clearTimeout(timeoutID);
+        getCart();
+      }
 
-        if (userInfo?.user.trxHist.includes(order.trans._id)) {
-          console.log(order.trans._id, "exists in trxHist");
+      const timeoutID = setTimeout(stopClock, 3 * 60 * 1000);
 
-          clearInterval(interValCheck);
+      socket.on("zpCallback", (data) => {
+        if (data) {
+          console.log("vy", data);
+          getCart();
+          clearTimeout(timeoutID);
         }
-      }, 10 * 1000);
-
-      setTimeout(() => {
-        clearInterval(interValCheck);
-      }, 3 * 60 * 1000);
-
-      await getUserCart(
-        user?.data.userInfo._id,
-        user?.accessToken,
-        dispatch,
-        axiosJWT
-      );
+      });
     }
   };
 
