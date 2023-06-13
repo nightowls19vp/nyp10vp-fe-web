@@ -66,7 +66,7 @@ function MyPackage() {
 
       for (let group of groupsSuperUser) {
         let i = 0;
-        for (let pkg of group.packages) {
+        for (let pkg of group.child[0].group.packages) {
           let formData = {
             _id: group._id + i,
             name: pkg.package.name,

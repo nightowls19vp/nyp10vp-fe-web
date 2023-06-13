@@ -20,10 +20,10 @@ function SidebarItemCollapse({ item, title, selectedID }) {
   const [open, setOpen] = useState(item.status);
 
   const handleButtonStatus = () => {
-    if (title === "group") {
+    if (title === "group" && open === false) {
       dispacth(updateGroupId(item._id));
-      setOpen(!open);
     }
+    setOpen(!open);
   }
   
   return (

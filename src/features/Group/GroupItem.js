@@ -30,17 +30,16 @@ function GroupItem() {
         <SidebarLayout
           data={groups}
           title="group"
-          selectedID={selectedID}
+          selectedID={selectedItemID}
         >
           {groups[0].child.map((route) =>
             route ? (
               route._id === selectedID ? (
-                // selectedItemID === 0 ? (
-                //   <SuperUser item={route} key={route._id} />
-                // ) : (
-                //   <GroupSpending item={route} key={route._id} />
-                // )
-                <SuperUser item={route} key={route._id} />
+                selectedItemID === 0 ? (
+                  <SuperUser item={route.child[0].group} key={route._id} />
+                ) : (
+                  <GroupSpending item={route.child[1].group} key={route._id} />
+                )
               ) : null
             ) : null
           )}

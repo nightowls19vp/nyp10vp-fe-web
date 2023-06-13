@@ -151,68 +151,145 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
       },
     });
 
+    
+
     if (resSU?.data.groups.length > 0 || resU?.data.groups.length > 0) {
       let dataGroup = [
         {
           name: "Group SUPER USER",
+          _id: 0,
           status: true,
           child: [],
         },
         {
           name: "Group USER",
+          _id: 1,
           status: false,
           child: [],
         },
       ];
 
-      // let childGroupItem = [
-      //   {
-      //     _id: 0,
-      //     name: "Thông tin nhóm"
-      //   },
-      //   {
-      //     _id: 1,
-      //     name: "Quản lý chi tiêu"
-      //   },
-      // ];
-
       if (resSU?.data.groups.length > 0 && resU?.data.groups.length > 0) {
         for (let item of resSU?.data.groups) {
-          // item.child = childGroupItem;
-          // item.status = false;
-          dataGroup[0].child.push(item);
+          let formData = {
+            _id: item._id,
+            name: item.name,
+            status: false,
+            child: [],
+          };
+
+          let childGroupItem = [
+            {
+              _id: 0,
+              name: "Thông tin nhóm",
+              group: item,
+            },
+            {
+              _id: 1,
+              name: "Quản lý chi tiêu",
+              group: item,
+            },
+          ];
+
+          for (let gr of childGroupItem) {
+            formData.child.push(gr);
+          }
+          dataGroup[0].child.push(formData);
         }
-        // dataGroup[0].child[0].status = true;
+        dataGroup[0].child[0].status = true;
         dispatch(updateGroupId(dataGroup[0].child[0]._id));
 
         for (let item of resU?.data.groups) {
-          // item.child = childGroupItem;
-          // item.status = false;
-          dataGroup[1].child.push(item);
+          let formData = {
+            _id: item._id,
+            name: item.name,
+            status: false,
+            child: [],
+          };
+
+          let childGroupItem = [
+            {
+              _id: 0,
+              name: "Thông tin nhóm",
+              group: item,
+            },
+            {
+              _id: 1,
+              name: "Quản lý chi tiêu",
+              group: item,
+            },
+          ];
+
+          for (let gr of childGroupItem) {
+            formData.child.push(gr);
+          }
+          dataGroup[1].child.push(formData);
         }
       } else if (
         resSU?.data.groups.length > 0 &&
         resU?.data.groups.length === 0
       ) {
         for (let item of resSU?.data.groups) {
-          // item.child = childGroupItem;
-          // item.status = false;
-          dataGroup[0].child.push(item);
-        }
-        // dataGroup[0].child[0].status = true;
-        dispatch(updateGroupId(dataGroup[0].child[0]._id));
+          let formData = {
+            _id: item._id,
+            name: item.name,
+            status: false,
+            child: [],
+          };
 
+          let childGroupItem = [
+            {
+              _id: 0,
+              name: "Thông tin nhóm",
+              group: item,
+            },
+            {
+              _id: 1,
+              name: "Quản lý chi tiêu",
+              group: item,
+            },
+          ];
+
+          for (let gr of childGroupItem) {
+            formData.child.push(gr);
+          }
+          dataGroup[0].child.push(formData);
+        }
+        dataGroup[0].child[0].status = true;
+        dispatch(updateGroupId(dataGroup[0].child[0]._id));
       } else {
         for (let item of resU?.data.groups) {
-          // item.child = childGroupItem;
-          // item.status = false;
-          dataGroup[1].child.push(item);
+          let formData = {
+            _id: item._id,
+            name: item.name,
+            status: false,
+            child: [],
+          };
+
+          let childGroupItem = [
+            {
+              _id: 0,
+              name: "Thông tin nhóm",
+              group: item,
+            },
+            {
+              _id: 1,
+              name: "Quản lý chi tiêu",
+              group: item,
+            },
+          ];
+
+          for (let gr of childGroupItem) {
+            formData.child.push(gr);
+          }
+          dataGroup[1].child.push(formData);
         }
-        // dataGroup[1].child[0].status = true;
+        dataGroup[1].child[0].status = true;
         dispatch(updateGroupId(dataGroup[1].child[0]._id));
       }
 
       dispatch(getGroupAll(dataGroup));
+
     } else {
       dispatch(updateGroupId(0));
 
@@ -344,7 +421,13 @@ export const userRenewGroup = async (grId, token, dispatch, data, axiosJWT) => {
   }
 };
 
-export const updateGroupChannel = async (grId, token, data, dispatch, axiosJWT) => {
+export const updateGroupChannel = async (
+  grId,
+  token,
+  data,
+  dispatch,
+  axiosJWT
+) => {
   try {
     await axiosJWT.post(`/pkg-mgmt/gr/${grId}/channel`, data, {
       headers: {
@@ -352,11 +435,10 @@ export const updateGroupChannel = async (grId, token, data, dispatch, axiosJWT) 
         Authorization: `Bearer ${token}`,
       },
     });
-    
+
     await getGroupByUserId(token, dispatch, axiosJWT);
 
     await getGroupChannel(token, dispatch, axiosJWT);
-
   } catch (error) {
     console.log(error);
   }

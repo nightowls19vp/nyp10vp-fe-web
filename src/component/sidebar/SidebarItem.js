@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   ListItemButton,
   ListItemIcon,
@@ -8,10 +8,7 @@ import {
 } from "@mui/material";
 
 import { Colors } from "../../config/Colors";
-import {
-  updateProfileId,
-  updateShowSidebar,
-} from "../../redux/packageSlice";
+import { updateProfileId, updateShowSidebar } from "../../redux/packageSlice";
 import { updateGroupId, updateGroupItemId } from "../../redux/userSlice";
 
 function SidebarItem({ item, title, selectedID }) {
@@ -19,12 +16,13 @@ function SidebarItem({ item, title, selectedID }) {
 
   const dispacth = useDispatch();
 
+  const grID = useSelector((state) => state?.user?.groupID);
+
   const handleButtonItemID = (ID) => {
     if (title === "profile") {
       dispacth(updateProfileId(ID));
     } else if (title === "group") {
-      // dispacth(updateGroupItemId(ID));
-      dispacth(updateGroupId(ID));
+      dispacth(updateGroupItemId(ID));
     }
     dispacth(updateShowSidebar(false));
   };
@@ -33,7 +31,13 @@ function SidebarItem({ item, title, selectedID }) {
     <>
       <ListItemButton
         sx={{
-          backgroundColor: selectedIdx === item._id ? Colors.primary : null,
+          backgroundColor: (
+            title === "group"
+              ? selectedIdx === item._id && grID === item.group._id
+              : selectedIdx === item._id
+          )
+            ? Colors.primary
+            : null,
           "&: hover": { backgroundColor: Colors.gray },
         }}
         onClick={() => {
@@ -42,7 +46,15 @@ function SidebarItem({ item, title, selectedID }) {
       >
         {item.icon ? (
           <ListItemIcon
-            sx={{ color: selectedIdx === item._id ? Colors.background : null }}
+            sx={{
+              color: (
+                title === "group"
+                  ? selectedIdx === item._id && grID === item.group._id
+                  : selectedIdx === item._id
+              )
+                ? Colors.background
+                : null,
+            }}
           >
             {item.icon && item.icon}
           </ListItemIcon>
@@ -50,8 +62,20 @@ function SidebarItem({ item, title, selectedID }) {
         <ListItemText>
           <Typography
             sx={{
-              color: selectedIdx === item._id ? Colors.background : null,
-              fontWeight: selectedIdx === item._id ? 800 : null,
+              color: (
+                title === "group"
+                  ? selectedIdx === item._id && grID === item.group._id
+                  : selectedIdx === item._id
+              )
+                ? Colors.background
+                : null,
+              fontWeight: (
+                title === "group"
+                  ? selectedIdx === item._id && grID === item.group._id
+                  : selectedIdx === item._id
+              )
+                ? 800
+                : null,
               paddingLeft: item.icon ? "10px" : null,
             }}
           >
