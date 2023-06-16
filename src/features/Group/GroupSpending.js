@@ -8,9 +8,13 @@ import {
   Modal,
   TextField,
   MenuItem,
-  TextareaAutosize,
+  Select,
+  OutlinedInput,
+  IconButton,
 } from "@mui/material";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+
 import { Colors } from "../../config/Colors";
 import DateTimePicker from "../../component/Date/DateTimePicker";
 
@@ -28,6 +32,17 @@ const style = {
   p: 4,
 };
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 function GroupSpending({ item }) {
   let listMember = [];
   for (let member of item.members) {
@@ -43,11 +58,10 @@ function GroupSpending({ item }) {
   };
   listMember.push(formData);
 
-
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [date, setDate] = useState(null);
-  const [member, setMember] = useState(listMember[0]);
+  const [hostName, setHostName] = React.useState("");
   const [des, setDes] = useState("");
 
   const handleOpen = () => setOpen(true);
@@ -55,6 +69,13 @@ function GroupSpending({ item }) {
 
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue.$d);
+  };
+
+  const handleChangeHost = (e) => {
+    setHostName(e.target.value);
+    listMember = [
+      ...listMember.filter((member) => member._id !== e.target.value),
+    ];
   };
 
   return (
@@ -103,7 +124,14 @@ function GroupSpending({ item }) {
               <Typography variant="body2" sx={{ minWidth: "100px" }}>
                 Người chi trả:
               </Typography>
-              <TextField select value={member._id} fullWidth>
+              <Select
+                labelId="demo-multiple-name-label"
+                id="demo-multiple-name"
+                value={hostName}
+                onChange={handleChangeHost}
+                input={<OutlinedInput fullWidth />}
+                MenuProps={MenuProps}
+              >
                 {listMember.map((route) =>
                   route ? (
                     <MenuItem key={route._id} value={route._id}>
@@ -111,7 +139,7 @@ function GroupSpending({ item }) {
                     </MenuItem>
                   ) : null
                 )}
-              </TextField>
+              </Select>
             </Box>
 
             <Box className="title-group-spending">
@@ -126,16 +154,13 @@ function GroupSpending({ item }) {
               />
             </Box>
 
-            <Box className="title-group-spending">
+            <Box className="title-group-spending" sx={{ justifyContent: "space-between"}}>
               <Typography variant="body2" sx={{ minWidth: "100px" }}>
                 Thêm thành viên
               </Typography>
-              <TextField
-                multiline
-                fullWidth
-                value={des}
-                onChange={(e) => setDes(e.target.value)}
-              />
+              <IconButton >
+                <PersonAddAlt1Icon />
+              </IconButton>
             </Box>
           </Stack>
         </Box>

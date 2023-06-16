@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   Box,
   Stack,
@@ -24,7 +24,9 @@ import "../../assets/css/Group.scss";
 import ImgAvatar from "../../assets/img/user.png";
 import { Colors } from "../../config/Colors";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
+import CalculateDate from "../../component/Date/CalculateDate";
 import PackagesGroup from "./PackagesGroup";
+import OtherPackages from "./OtherPackages";
 
 const style = {
   position: "absolute",
@@ -38,7 +40,7 @@ const style = {
   p: 4,
 };
 
-function SuperUser({ item }) {
+function SuperUser({ item, title }) {
   const dispatch = useDispatch();
   const inputRef = useRef();
 
@@ -116,7 +118,7 @@ function SuperUser({ item }) {
       justifyContent="flex-start"
       alignItems="center"
       spacing={2}
-      sx={{ paddingX: { xs: "0px", sm: "0px", md: "10px" }, width: '100%' }}
+      sx={{ paddingX: { xs: "0px", sm: "0px", md: "10px" }, width: "100%" }}
     >
       <Box className="title-group">
         <Box align={"center"} sx={{ paddingRight: "15px" }}>
@@ -139,7 +141,9 @@ function SuperUser({ item }) {
             </CustomComponent.Image>
           </CustomComponent.ButtonAvatar>
         </Box>
-        <Typography variant="h6" fontSize={22}> {item.name} </Typography>
+        <Typography variant="h6" fontSize={22}>
+          {item.name}
+        </Typography>
         <IconButton onClick={handleOpen}>
           <AiOutlineEdit />
         </IconButton>
@@ -171,7 +175,7 @@ function SuperUser({ item }) {
 
       <Box
         sx={{
-          width: { xs: "100%", sm: "100%", md: "70%" },
+          width: { xs: "100%", lg: "70%" },
           typography: "body1",
         }}
       >
@@ -194,29 +198,15 @@ function SuperUser({ item }) {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <PackagesGroup data={item} />
+            <PackagesGroup data={item} pkg={item.packages.infoPackages[0]} title={title} />
           </TabPanel>
-          <TabPanel value="2"> </TabPanel>
+          <TabPanel value="2">
+            {item.packages.otherPakages.length > 0 ? (
+              <OtherPackages item={item.packages.otherPakages} />
+            ) : null}
+          </TabPanel>
         </TabContext>
       </Box>
-
-      {/* <Box className="btn-invite">
-        <CustomComponent.Button1
-          sx={{ marginBottom: "10px" }}
-          onClick={handleButtonInvite}
-        >
-          Mời thành viên
-        </CustomComponent.Button1>
-        {linkInvite ? (
-          <TextField
-            id="outlined-basic"
-            fullWidth
-            variant="outlined"
-            value={linkInvite}
-            sx={{ textOverflow: "ellipsis" }}
-          />
-        ) : null}
-      </Box> */}
     </Stack>
   );
 }

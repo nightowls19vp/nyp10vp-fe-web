@@ -8,6 +8,7 @@ const userSlice = createSlice({
         error: false,
         mgsUser: null,
         groupAll: null,
+        groupCollapse: 0,
         groupID: 0,
         groupItemID: 0,
         channel: null,
@@ -29,6 +30,9 @@ const userSlice = createSlice({
         getGroupAll: (state, action) => {
             state.groupAll = action.payload;
         },
+        updateGroupCollapse: (state, action) => {
+            state.groupCollapse = action.payload;
+        },
         updateGroupId: (state, action) => {
             state.groupID = action.payload;
         },
@@ -49,6 +53,7 @@ export const {
    getUserInforSuccess,
    getUserInforFailed,
    getGroupAll,
+   updateGroupCollapse,
    updateGroupId,
    updateGroupItemId,
    getChannels,

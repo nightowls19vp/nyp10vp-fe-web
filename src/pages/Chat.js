@@ -1,11 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  IconButton,
+  InputAdornment,
+  InputBase,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 import "../assets/css/Chat.scss";
+import { Colors } from "../config/Colors";
+import * as CustomComponent from "../component/custom/CustomComponents.js";
+import { RiSendPlane2Fill } from "react-icons/ri";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 import DefaultLayout from "../layout/DefaultLayout.js";
 import ChatLayout from "../features/Chat/ChatLayout.js";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import SendbirdChat from "@sendbird/chat";
 import {
@@ -18,8 +32,8 @@ import {
 import { SENDBIRD_INFO } from "../features/constants/constants";
 let sb;
 
-
 function Chat() {
+  const dispatch = useDispatch();
 
   const userInfo = useSelector((state) => state?.user?.userInfo.user);
   const groups = useSelector((state) => state?.user?.groupAll);
@@ -27,12 +41,21 @@ function Chat() {
 
   const [listChannel, setListChannel] = useState([]);
 
-  // const onError = (error) => {
-  //   console.log(error);
+  // const channelID = useSelector((state) => state?.user?.channelID);
+
+  // const [message, setMessage] = useState("");
+
+  // const handleChoseChannel = (event, id) => {
+  //   //
+  // };
+
+  // const handleSendMessage = async () => {
+  //   //
   // };
 
   useEffect(() => {
-    const setupUser = async () => {
+    console.log("vyyyyy");
+    const getChannels = async () => {
       const sendbirdChat = await SendbirdChat.init({
         appId: SENDBIRD_INFO.appId,
         localCacheEnabled: true,
@@ -44,34 +67,25 @@ function Chat() {
 
       sb = sendbirdChat;
 
-      // const channel = await sb.groupChannel.getChannel(groups[0].child[0].channel);
-
       let newChannel = [];
 
       for (let channel of channels) {
         let item = await sb.groupChannel.getChannel(channel);
         newChannel.push(item);
       }
-
-      // console.log(channel);
-
-      // const [channels, error] = await loadChannels(channelHandlers);
-
       setListChannel(newChannel);
 
-      // if (error) {
-      //   return onError(error);
-      // }
     };
 
-    setupUser().catch(console.error);
+    getChannels().catch(console.error);
   }, [channels, groups, userInfo]);
 
   console.log(listChannel);
 
   return (
     <DefaultLayout>
-      {listChannel.length !== 0 ? <ChatLayout item={listChannel} /> : null}
+      {/* {listChannel.length !== 0 ? <ChatLayout item={listChannel} /> : null} */}
+      
     </DefaultLayout>
   );
 }

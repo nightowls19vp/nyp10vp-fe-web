@@ -15,15 +15,12 @@ import { useNavigate } from "react-router-dom";
 import SendbirdChat from "@sendbird/chat";
 import {
   GroupChannelModule,
-  GroupChannelFilter,
-  GroupChannelListOrder,
-  MessageFilter,
-  MessageCollectionInitPolicy,
 } from "@sendbird/chat/groupChannel";
 import { SENDBIRD_INFO } from "../constants/constants";
+import CalculateDate from "../../component/Date/CalculateDate";
 let sb;
 
-function PackageGroup({ item, data }) {
+function PackageGroup({ item, data, title }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -87,8 +84,6 @@ function PackageGroup({ item, data }) {
       groupChannelMembers
     );
     
-    console.log("vy2", groupChannel);
-
     let formData = {
       channel: groupChannel.url,
     };
@@ -140,6 +135,7 @@ function PackageGroup({ item, data }) {
           <Typography variant="h5" color={Colors.textPrimary}>
             Gói người dùng
           </Typography>
+          {title === "Group SUPER USER" ? 
           <Box>
             {btn ? (
               <Button
@@ -158,7 +154,7 @@ function PackageGroup({ item, data }) {
                 Gia hạn gói
               </CustomComponent.Button2>
             )}
-          </Box>
+          </Box> : null }
         </Box>
         <Box className="package-group">
           <Typography
@@ -173,19 +169,33 @@ function PackageGroup({ item, data }) {
             {item.package.name}
           </Typography>
         </Box>
-        <Box className="package-group">
+        {btn ? <Box className="package-group">
           <Typography
             width={"120px"}
             variant="subtitle2"
             fontSize={16}
             gutterBottom
           >
-            Thời hạn:
+            Thời hạn: 
           </Typography>
           <Typography fontSize={16} gutterBottom>
             {item.package.duration*30} ngày
           </Typography>
-        </Box>
+        </Box> : 
+        <Box className="package-group">
+        <Typography
+          width={"120px"}
+          variant="subtitle2"
+          fontSize={16}
+          gutterBottom
+        >
+          Còn lại:
+        </Typography>
+        <Typography fontSize={16} gutterBottom>
+          {CalculateDate(item.startDate, item.endDate)} ngày
+        </Typography>
+      </Box>}
+        
         <Box className="package-group" sx={{ paddingBottom: "10px" }}>
           <Typography
             width={"120px"}

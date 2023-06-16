@@ -15,7 +15,7 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getGroupByUserId, usersInvitePeople } from "../../redux/userRequest";
+import { usersInvitePeople } from "../../redux/userRequest";
 import { createAxios } from "../../http/createInstance";
 import { loginSuccess } from "../../redux/authSlice";
 import "../../assets/css/Group.scss";
@@ -23,7 +23,7 @@ import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 import PackageGroup from "./PackageGroup";
 
-function PackagesGroup({ data }) {
+function PackagesGroup({ data, pkg, title }) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state?.auth.login?.currentUser);
@@ -75,28 +75,11 @@ function PackagesGroup({ data }) {
     setOpenInvite(false);
     console.log(res);
 
-    // await getGroupByUserId(user?.accessToken, dispatch, axiosJWT);
   };
 
-  // const [linkInvite, setLinkInvite] = useState("");
-
-  // const handleButtonInvite = async () => {
-  //   const res = await usersInvitePeople(user?.accessToken, data._id, axiosJWT);
-  //   let link = "http://localhost:8080";
-  //   link += res.data;
-  //   setLinkInvite(link);
-  // };
   return (
     <Stack spacing={3}>
-      {data.packages.map((route, index) =>
-        route ? (
-          <PackageGroup
-            item={route}
-            data={data}
-            key={index}
-          />
-        ) : null
-      )}
+      {pkg ? <PackageGroup item={pkg} data={data} title={title} /> : null}
       <Stack
         spacing={1}
         sx={{

@@ -23,6 +23,7 @@ function SidebarItem({ item, title, selectedID }) {
       dispacth(updateProfileId(ID));
     } else if (title === "group") {
       dispacth(updateGroupItemId(ID));
+      dispacth(updateGroupId(item.group._id));
     }
     dispacth(updateShowSidebar(false));
   };

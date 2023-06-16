@@ -158,12 +158,14 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
         {
           name: "Group SUPER USER",
           _id: 0,
+          check: true,
           status: true,
           child: [],
         },
         {
           name: "Group USER",
           _id: 1,
+          check: true,
           status: false,
           child: [],
         },
@@ -178,15 +180,42 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             child: [],
           };
 
+          let infoPackages = [];
+          let otherPakages = [];
+
+          if (item.packages.length === 1) {
+            infoPackages.push(item.packages[0])
+          } else {
+            for (let i = 0; i < item.packages.length; i++) {
+              if (item.packages[i].status === "Active") {
+                infoPackages.push(item.packages[i]);
+              } else {
+                otherPakages.push(item.packages[i]);
+              }
+            }
+          }
+
+          let packages = {
+            infoPackages: infoPackages,
+            otherPakages: otherPakages
+          }
+
+          item = {
+            ...item,
+            packages: packages
+          }
+
           let childGroupItem = [
             {
               _id: 0,
               name: "Thông tin nhóm",
+              check: false,
               group: item,
             },
             {
               _id: 1,
               name: "Quản lý chi tiêu",
+              check: false,
               group: item,
             },
           ];
@@ -207,15 +236,42 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             child: [],
           };
 
+          let infoPackages = [];
+          let otherPakages = [];
+
+          if (item.packages.length === 1) {
+            infoPackages.push(item.packages[0])
+          } else {
+            for (let i = 0; i < item.packages.length; i++) {
+              if (item.packages[i].status === "Active") {
+                infoPackages.push(item.packages[i]);
+              } else {
+                otherPakages.push(item.packages[i]);
+              }
+            }
+          }
+
+          let packages = {
+            infoPackages: infoPackages,
+            otherPakages: otherPakages
+          }
+
+          item = {
+            ...item,
+            packages: packages
+          }
+
           let childGroupItem = [
             {
               _id: 0,
               name: "Thông tin nhóm",
+              check: false,
               group: item,
             },
             {
               _id: 1,
               name: "Quản lý chi tiêu",
+              check: false,
               group: item,
             },
           ];
@@ -237,15 +293,42 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             child: [],
           };
 
+          let infoPackages = [];
+          let otherPakages = [];
+
+          if (item.packages.length === 1) {
+            infoPackages.push(item.packages[0])
+          } else {
+            for (let i = 0; i < item.packages.length; i++) {
+              if (item.packages[i].status === "Active") {
+                infoPackages.push(item.packages[i]);
+              } else {
+                otherPakages.push(item.packages[i]);
+              }
+            }
+          }
+
+          let packages = {
+            infoPackages: infoPackages,
+            otherPakages: otherPakages
+          }
+
+          item = {
+            ...item,
+            packages: packages
+          }
+
           let childGroupItem = [
             {
               _id: 0,
               name: "Thông tin nhóm",
+              check: false,
               group: item,
             },
             {
               _id: 1,
               name: "Quản lý chi tiêu",
+              check: false,
               group: item,
             },
           ];
@@ -258,6 +341,8 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
         dataGroup[0].child[0].status = true;
         dispatch(updateGroupId(dataGroup[0].child[0]._id));
       } else {
+        dataGroup[0].status = false;
+        dataGroup[1].status = true;
         for (let item of resU?.data.groups) {
           let formData = {
             _id: item._id,
@@ -266,15 +351,42 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             child: [],
           };
 
+          let infoPackages = [];
+          let otherPakages = [];
+
+          if (item.packages.length === 1) {
+            infoPackages.push(item.packages[0])
+          } else {
+            for (let i = 0; i < item.packages.length; i++) {
+              if (item.packages[i].status === "Active") {
+                infoPackages.push(item.packages[i]);
+              } else {
+                otherPakages.push(item.packages[i]);
+              }
+            }
+          }
+
+          let packages = {
+            infoPackages: infoPackages,
+            otherPakages: otherPakages
+          }
+
+          item = {
+            ...item,
+            packages: packages
+          }
+
           let childGroupItem = [
             {
               _id: 0,
               name: "Thông tin nhóm",
+              check: false,
               group: item,
             },
             {
               _id: 1,
               name: "Quản lý chi tiêu",
+              check: false,
               group: item,
             },
           ];
