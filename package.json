@@ -17,6 +17,7 @@
     "@mui/x-data-grid-pro": "^6.4.0",
     "@mui/x-date-pickers": "^6.0.3",
     "@reduxjs/toolkit": "^1.9.3",
+    "@sendbird/chat": "^4.9.2",
     "@sendbird/uikit-react": "^3.4.9",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

@@ -7,6 +7,7 @@ import {
   getUserInforSuccess,
   getChannels,
   updateGroupId,
+  updateGroupItemId,
 } from "./userSlice";
 
 export const getInformationUser = async (userID, token, dispatch, axiosJWT) => {
@@ -401,11 +402,12 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
       }
 
       dispatch(getGroupAll(dataGroup));
+      dispatch(updateGroupItemId(0));
 
     } else {
       dispatch(updateGroupId(0));
-
       dispatch(getGroupAll([]));
+      dispatch(updateGroupItemId(0));
     }
   } catch (error) {
     console.log(error);

@@ -21,16 +21,8 @@ import ChatLayout from "../features/Chat/ChatLayout.js";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import SendbirdChat from "@sendbird/chat";
-import {
-  GroupChannelModule,
-  GroupChannelFilter,
-  GroupChannelListOrder,
-  MessageFilter,
-  MessageCollectionInitPolicy,
-} from "@sendbird/chat/groupChannel";
-import { SENDBIRD_INFO } from "../features/constants/constants";
-let sb;
+import * as SB from "../component/Chat/SendBirdGroupChat.js";
+import { updateChannelID } from "../redux/userSlice";
 
 function Chat() {
   const dispatch = useDispatch();
@@ -40,52 +32,44 @@ function Chat() {
   const channels = useSelector((state) => state?.user?.channel);
 
   const [listChannel, setListChannel] = useState([]);
-
-  // const channelID = useSelector((state) => state?.user?.channelID);
-
-  // const [message, setMessage] = useState("");
-
-  // const handleChoseChannel = (event, id) => {
-  //   //
-  // };
-
-  // const handleSendMessage = async () => {
-  //   //
-  // };
+  const [channelFisrt, setChannelFirst] = useState();
+  const [messageFirst, setMessageFirst] = useState([]);
 
   useEffect(() => {
-    console.log("vyyyyy");
     const getChannels = async () => {
-      const sendbirdChat = await SendbirdChat.init({
-        appId: SENDBIRD_INFO.appId,
-        localCacheEnabled: true,
-        modules: [new GroupChannelModule()],
-      });
-
-      await sendbirdChat.connect(userInfo?._id);
-      await sendbirdChat.setChannelInvitationPreference(true);
-
-      sb = sendbirdChat;
+      await SB.connectSendBird(userInfo?._id);
 
       let newChannel = [];
 
       for (let channel of channels) {
-        let item = await sb.groupChannel.getChannel(channel);
-        newChannel.push(item);
+        let item = await SB.getUserChannel(channel);
+        let fromData = {
+          _id: item.url,
+          name: item.name,
+          avatar: item.coverUrl,
+        };
+        newChannel.push(fromData);
       }
       setListChannel(newChannel);
+      dispatch(updateChannelID(newChannel[0]._id));
 
+      let c = await SB.getUserChannel(channels[0]);
+      setChannelFirst(c);
+
+      let m = await SB.receiveMessage(c);
+      setMessageFirst(m);
     };
 
     getChannels().catch(console.error);
-  }, [channels, groups, userInfo]);
-
-  console.log(listChannel);
+  }, [channels, dispatch, groups, userInfo]);
 
   return (
     <DefaultLayout>
-      {/* {listChannel.length !== 0 ? <ChatLayout item={listChannel} /> : null} */}
-      
+      <ChatLayout
+        item={listChannel}
+        channelFisrt={channelFisrt}
+        messageFirst={messageFirst}
+      />
     </DefaultLayout>
   );
 }

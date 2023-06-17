@@ -1,0 +1,127 @@
+import React, { Component } from "react";
+
+import SendbirdChat from "@sendbird/chat";
+import {
+  GroupChannelModule,
+  GroupChannelFilter,
+  GroupChannelListOrder,
+  MessageFilter,
+  MessageCollectionInitPolicy,
+} from "@sendbird/chat/groupChannel";
+
+import { SENDBIRD_INFO } from "../../features/constants/constants";
+
+const sb = SendbirdChat.init({
+  appId: SENDBIRD_INFO.appId,
+  modules: [new GroupChannelModule()],
+});
+
+export const connectSendBird = async (USER_ID) => {
+  try {
+    await sb.connect(USER_ID);
+    await sb.setChannelInvitationPreference(true);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const setupUser = async (USER_ID, USER_NAME, AVATAR) => {
+  const userUpdateParams = {};
+  userUpdateParams.nickname = USER_NAME;
+  userUpdateParams.userId = USER_ID;
+  userUpdateParams.plainProfileUrl = AVATAR;
+
+  await sb.updateCurrentUserInfo(userUpdateParams);
+};
+
+export const createChannel = async (CHANNEL_NAME, AVATAR, userIdsToInvite) => {
+  try {
+    const groupChannelParams = {};
+    groupChannelParams.invitedUserIds = userIdsToInvite;
+    groupChannelParams.name = CHANNEL_NAME;
+    groupChannelParams.coverUrl = AVATAR;
+    groupChannelParams.operatorUserIds = userIdsToInvite;
+
+    const groupChannel = await sb.groupChannel.createChannel(
+      groupChannelParams
+    );
+
+    return [groupChannel, null];
+  } catch (error) {
+    return [null, error];
+  }
+};
+
+export const getUserChannel = async (CHANNEL_URL) => {
+  const channel = await sb.groupChannel.getChannel(CHANNEL_URL);
+  return channel;
+};
+
+export const enterChannel = async (CHANNEL_URL) => {
+  const channel = sb.groupChannel.getChannel(CHANNEL_URL);
+  await channel.enter();
+
+  return channel;
+};
+
+export const exitChannel = async (CHANNEL_URL) => {
+  const channel = sb.groupChannel.getChannel(CHANNEL_URL);
+  await channel.exit();
+};
+
+export const sendMessage = async (channel, TEXT_MESSAGE) => {
+  const params = {
+    message: TEXT_MESSAGE,
+  };
+  channel.sendUserMessage(params).onSucceeded((message) => {
+    const messageId = message.messageId;
+    console.log("mess of vy: ", messageId);
+  });
+};
+
+export const receiveMessage = async (channel) => {
+  try {
+    const MessageListParams = {
+      prevResultSize: 100,
+      nextResultSize: 100,
+      // ...
+    };
+    const messages = await channel.getMessagesByTimestamp(0, MessageListParams);
+    console.log("messages by timestamp", messages);
+
+    // Reverse message array by message.createdAt
+    // messages.reverse();
+
+    return messages.map((message) => {
+      return {
+        _id: message.messageId,
+        text: message.message,
+        createdAt: new Date(message.createdAt),
+        user: {
+          _id: message.sender.userId,
+          name: message.sender.nickname,
+          avatar: message.sender.plainProfileUrl,
+        },
+      };
+    });
+  } catch (e) {
+    // Todo: Handle error
+    console.log("get messages error", e);
+
+    return [];
+  }
+};
+
+export const sendFile = async (channel, FILE) => {
+  const fileMessageParams = {};
+  fileMessageParams.file = FILE;
+  await channel
+    .sendFileMessage(fileMessageParams)
+    .onSucceeded(() => {
+      return true;
+    })
+    .onFailed((error) => {
+      console.log(error);
+      return false;
+    });
+};

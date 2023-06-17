@@ -8,7 +8,6 @@ import GroupSpending from "./GroupSpending";
 
 function GroupItem() {
   const groups = useSelector((state) => state?.user?.groupAll);
-  const selectedCollapseID = useSelector((state) => state?.user?.groupCollapse);
   const selectedID = useSelector((state) => state?.user?.groupID);
   const selectedItemID = useSelector((state) => state?.user?.groupItemID);
 
@@ -52,17 +51,6 @@ function GroupItem() {
                 )
               : null
           )}
-          {/* {groups[0].child.map((route) =>
-            route ? (
-              route._id === selectedID ? (
-                selectedItemID === 0 ? (
-                  <SuperUser item={route.child[0].group} key={route._id} />
-                ) : (
-                  <GroupSpending item={route.child[1].group} key={route._id} />
-                )
-              ) : null
-            ) : null
-          )} */}
         </SidebarLayout>
       )}
     </>

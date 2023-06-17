@@ -35,6 +35,7 @@ export const GroupChat = styled(Button)({
   boxShadow: "none",
   textTransform: "none",
   fontSize: 16,
+  padding: "10px",
   position: "relative",
   height: "50px",
   fontFamily: [

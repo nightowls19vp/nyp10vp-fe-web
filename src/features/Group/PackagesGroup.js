@@ -11,8 +11,11 @@ import {
   DialogActions,
   Button,
   IconButton,
+  Input,
+  InputAdornment,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
+import { RiSendPlane2Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 
 import { usersInvitePeople } from "../../redux/userRequest";
@@ -22,6 +25,7 @@ import "../../assets/css/Group.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 import PackageGroup from "./PackageGroup";
+import { Height } from "@mui/icons-material";
 
 function PackagesGroup({ data, pkg, title }) {
   const dispatch = useDispatch();
@@ -74,7 +78,6 @@ function PackagesGroup({ data, pkg, title }) {
 
     setOpenInvite(false);
     console.log(res);
-
   };
 
   return (
@@ -101,12 +104,14 @@ function PackagesGroup({ data, pkg, title }) {
           <Typography variant="h5" color={Colors.textPrimary}>
             Thành viên trong nhóm
           </Typography>
-          <CustomComponent.Button1
-            sx={{ marginBottom: "10px" }}
-            onClick={handleClickOpenInvite}
-          >
-            Mời thành viên
-          </CustomComponent.Button1>
+          {title === "Group SUPER USER" ? (
+            <CustomComponent.Button1
+              sx={{ marginBottom: "10px" }}
+              onClick={handleClickOpenInvite}
+            >
+              Mời thành viên
+            </CustomComponent.Button1>
+          ) : null}
         </Box>
         {data.members.map((route) =>
           route ? (
@@ -115,8 +120,8 @@ function PackagesGroup({ data, pkg, title }) {
               className="package-group"
               sx={{ paddingBottom: "10px" }}
             >
-              <Avatar src={route.user.user.avatar} />
-              <Typography sx={{ paddingLeft: "10px" }}>
+              <Avatar src={route.user.user.avatar} sx={{ width: "50px", height: "50px"}} />
+              <Typography variant="overline" display="block" sx={{ paddingLeft: "20px", fontSize: 18 }}>
                 {route.user.user.name}
               </Typography>
             </Box>
@@ -140,26 +145,23 @@ function PackagesGroup({ data, pkg, title }) {
                   paddingTop: "5px",
                 }}
               >
-                <TextField
+                <Input
+                  placeholder="Nhập địa chỉ mail..."
                   autoFocus
-                  id="name"
-                  label="Nhập địa chỉ mail"
                   type="email"
                   color="success"
                   fullWidth
                   value={email}
-                  variant="outlined"
+                  endAdornment={
+                    <InputAdornment  position="end">
+                      <IconButton onClick={handleButtonSave}>
+                        <RiSendPlane2Fill />
+                      </IconButton>
+                    </InputAdornment>
+                  }
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={handleKeyDown}
                 />
-                <Button
-                  sx={{ marginLeft: "10px" }}
-                  variant="contained"
-                  color="success"
-                  onClick={handleButtonSave}
-                >
-                  Chọn
-                </Button>
               </Box>
 
               {selectedPeople.map((person, idx) =>
