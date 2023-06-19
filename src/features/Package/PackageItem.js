@@ -61,7 +61,8 @@ function PackageItem({ data, grpId }) {
                     ) : null
                   )}
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            
+            <Box sx={{ position: "fixed", right: 20, bottom: 20 }}>
               {notiPkg?.statusNoti === 0 ? null : notiPkg?.statusNoti === 1 ? (
                 <Alert severity="success">
                   <AlertTitle>Thành công</AlertTitle>

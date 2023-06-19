@@ -86,6 +86,8 @@ function SuperUser({ item, title }) {
     await updateAvatarGroup(
       item._id,
       user?.accessToken,
+      item.channel,
+      user?.data.userInfo._id,
       formAvatar,
       dispatch,
       axiosJWT
@@ -99,11 +101,11 @@ function SuperUser({ item, title }) {
       name: name,
     };
 
-    console.log(formData);
-
     await updateGroupName(
       item._id,
       user?.accessToken,
+      item.channel,
+      user?.data.userInfo._id,
       formData,
       dispatch,
       axiosJWT
@@ -175,7 +177,8 @@ function SuperUser({ item, title }) {
 
       <Box
         sx={{
-          width: { xs: "100%", lg: "70%" },
+          // width: { xs: "100%", lg: "70%" },
+          width: "100%",
           typography: "body1",
         }}
       >
@@ -197,14 +200,26 @@ function SuperUser({ item, title }) {
               />
             </TabList>
           </Box>
-          <TabPanel value="1">
-            <PackagesGroup data={item} pkg={item.packages.infoPackages[0]} title={title} />
-          </TabPanel>
-          <TabPanel value="2">
-            {item.packages.otherPakages.length > 0 ? (
-              <OtherPackages item={item.packages.otherPakages} />
-            ) : null}
-          </TabPanel>
+
+          <Box sx={{ width: "100%" }}>
+            <TabPanel
+              value="1"
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              <PackagesGroup
+                data={item}
+                pkg={item.packages.infoPackages[0]}
+                title={title}
+              />
+            </TabPanel>
+          </Box>
+          <Box sx={{ width: "100%" }}>
+            <TabPanel value="2" sx={{ display: "flex", justifyContent: "center" }}>
+              {item.packages.otherPakages.length > 0 ? (
+                <OtherPackages item={item.packages.otherPakages} />
+              ) : null}
+            </TabPanel>
+          </Box>
         </TabContext>
       </Box>
     </Stack>

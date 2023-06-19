@@ -37,6 +37,8 @@ function PackageGroup({ item, data, title }) {
   };
 
   const handleCreateChannel = async () => {
+    await SB.connectSendBird(user?.data.userInfo._id);
+
     groupChannelMembers.push(data.members[0].user.user._id);
     const [groupChannel, error] = await SB.createChannel(
       data.name,

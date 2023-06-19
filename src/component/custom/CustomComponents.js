@@ -31,39 +31,32 @@ export const ButtonPopperAvatar = styled(ButtonBase)({
   },
 });
 
-export const GroupChat = styled(Button)({
-  boxShadow: "none",
-  textTransform: "none",
-  fontSize: 16,
-  padding: "10px",
+export const GroupChat = styled(ButtonBase)(({ theme }) => ({
   position: "relative",
-  height: "50px",
-  fontFamily: [
-    "-apple-system",
-    "BlinkMacSystemFont",
-    '"Segoe UI"',
-    "Roboto",
-    '"Helvetica Neue"',
-    "Arial",
-    "sans-serif",
-    '"Apple Color Emoji"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-  ].join(","),
-  "&:hover": {
+  borderRadius: "20px",
+  width: "100%",
+  height: "fit-content",
+  minHeight: "70px",
+  '&:hover': {
     backgroundColor: "#e6e6e6",
-    // borderColor: '#0062cc',
-    // boxShadow: 'none',
-  },
-  "&:active": {
-    boxShadow: "none",
-    backgroundColor: "#ffdfb3",
-    // borderColor: '#005cbf',
-  },
-  "&:focus": {
-    // boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
-    backgroundColor: "#ffdfb3",
-  },
+  }
+}));
+
+export const ImageSrcGC = styled("span")({
+  position: "absolute",
+  borderRadius: "20px",
+  left: 0,
+  right: 0,
+  top: 0,
+  bottom: 0,
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  padding: "0px 5px 0px 5px",
+  wordBreak: "break-all",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
 });
 
 export const Button1 = styled(Button)({

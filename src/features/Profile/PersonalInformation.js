@@ -318,7 +318,7 @@ function PersonalInformation() {
           Lưu thay đổi
         </CustomComponent.Button1>
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      <Box sx={{ position: "fixed", right: 20, bottom: 20 }} >
         {status === 0 ? null : status === 1 ? (
           <Alert severity="success">
             <AlertTitle>Thành công</AlertTitle>

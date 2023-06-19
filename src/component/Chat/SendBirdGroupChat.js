@@ -29,7 +29,7 @@ export const setupUser = async (USER_ID, USER_NAME, AVATAR) => {
   const userUpdateParams = {};
   userUpdateParams.nickname = USER_NAME;
   userUpdateParams.userId = USER_ID;
-  userUpdateParams.plainProfileUrl = AVATAR;
+  userUpdateParams.profileUrl = AVATAR;
 
   await sb.updateCurrentUserInfo(userUpdateParams);
 };
@@ -57,23 +57,49 @@ export const getUserChannel = async (CHANNEL_URL) => {
   return channel;
 };
 
-export const enterChannel = async (CHANNEL_URL) => {
-  const channel = sb.groupChannel.getChannel(CHANNEL_URL);
-  await channel.enter();
+export const updateNameChannel = async (CHANNEL_URL, NAME) => {
+  const channel = await getUserChannel(CHANNEL_URL);
 
-  return channel;
+  try {
+    const GroupChannelUpdateParams = {};
+    GroupChannelUpdateParams.name = NAME;
+
+    const groupChannel = await channel.updateChannel()(
+      GroupChannelUpdateParams
+    );
+
+    console.log(groupChannel);
+
+    return [groupChannel, null];
+  } catch (error) {
+    return [null, error];
+  }
 };
 
-export const exitChannel = async (CHANNEL_URL) => {
-  const channel = sb.groupChannel.getChannel(CHANNEL_URL);
-  await channel.exit();
+export const updateAvatarChannel = async (CHANNEL_URL, AVATAR) => {
+  const channel = await getUserChannel(CHANNEL_URL);
+
+  try {
+    const GroupChannelUpdateParams = {};
+    GroupChannelUpdateParams.coverUrl = AVATAR;
+
+    const groupChannel = await channel.updateChannel()(
+      GroupChannelUpdateParams
+    );
+
+    console.log(groupChannel);
+
+    return [groupChannel, null];
+  } catch (error) {
+    return [null, error];
+  }
 };
 
 export const sendMessage = async (channel, TEXT_MESSAGE) => {
   const params = {
     message: TEXT_MESSAGE,
   };
-  channel.sendUserMessage(params).onSucceeded((message) => {
+  await channel.sendUserMessage(params).onSucceeded((message) => {
     const messageId = message.messageId;
     console.log("mess of vy: ", messageId);
   });
@@ -90,12 +116,14 @@ export const receiveMessage = async (channel) => {
     console.log("messages by timestamp", messages);
 
     // Reverse message array by message.createdAt
-    // messages.reverse();
+    messages.reverse();
 
     return messages.map((message) => {
       return {
         _id: message.messageId,
         text: message.message,
+        // url: message.plainUrl,
+        type: message.messageType,
         createdAt: new Date(message.createdAt),
         user: {
           _id: message.sender.userId,

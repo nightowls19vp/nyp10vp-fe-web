@@ -1,0 +1,63 @@
+import React, { useEffect, useState } from "react";
+import ChatLayout from "./ChatLayout";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import * as SB from "../../component/Chat/SendBirdGroupChat.js";
+import { updateChannelID } from "../../redux/userSlice";
+
+function ChatItem() {
+    const dispatch = useDispatch();
+
+  const userInfo = useSelector((state) => state?.user?.userInfo.user);
+  const channels = useSelector((state) => state?.user?.channel);
+
+  const [listChannel, setListChannel] = useState([]);
+  const [channelFisrt, setChannelFirst] = useState();
+  const [messageFirst, setMessageFirst] = useState([]);
+
+  useEffect(() => {
+
+    const getChannels = async () => {
+      let newChannel = [];
+
+      await SB.connectSendBird(userInfo?._id);
+
+      for (let channel of channels) {
+        let item = await SB.getUserChannel(channel);
+        let fromData = {
+          _id: item.url,
+          name: item.name,
+          avatar: item.coverUrl,
+        };
+        newChannel.push(fromData);
+      }
+      setListChannel(newChannel);
+      dispatch(updateChannelID(newChannel[0]._id));
+
+      let c = await SB.getUserChannel(channels[0]);
+      setChannelFirst(c);
+
+      let m = await SB.receiveMessage(c);
+      setMessageFirst(m.reverse());
+    };
+
+    if (channels.length > 0) {
+      getChannels().catch(console.error);
+    }
+  }, [channels, dispatch, userInfo?._id]);
+
+  return (
+    <>
+      {listChannel.length > 0 ? (
+        <ChatLayout
+          item={listChannel}
+          channelFisrt={channelFisrt}
+          messageFirst={messageFirst}
+        />
+      ) : null}
+    </>
+  );
+}
+
+export default ChatItem;

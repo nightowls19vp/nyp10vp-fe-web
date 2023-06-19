@@ -23,6 +23,10 @@ function Group() {
     groupUser()
     .catch(console.error);
 
+    return () => {
+      groupUser();
+    }
+
   }, [axiosJWT, dispatch, user]);
   
   return (

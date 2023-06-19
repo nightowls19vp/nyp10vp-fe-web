@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -17,6 +17,7 @@ import { AiOutlineBars } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
 // import { createAxios } from "../../http/createInstance.js";
+import SockectIO from "../../http/socket.js";
 import { toggleShowSidebar } from "../../redux/packageSlice";
 import { loginSuccess } from "../../redux/authSlice";
 
@@ -32,6 +33,7 @@ function Header() {
 
   let user = useSelector((state) => state?.auth.login?.currentUser);
   // const userInfo = useSelector((state) => state?.user?.userInfo.user);
+  const socket = SockectIO();
 
   let day = new Date();
 
@@ -45,6 +47,14 @@ function Header() {
   const handleHeaderBars = () => {
     dispatch(toggleShowSidebar());
   };
+
+  // useEffect(() => {
+  //   socket.connect();
+
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, [socket]);
 
   return (
     <AppBar

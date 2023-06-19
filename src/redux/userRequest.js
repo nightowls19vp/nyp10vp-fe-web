@@ -1,5 +1,6 @@
 import apiClient from "../http/http-common.js";
 import { setOrder } from "./authSlice.js";
+import * as SB from "../component/Chat/SendBirdGroupChat.js";
 import {
   getGroupAll,
   getUserInforFailed,
@@ -152,8 +153,6 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
       },
     });
 
-    
-
     if (resSU?.data.groups.length > 0 || resU?.data.groups.length > 0) {
       let dataGroup = [
         {
@@ -185,7 +184,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
           let otherPakages = [];
 
           if (item.packages.length === 1) {
-            infoPackages.push(item.packages[0])
+            infoPackages.push(item.packages[0]);
           } else {
             for (let i = 0; i < item.packages.length; i++) {
               if (item.packages[i].status === "Active") {
@@ -198,13 +197,13 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
           let packages = {
             infoPackages: infoPackages,
-            otherPakages: otherPakages
-          }
+            otherPakages: otherPakages,
+          };
 
           item = {
             ...item,
-            packages: packages
-          }
+            packages: packages,
+          };
 
           let childGroupItem = [
             {
@@ -241,7 +240,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
           let otherPakages = [];
 
           if (item.packages.length === 1) {
-            infoPackages.push(item.packages[0])
+            infoPackages.push(item.packages[0]);
           } else {
             for (let i = 0; i < item.packages.length; i++) {
               if (item.packages[i].status === "Active") {
@@ -254,13 +253,13 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
           let packages = {
             infoPackages: infoPackages,
-            otherPakages: otherPakages
-          }
+            otherPakages: otherPakages,
+          };
 
           item = {
             ...item,
-            packages: packages
-          }
+            packages: packages,
+          };
 
           let childGroupItem = [
             {
@@ -298,7 +297,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
           let otherPakages = [];
 
           if (item.packages.length === 1) {
-            infoPackages.push(item.packages[0])
+            infoPackages.push(item.packages[0]);
           } else {
             for (let i = 0; i < item.packages.length; i++) {
               if (item.packages[i].status === "Active") {
@@ -311,13 +310,13 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
           let packages = {
             infoPackages: infoPackages,
-            otherPakages: otherPakages
-          }
+            otherPakages: otherPakages,
+          };
 
           item = {
             ...item,
-            packages: packages
-          }
+            packages: packages,
+          };
 
           let childGroupItem = [
             {
@@ -356,7 +355,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
           let otherPakages = [];
 
           if (item.packages.length === 1) {
-            infoPackages.push(item.packages[0])
+            infoPackages.push(item.packages[0]);
           } else {
             for (let i = 0; i < item.packages.length; i++) {
               if (item.packages[i].status === "Active") {
@@ -369,13 +368,13 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
           let packages = {
             infoPackages: infoPackages,
-            otherPakages: otherPakages
-          }
+            otherPakages: otherPakages,
+          };
 
           item = {
             ...item,
-            packages: packages
-          }
+            packages: packages,
+          };
 
           let childGroupItem = [
             {
@@ -403,7 +402,6 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
       dispatch(getGroupAll(dataGroup));
       dispatch(updateGroupItemId(0));
-
     } else {
       dispatch(updateGroupId(0));
       dispatch(getGroupAll([]));
@@ -463,6 +461,8 @@ export const uploadAvatarGroup = async (id, token, file, axiosJWT) => {
 export const updateAvatarGroup = async (
   id,
   token,
+  channel,
+  userID,
   file,
   dispatch,
   axiosJWT
@@ -476,12 +476,24 @@ export const updateAvatarGroup = async (
     });
 
     await getGroupByUserId(token, "Super User", dispatch, axiosJWT);
+
+    // await SB.connectSendBird(userID);
+
+    // await SB.updateAvatarChannel(channel, file.file);
   } catch (error) {
     console.log(error);
   }
 };
 
-export const updateGroupName = async (id, token, name, dispatch, axiosJWT) => {
+export const updateGroupName = async (
+  id,
+  token,
+  channel,
+  userID,
+  name,
+  dispatch,
+  axiosJWT
+) => {
   try {
     await axiosJWT.put(`/pkg-mgmt/gr/${id}`, name, {
       headers: {
@@ -491,6 +503,10 @@ export const updateGroupName = async (id, token, name, dispatch, axiosJWT) => {
     });
 
     await getGroupByUserId(token, dispatch, axiosJWT);
+
+    // await SB.connectSendBird(userID);
+    // await SB.updateNameChannel(channel, name.name);
+    
   } catch (error) {
     console.log(error);
   }
@@ -535,6 +551,21 @@ export const userRenewGroup = async (grId, token, dispatch, data, axiosJWT) => {
   }
 };
 
+export const getGroupChannel = async (token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get("/pkg-mgmt/gr/user_id/channel", {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    dispatch(getChannels(res?.data.channels));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const updateGroupChannel = async (
   grId,
   token,
@@ -553,21 +584,6 @@ export const updateGroupChannel = async (
     await getGroupByUserId(token, dispatch, axiosJWT);
 
     await getGroupChannel(token, dispatch, axiosJWT);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getGroupChannel = async (token, dispatch, axiosJWT) => {
-  try {
-    const res = await axiosJWT.get("/pkg-mgmt/gr/user_id/channel", {
-      headers: {
-        accept: "*/*",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    dispatch(getChannels(res?.data.channels));
   } catch (error) {
     console.log(error);
   }

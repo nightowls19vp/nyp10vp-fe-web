@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import {
@@ -30,11 +30,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getInformationUser,
-  getUserById,
-  userCheckout,
-} from "../../redux/userRequest";
+import { userCheckout } from "../../redux/userRequest";
 import { useNavigate } from "react-router-dom";
 
 import { createAxios } from "../../http/createInstance.js";
@@ -45,7 +41,6 @@ import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { loginSuccess } from "../../redux/authSlice";
 import { getUserCart, updateUserCart } from "../../redux/packageRequest";
 import { setCarts, updateNumberCart } from "../../redux/packageSlice";
-import { useEffect } from "react";
 
 const style = {
   position: "absolute",
@@ -259,20 +254,13 @@ export default function EnhancedTable({ item }) {
   const userInfo = useSelector((state) => state?.user?.userInfo);
   const order = useSelector((state) => state?.auth?.order);
 
+  const socket = SockectIO();
+
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [openModal, setOpenModal] = React.useState(false);
   const [valueMethod, setValueMethod] = React.useState("zalo");
   // const [openProgress, setOpenProgress] = React.useState(false);
-
-  const socket = SockectIO();
-  useEffect(() => {
-    socket.connect();
-
-    return () => {
-      socket.disconnect();
-    };
-  }, [socket]);
 
   const handleClose = () => setOpenModal(false);
 
@@ -290,6 +278,8 @@ export default function EnhancedTable({ item }) {
   const [selected, setSelected] = React.useState([]);
 
   const [total, setTotal] = React.useState(0);
+  const [flag, setFlag] = React.useState(false);
+  let timeId = useRef();
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -412,6 +402,20 @@ export default function EnhancedTable({ item }) {
     setValueMethod(event.target.value);
   };
 
+  useEffect(() => {
+    socket.connect();
+
+    socket.on("zpCallback", (data) => {
+      console.log("vy1", data);
+      setFlag(true);
+      clearTimeout(timeId);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket]);
+
   const handleButtonCheckout = async () => {
     if (selected.length === 0) {
       setOpenModal(true);
@@ -465,30 +469,18 @@ export default function EnhancedTable({ item }) {
     if (res?.statusCode === 200) {
       window.open(order.order.order_url);
 
-      async function getCart() {
-        await getUserCart(
-          user?.data.userInfo._id,
-          user?.accessToken,
-          dispatch,
-          axiosJWT
-        );
-      }
+      timeId = setTimeout(function () {
+        console.log("stop");
+      }, 3 * 60 * 1000);
 
-      function stopClock() {
-        console.log("vyyyyyy");
-        clearTimeout(timeoutID);
-        getCart();
-      }
+      console.log("vy2");
 
-      const timeoutID = setTimeout(stopClock, 3 * 60 * 1000);
-
-      socket.on("zpCallback", (data) => {
-        if (data) {
-          console.log("vy", data);
-          getCart();
-          clearTimeout(timeoutID);
-        }
-      });
+      await getUserCart(
+        user?.data.userInfo._id,
+        user?.accessToken,
+        dispatch,
+        axiosJWT
+      );
     }
   };
 
@@ -649,6 +641,7 @@ export default function EnhancedTable({ item }) {
             <CustomComponent.Button1 fullWidth onClick={handleButtonCheckout}>
               Thanh toán
             </CustomComponent.Button1>
+            {flag === true ? <Typography> VY </Typography> : null}
             <Modal
               open={openModal}
               onClose={handleClose}

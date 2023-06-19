@@ -81,7 +81,7 @@ function PackagesGroup({ data, pkg, title }) {
   };
 
   return (
-    <Stack spacing={3}>
+    <Stack spacing={3} sx={{ width: "70%" }}>
       {pkg ? <PackageGroup item={pkg} data={data} title={title} /> : null}
       <Stack
         spacing={1}
