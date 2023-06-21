@@ -559,7 +559,7 @@ export const getGroupChannel = async (token, dispatch, axiosJWT) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
+    console.log(res?.data.channels);
     dispatch(getChannels(res?.data.channels));
   } catch (error) {
     console.log(error);

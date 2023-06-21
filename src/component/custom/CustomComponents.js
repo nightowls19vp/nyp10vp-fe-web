@@ -258,7 +258,7 @@ export const ImageStock = styled("span")(({ theme }) => ({
   top: 0,
   bottom: 0,
   display: "flex",
-  alignItems: "center",
+  alignItems: "flex-end",
   justifyContent: "center",
   // color: theme.palette.common.white,
 }));
@@ -289,12 +289,12 @@ export const ModalBox = styled(Box)(({ theme }) => ({
   position: "absolute",
   top: "50%",
   left: "50%",
-  transform: "translate(-50%, -50%)",
+  // transform: "translate(-50%, -50%)",
   width: 400,
   [theme.breakpoints.down("sm")]: {
     width: "100%",
   },
-  bgcolor: theme.palette.common.white,
+  // bgcolor: theme.palette.common.white,
   border: "1px solid #e6e6e6",
   borderRadius: "20px",
   boxShadow: 24,

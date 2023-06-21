@@ -35,21 +35,18 @@ const images = [
   },
 ];
 
-// const style = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-//   width: 400,
-//   [theme.breakpoints.down('sm')]: {
-//     width: '100%'
-//   },
-//   bgcolor: "background.paper",
-//   border: "1px solid #e6e6e6",
-//   borderRadius: "20px",
-//   boxShadow: 24,
-//   p: 4,
-// };
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '1px solid #000',
+  boxShadow: 24,
+  borderRadius: "20px",
+  p: 4,
+};
 
 function StockItem() {
   const [open, setOpen] = useState(false);
@@ -79,21 +76,21 @@ function StockItem() {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <CustomComponent.ModalBox>
+            <Box sx={style}>
               <Typography id="modal-modal-title" variant="h6" component="h2">
                 Thêm kho mới
               </Typography>
               <Stack id="modal-modal-description" spacing={2}>
                 <Box className="input-modal-description">
-                  <Typography variant="body2" sx={{  width: '130px'}}> Nhập tên kho: </Typography>
+                  <Typography variant="body2" sx={{  minWidth: '130px'}}> Nhập tên kho: </Typography>
                   <TextField size="small" fullWidth />
                 </Box>
                 <Box className="input-modal-description">
-                  <Typography variant="body2" sx={{  width: '130px'}}> Nhập mô tả kho: </Typography>
+                  <Typography variant="body2" sx={{  minWidth: '130px'}}> Nhập mô tả kho: </Typography>
                   <TextField size="small" multiline rows={3} fullWidth />
                 </Box>
               </Stack>
-            </CustomComponent.ModalBox>
+            </Box>
           </Modal>
         </Box>
       </Box>

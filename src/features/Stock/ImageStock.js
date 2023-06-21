@@ -51,13 +51,13 @@ function ImageStock({ item }) {
         />
         <CustomComponent.ImageBackdropStock className="MuiImageBackdrop-root" />
         <CustomComponent.ImageStock>
-          <Slide direction="up" in={openDetail} mountOnEnter unmountOnExit>
+          <Slide direction="up" in={openDetail} mountOnEnter unmountOnExit >
             <Box
               sx={{
                 width: "100%",
-                height: "100%",
+                height: "30%",
                 bgcolor: Colors.search,
-                borderRadius: "20px",
+                borderRadius: "0px 0px 20px 20px",
               }}
             >
               <Typography> {item.title} </Typography>

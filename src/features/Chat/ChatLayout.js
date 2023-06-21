@@ -129,7 +129,7 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
           <Box id="scrollBar-list" className="list-channels">
             {item.map((channel, idx) =>
               channel ? (
-                <Box key={channel._id}>
+                <Box key={channel._id} sx={{ paddingY: "3px"}}>
                   <CustomComponent.GroupChat
                     sx={{
                       backgroundColor:
