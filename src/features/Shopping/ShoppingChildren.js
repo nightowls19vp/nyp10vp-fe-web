@@ -469,9 +469,9 @@ export default function EnhancedTable({ item }) {
     if (res?.statusCode === 200) {
       window.open(order.order.order_url);
 
-      timeId = setTimeout(function () {
-        console.log("stop");
-      }, 3 * 60 * 1000);
+      // timeId = setTimeout(function () {
+      //   console.log("stop");
+      // }, 3 * 60 * 1000);
 
       console.log("vy2");
 

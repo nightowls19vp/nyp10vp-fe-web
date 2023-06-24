@@ -12,5 +12,7 @@ export const Colors = {
     btnOutline: "#ffeacc",
     black: "#000000",
     box: "#e6e6e6",
-    camera: "#e0e4eb"
+    camera: "#e0e4eb",
+    error: "#e60000",
+    success: "#009933",
 };

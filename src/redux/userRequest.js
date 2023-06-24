@@ -504,9 +504,6 @@ export const updateGroupName = async (
 
     await getGroupByUserId(token, dispatch, axiosJWT);
 
-    // await SB.connectSendBird(userID);
-    // await SB.updateNameChannel(channel, name.name);
-    
   } catch (error) {
     console.log(error);
   }

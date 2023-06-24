@@ -20,12 +20,14 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 
 function createData(id, name, status, startDate, endDate) {
+  let s = new Date(startDate);
+  let e = new Date(endDate);
   return {
     id,
     name,
     status,
-    startDate,
-    endDate,
+    s,
+    e,
   };
 }
 

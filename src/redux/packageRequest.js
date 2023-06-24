@@ -91,3 +91,18 @@ export const updateUserCart = async (userID, cart, token, dispatch, axiosJWT) =>
     console.log(error);
   }
 };
+
+export const postPackageBill = async (group_id, data, token, axiosJWT) => {
+  try {
+    const res = await axiosJWT.post(`/pkg-mgmt/bill/${group_id}`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    console.log(res);
+  } catch (error) {
+    console.log(error);
+  }
+};

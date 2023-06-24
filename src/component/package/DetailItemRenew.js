@@ -139,15 +139,15 @@ function DetailItemRenew({ item, grpId }) {
         getGroup();
       }
 
-      const timeoutID = setTimeout(stopClock, 3 * 60 * 1000);
+      const timeoutID = setTimeout(stopClock, 1 * 60 * 1000);
 
-      socket.on("zpCallback", (data) => {
-        if (data) {
-          console.log("vy", data);
-          getGroup();
-          clearTimeout(timeoutID);
-        }
-      });
+      // socket.on("zpCallback", (data) => {
+      //   if (data) {
+      //     console.log("vy", data);
+      //     getGroup();
+      //     clearTimeout(timeoutID);
+      //   }
+      // });
 
       navigate("/group");
     }
