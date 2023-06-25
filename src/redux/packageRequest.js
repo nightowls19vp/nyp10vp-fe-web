@@ -1,7 +1,7 @@
 import apiClient from "../http/http-common.js";
 
 // import dataPackage from "../data/dataPackage.js";
-import { setCarts, setInitialPackage, updateNotiPackage, updateNumberCart, updatePackageId } from "./packageSlice.js";
+import { setCarts, setInitialPackage, updateBill, updateNotiPackage, updateNumberCart, updatePackageId } from "./packageSlice.js";
 
 export const getAllPackage = async (dispatch) => {
   try {
@@ -100,8 +100,22 @@ export const postPackageBill = async (group_id, data, token, axiosJWT) => {
         Authorization: `Bearer ${token}`,
       },
     })
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-    console.log(res);
+export const getPackageBill = async (group_id, token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get(`/pkg-mgmt/bill/${group_id}`, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    dispatch(updateBill(res?.data.data));
+    console.log(res?.data);
   } catch (error) {
     console.log(error);
   }

@@ -4,7 +4,13 @@ import { Stack, Box, Typography, IconButton, Modal } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 
+import { createAxios } from "../../http/createInstance";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess } from "../../redux/authSlice";
+// import { getPackageBill } from "../../redux/packageRequest";
+
 import { Colors } from "../../config/Colors";
+import ListBill from "./ListBill";
 import FormSpending from "./FormSpending";
 
 const style = {
@@ -12,42 +18,61 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: { xs: "100%", md: "70%", lg: "50%" },
+  width: { xs: "95%", sm: "80%", md: "70%", lg: "50%" },
   bgcolor: "background.paper",
-  border: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
+  border:
+    "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
   boxShadow: 24,
   borderRadius: "20px",
   p: 4,
 };
 
 function GroupSpending({ item }) {
+  // const dispatch = useDispatch();
+
+  // const user = useSelector((state) => state?.auth.login?.currentUser);
+  // let axiosJWT = createAxios(user, dispatch, loginSuccess);
+
   const [open, setOpen] = useState(false);
+  const [listMember, setListMember] = useState();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  let listMember = [];
+  // useEffect(() => {
+  //   const getBillInGroup = async () => {
+  //     await getPackageBill(item._id, user?.accessToken, dispatch, axiosJWT);
+  //   };
 
-  for (let member of item.members) {
-    let formData = {
-      _id: member.user.user._id,
-      name: member.user.user.name,
+  //   getBillInGroup().catch(console.error);
+
+  //   return () => {
+  //     getBillInGroup();
+  //   };
+  // }, [axiosJWT, dispatch, item._id, user?.accessToken]);
+
+  useEffect(() => {
+    const getUsersInGroup = () => {
+      let array = [];
+      for (let member of item.members) {
+        let formData = {
+          _id: member.user.user._id,
+          name: member.user.user.name,
+        };
+        array.push(formData);
+      }
+      setListMember(array);
     };
-    listMember.push(formData);
-  }
-  let formData = {
-    _id: "648406c2549163797aa486ww",
-    name: "user2",
-  };
-  listMember.push(formData);
-  formData = {
-    _id: "648406c2549163797aa486wu",
-    name: "user3",
-  };
-  listMember.push(formData);
+
+    getUsersInGroup();
+
+    return () => {
+      getUsersInGroup();
+    };
+  }, [item.members]);
 
   return (
-    <Stack>
+    <Stack sx={{ width: "100%" }}>
       <Box className="title-group-spending">
         <MonetizationOnOutlinedIcon
           sx={{
@@ -80,9 +105,11 @@ function GroupSpending({ item }) {
           <FormSpending grID={item._id} item={listMember} />
         </Box>
       </Modal>
-      {/* <Box sx={{ width: "100%", display: "flex", justifyContent: "center"}}>
-      <FormSpending item={listMember} />
-      </Box> */}
+
+      <Box sx={{ width: "100%" }}>
+        <Typography>Danh sách chi tiêu bên ngoài</Typography>
+        <ListBill grID={item._id} />
+      </Box>
     </Stack>
   );
 }

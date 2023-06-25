@@ -9,6 +9,7 @@ const packageSlice = createSlice({
     numberCart: 0,
     cart: [],
     noti: null,
+    bill: [],
   },
   reducers: {
     setInitialPackage: (state, action) => {
@@ -31,7 +32,10 @@ const packageSlice = createSlice({
     },
     updateNotiPackage: (state, action) => {
       state.noti = action.payload;
-    }
+    },
+    updateBill: (state, action) => {
+      state.bill = action.payload;
+    },
   },
 });
 
@@ -43,6 +47,7 @@ export const {
   updateShowSidebar,
   updateProfileId,
   updateNotiPackage,
+  updateBill,
 } = packageSlice.actions;
 
 export default packageSlice.reducer;

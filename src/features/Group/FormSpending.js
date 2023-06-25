@@ -11,7 +11,6 @@ import {
   Input,
   FormControl,
   InputLabel,
-  InputBase,
 } from "@mui/material";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 
@@ -94,8 +93,11 @@ function FormSpending({ grID, item }) {
   };
 
   const handleGroupBill = async () => {
+    let array = [...memName];
+    array[idxUser].amount = money;
+
     let borrowers = [];
-    for (let el of memName) {
+    for (let el of array) {
       if (el._id !== "0") {
         let data = {
           user: el._id,

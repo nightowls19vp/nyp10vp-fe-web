@@ -320,31 +320,12 @@ function DetailItem({ item }) {
           </Typography>
           {item.name === "Family Package" ? (
             <Box className="item">
-              {/* <CustomComponents.CssTextField size="small" value={member} /> */}
               <Typography variant="subtitle1" fontSize={18} gutterBottom>
                 {member}
               </Typography>
             </Box>
           ) : (
             <Box className="item">
-              {/* <IconButton disabled={arrowLeftMem} onClick={handleArrowLeftMem}>
-                <CiSquareMinus
-                  color={arrowLeftMem ? null : Colors.textPrimary}
-                  size={30}
-                />
-              </IconButton>
-              <Typography variant="subtitle1" fontSize={18}>
-                {member}
-              </Typography>
-              <IconButton
-                disabled={arrowRightMem}
-                onClick={handleArrowRightMem}
-              >
-                <CiSquarePlus
-                  color={arrowRightMem ? null : Colors.textPrimary}
-                  size={30}
-                />
-              </IconButton> */}
               <CustomComponents.PrettoSlider
                 valueLabelDisplay="auto"
                 aria-label="pretto slider"
