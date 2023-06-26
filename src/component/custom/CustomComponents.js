@@ -7,6 +7,7 @@ import {
   TextField,
   Box,
   Slider,
+  IconButton,
 } from "@mui/material";
 
 import { Colors } from "../../config/Colors";
@@ -261,6 +262,15 @@ export const ImageStock = styled("span")(({ theme }) => ({
   alignItems: "flex-end",
   justifyContent: "center",
   // color: theme.palette.common.white,
+}));
+
+export const EditStock = styled("span")(({ theme }) => ({
+  position: "absolute",
+  //left: 0,
+  right: 5,
+  top: 5,
+  //bottom: 0,
+  color: theme.palette.common.white,
 }));
 
 export const ImageBackdropStock = styled("span")(({ theme }) => ({

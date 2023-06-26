@@ -24,7 +24,7 @@ function BillDetail({ item, statusBill }) {
       }}
     >
       <Typography variant="h4">{item.summary}</Typography>
-      <Stack spacing={2}>
+      <Stack spacing={2} id="modalBillDetail" className="modalModalBillDetail">
         <Typography variant="subtitle1">{date.toDateString()}</Typography>
         <Typography variant="subtitle1" sx={{ fontStyle: "italic" }}>
           {item.description}

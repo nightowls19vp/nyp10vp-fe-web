@@ -107,7 +107,6 @@ function GroupSpending({ item }) {
       </Modal>
 
       <Box sx={{ width: "100%" }}>
-        <Typography>Danh sách chi tiêu bên ngoài</Typography>
         <ListBill grID={item._id} />
       </Box>
     </Stack>

@@ -6,22 +6,21 @@ import Bill from "./Bill";
 import "../../assets/css/Bill.scss";
 import { useSelector } from "react-redux";
 
-function ListBill({ grID }) {
+function ListBill() {
   const listBill = useSelector((state) => state?.package?.bill);
 
   return (
     <Box
       sx={{
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "column",
         flexWrap: "wrap",
-        justifyContent: { xs: "center", sm: "center", md: "flex-start" },
-        paddingY: "10px",
+        justifyContent: "center",
         width: "100%",
       }}
     >
       {listBill.map((bill) =>
-        bill ? <Bill key={bill._id} item={bill} grID={grID} /> : null
+        bill ? <Bill key={bill._id} item={bill} /> : null
       )}
     </Box>
   );

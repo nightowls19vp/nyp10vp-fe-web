@@ -126,8 +126,8 @@ function FormSpending({ grID, item }) {
       <Input
         id="modal-modal-title"
         placeholder="Tên chi tiêu"
-        size="small"
         value={name}
+        fontSize={18}
         className="name-bill"
         onChange={(e) => setName(e.target.value)}
       />
@@ -150,6 +150,7 @@ function FormSpending({ grID, item }) {
             <Select
               labelId="demo-simple-select-host-name"
               id="select-host-name"
+              size="small"
               value={hostName}
               onChange={handleChangeHost}
             >
@@ -245,6 +246,7 @@ function FormSpending({ grID, item }) {
                     <Select
                       labelId="demo-simple-select-member"
                       id="select-member"
+                      size="small"
                       value={route._id}
                       label="Chọn thành viên"
                       onChange={handleChangeMember}
@@ -262,6 +264,7 @@ function FormSpending({ grID, item }) {
                   <Box sx={{ width: "50%", paddingLeft: "10px" }}>
                     <TextField
                       fullWidth
+                      size="small"
                       value={money}
                       placeholder="Nhập tiền"
                       onChange={(e) => handleChangeAmount(e, idx)}

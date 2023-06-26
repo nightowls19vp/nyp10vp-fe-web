@@ -14,6 +14,7 @@ import { Colors } from "../../config/Colors";
 import "../../assets/css/Stock.scss";
 import ImgAvatar from "../../assets/img/panda.jpg";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
+import ModalAddStock from "./ModalAddStock";
 
 const images = [
   {
@@ -40,7 +41,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: { xs: "90%", sm: "70%", md: "60%", lg: "40%" },
   bgcolor: 'background.paper',
   border: '1px solid #000',
   boxShadow: 24,
@@ -77,19 +78,7 @@ function StockItem() {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Thêm kho mới
-              </Typography>
-              <Stack id="modal-modal-description" spacing={2}>
-                <Box className="input-modal-description">
-                  <Typography variant="body2" sx={{  minWidth: '130px'}}> Nhập tên kho: </Typography>
-                  <TextField size="small" fullWidth />
-                </Box>
-                <Box className="input-modal-description">
-                  <Typography variant="body2" sx={{  minWidth: '130px'}}> Nhập mô tả kho: </Typography>
-                  <TextField size="small" multiline rows={3} fullWidth />
-                </Box>
-              </Stack>
+              <ModalAddStock />
             </Box>
           </Modal>
         </Box>

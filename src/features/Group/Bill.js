@@ -27,7 +27,7 @@ const style = {
   p: 4,
 };
 
-function Bill({ item, grID }) {
+function Bill({ item }) {
   const day = new Date(item.date);
   const [status, setStatus] = useState(null);
 
@@ -52,50 +52,51 @@ function Bill({ item, grID }) {
   return (
     <>
       <ButtonBase onClick={handleOpen}>
-        <Box
-          sx={{ width: { xs: "70%", sm: "50%", md: "30%" }, minWidth: "250px" }}
-          className="bill"
-        >
-          <Stack spacing={2}>
-            <Typography variant="h6" sx={{ fontSize: 18 }}>
-              {item.summary}
+        <Box sx={{ width: "90%", minWidth: "250px" }} className="bill">
+          <Typography variant="h6" sx={{ fontSize: 18 }}>
+            {item.summary}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <AccessTimeIcon />
+            <Typography
+              variant="overline"
+              display="block"
+              sx={{ fontStyle: "italic" }}
+            >
+              {day.toDateString()}
             </Typography>
+          </Box>
+          <Box className="bill-end">
+            <Avatar src="" />
             <Box
               sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <AccessTimeIcon />
-              <Typography variant="overline" display="block" sx={{ fontStyle: "italic"}}>
-                {day.toDateString()}
-              </Typography>
-            </Box>
-            <Box className="bill-end">
-              <Box
-                sx={{
-                  backgroundColor:
-                    status === "PENDING"
-                      ? "#ccffdd"
-                      : status === "APPROVED"
-                      ? "#ccf5ff"
-                      : "#f2f2f2",
+                backgroundColor:
+                  status === "PENDING"
+                    ? "#ccffdd"
+                    : status === "APPROVED"
+                    ? "#ccf5ff"
+                    : "#f2f2f2",
 
-                  color:
-                    status === "PENDING"
-                      ? "#008000"
-                      : status === "APPROVED"
-                      ? "#0000cc"
-                      : "#000000",
-                }}
-                className="status-bill"
-              >
-                <Typography sx={{ fontWeight: 600 }}>{status}</Typography>
-              </Box>
-              <Avatar src="" />
+                color:
+                  status === "PENDING"
+                    ? "#008000"
+                    : status === "APPROVED"
+                    ? "#0000cc"
+                    : "#000000",
+                    
+                marginLeft: "5px",
+              }}
+              className="status-bill"
+            >
+              <Typography sx={{ fontWeight: 600 }}>{status}</Typography>
             </Box>
-          </Stack>
+          </Box>
         </Box>
       </ButtonBase>
       <Modal

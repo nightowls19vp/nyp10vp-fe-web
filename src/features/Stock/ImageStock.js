@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Box, Stack, Typography, Slide } from "@mui/material";
+import { Box, Stack, Typography, Slide, IconButton } from "@mui/material";
+
+import EditIcon from "@mui/icons-material/Edit";
 
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import ImgAvatar from "../../assets/img/panda.jpg";
@@ -31,6 +33,10 @@ function ImageStock({ item }) {
 
   const [openDetail, setOpenDetail] = useState(false);
 
+  const handleButtonEditStock = () => {
+    console.log("vyyy");
+  }
+
   const handleClickImage = () => {
     navigate(`/stock/product-stock?id=${item.title}`);
   };
@@ -51,15 +57,23 @@ function ImageStock({ item }) {
         />
         <CustomComponent.ImageBackdropStock className="MuiImageBackdrop-root" />
         <CustomComponent.ImageStock>
-          <Slide direction="up" in={openDetail} mountOnEnter unmountOnExit >
+          <Slide direction="up" in={openDetail} mountOnEnter unmountOnExit>
             <Box
               sx={{
                 width: "100%",
                 height: "30%",
                 bgcolor: Colors.search,
                 borderRadius: "0px 0px 20px 20px",
+                position: "relative",
               }}
             >
+              <div
+                sx={{ position: "absolute", top: 0, right: 0 }}
+                role="button"
+                onClick={handleButtonEditStock}
+              >
+                <EditIcon />
+              </div>
               <Typography> {item.title} </Typography>
             </Box>
           </Slide>
