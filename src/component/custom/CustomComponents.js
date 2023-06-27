@@ -233,11 +233,11 @@ export const CssTextField = styled(TextField)({
 
 export const ImageButtonStock = styled(ButtonBase)(({ theme }) => ({
   position: "relative",
-  height: 350,
+  height: 250,
   borderRadius: "20px",
   [theme.breakpoints.down("sm")]: {
     width: "100% !important", // Overrides inline-style
-    height: 200,
+    height: 100,
   },
 }));
 

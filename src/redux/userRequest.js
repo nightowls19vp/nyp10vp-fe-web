@@ -133,9 +133,12 @@ export const userCheckout = async (token, dispatch, user, axiosJWT) => {
 
 export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
   try {
-    const resSU = await axiosJWT.get("/pkg-mgmt/gr/user_id", {
+    const resSU = await axiosJWT.get("/pkg-mgmt/gr/user", {
       params: {
         role: "Super User",
+        page: 0,
+        limit: 5,
+        sort: "-createdAt",
       },
       headers: {
         accept: "*/*",
@@ -143,9 +146,12 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
       },
     });
 
-    const resU = await axiosJWT.get("/pkg-mgmt/gr/user_id", {
+    const resU = await axiosJWT.get("/pkg-mgmt/gr/user", {
       params: {
         role: "User",
+        page: 0,
+        limit: 5,
+        sort: "-createdAt",
       },
       headers: {
         accept: "*/*",
@@ -503,7 +509,6 @@ export const updateGroupName = async (
     });
 
     await getGroupByUserId(token, dispatch, axiosJWT);
-
   } catch (error) {
     console.log(error);
   }

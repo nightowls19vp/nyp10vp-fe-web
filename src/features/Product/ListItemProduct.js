@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import { styled } from "@mui/material/styles";
 import {
-  Stack,
   Paper,
   Table,
   TableBody,
@@ -11,7 +10,6 @@ import {
   TableRow,
   TableFooter,
   TablePagination,
-  Box,
 } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 
@@ -52,7 +50,7 @@ const rows = [
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
 
-function ProductItem() {
+function ListItemProduct() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -77,11 +75,10 @@ function ProductItem() {
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-              <StyledTableCell align="right">Calories</StyledTableCell>
-              <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-              <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-              <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+              <StyledTableCell>Tên sản phẩm</StyledTableCell>
+              <StyledTableCell align="right">Số lượng</StyledTableCell>
+              <StyledTableCell align="right">Giá tiền (vnd)</StyledTableCell>
+              <StyledTableCell align="right">Hạn sử dụng</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -103,7 +100,6 @@ function ProductItem() {
                 <StyledTableCell align="right">{row.calories}</StyledTableCell>
                 <StyledTableCell align="right">{row.fat}</StyledTableCell>
                 <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                <StyledTableCell align="right">{row.protein}</StyledTableCell>
               </StyledTableRow>
             ))}
 
@@ -131,4 +127,4 @@ function ProductItem() {
   );
 }
 
-export default ProductItem;
+export default ListItemProduct;
