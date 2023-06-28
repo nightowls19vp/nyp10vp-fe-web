@@ -12,11 +12,16 @@ import {
 
 import { MdOutlineAddBox } from "react-icons/md";
 
+import { createAxios } from "../../http/createInstance";
+
 import { Colors } from "../../config/Colors";
 import ListItemProduct from "./ListItemProduct.js";
 import AddProduct from "./AddProduct";
 import CreateProduct from "./CreateProduct";
 import AddressVietNam from "../../component/Address/AddressVietNam";
+import { getGroupProducts } from "../../redux/stockRequest";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess } from "../../redux/authSlice";
 
 const style = {
   position: "absolute",
@@ -31,17 +36,29 @@ const style = {
   p: 4,
 };
 
-function ProductItem() {
+function ProductItem({ grId }) {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
+
   const [openAdd, setOpenAdd] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
+  const [products, setProducts] = useState();
 
-  const handleOpenAdd = () => setOpenAdd(true);
+  const handleOpenAdd = async () => {
+    const res = await getGroupProducts(grId, 1, 10, user?.accessToken, dispatch, axiosJWT);
+    console.log("vyy", res.data);
+    setProducts(res.data);
+    setOpenAdd(true);
+  };
   const handleCloseAdd = () => setOpenAdd(false);
 
   const handleCreatePro = (flag) => {
     setOpenAdd(false);
     setOpenCreate(true);
-  }
+  };
 
   const handleCloseCreatePro = () => setOpenCreate(false);
 
@@ -87,7 +104,7 @@ function ProductItem() {
         aria-describedby="modal-modal-product"
       >
         <Box sx={style}>
-          <AddProduct handleCreatePro={handleCreatePro} />
+          <AddProduct item={products} handleCreatePro={handleCreatePro} />
         </Box>
       </Modal>
 

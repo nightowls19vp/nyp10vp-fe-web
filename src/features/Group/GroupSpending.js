@@ -28,10 +28,6 @@ const style = {
 };
 
 function GroupSpending({ item }) {
-  // const dispatch = useDispatch();
-
-  // const user = useSelector((state) => state?.auth.login?.currentUser);
-  // let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [open, setOpen] = useState(false);
   const [listMember, setListMember] = useState();
@@ -39,25 +35,13 @@ function GroupSpending({ item }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // useEffect(() => {
-  //   const getBillInGroup = async () => {
-  //     await getPackageBill(item._id, user?.accessToken, dispatch, axiosJWT);
-  //   };
-
-  //   getBillInGroup().catch(console.error);
-
-  //   return () => {
-  //     getBillInGroup();
-  //   };
-  // }, [axiosJWT, dispatch, item._id, user?.accessToken]);
-
   useEffect(() => {
     const getUsersInGroup = () => {
       let array = [];
       for (let member of item.members) {
         let formData = {
-          _id: member.user.user._id,
-          name: member.user.user.name,
+          _id: member.user._id,
+          name: member.user.name,
         };
         array.push(formData);
       }

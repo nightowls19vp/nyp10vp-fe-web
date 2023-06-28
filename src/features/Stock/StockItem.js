@@ -49,7 +49,7 @@ const style = {
   p: 4,
 };
 
-function StockItem() {
+function StockItem({ item }) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -92,8 +92,8 @@ function StockItem() {
           width: "100%",
         }}
       >
-        {images.map((img) => (
-          <ImageStock item={img} key={img.title} />
+        {item.map((stock) => (
+          stock ? (<ImageStock item={stock} key={stock.id} />) : null
         ))}
       </Box>
     </Stack>

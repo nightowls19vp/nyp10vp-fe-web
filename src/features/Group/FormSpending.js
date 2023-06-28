@@ -154,7 +154,7 @@ function FormSpending({ grID, item }) {
               value={hostName}
               onChange={handleChangeHost}
             >
-              {item.map((member) =>
+              {item?.map((member) =>
                 member ? (
                   <MenuItem key={member._id} value={member._id}>
                     {member.name}
@@ -202,7 +202,7 @@ function FormSpending({ grID, item }) {
           </IconButton>
         </Box>
 
-        {memName.map((route, idx) =>
+        {memName?.map((route, idx) =>
           route ? (
             <Box
               sx={{

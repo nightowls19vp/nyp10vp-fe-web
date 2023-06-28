@@ -15,6 +15,7 @@ import storage from "redux-persist/lib/storage";
 import authReducer from "./authSlice";
 import packageSlice from "./packageSlice";
 import userSlice from "./userSlice";
+import stockSlide from "./stockSlide";
 
 
 // export const store = configureStore({
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   package: packageSlice,
   user: userSlice,
+  stock: stockSlide,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

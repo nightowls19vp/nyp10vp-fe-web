@@ -76,8 +76,8 @@ function PackagesGroup({ data, pkg, title }) {
     console.log(formData);
     const res = await usersInvitePeople(user?.accessToken, formData, axiosJWT);
 
-    setOpenInvite(false);
     console.log(res);
+    handleCloseInvite();
   };
 
   return (
@@ -116,13 +116,13 @@ function PackagesGroup({ data, pkg, title }) {
         {data.members.map((route) =>
           route ? (
             <Box
-              key={route.user.user._id}
+              key={route.user._id}
               className="package-group"
               sx={{ paddingBottom: "10px" }}
             >
-              <Avatar src={route.user.user.avatar} sx={{ width: "50px", height: "50px"}} />
+              <Avatar src={route.user.avatar} sx={{ width: "50px", height: "50px"}} />
               <Typography variant="overline" display="block" sx={{ paddingLeft: "20px", fontSize: 18 }}>
-                {route.user.user.name}
+                {route.user.name}
               </Typography>
             </Box>
           ) : null

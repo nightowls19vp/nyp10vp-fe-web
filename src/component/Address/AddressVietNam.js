@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Box, Autocomplete, TextField } from "@mui/material";
+import { Box, Autocomplete, TextField, Stack } from "@mui/material";
 
 const options = ["Option 1", "Option 2"];
 
@@ -19,6 +19,8 @@ function AddressVietNam({ handleAddress }) {
       <Box flex={1}>
         <Autocomplete
           value={province}
+          fullWidth
+          size="small"
           onChange={(event, newValue) => {
             setProvince(newValue);
           }}
@@ -37,6 +39,8 @@ function AddressVietNam({ handleAddress }) {
         <Autocomplete
           disabled={province !== null ? false : true}
           value={district}
+          fullWidth
+          size="small"
           onChange={(event, newValue) => {
             setDistrict(newValue);
           }}
@@ -46,14 +50,14 @@ function AddressVietNam({ handleAddress }) {
           }}
           id="controllable-states-demo"
           options={options}
-          renderInput={(params) => (
-            <TextField {...params} label="Quận/huyện" />
-          )}
+          renderInput={(params) => <TextField {...params} label="Quận/huyện" />}
         />
       </Box>
       <Box flex={1}>
         <Autocomplete
           disabled={province === null || district === null ? true : false}
+          fullWidth
+          size="small"
           value={war}
           onChange={(event, newValue) => {
             setWar(newValue);
@@ -65,9 +69,7 @@ function AddressVietNam({ handleAddress }) {
           }}
           id="controllable-states-demo"
           options={options}
-          renderInput={(params) => (
-            <TextField {...params} label="Phường/Xã" />
-          )}
+          renderInput={(params) => <TextField {...params} label="Phường/Xã" />}
         />
       </Box>
     </Box>

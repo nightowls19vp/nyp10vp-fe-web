@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 
-import { Stack, Typography, Box, TextField } from "@mui/material";
+import {
+  Stack,
+  Typography,
+  Box,
+  TextField,
+  Autocomplete,
+  IconButton,
+} from "@mui/material";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
 
 import "../../assets/css/Product.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker";
+import AddressVietNam from "../../component/Address/AddressVietNam";
 
 function CreateProduct() {
   const nowDate = new Date();
@@ -18,15 +27,40 @@ function CreateProduct() {
   const [region, setRegion] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
+  const [province, setProvince] = useState(null);
+  const [district, setDistrict] = useState(null);
+  const [war, setWar] = useState(null);
+  const [addr1, setAddr1] = useState("");
   const [descrip, setDescrip] = useState("");
+  const [flagAddr, setFlagAddr] = useState(false);
+
+  const listAddress = [];
+
+  const defaultProps = {
+    options: listAddress,
+    getOptionLabel: (option) => option.title,
+  };
+
+  const [addr, setAddr] = React.useState(null);
+  const [inputAddr, setInputAddr] = React.useState("");
 
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue.$d);
   };
+
+  const handleButtonAddAddress = () => {
+    setFlagAddr(true);
+  };
+
+  const handleAddress = (prov, dis, war) => {
+    setProvince(prov);
+    setDistrict(dis);
+    setWar(war);
+  };
   return (
     <Stack spacing={2}>
       <Typography>Thêm sản phẩm</Typography>
-      <Stack spacing={2}>
+      <Stack spacing={2} id="createProduct" className="createCreateProduct">
         <Box
           sx={{
             display: "flex",
@@ -107,16 +141,69 @@ function CreateProduct() {
         </Box>
         <Box className="d-flex">
           <Typography sx={{ minWidth: "120px" }}>Region:</Typography>
-          <TextField size="small" fullWidth value={region} onChange={(e) => setRegion(e.target.value)} />
+          <TextField
+            size="small"
+            fullWidth
+            value={region}
+            onChange={(e) => setRegion(e.target.value)}
+          />
         </Box>
         <Box className="d-flex">
           <Typography sx={{ minWidth: "120px" }}>Brand:</Typography>
-          <TextField size="small" fullWidth value={brand} onChange={(e) => setBrand(e.target.value)} />
+          <TextField
+            size="small"
+            fullWidth
+            value={brand}
+            onChange={(e) => setBrand(e.target.value)}
+          />
         </Box>
         <Box className="d-flex">
           <Typography sx={{ minWidth: "120px" }}>Category:</Typography>
-          <TextField size="small" fullWidth value={category} onChange={(e) => setCategory(e.target.value)} />
+          <TextField
+            size="small"
+            fullWidth
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
         </Box>
+
+        {flagAddr ? (
+          <Stack spacing={2}>
+            <AddressVietNam handleAddress={handleAddress} />
+            <TextField
+              fullWidth
+              size="small"
+              label="Địa chỉ cụ thể"
+              value={addr1}
+              onChange={(e) => setAddr1(e.target.value)}
+            />
+          </Stack>
+        ) : (
+          <Box className="d-flex">
+            <Autocomplete
+              fullWidth
+              size="small"
+              {...defaultProps}
+              id="clear-on-escape"
+              clearOnEscape
+              noOptionsText="Không có địa chỉ"
+              value={addr}
+              onChange={(event, newValue) => {
+                setAddr(newValue);
+              }}
+              inputValue={inputAddr}
+              onInputChange={(event, newInputValue) => {
+                setInputAddr(newInputValue);
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Chọn địa chỉ" />
+              )}
+            />
+            <IconButton onClick={handleButtonAddAddress}>
+              <ControlPointIcon sx={{ fontSize: 35 }} />
+            </IconButton>
+          </Box>
+        )}
         <TextField
           size="small"
           multiline

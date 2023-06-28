@@ -19,7 +19,7 @@ function ListBill() {
         width: "100%",
       }}
     >
-      {listBill.map((bill) =>
+      {listBill?.map((bill) =>
         bill ? <Bill key={bill._id} item={bill} /> : null
       )}
     </Box>

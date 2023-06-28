@@ -13,7 +13,8 @@ function ImageStock({ item }) {
   const [openDetail, setOpenDetail] = useState(false);
 
   const handleClickImage = () => {
-    navigate(`/stock/product-stock?id=${item.title}`);
+    let id = "649b0193d536e02035c7b191";
+    navigate(`/stock/product-stock?id=${id}`);
   };
 
   return (
@@ -34,7 +35,7 @@ function ImageStock({ item }) {
         onMouseLeave={() => setOpenDetail(false)}
       >
         <CustomComponent.ImageSrcStock
-          style={{ backgroundImage: `url(${item.url})` }}
+          style={{ backgroundImage: `url(${item.image})` }}
         />
         <CustomComponent.ImageBackdropStock className="MuiImageBackdrop-root" />
         <CustomComponent.ImageStock>
@@ -45,15 +46,29 @@ function ImageStock({ item }) {
                 height: "40%",
                 bgcolor: Colors.search,
                 borderRadius: "0px 0px 20px 20px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <Typography> {item.title} </Typography>
+              <Typography> {item.name} </Typography>
+              <Typography
+                sx={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  fontStyle: "italic"
+                }}
+              >
+                {item.description}
+              </Typography>
             </Box>
           </Slide>
         </CustomComponent.ImageStock>
       </CustomComponent.ImageButtonStock>
-      <IconButton sx={{ position: "absolute", top: "35%", left: "40%" }}>
-        <Box bgcolor={Colors.camera} borderRadius={"50%"} padding={"8px"}>
+      <IconButton sx={{ position: "absolute", top: "0", right: "0" }}>
+        <Box borderRadius={"20px"} padding={"5px"}>
           <EditIcon color={Colors.black} size={25} />
         </Box>
       </IconButton>

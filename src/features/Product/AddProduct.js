@@ -3,73 +3,41 @@ import React, { useState } from "react";
 import {
   Autocomplete,
   Box,
+  FormControl,
+  InputAdornment,
+  InputBase,
+  MenuItem,
+  Select,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import "../../assets/css/Product.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker";
 
-function AddProduct({ handleCreatePro }) {
-  const top100Films = [
-    { title: "The Shawshank Redemption", year: 1994 },
-    { title: "The Godfather", year: 1972 },
-    { title: "The Godfather: Part II", year: 1974 },
-    { title: "The Dark Knight", year: 2008 },
-    { title: "12 Angry Men", year: 1957 },
-    { title: "Schindler's List", year: 1993 },
-    { title: "Pulp Fiction", year: 1994 },
-    {
-      title: "The Lord of the Rings: The Return of the King",
-      year: 2003,
-    },
-  ];
-
+function AddProduct({ item, handleCreatePro }) {
+  console.log(item);
   const nowDate = new Date();
   const [prod, setProd] = useState("");
   const [quantity, setQuantity] = useState("");
   const [unit, setUnit] = useState("");
   const [date, setDate] = useState(nowDate);
 
-  const defaultProps = {
-    options: top100Films,
-    getOptionLabel: (option) => option.title,
-  };
-
-  const [value, setValue] = React.useState(null);
-  const [inputValue, setInputValue] = React.useState("");
-
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue.$d);
+  };
+
+  const handleChangeProduct = (e) => {
+    setProd(e.target.value);
   };
 
   return (
     <Stack spacing={2}>
       <Box className="d-flex">
-        <Autocomplete
-          fullWidth
-          {...defaultProps}
-          id="clear-on-escape"
-          clearOnEscape
-          noOptionsText="Không có sản phẩm"
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
-          inputValue={inputValue}
-          onInputChange={(event, newInputValue) => {
-            setInputValue(newInputValue);
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Chọn sản phẩm đã có"
-              variant="standard"
-            />
-          )}
-        />
+        
       </Box>
       <Box
         sx={{
@@ -114,7 +82,7 @@ function AddProduct({ handleCreatePro }) {
           handleDateTimePicker={handleDateTimePicker}
         />
       </Box>
-      {value !== null ? (
+      {prod !== null || prod.length > 0 ? (
         <Box sx={{ textAlign: "end" }}>
           <CustomComponent.Button1>
             Thêm sản phẩm vào kho
