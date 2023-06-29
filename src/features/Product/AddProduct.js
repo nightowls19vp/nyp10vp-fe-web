@@ -1,25 +1,21 @@
 import React, { useState } from "react";
 
 import {
-  Autocomplete,
   Box,
-  FormControl,
-  InputAdornment,
-  InputBase,
-  MenuItem,
-  Select,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+// import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+// import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+// import ClearIcon from "@mui/icons-material/Clear";
 
 import "../../assets/css/Product.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker";
+import AutocompletePopper from "../../component/Auto/AutocompletePopper";
 
-function AddProduct({ item, handleCreatePro }) {
-  console.log(item);
+function AddProduct({ grId, handleCreatePro }) {
   const nowDate = new Date();
   const [prod, setProd] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -29,15 +25,21 @@ function AddProduct({ item, handleCreatePro }) {
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue.$d);
   };
-
-  const handleChangeProduct = (e) => {
-    setProd(e.target.value);
+  
+  const handleAutoCompleteProduct = (idProd) => {
+    setProd(idProd);
   };
+
+  console.log(prod.length, "vyy");
 
   return (
     <Stack spacing={2}>
       <Box className="d-flex">
-        
+        <AutocompletePopper
+          title={"groupProduct"}
+          grId={grId}
+          handleAutoCompleteProduct={handleAutoCompleteProduct}
+        />
       </Box>
       <Box
         sx={{
@@ -82,7 +84,7 @@ function AddProduct({ item, handleCreatePro }) {
           handleDateTimePicker={handleDateTimePicker}
         />
       </Box>
-      {prod !== null || prod.length > 0 ? (
+      {prod.length > 0 ? (
         <Box sx={{ textAlign: "end" }}>
           <CustomComponent.Button1>
             Thêm sản phẩm vào kho

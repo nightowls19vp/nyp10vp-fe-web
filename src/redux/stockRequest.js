@@ -75,7 +75,6 @@ export const getGroupProducts = async (
   currentPage,
   limit,
   token,
-  dispatch,
   axiosJWT
 ) => {
   try {
@@ -90,8 +89,26 @@ export const getGroupProducts = async (
         Authorization: `Bearer ${token}`,
       },
     });
-   
-    return res?.data;
+    return res?.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const searchGroupProducts = async (search, groupId, token, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get(`/prod-mgmt/group-products/${groupId}`, {
+      params: {
+        search: search,
+        searchBy: 'name',
+        'filter.timestamp.deletedAt': '$null'
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return res?.data.data;
   } catch (error) {
     console.log(error);
   }

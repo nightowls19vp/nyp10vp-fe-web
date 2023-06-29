@@ -18,8 +18,6 @@ import { Colors } from "../../config/Colors";
 import ListItemProduct from "./ListItemProduct.js";
 import AddProduct from "./AddProduct";
 import CreateProduct from "./CreateProduct";
-import AddressVietNam from "../../component/Address/AddressVietNam";
-import { getGroupProducts } from "../../redux/stockRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
 
@@ -37,21 +35,14 @@ const style = {
 };
 
 function ProductItem({ grId }) {
-  const dispatch = useDispatch();
 
-  const user = useSelector((state) => state?.auth.login?.currentUser);
   const listProducts = useSelector((state) => state?.stock?.listProduct.data);
   const metaProducts = useSelector((state) => state?.stock?.listProduct.meta);
 
-  let axiosJWT = createAxios(user, dispatch, loginSuccess);
-
   const [openAdd, setOpenAdd] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
-  const [products, setProducts] = useState();
 
   const handleOpenAdd = async () => {
-    const res = await getGroupProducts(grId, 1, 10, user?.accessToken, dispatch, axiosJWT);
-    setProducts(res.data);
     setOpenAdd(true);
   };
   const handleCloseAdd = () => setOpenAdd(false);
@@ -105,7 +96,7 @@ function ProductItem({ grId }) {
         aria-describedby="modal-modal-product"
       >
         <Box sx={style}>
-          <AddProduct item={products} handleCreatePro={handleCreatePro} />
+          <AddProduct grId={grId} handleCreatePro={handleCreatePro} />
         </Box>
       </Modal>
 
