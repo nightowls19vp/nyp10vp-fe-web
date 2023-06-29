@@ -40,6 +40,8 @@ function ProductItem({ grId }) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state?.auth.login?.currentUser);
+  const listProducts = useSelector((state) => state?.stock?.listProduct.data);
+  const metaProducts = useSelector((state) => state?.stock?.listProduct.meta);
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
@@ -49,7 +51,6 @@ function ProductItem({ grId }) {
 
   const handleOpenAdd = async () => {
     const res = await getGroupProducts(grId, 1, 10, user?.accessToken, dispatch, axiosJWT);
-    console.log("vyy", res.data);
     setProducts(res.data);
     setOpenAdd(true);
   };
@@ -96,7 +97,7 @@ function ProductItem({ grId }) {
           <MdOutlineAddBox color={Colors.textPrimary} size={30} />
         </IconButton>
       </Box>
-      <ListItemProduct />
+      <ListItemProduct item={listProducts} p={metaProducts} grId={grId} />
       <Modal
         open={openAdd}
         onClose={handleCloseAdd}

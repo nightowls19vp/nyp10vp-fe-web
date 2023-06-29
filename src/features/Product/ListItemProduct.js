@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { styled } from "@mui/material/styles";
 import {
@@ -13,7 +13,12 @@ import {
 } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 
+import { createAxios } from "../../http/createInstance";
+
 import { Colors } from "../../config/Colors";
+import { getProductItems } from "../../redux/stockRequest";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess } from "../../redux/authSlice";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -38,31 +43,55 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
+function createData(id, name, quantity, unit, money, exp) {
+  return { id, name, quantity, unit, money, exp };
+};
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
+function ListItemProduct({ item, p, grId }) {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
+  const rows = item.map((row) =>
+    createData(
+      row.id,
+      row.groupProduct.name,
+      row.quantity,
+      row.unit,
+      row.groupProduct.price,
+      row.bestBefore
+    )
+  );
 
-function ListItemProduct() {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(p.currentPage - 1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = async (event, newPage) => {
+    let currentPage = newPage;
+    await getProductItems(
+      grId,
+      currentPage+1,
+      rowsPerPage,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+  const handleChangeRowsPerPage = async (event) => {
+    let limit = parseInt(event.target.value, 10);
+    await getProductItems(
+      grId,
+      1,
+      limit,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
+    setRowsPerPage(limit);
     setPage(0);
   };
 
@@ -71,59 +100,58 @@ function ListItemProduct() {
   };
 
   return (
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Tên sản phẩm</StyledTableCell>
-              <StyledTableCell align="right">Số lượng</StyledTableCell>
-              <StyledTableCell align="right">Giá tiền (vnd)</StyledTableCell>
-              <StyledTableCell align="right">Hạn sử dụng</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
-            ).map((row) => (
-              <StyledTableRow
-                key={row.name}
-                sx={{
-                  cursor: "pointer",
-                  "&:last-child td, &:last-child th": { border: 0 },
-                }}
-                onClick={handleClick}
-              >
-                <StyledTableCell component="th" scope="row">
-                  {row.name}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              </StyledTableRow>
-            ))}
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>Tên sản phẩm</StyledTableCell>
+            <StyledTableCell align="right">Số lượng</StyledTableCell>
+            <StyledTableCell align="right">Giá tiền (vnd)</StyledTableCell>
+            <StyledTableCell align="right">Hạn sử dụng</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <StyledTableRow
+              key={row.name}
+              sx={{
+                cursor: "pointer",
+                "&:last-child td, &:last-child th": { border: 0 },
+              }}
+              onClick={handleClick}
+            >
+              <StyledTableCell component="th" scope="row">
+                {row.name}
+              </StyledTableCell>
+              <StyledTableCell align="right">
+                {row.quantity}/{row.unit}
+              </StyledTableCell>
+              <StyledTableCell align="right">{row.money ?? 0}</StyledTableCell>
+              <StyledTableCell align="right">{row.exp}</StyledTableCell>
+            </StyledTableRow>
+          ))}
 
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 20, { label: "All", value: -1 }]}
-                labelRowsPerPage="Số hàng trên trang"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+          {emptyRows > 0 && (
+            <TableRow style={{ height: 55 }}>
+              <TableCell colSpan={6} />
             </TableRow>
-          </TableFooter>
-        </Table>
-      </TableContainer>
+          )}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 20]}
+              labelRowsPerPage="Số hàng trên trang"
+              count={p.totalItems}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </TableContainer>
   );
 }
 

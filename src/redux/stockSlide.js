@@ -3,13 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const stockSlide = createSlice({
   name: "stock",
   initialState: {
-    listStock: [],
+    listStock: null,
     listProduct: {
-      items: null,
-      meta: null,
-    },
-    groupProducts: {
-      items: null,
+      data: null,
       meta: null,
     },
   },
@@ -17,27 +13,19 @@ const stockSlide = createSlice({
     updateListStock: (state, action) => {
       state.listStock = action.payload;
     },
-    updateItemsListProduct: (state, action) => {
-      state.listProduct.items = action.payload;
+    updateListProduct: (state, action) => {
+      state.listProduct.data = action.payload;
     },
     updateMetaListProduct: (state, action) => {
       state.listProduct.meta = action.payload;
-    },
-    updateItemsGroupProducts: (state, action) => {
-      state.groupProducts.items = action.payload;
-    },
-    updateMetaGroupProducts: (state, action) => {
-      state.groupProducts.meta = action.payload;
-    },
+    }
   },
 });
 
 export const {
   updateListStock,
-  updateItemsListProduct,
-  updateMetaListProduct,
-  updateItemsGroupProducts,
-  updateMetaGroupProducts,
+  updateListProduct,
+  updateMetaListProduct
 } = stockSlide.actions;
 
 export default stockSlide.reducer;

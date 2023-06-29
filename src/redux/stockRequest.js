@@ -1,4 +1,4 @@
-import { updateItemsGroupProducts, updateItemsListProduct, updateListStock, updateMetaGroupProducts, updateMetaListProduct } from "./stockSlide";
+import { updateListProduct, updateListStock, updateMetaListProduct } from "./stockSlide";
 
 export const getStorageLocation = async (
   groupId,
@@ -62,15 +62,22 @@ export const getProductItems = async (
         Authorization: `Bearer ${token}`,
       },
     });
-    dispatch(updateItemsListProduct(res?.data.data));
+    console.log(res?.data);
+    dispatch(updateListProduct(res?.data.data));
     dispatch(updateMetaListProduct(res?.data.meta));
   } catch (error) {
     console.log(error);
   }
 };
 
-
-export const getGroupProducts = async (groupId, currentPage, limit, token, dispatch, axiosJWT) => {
+export const getGroupProducts = async (
+  groupId,
+  currentPage,
+  limit,
+  token,
+  dispatch,
+  axiosJWT
+) => {
   try {
     const res = await axiosJWT.get(`/prod-mgmt/group-products/${groupId}`, {
       params: {
@@ -83,11 +90,9 @@ export const getGroupProducts = async (groupId, currentPage, limit, token, dispa
         Authorization: `Bearer ${token}`,
       },
     });
-    // dispatch(updateItemsGroupProducts(res?.data.data));
-    // dispatch(updateMetaGroupProducts(res?.data.meta));
-
+   
     return res?.data;
   } catch (error) {
     console.log(error);
   }
-}
+};
