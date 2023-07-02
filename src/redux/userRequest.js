@@ -133,11 +133,12 @@ export const userCheckout = async (token, dispatch, user, axiosJWT) => {
 
 export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
   try {
-    const resSU = await axiosJWT.get("/pkg-mgmt/gr/user", {
+    const resSU_group = await axiosJWT.get("/pkg-mgmt/gr/user", {
       params: {
+        projection: 'name;avatar;packages;members;billing',
         role: "Super User",
         page: 0,
-        limit: 5,
+        limit: 10,
         sort: "-createdAt",
       },
       headers: {
@@ -146,11 +147,12 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
       },
     });
 
-    const resU = await axiosJWT.get("/pkg-mgmt/gr/user", {
+    const resU_group = await axiosJWT.get("/pkg-mgmt/gr/user", {
       params: {
+        projection: 'name;avatar;packages;members;billing',
         role: "User",
         page: 0,
-        limit: 5,
+        limit: 10,
         sort: "-createdAt",
       },
       headers: {
@@ -159,7 +161,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
       },
     });
 
-    if (resSU?.data.groups.length > 0 || resU?.data.groups.length > 0) {
+    if (resSU_group?.data.groups.length > 0 || resU_group?.data.groups.length > 0) {
       let dataGroup = [
         {
           name: "Group SUPER USER",
@@ -177,8 +179,8 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
         },
       ];
 
-      if (resSU?.data.groups.length > 0 && resU?.data.groups.length > 0) {
-        for (let item of resSU?.data.groups) {
+      if (resSU_group?.data.groups.length > 0 && resU_group?.data.groups.length > 0) {
+        for (let item of resSU_group?.data.groups) {
           let formData = {
             _id: item._id,
             name: item.name,
@@ -206,23 +208,32 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             otherPakages: otherPakages,
           };
 
-          item = {
-            ...item,
+          let itemInfo = {
+            _id: item._id,
+            name: item.name,
+            avatar: item.avatar,
             packages: packages,
+            members: item.members
           };
+
+          let itemSpending = {
+            _id: item._id,
+            members: item.members,
+            billing: item.billing
+          }
 
           let childGroupItem = [
             {
               _id: 0,
               name: "Thông tin nhóm",
               check: false,
-              group: item,
+              group: itemInfo,
             },
             {
               _id: 1,
               name: "Quản lý chi tiêu",
               check: false,
-              group: item,
+              group: itemSpending,
             },
           ];
 
@@ -234,7 +245,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
         dataGroup[0].child[0].status = true;
         dispatch(updateGroupId(dataGroup[0].child[0]._id));
 
-        for (let item of resU?.data.groups) {
+        for (let item of resU_group?.data.groups) {
           let formData = {
             _id: item._id,
             name: item.name,
@@ -262,23 +273,32 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             otherPakages: otherPakages,
           };
 
-          item = {
-            ...item,
+          let itemInfo = {
+            _id: item._id,
+            name: item.name,
+            avatar: item.avatar,
             packages: packages,
+            members: item.members
           };
+
+          let itemSpending = {
+            _id: item._id,
+            members: item.members,
+            billing: item.billing
+          }
 
           let childGroupItem = [
             {
               _id: 0,
               name: "Thông tin nhóm",
               check: false,
-              group: item,
+              group: itemInfo,
             },
             {
               _id: 1,
               name: "Quản lý chi tiêu",
               check: false,
-              group: item,
+              group: itemSpending,
             },
           ];
 
@@ -288,10 +308,10 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
           dataGroup[1].child.push(formData);
         }
       } else if (
-        resSU?.data.groups.length > 0 &&
-        resU?.data.groups.length === 0
+        resSU_group?.data.groups.length > 0 &&
+        resU_group?.data.groups.length === 0
       ) {
-        for (let item of resSU?.data.groups) {
+        for (let item of resSU_group?.data.groups) {
           let formData = {
             _id: item._id,
             name: item.name,
@@ -319,23 +339,32 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             otherPakages: otherPakages,
           };
 
-          item = {
-            ...item,
+          let itemInfo = {
+            _id: item._id,
+            name: item.name,
+            avatar: item.avatar,
             packages: packages,
+            members: item.members
           };
+
+          let itemSpending = {
+            _id: item._id,
+            members: item.members,
+            billing: item.billing
+          }
 
           let childGroupItem = [
             {
               _id: 0,
               name: "Thông tin nhóm",
               check: false,
-              group: item,
+              group: itemInfo,
             },
             {
               _id: 1,
               name: "Quản lý chi tiêu",
               check: false,
-              group: item,
+              group: itemSpending,
             },
           ];
 
@@ -349,7 +378,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
       } else {
         dataGroup[0].status = false;
         dataGroup[1].status = true;
-        for (let item of resU?.data.groups) {
+        for (let item of resU_group?.data.groups) {
           let formData = {
             _id: item._id,
             name: item.name,
@@ -377,23 +406,32 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             otherPakages: otherPakages,
           };
 
-          item = {
-            ...item,
+          let itemInfo = {
+            _id: item._id,
+            name: item.name,
+            avatar: item.avatar,
             packages: packages,
+            members: item.members
           };
+
+          let itemSpending = {
+            _id: item._id,
+            members: item.members,
+            billing: item.billing
+          }
 
           let childGroupItem = [
             {
               _id: 0,
               name: "Thông tin nhóm",
               check: false,
-              group: item,
+              group: itemInfo,
             },
             {
               _id: 1,
               name: "Quản lý chi tiêu",
               check: false,
-              group: item,
+              group: itemSpending,
             },
           ];
 
@@ -586,6 +624,21 @@ export const updateGroupChannel = async (
     await getGroupByUserId(token, dispatch, axiosJWT);
 
     await getGroupChannel(token, dispatch, axiosJWT);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const postPackageBill = async (group_id, data, token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.post(`/pkg-mgmt/bill/${group_id}`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+     await getGroupByUserId(token, dispatch, axiosJWT);
+    return res?.data;
   } catch (error) {
     console.log(error);
   }

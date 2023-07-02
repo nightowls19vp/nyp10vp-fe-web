@@ -8,19 +8,23 @@ import "../../assets/css/Stock.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
-import { postStorageLocation } from "../../redux/stockRequest";
+import {
+  postStorageLocation,
+  updateStorageLocation,
+} from "../../redux/stockRequest";
 
-function ModalAddStock({ grID, handleClose }) {
+function ModalEditStock({ item, grID, handleClose }) {
   const inputRef = useRef();
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  const [nameStock, setNameStock] = useState("");
-  const [description, setDescription] = useState("");
+  const [nameStock, setNameStock] = useState(item.name);
+  const [description, setDescription] = useState(item.description);
   const [image, setImage] = useState(null);
   const [nameImg, setNameImg] = useState("");
+  const [status, setStatus] = useState(true);
 
   const handleChangeNameStock = (e) => {
     setNameStock(e.target.value);
@@ -28,7 +32,7 @@ function ModalAddStock({ grID, handleClose }) {
 
   const handleChangeDescription = (e) => {
     setDescription(e.target.value);
-  }
+  };
 
   const handleClick = () => {
     inputRef.current.click();
@@ -43,19 +47,35 @@ function ModalAddStock({ grID, handleClose }) {
     setNameImg(fileObj.name);
   };
 
-  const handleAddStock = async () => {
+  const handleEditStock = async () => {
     let formData = {
-        groupId: grID,
-        name: nameStock,
-        addedBy: user?.data.userInfo._id,
-        file: image,
-        description: description
-    }
-
-    await postStorageLocation(formData, user?.accessToken, dispatch, axiosJWT);
+      name: nameStock,
+      file: image,
+      description: description,
+    };
+    const res = await updateStorageLocation(
+      grID,
+      item.id,
+      formData,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
 
     handleClose();
   };
+
+  //   const handleAddStock = async () => {
+  //     let formData = {
+  //         groupId: grID,
+  //         name: nameStock,
+  //         addedBy: user?.data.userInfo._id,
+  //         file: image,
+  //         description: description
+  //     }
+
+  //     await postStorageLocation(formData, user?.accessToken, dispatch, axiosJWT);
+  //   };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -65,10 +85,10 @@ function ModalAddStock({ grID, handleClose }) {
         component="h2"
         sx={{ paddingBottom: "10px" }}
       >
-        Thêm kho mới
+        Chỉnh sửa kho
       </Typography>
       <Stack id="modalAddStock" spacing={2} className="modalModalAddStock">
-      <Box className="input-modal-description">
+        <Box className="input-modal-description">
           <CustomComponent.Button2
             onClick={handleClick}
             sx={{ minWidth: "150px" }}
@@ -108,12 +128,14 @@ function ModalAddStock({ grID, handleClose }) {
             onChange={(e) => handleChangeDescription(e)}
           />
         </Box>
-        <Box sx={{ textAlign: "end"}}>
-            <CustomComponent.Button1 onClick={handleAddStock}>Tạo kho mới</CustomComponent.Button1>
+        <Box sx={{ textAlign: "end" }}>
+          <CustomComponent.Button1 onClick={handleEditStock}>
+            Lưu thay đổi
+          </CustomComponent.Button1>
         </Box>
       </Stack>
     </Box>
   );
 }
 
-export default ModalAddStock;
+export default ModalEditStock;

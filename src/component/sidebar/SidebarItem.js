@@ -10,6 +10,7 @@ import {
 import { Colors } from "../../config/Colors";
 import { updateProfileId, updateShowSidebar } from "../../redux/packageSlice";
 import { updateGroupId, updateGroupItemId } from "../../redux/userSlice";
+import { setIdOfStock } from "../../redux/stockSlide";
 
 function SidebarItem({ item, title, selectedID }) {
   const selectedIdx = selectedID;
@@ -24,6 +25,8 @@ function SidebarItem({ item, title, selectedID }) {
     } else if (title === "group") {
       dispacth(updateGroupItemId(ID));
       dispacth(updateGroupId(item.group._id));
+    } else if (title === "stock") {
+      dispacth(setIdOfStock(ID));
     }
     dispacth(updateShowSidebar(false));
   };

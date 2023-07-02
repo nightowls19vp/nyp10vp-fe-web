@@ -1,21 +1,45 @@
 import React, { useState } from "react";
-import { Box, Typography, Slide, IconButton } from "@mui/material";
+import { Box, Typography, Slide, IconButton, Modal } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { useNavigate } from "react-router-dom";
 import { Colors } from "../../config/Colors.js";
+import ModalEditStock from "./ModalEditStock.js";
 
-function ImageStock({ item }) {
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: { xs: "90%", sm: "70%", md: "60%", lg: "40%" },
+  bgcolor: "background.paper",
+  border: "1px solid #000",
+  boxShadow: 24,
+  borderRadius: "20px",
+  p: 4,
+};
+
+function ImageStock({ item, grID }) {
   const navigate = useNavigate();
 
   const [openDetail, setOpenDetail] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
 
   const handleClickImage = () => {
-    let id = "649b0193d536e02035c7b191";
-    navigate(`/stock/product-stock?id=${id}`);
+    navigate(`/stock/product-stock?id=${item.id}`);
   };
+
+  const handleUpdateStock = () => {
+    setOpenEdit(true);
+  };
+
+  const handleClose = () => setOpenEdit(false);
+
+  const handleCloseEdit = (status) => {
+    setOpenEdit(status);
+  }
 
   return (
     <Box
@@ -58,7 +82,7 @@ function ImageStock({ item }) {
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  fontStyle: "italic"
+                  fontStyle: "italic",
                 }}
               >
                 {item.description}
@@ -67,11 +91,24 @@ function ImageStock({ item }) {
           </Slide>
         </CustomComponent.ImageStock>
       </CustomComponent.ImageButtonStock>
-      <IconButton sx={{ position: "absolute", top: "0", right: "0" }}>
-        <Box borderRadius={"20px"} padding={"5px"}>
-          <EditIcon color={Colors.black} size={25} />
+      <IconButton
+        sx={{ position: "absolute", top: "0", right: "0" }}
+        onClick={handleUpdateStock}
+      >
+        <Box className="box-edit-stock">
+          <EditIcon color={Colors.black} size={25} className="btn-edit-stock" />
         </Box>
       </IconButton>
+      <Modal
+        open={openEdit}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-edit-stock"
+        aria-describedby="modal-modal-edit-stock"
+      >
+        <Box sx={style}>
+          <ModalEditStock item={item} grID={grID} handleClose={handleClose} />
+        </Box>
+      </Modal>
     </Box>
   );
 }

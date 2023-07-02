@@ -16,3 +16,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.box-edit-stock {
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.btn-edit-stock {
+    opacity: 0.75;
+}
+
+.btn-edit-stock:hover {
+    opacity: 1;
+}

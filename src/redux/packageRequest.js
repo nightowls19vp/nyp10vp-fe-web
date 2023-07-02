@@ -76,46 +76,11 @@ export const updateUserCart = async (userID, cart, token, dispatch, axiosJWT) =>
         
       },
     });
-    
-    // dispatch(setCarts(res?.data.cart));
-
-    // dispatch(updateNumberCart(res?.data.cart?.length));
-
-    // return res?.data;
 
     await getUserCart(userID, token, dispatch, axiosJWT);
 
     return res?.data;
     
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const postPackageBill = async (group_id, data, token, axiosJWT) => {
-  try {
-    const res = await axiosJWT.post(`/pkg-mgmt/bill/${group_id}`, data, {
-      headers: {
-        accept: "*/*",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    return res?.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getPackageBill = async (group_id, token, dispatch, axiosJWT) => {
-  try {
-    const res = await axiosJWT.get(`/pkg-mgmt/bill/${group_id}`, {
-      headers: {
-        accept: "*/*",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    dispatch(updateBill(res?.data.data));
-    console.log(res?.data);
   } catch (error) {
     console.log(error);
   }

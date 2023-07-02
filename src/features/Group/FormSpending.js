@@ -19,7 +19,7 @@ import { createAxios } from "../../http/createInstance";
 import { Colors } from "../../config/Colors";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker";
-import { postPackageBill } from "../../redux/packageRequest";
+import { postPackageBill } from "../../redux/userRequest";
 import { loginSuccess } from "../../redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -114,7 +114,10 @@ function FormSpending({ grID, item }) {
       description: description
     };
 
-    await postPackageBill(grID, formData, user?.accessToken, axiosJWT);
+    console.log("borrowers", borrowers);
+    console.log("lender", hostName);
+
+    // await postPackageBill(grID, formData, user?.accessToken, dispatch, axiosJWT);
   }
 
   return (

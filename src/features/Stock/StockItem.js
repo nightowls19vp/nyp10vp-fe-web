@@ -49,7 +49,7 @@ const style = {
   p: 4,
 };
 
-function StockItem({ item }) {
+function StockItem({ item, grID }) {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -58,7 +58,7 @@ function StockItem({ item }) {
   return (
     <Stack
       spacing={3}
-      sx={{ paddingX: { xs: "2%", md: "5%" }, width: "100%", paddingY: "40px" }}
+      // sx={{ paddingX: { xs: "2%", md: "5%" }, width: "100%", paddingY: "40px" }}
     >
       <Box className="title-stock" sx={{ justifyContent: "space-between" }}>
         <Box className="title-stock">
@@ -78,7 +78,7 @@ function StockItem({ item }) {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
-              <ModalAddStock />
+              <ModalAddStock grID={grID} handleClose={handleClose} />
             </Box>
           </Modal>
         </Box>
@@ -93,7 +93,7 @@ function StockItem({ item }) {
         }}
       >
         {item.map((stock) => (
-          stock ? (<ImageStock item={stock} key={stock.id} />) : null
+          stock ? (<ImageStock item={stock} grID={grID} key={stock.id} />) : null
         ))}
       </Box>
     </Stack>

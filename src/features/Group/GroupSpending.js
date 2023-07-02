@@ -12,6 +12,7 @@ import { loginSuccess } from "../../redux/authSlice";
 import { Colors } from "../../config/Colors";
 import ListBill from "./ListBill";
 import FormSpending from "./FormSpending";
+import Bill from "./Bill";
 
 const style = {
   position: "absolute",
@@ -28,7 +29,6 @@ const style = {
 };
 
 function GroupSpending({ item }) {
-
   const [open, setOpen] = useState(false);
   const [listMember, setListMember] = useState();
 
@@ -90,9 +90,24 @@ function GroupSpending({ item }) {
         </Box>
       </Modal>
 
-      <Box sx={{ width: "100%" }}>
-        <ListBill grID={item._id} />
-      </Box>
+      {item.billing.length > 0 ? (
+        // <Box sx={{ width: "100%" }}>
+        //   <ListBill grID={item._id} />
+        // </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          {item.billing?.map((bill) =>
+            <Bill key={bill._id} item={bill} />
+          )}
+        </Box>
+      ) : null}
     </Stack>
   );
 }

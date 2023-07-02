@@ -8,7 +8,6 @@ import GroupSpending from "./GroupSpending";
 import { loginSuccess } from "../../redux/authSlice";
 
 import { createAxios } from "../../http/createInstance";
-import { getPackageBill } from "../../redux/packageRequest";
 
 function GroupItem() {
   const dispatch = useDispatch();
@@ -20,17 +19,17 @@ function GroupItem() {
   
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  useEffect(() => {
-    const getBillInGroup = async () => {
-      await getPackageBill(selectedID, user?.accessToken, dispatch, axiosJWT);
-    };
+  // useEffect(() => {
+  //   const getBillInGroup = async () => {
+  //     await getPackageBill(selectedID, user?.accessToken, dispatch, axiosJWT);
+  //   };
 
-    getBillInGroup().catch(console.error);
+  //   getBillInGroup().catch(console.error);
 
-    return () => {
-      getBillInGroup();
-    };
-  }, [axiosJWT, dispatch, selectedID, user?.accessToken]);
+  //   return () => {
+  //     getBillInGroup();
+  //   };
+  // }, [axiosJWT, dispatch, selectedID, user?.accessToken]);
 
   return (
     <>

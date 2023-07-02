@@ -4,6 +4,8 @@ const stockSlide = createSlice({
   name: "stock",
   initialState: {
     listStock: null,
+    sidebarStock: null,
+    idStock: 0,
     listProduct: {
       data: null,
       meta: null,
@@ -12,6 +14,12 @@ const stockSlide = createSlice({
   reducers: {
     updateListStock: (state, action) => {
       state.listStock = action.payload;
+    },
+    updateSidebarStock: (state, action) => {
+      state.sidebarStock = action.payload;
+    },
+    setIdOfStock: (state, action) => {
+      state.idStock = action.payload;
     },
     updateListProduct: (state, action) => {
       state.listProduct.data = action.payload;
@@ -24,6 +32,8 @@ const stockSlide = createSlice({
 
 export const {
   updateListStock,
+  updateSidebarStock,
+  setIdOfStock,
   updateListProduct,
   updateMetaListProduct
 } = stockSlide.actions;

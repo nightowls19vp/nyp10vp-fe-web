@@ -188,11 +188,12 @@ function EnhancedTableToolbar(props) {
       user?.data.userInfo._id,
       formCart,
       user?.accessToken,
+      dispatch,
       axiosJWT
     );
     console.log(res);
 
-    if (res.statusCode === 200) {
+    if (res?.statusCode === 200) {
       onSetSelected(newSelected);
     }
 
@@ -402,19 +403,20 @@ export default function EnhancedTable({ item }) {
     setValueMethod(event.target.value);
   };
 
-  useEffect(() => {
-    socket.connect();
+  // useEffect(() => {
+  //   socket.connect();
 
-    socket.on("zpCallback", (data) => {
-      console.log("vy1", data);
-      setFlag(true);
-      clearTimeout(timeId);
-    });
+  //     socket.on("zpCallback", (data) => {
+  //       console.log("socket-io zpCallback: ", data);
+  //       // setFlag(true);
+  //       // clearTimeout(timeId);
+  //     });
 
-    return () => {
-      socket.disconnect();
-    };
-  }, [socket]);
+
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, [socket]);
 
   const handleButtonCheckout = async () => {
     if (selected.length === 0) {

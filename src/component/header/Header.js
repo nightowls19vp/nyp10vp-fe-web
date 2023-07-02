@@ -48,13 +48,19 @@ function Header() {
     dispatch(toggleShowSidebar());
   };
 
-  // useEffect(() => {
-  //   socket.connect();
+  useEffect(() => {
+    socket.connect();
 
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, [socket]);
+    socket.on("zpCallback", (data) => {
+      console.log("socket-io zpCallback: ", data);
+      // setFlag(true);
+      // clearTimeout(timeId);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket]);
 
   return (
     <AppBar

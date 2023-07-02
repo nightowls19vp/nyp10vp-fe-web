@@ -30,8 +30,6 @@ function AddProduct({ grId, handleCreatePro }) {
     setProd(idProd);
   };
 
-  console.log(prod.length, "vyy");
-
   return (
     <Stack spacing={2}>
       <Box className="d-flex">
