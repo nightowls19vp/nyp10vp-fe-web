@@ -4,13 +4,17 @@ import { createAxios } from "../http/createInstance";
 
 import ProductItem from "../features/Product/ProductItem";
 import DefaultLayout from "../layout/DefaultLayout";
-import { getProductItems } from "../redux/stockRequest";
+import { getProductItemsByStorage } from "../redux/stockRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../redux/authSlice";
 
 function ListProduct() {
   const urlQuery = new URL(window.location.href).searchParams;
-  const grId = urlQuery.get("id");
+  const grId = urlQuery.get("grId");;
+  const storageID = urlQuery.get("storageId");
+
+  console.log(grId);
+  console.log(storageID);
 
   const dispatch = useDispatch();
 
@@ -20,7 +24,7 @@ function ListProduct() {
 
   useEffect(() => {
     const getListProduct = async () => {
-      await getProductItems(grId, 1, 5, user?.accessToken, dispatch, axiosJWT);
+      await getProductItemsByStorage(grId, 1, 5, storageID,  user?.accessToken, dispatch, axiosJWT);
     };
 
     getListProduct().catch(console.error);
@@ -28,10 +32,10 @@ function ListProduct() {
     return () => {
       getListProduct();
     };
-  }, [axiosJWT, dispatch, grId, user?.accessToken]);
+  }, [axiosJWT, dispatch, grId, storageID, user?.accessToken]);
   return (
     <DefaultLayout>
-      <ProductItem grId={grId} />
+      <ProductItem grId={grId} storageID={storageID} />
     </DefaultLayout>
   );
 }

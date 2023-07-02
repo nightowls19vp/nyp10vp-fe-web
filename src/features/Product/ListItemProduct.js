@@ -16,7 +16,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { createAxios } from "../../http/createInstance";
 
 import { Colors } from "../../config/Colors";
-import { getProductItems } from "../../redux/stockRequest";
+import { getProductItemsByStorage } from "../../redux/stockRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
 
@@ -47,7 +47,7 @@ function createData(id, name, quantity, unit, money, exp) {
   return { id, name, quantity, unit, money, exp };
 };
 
-function ListItemProduct({ item, p, grId }) {
+function ListItemProduct({ item, p, grId, storageID }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
@@ -70,10 +70,11 @@ function ListItemProduct({ item, p, grId }) {
 
   const handleChangePage = async (event, newPage) => {
     let currentPage = newPage;
-    await getProductItems(
+    await getProductItemsByStorage(
       grId,
       currentPage+1,
       rowsPerPage,
+      storageID,
       user?.accessToken,
       dispatch,
       axiosJWT
@@ -83,10 +84,11 @@ function ListItemProduct({ item, p, grId }) {
 
   const handleChangeRowsPerPage = async (event) => {
     let limit = parseInt(event.target.value, 10);
-    await getProductItems(
+    await getProductItemsByStorage(
       grId,
       1,
       limit,
+      storageID,
       user?.accessToken,
       dispatch,
       axiosJWT

@@ -110,10 +110,11 @@ export const updateStorageLocation = async (
   }
 };
 
-export const getProductItems = async (
+export const getProductItemsByStorage = async (
   grId,
   currentPage,
   limit,
+  storageID,
   token,
   dispatch,
   axiosJWT
@@ -125,6 +126,7 @@ export const getProductItems = async (
         page: currentPage,
         limit: limit,
         "filter.timestamp.deletedAt": "$null",
+        'filter.storageLocation.id': storageID,
       },
       headers: {
         accept: "*/*",

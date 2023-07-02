@@ -7,6 +7,7 @@ import {
   Input,
   InputAdornment,
   Typography,
+  Modal,
 } from "@mui/material";
 
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -80,11 +81,10 @@ function AutocompletePopper({ title, grId, handleAutoCompleteProduct }) {
 
   const handleSelectItem = (e, prod) => {
     setInputValue(prod.name);
-    handleAutoCompleteProduct(prod.id);
   };
 
   return (
-    <Stack sx={{ width: "100%" }}>
+    <Stack sx={{ width: "100%"}}>
       <Input
         value={inputValue}
         fullWidth
@@ -111,9 +111,10 @@ function AutocompletePopper({ title, grId, handleAutoCompleteProduct }) {
             </Box>
           </InputAdornment>
         }
+        sx={{ height: "20px" }}
       />
       {focusInput ? (
-        <Stack className="auto-input" spacing={2}>
+        <Box className="auto-input" spacing={2}>
           {data != null
             ? data.map((x, idx) => (
                 <ButtonBase
@@ -129,7 +130,7 @@ function AutocompletePopper({ title, grId, handleAutoCompleteProduct }) {
                 </ButtonBase>
               ))
             : null}
-        </Stack>
+        </Box>
       ) : null}
     </Stack>
   );

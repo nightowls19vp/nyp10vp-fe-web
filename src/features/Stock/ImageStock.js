@@ -28,7 +28,7 @@ function ImageStock({ item, grID }) {
   const [openEdit, setOpenEdit] = useState(false);
 
   const handleClickImage = () => {
-    navigate(`/stock/product-stock?id=${item.id}`);
+    navigate(`/stock/product-stock?grId=${grID}&storageId=${item.id}`);
   };
 
   const handleUpdateStock = () => {
@@ -36,10 +36,6 @@ function ImageStock({ item, grID }) {
   };
 
   const handleClose = () => setOpenEdit(false);
-
-  const handleCloseEdit = (status) => {
-    setOpenEdit(status);
-  }
 
   return (
     <Box

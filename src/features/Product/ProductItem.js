@@ -34,8 +34,7 @@ const style = {
   p: 4,
 };
 
-function ProductItem({ grId }) {
-
+function ProductItem({ grId, storageID }) {
   const listProducts = useSelector((state) => state?.stock?.listProduct.data);
   const metaProducts = useSelector((state) => state?.stock?.listProduct.meta);
 
@@ -88,7 +87,14 @@ function ProductItem({ grId }) {
           <MdOutlineAddBox color={Colors.textPrimary} size={30} />
         </IconButton>
       </Box>
-      <ListItemProduct item={listProducts} p={metaProducts} grId={grId} />
+      {listProducts.length > 0 ? (
+        <ListItemProduct
+          item={listProducts}
+          p={metaProducts}
+          grId={grId}
+          storageID={storageID}
+        />
+      ) : null}
       <Modal
         open={openAdd}
         onClose={handleCloseAdd}
