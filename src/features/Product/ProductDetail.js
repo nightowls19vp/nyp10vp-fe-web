@@ -1,9 +1,11 @@
 import React from "react";
-import { Stack, Breadcrumbs,
-  Link, Typography } from "@mui/material";
+import { Stack, Breadcrumbs, Link, Typography } from "@mui/material";
 import { Colors } from "../../config/Colors";
+import { useSelector } from "react-redux";
+import ItemDetail from "./ItemDetail";
 
-function ProductDetail() {
+function ProductDetail({ grId, storageID, productId }) {
+  const product = useSelector((state) => state?.stock?.productItem);
   return (
     <Stack
       spacing={3}
@@ -20,11 +22,16 @@ function ProductDetail() {
         <Link underline="hover" color={Colors.textPrimary} href="/stock">
           Kho lưu trữ
         </Link>
-        <Link underline="hover" color={Colors.textPrimary} href="/stock">
-        Các sản phẩm trong kho
+        <Link
+          underline="hover"
+          color={Colors.textPrimary}
+          href={`/stock/product-stock?grId=${grId}&storageId=${storageID}`}
+        >
+          Các sản phẩm trong kho
         </Link>
-        <Typography color="text.primary"> sản phẩm  </Typography>
+        <Typography color="text.primary"> sản phẩm </Typography>
       </Breadcrumbs>
+      <ItemDetail item={product} />
     </Stack>
   );
 }

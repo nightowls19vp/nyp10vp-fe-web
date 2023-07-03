@@ -13,9 +13,9 @@ import {
 } from "./authSlice";
 import { getAllPackage, getUserCart } from "./packageRequest";
 import { updateProfileId } from "./packageSlice";
-import { getGroupByUserId, getInformationUser } from "./userRequest";
+import { getInformationUser } from "./userRequest";
 
-import * as SB from "../component/Chat/SendBirdGroupChat.js";
+// import * as SB from "../component/Chat/SendBirdGroupChat.js";
 
 export const getJoinGroup = async (token, tokenJoinGr) => {
   try {
@@ -58,8 +58,8 @@ export const loginUser = async (user, dispatch, navigate, tokenJoinGr, axiosJWT)
 
     dispatch(updateProfileId(1));
 
-    await SB.connectSendBird(res?.data.data.userInfo._id);
-    await SB.setupUser(res?.data.data.userInfo._id, res?.data.data.userInfo.name, res?.data.data.userInfo.avatar);
+    // await SB.connectSendBird(res?.data.data.userInfo._id);
+    // await SB.setupUser(res?.data.data.userInfo._id, res?.data.data.userInfo.name, res?.data.data.userInfo.avatar);
 
     navigate("/");
   } catch (error) {

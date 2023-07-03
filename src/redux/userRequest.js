@@ -593,14 +593,26 @@ export const userRenewGroup = async (grId, token, dispatch, data, axiosJWT) => {
 
 export const getGroupChannel = async (token, dispatch, axiosJWT) => {
   try {
-    const res = await axiosJWT.get("/pkg-mgmt/gr/user_id/channel", {
+    const res = await axiosJWT.get("/pkg-mgmt/gr/user", {
+      params: {
+        projection: 'channel;members',
+        page: 0,
+        limit: 20,
+        sort: '-createdAt'
+      },
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res?.data.channels);
-    dispatch(getChannels(res?.data.channels));
+    let newArray = [];
+    for (let item of res?.data.groups) {
+      if (item.channel) {
+        newArray.push(item);
+      }
+    }
+    console.log(newArray);
+    dispatch(getChannels(newArray));
   } catch (error) {
     console.log(error);
   }

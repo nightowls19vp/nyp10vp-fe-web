@@ -3,6 +3,7 @@ import {
   updateListProduct,
   updateListStock,
   updateMetaListProduct,
+  updateProductItem,
   updateSidebarStock,
 } from "./stockSlide";
 
@@ -184,3 +185,18 @@ export const searchGroupProducts = async (search, groupId, token, axiosJWT) => {
     console.log(error);
   }
 };
+
+export const getProductItemById = async (groupId, id, token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}/${id}`, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    dispatch(updateProductItem(res?.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}

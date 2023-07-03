@@ -13,6 +13,7 @@ import UserJoinPage from '../pages/UserJoin.js';
 import PackageRenewPage from '../pages/PackageRenew.js';
 import ChatPage from '../pages/Chat.js';
 import ProductPage from '../pages/ListProduct.js';
+import ProductItemPage from '../pages/Product.js';
 
 const publicRoutes = [
     { path: routesConfig.home, component: HomePage},
@@ -32,6 +33,7 @@ const loginRoute = [
     { path: routesConfig.login, component: LoginPage},
     { path: routesConfig.packageGroup, component: PackageRenewPage},
     { path: routesConfig.product, component: ProductPage},
+    { path: routesConfig.productItem, component: ProductItemPage},
     { path: routesConfig.homeGG, component: HomeGGPage},
 ]
 

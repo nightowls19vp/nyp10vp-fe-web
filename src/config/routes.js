@@ -11,6 +11,7 @@ const routes = {
     packageGroup: '/group-package',
     chatGr: '/group-chat',
     product: '/stock/product-stock',
+    productItem: '/stock/product-item',
 };
 
 export default routes;

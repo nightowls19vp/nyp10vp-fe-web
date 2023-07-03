@@ -31,6 +31,7 @@ import DateTimePicker from "../../component/Date/DateTimePicker";
 function AddProduct({ grId, handleCreatePro }) {
   const inputRef = useRef(null);
   const boxRef = useRef();
+  const observer = useRef();
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.auth.login?.currentUser);
 
@@ -98,14 +99,22 @@ function AddProduct({ grId, handleCreatePro }) {
     setFocusInput(false);
   };
 
+  const handleScroll = () => {
+    alert("handleScroll");
+  };
+
   useEffect(() => {
     window.onclick = (event) => {
-      if (event.target.contains(boxRef.current)
-        && event.target !== boxRef.current) {
+      if (
+        event.target.contains(boxRef.current) &&
+        event.target !== boxRef.current
+      ) {
         setFocusInput(false);
-      } 
-    }
-  }, [])
+      }
+    };
+
+    boxRef.current.addEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <Stack spacing={2}>
@@ -139,7 +148,12 @@ function AddProduct({ grId, handleCreatePro }) {
           sx={{ height: "20px" }}
         />
         {focusInput ? (
-          <Box className="auto-input" spacing={2} ref={boxRef}>
+          <Box
+            className="auto-input"
+            id="id-auto-input"
+            spacing={2}
+            ref={boxRef}
+          >
             {data != null
               ? data.map((x, idx) => (
                   <ButtonBase

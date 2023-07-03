@@ -13,8 +13,6 @@ import { createAxios } from "../http/createInstance";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import * as SB from "../component/Chat/SendBirdGroupChat.js";
-import { updateChannelID } from "../redux/userSlice";
 import { getGroupChannel } from "../redux/userRequest";
 import { loginSuccess } from "../redux/authSlice";
 import ChatItem from "../features/Chat/ChatItem";

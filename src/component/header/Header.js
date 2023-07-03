@@ -26,13 +26,15 @@ import { Colors } from "../../config/Colors.js";
 import { dataHeader2 } from "../../data/index.js";
 import HeaderAvatar from "./HeaderAvatar.js";
 
+import * as SB from "../Chat/SendBirdGroupChat.js";
+
 const topSearch = [];
 
 function Header() {
   const dispatch = useDispatch();
 
   let user = useSelector((state) => state?.auth.login?.currentUser);
-  // const userInfo = useSelector((state) => state?.user?.userInfo.user);
+  const channels = useSelector((state) => state?.user?.channel);
   const socket = SockectIO();
 
   let day = new Date();
@@ -48,8 +50,40 @@ function Header() {
     dispatch(toggleShowSidebar());
   };
 
+  const inviteInGroupChannel = async (channel, user) => {
+    await SB.inviteMember(channel, user);
+  }
+
+  useEffect(() => {
+    const userConnectChat = async () => {
+      await SB.connectSendBird(user?.data.userInfo._id);
+
+      await SB.setupUser(
+        user?.data.userInfo._id,
+        user?.data.userInfo.name,
+        user?.data.userInfo.avatar
+      );
+    };
+
+    userConnectChat().catch(console.error);
+
+    return () => {
+      userConnectChat();
+    };
+  }, [user?.data.userInfo]);
+
   useEffect(() => {
     socket.connect();
+
+    socket.on("joinGr", async (data) => {
+      console.log("join group: ", data.user);
+      for (let channel of channels) {
+        if (channel._id === data._id) {
+          console.log("join group");
+          inviteInGroupChannel(channel.channel, data.user);
+        }
+      }
+    });
 
     socket.on("zpCallback", (data) => {
       console.log("socket-io zpCallback: ", data);
@@ -60,7 +94,7 @@ function Header() {
     return () => {
       socket.disconnect();
     };
-  }, [socket]);
+  }, [channels, socket]);
 
   return (
     <AppBar

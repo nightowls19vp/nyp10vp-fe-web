@@ -19,6 +19,7 @@ import { Colors } from "../../config/Colors";
 import { getProductItemsByStorage } from "../../redux/stockRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,6 +50,7 @@ function createData(id, name, quantity, unit, money, exp) {
 
 function ListItemProduct({ item, p, grId, storageID }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
   const rows = item.map((row) =>
@@ -97,8 +99,8 @@ function ListItemProduct({ item, p, grId, storageID }) {
     setPage(0);
   };
 
-  const handleClick = () => {
-    //
+  const handleClick = (e, productID) => {
+    navigate(`/stock/product-item?grId=${grId}&storageId=${storageID}&productId=${productID}`);
   };
 
   return (
@@ -120,7 +122,7 @@ function ListItemProduct({ item, p, grId, storageID }) {
                 cursor: "pointer",
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
-              onClick={handleClick}
+              onClick={(e) => handleClick(e, row.id)}
             >
               <StyledTableCell component="th" scope="row">
                 {row.name}

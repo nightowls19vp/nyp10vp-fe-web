@@ -6,6 +6,7 @@ const stockSlide = createSlice({
     listStock: null,
     sidebarStock: null,
     idStock: 0,
+    productItem: null,
     listProduct: {
       data: null,
       meta: null,
@@ -21,6 +22,9 @@ const stockSlide = createSlice({
     setIdOfStock: (state, action) => {
       state.idStock = action.payload;
     },
+    updateProductItem: (state, action) => {
+      state.productItem = action.payload;
+    },
     updateListProduct: (state, action) => {
       state.listProduct.data = action.payload;
     },
@@ -34,6 +38,7 @@ export const {
   updateListStock,
   updateSidebarStock,
   setIdOfStock,
+  updateProductItem,
   updateListProduct,
   updateMetaListProduct
 } = stockSlide.actions;

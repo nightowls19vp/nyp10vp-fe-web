@@ -81,6 +81,40 @@ export const Button2 = styled(Button)({
   borderRadius: "10px",
 });
 
+export const ButtonProduct = styled(ButtonBase)(({ theme }) => ({
+  position: "relative",
+  borderRadius: "30px",
+  width: "180px",
+  height: "180px",
+  [theme.breakpoints.down("md")]: {
+    width: "120px !important", // Overrides inline-style
+    height: "120px",
+  },
+  "&:hover, &.Mui-focusVisible": {
+    zIndex: 1,
+    "& .MuiImageBackdrop-root": {
+      opacity: 0.15,
+    },
+    "& .MuiImageMarked-root": {
+      opacity: 0.15,
+    },
+    "& .MuiTypography-root": {
+      border: "4px solid currentColor",
+    },
+  },
+}));
+
+export const ImageSrcProduct = styled("span")({
+  position: "absolute",
+  borderRadius: "30px",
+  left: 0,
+  right: 0,
+  top: 0,
+  bottom: 0,
+  backgroundSize: "cover",
+  backgroundPosition: "center 40%",
+});
+
 export const ButtonAvatar = styled(ButtonBase)(({ theme }) => ({
   position: "relative",
   borderRadius: "50%",

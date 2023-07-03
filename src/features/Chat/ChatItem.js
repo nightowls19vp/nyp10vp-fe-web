@@ -7,7 +7,7 @@ import * as SB from "../../component/Chat/SendBirdGroupChat.js";
 import { updateChannelID } from "../../redux/userSlice";
 
 function ChatItem() {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const userInfo = useSelector((state) => state?.user?.userInfo.user);
   const channels = useSelector((state) => state?.user?.channel);
@@ -17,14 +17,13 @@ function ChatItem() {
   const [messageFirst, setMessageFirst] = useState([]);
 
   useEffect(() => {
-
     const getChannels = async () => {
       let newChannel = [];
 
       await SB.connectSendBird(userInfo?._id);
 
       for (let channel of channels) {
-        let item = await SB.getUserChannel(channel);
+        let item = await SB.getUserChannel(channel.channel);
         let fromData = {
           _id: item.url,
           name: item.name,
@@ -34,8 +33,9 @@ function ChatItem() {
       }
       setListChannel(newChannel);
       dispatch(updateChannelID(newChannel[0]._id));
-
-      let c = await SB.getUserChannel(channels[0]);
+      console.log("get channel");
+      let c = await SB.getUserChannel(channels[0].channel);
+      console.log("channel: ", c);
       setChannelFirst(c);
 
       let m = await SB.receiveMessage(c);
