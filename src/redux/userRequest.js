@@ -10,6 +10,7 @@ import {
   updateGroupId,
   updateGroupItemId,
 } from "./userSlice";
+import { Try } from "@mui/icons-material";
 
 export const getInformationUser = async (userID, token, dispatch, axiosJWT) => {
   dispatch(getUserInforStart());
@@ -135,7 +136,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
   try {
     const resSU_group = await axiosJWT.get("/pkg-mgmt/gr/user", {
       params: {
-        projection: 'name;avatar;packages;members;billing',
+        projection: "name;avatar;packages;members;billing",
         role: "Super User",
         page: 0,
         limit: 10,
@@ -149,7 +150,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
     const resU_group = await axiosJWT.get("/pkg-mgmt/gr/user", {
       params: {
-        projection: 'name;avatar;packages;members;billing',
+        projection: "name;avatar;packages;members;billing",
         role: "User",
         page: 0,
         limit: 10,
@@ -161,25 +162,29 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
       },
     });
 
-    if (resSU_group?.data.groups.length > 0 || resU_group?.data.groups.length > 0) {
+    if (
+      resSU_group?.data.groups.length > 0 ||
+      resU_group?.data.groups.length > 0
+    ) {
       let dataGroup = [
         {
           name: "Group SUPER USER",
           _id: 0,
-          check: true,
           status: true,
           child: [],
         },
         {
           name: "Group USER",
           _id: 1,
-          check: true,
           status: false,
           child: [],
         },
       ];
 
-      if (resSU_group?.data.groups.length > 0 && resU_group?.data.groups.length > 0) {
+      if (
+        resSU_group?.data.groups.length > 0 &&
+        resU_group?.data.groups.length > 0
+      ) {
         for (let item of resSU_group?.data.groups) {
           let formData = {
             _id: item._id,
@@ -213,14 +218,14 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             name: item.name,
             avatar: item.avatar,
             packages: packages,
-            members: item.members
+            members: item.members,
           };
 
           let itemSpending = {
             _id: item._id,
             members: item.members,
-            billing: item.billing
-          }
+            billing: item.billing,
+          };
 
           let childGroupItem = [
             {
@@ -278,14 +283,14 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             name: item.name,
             avatar: item.avatar,
             packages: packages,
-            members: item.members
+            members: item.members,
           };
 
           let itemSpending = {
             _id: item._id,
             members: item.members,
-            billing: item.billing
-          }
+            billing: item.billing,
+          };
 
           let childGroupItem = [
             {
@@ -344,14 +349,14 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             name: item.name,
             avatar: item.avatar,
             packages: packages,
-            members: item.members
+            members: item.members,
           };
 
           let itemSpending = {
             _id: item._id,
             members: item.members,
-            billing: item.billing
-          }
+            billing: item.billing,
+          };
 
           let childGroupItem = [
             {
@@ -411,14 +416,14 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             name: item.name,
             avatar: item.avatar,
             packages: packages,
-            members: item.members
+            members: item.members,
           };
 
           let itemSpending = {
             _id: item._id,
             members: item.members,
-            billing: item.billing
-          }
+            billing: item.billing,
+          };
 
           let childGroupItem = [
             {
@@ -595,10 +600,10 @@ export const getGroupChannel = async (token, dispatch, axiosJWT) => {
   try {
     const res = await axiosJWT.get("/pkg-mgmt/gr/user", {
       params: {
-        projection: 'channel;members',
+        projection: "channel;members",
         page: 0,
         limit: 20,
-        sort: '-createdAt'
+        sort: "-createdAt",
       },
       headers: {
         accept: "*/*",
@@ -641,15 +646,36 @@ export const updateGroupChannel = async (
   }
 };
 
-export const postPackageBill = async (group_id, data, token, dispatch, axiosJWT) => {
+export const postPackageBill = async (
+  group_id,
+  data,
+  token,
+  dispatch,
+  axiosJWT
+) => {
   try {
     const res = await axiosJWT.post(`/pkg-mgmt/bill/${group_id}`, data, {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
       },
-    })
-     await getGroupByUserId(token, dispatch, axiosJWT);
+    });
+    await getGroupByUserId(token, dispatch, axiosJWT);
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateStatusBill = async (id, data, token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.put(`/pkg-mgmt/bill/${id}/status`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    await getGroupByUserId(token, dispatch, axiosJWT);
     return res?.data;
   } catch (error) {
     console.log(error);

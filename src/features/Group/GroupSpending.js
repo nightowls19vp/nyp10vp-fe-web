@@ -104,7 +104,7 @@ function GroupSpending({ item }) {
           }}
         >
           {item.billing?.map((bill) =>
-            <Bill key={bill._id} item={bill} />
+            bill ? <Bill key={bill._id} item={bill} /> : null
           )}
         </Box>
       ) : null}

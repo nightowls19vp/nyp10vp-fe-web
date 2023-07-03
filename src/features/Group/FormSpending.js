@@ -100,7 +100,7 @@ function FormSpending({ grID, item }) {
     for (let el of array) {
       if (el._id !== "0") {
         let data = {
-          user: el._id,
+          borrower: el._id,
           amount: el.amount
         }
         borrowers.push(data);
@@ -114,10 +114,9 @@ function FormSpending({ grID, item }) {
       description: description
     };
 
-    console.log("borrowers", borrowers);
-    console.log("lender", hostName);
+    console.log("bill: ", formData);
 
-    // await postPackageBill(grID, formData, user?.accessToken, dispatch, axiosJWT);
+    await postPackageBill(grID, formData, user?.accessToken, dispatch, axiosJWT);
   }
 
   return (

@@ -83,12 +83,12 @@ export const Button2 = styled(Button)({
 
 export const ButtonProduct = styled(ButtonBase)(({ theme }) => ({
   position: "relative",
-  borderRadius: "30px",
-  width: "180px",
-  height: "180px",
+  // borderRadius: "50%",
+  width: "250px",
+  height: "500px",
   [theme.breakpoints.down("md")]: {
-    width: "120px !important", // Overrides inline-style
-    height: "120px",
+    width: "180px !important", // Overrides inline-style
+    height: "200px",
   },
   "&:hover, &.Mui-focusVisible": {
     zIndex: 1,
@@ -106,14 +106,28 @@ export const ButtonProduct = styled(ButtonBase)(({ theme }) => ({
 
 export const ImageSrcProduct = styled("span")({
   position: "absolute",
-  borderRadius: "30px",
+  // borderRadius: "50%",
   left: 0,
   right: 0,
   top: 0,
   bottom: 0,
   backgroundSize: "cover",
-  backgroundPosition: "center 40%",
+  backgroundPosition: "center 50%",
 });
+
+export const ImageProduct = styled("span")(({ theme }) => ({
+  position: "absolute",
+  left: 0,
+  right: -5,
+  top: 350,
+  bottom: 0,
+  [theme.breakpoints.down("md")]: {
+    top: 150,
+  },
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end",
+}));
 
 export const ButtonAvatar = styled(ButtonBase)(({ theme }) => ({
   position: "relative",
