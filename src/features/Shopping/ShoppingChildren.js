@@ -40,7 +40,11 @@ import "../../assets/css/Shopping.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { loginSuccess } from "../../redux/authSlice";
 import { getUserCart, updateUserCart } from "../../redux/packageRequest";
-import { setCarts, updateNumberCart } from "../../redux/packageSlice";
+import {
+  setCarts,
+  updateNotiCheckout,
+  updateNumberCart,
+} from "../../redux/packageSlice";
 
 const style = {
   position: "absolute",
@@ -254,6 +258,7 @@ export default function EnhancedTable({ item }) {
   const userCart = useSelector((state) => state?.package?.cart);
   const userInfo = useSelector((state) => state?.user?.userInfo);
   const order = useSelector((state) => state?.auth?.order);
+  const flag = useSelector((state) => state?.package?.flagCart);
 
   const socket = SockectIO();
 
@@ -279,8 +284,7 @@ export default function EnhancedTable({ item }) {
   const [selected, setSelected] = React.useState([]);
 
   const [total, setTotal] = React.useState(0);
-  const [flag, setFlag] = React.useState(false);
-  let timeId = useRef();
+  // let timeId = useRef();
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
@@ -412,7 +416,6 @@ export default function EnhancedTable({ item }) {
   //       // clearTimeout(timeId);
   //     });
 
-
   //   return () => {
   //     socket.disconnect();
   //   };
@@ -469,13 +472,12 @@ export default function EnhancedTable({ item }) {
     const res = await userCheckout(user?.accessToken, dispatch, data, axiosJWT);
 
     if (res?.statusCode === 200) {
+      dispatch(updateNotiCheckout(2));
       window.open(order.order.order_url);
 
-      // timeId = setTimeout(function () {
-      //   console.log("stop");
-      // }, 3 * 60 * 1000);
-
-      console.log("vy2");
+      setTimeout(function () {
+        dispatch(updateNotiCheckout(1));
+      }, 2 * 60 * 1000);
 
       await getUserCart(
         user?.data.userInfo._id,
@@ -491,174 +493,185 @@ export default function EnhancedTable({ item }) {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: { xs: "column", lg: "row" },
-        justifyContent: "space-between",
-        alignItems: "flex-start",
-        paddingY: "30px",
-      }}
-    >
-      <Box sx={{ width: { xs: "100%", lg: "70%" } }}>
-        <Stack>
-          <Box sx={{ width: "100%" }}>
-            <Paper sx={{ width: "100%", mb: 2 }}>
-              {selected.length > 0 ? (
-                <EnhancedTableToolbar
-                  numSelected={selected.length}
-                  data={rows}
-                  arrSelected={selected}
-                  onSetSelected={onSetSelected}
-                />
-              ) : null}
-              <TableContainer>
-                <Table
-                  sx={{ minWidth: 750 }}
-                  aria-labelledby="tableTitle"
-                  size={"medium"}
-                >
-                  <EnhancedTableHead
-                    numSelected={selected.length}
-                    onSelectAllClick={handleSelectAllClick}
-                    rowCount={rows.length}
-                  />
-                  <TableBody>
-                    {rows.map((row, index) => {
-                      const isItemSelected = isSelected(row);
-                      const labelId = `enhanced-table-checkbox-${index}`;
-
-                      return (
-                        <TableRow
-                          hover
-                          // onClick={(event) => handleClick(event, row)}
-                          // role="checkbox"
-                          // aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={index}
-                          selected={isItemSelected}
-                          sx={{ cursor: "pointer" }}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              color="primary"
-                              checked={isItemSelected}
-                              inputProps={{
-                                "aria-labelledby": labelId,
-                              }}
-                              onClick={(event) => handleClick(event, row)}
-                            />
-                          </TableCell>
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                          >
-                            {row.name}
-                          </TableCell>
-                          <TableCell align="center">
-                            {row.member} người
-                          </TableCell>
-                          <TableCell align="center">
-                            {row.duration} tháng
-                          </TableCell>
-                          <TableCell align="center">
-                            <Box className="quantity">
-                              <IconButton
-                                onClick={(event) =>
-                                  handleButtonMinus(event, row)
-                                }
-                              >
-                                <CiSquareMinus />
-                              </IconButton>
-                              <Typography variant="subtitle1" fontSize={18}>
-                                {row.quantity}
-                              </Typography>
-                              <IconButton
-                                onClick={(event) =>
-                                  handleButtonPlus(event, row)
-                                }
-                              >
-                                <CiSquarePlus />
-                              </IconButton>
-                            </Box>
-                          </TableCell>
-                          <TableCell align="center">{row.money}</TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Paper>
-          </Box>
-        </Stack>
-      </Box>
+    <>
       <Box
         sx={{
-          width: { xs: "100%", lg: "30%" },
           display: "flex",
-          justifyContent: { xs: "flex-start", lg: "center" },
+          flexDirection: { xs: "column", lg: "row" },
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          paddingY: "30px",
+          opacity: flag === 2 ? 0.3 : 1,
         }}
-        // className="method-total"
       >
-        <Stack spacing={2}>
-          <FormControl>
-            <FormLabel id="radio-buttons-method-total">
-              Chọn phương thức thanh toán
-            </FormLabel>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              value={valueMethod}
-              name="radio-buttons-group"
-              onChange={handleChange}
-            >
-              <FormControlLabel value="zalo" control={<Radio />} label="Zalo" />
-              <FormControlLabel
-                value="vnpay"
-                control={<Radio />}
-                label="Vnpay"
-              />
-              <FormControlLabel
-                value="other"
-                control={<Radio />}
-                label="Khác"
-              />
-            </RadioGroup>
-          </FormControl>
-          <Box className="total">
-            <Typography variant="subtitle2">
-              Tổng thanh toán ({selected.length} sản phẩm):
-            </Typography>
-            <Typography
-              variant="subtitle2"
-              color={"#ff3333"}
-              paddingLeft={"2px"}
-            >
-              {total}đ
-            </Typography>
-          </Box>
-          <Box align="right">
-            <CustomComponent.Button1 fullWidth onClick={handleButtonCheckout}>
-              Thanh toán
-            </CustomComponent.Button1>
-            {flag === true ? <Typography> VY </Typography> : null}
-            <Modal
-              open={openModal}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <Typography variant="h5" gutterBottom>
-                  Bạn vẫn chưa chọn sản phẩm để mua
-                </Typography>
-              </Box>
-            </Modal>
-          </Box>
-        </Stack>
+        <Box sx={{ width: { xs: "100%", lg: "70%" } }}>
+          <Stack>
+            <Box sx={{ width: "100%" }}>
+              <Paper sx={{ width: "100%", mb: 2 }}>
+                {selected.length > 0 ? (
+                  <EnhancedTableToolbar
+                    numSelected={selected.length}
+                    data={rows}
+                    arrSelected={selected}
+                    onSetSelected={onSetSelected}
+                  />
+                ) : null}
+                <TableContainer>
+                  <Table
+                    sx={{ minWidth: 750 }}
+                    aria-labelledby="tableTitle"
+                    size={"medium"}
+                  >
+                    <EnhancedTableHead
+                      numSelected={selected.length}
+                      onSelectAllClick={handleSelectAllClick}
+                      rowCount={rows.length}
+                    />
+                    <TableBody>
+                      {rows.map((row, index) => {
+                        const isItemSelected = isSelected(row);
+                        const labelId = `enhanced-table-checkbox-${index}`;
+
+                        return (
+                          <TableRow
+                            hover
+                            // onClick={(event) => handleClick(event, row)}
+                            // role="checkbox"
+                            // aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            key={index}
+                            selected={isItemSelected}
+                            sx={{ cursor: "pointer" }}
+                          >
+                            <TableCell padding="checkbox">
+                              <Checkbox
+                                color="primary"
+                                checked={isItemSelected}
+                                inputProps={{
+                                  "aria-labelledby": labelId,
+                                }}
+                                onClick={(event) => handleClick(event, row)}
+                              />
+                            </TableCell>
+                            <TableCell
+                              component="th"
+                              id={labelId}
+                              scope="row"
+                              padding="none"
+                            >
+                              {row.name}
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.member} người
+                            </TableCell>
+                            <TableCell align="center">
+                              {row.duration} tháng
+                            </TableCell>
+                            <TableCell align="center">
+                              <Box className="quantity">
+                                <IconButton
+                                  onClick={(event) =>
+                                    handleButtonMinus(event, row)
+                                  }
+                                >
+                                  <CiSquareMinus />
+                                </IconButton>
+                                <Typography variant="subtitle1" fontSize={18}>
+                                  {row.quantity}
+                                </Typography>
+                                <IconButton
+                                  onClick={(event) =>
+                                    handleButtonPlus(event, row)
+                                  }
+                                >
+                                  <CiSquarePlus />
+                                </IconButton>
+                              </Box>
+                            </TableCell>
+                            <TableCell align="center">{row.money}</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Paper>
+            </Box>
+          </Stack>
+        </Box>
+        <Box
+          sx={{
+            width: { xs: "100%", lg: "30%" },
+            display: "flex",
+            justifyContent: { xs: "flex-start", lg: "center" },
+          }}
+          // className="method-total"
+        >
+          <Stack spacing={2}>
+            <FormControl>
+              <FormLabel id="radio-buttons-method-total">
+                Chọn phương thức thanh toán
+              </FormLabel>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                value={valueMethod}
+                name="radio-buttons-group"
+                onChange={handleChange}
+              >
+                <FormControlLabel
+                  value="zalo"
+                  control={<Radio />}
+                  label="Zalo"
+                />
+                <FormControlLabel
+                  value="vnpay"
+                  control={<Radio />}
+                  label="Vnpay"
+                />
+                <FormControlLabel
+                  value="other"
+                  control={<Radio />}
+                  label="Khác"
+                />
+              </RadioGroup>
+            </FormControl>
+            <Box className="total">
+              <Typography variant="subtitle2">
+                Tổng thanh toán ({selected.length} sản phẩm):
+              </Typography>
+              <Typography
+                variant="subtitle2"
+                color={"#ff3333"}
+                paddingLeft={"2px"}
+              >
+                {total}đ
+              </Typography>
+            </Box>
+            <Box align="right">
+              <CustomComponent.Button1 fullWidth onClick={handleButtonCheckout}>
+                Thanh toán
+              </CustomComponent.Button1>
+              <Modal
+                open={openModal}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <Typography variant="h5" gutterBottom>
+                    Bạn vẫn chưa chọn sản phẩm để mua
+                  </Typography>
+                </Box>
+              </Modal>
+            </Box>
+          </Stack>
+        </Box>
       </Box>
-    </Box>
+      {flag === 2 ? (
+        <Box sx={{ position: "fixed", top: "50%", left: "50%" }}>
+          <CircularProgress />
+        </Box>
+      ) : null}
+    </>
   );
 }

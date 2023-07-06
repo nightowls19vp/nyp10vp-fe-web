@@ -113,7 +113,6 @@ function AddProduct({ grId, handleCreatePro }) {
       }
     };
 
-    boxRef.current.addEventListener("scroll", handleScroll);
   }, []);
 
   return (

@@ -16,9 +16,12 @@ import { AiOutlineBars } from "react-icons/ai";
 
 import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
-// import { createAxios } from "../../http/createInstance.js";
+import { createAxios } from "../../http/createInstance.js";
 import SockectIO from "../../http/socket.js";
-import { toggleShowSidebar } from "../../redux/packageSlice";
+import {
+  toggleShowSidebar,
+  updateNotiCheckout,
+} from "../../redux/packageSlice";
 import { loginSuccess } from "../../redux/authSlice";
 
 import "../../assets/css/Header.scss";
@@ -27,6 +30,7 @@ import { dataHeader2 } from "../../data/index.js";
 import HeaderAvatar from "./HeaderAvatar.js";
 
 import * as SB from "../Chat/SendBirdGroupChat.js";
+import { getUserCart } from "../../redux/packageRequest.js";
 
 const topSearch = [];
 
@@ -35,6 +39,8 @@ function Header() {
 
   let user = useSelector((state) => state?.auth.login?.currentUser);
   const channels = useSelector((state) => state?.user?.channel);
+
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
   const socket = SockectIO();
 
   let day = new Date();
@@ -52,7 +58,7 @@ function Header() {
 
   const inviteInGroupChannel = async (channel, user) => {
     await SB.inviteMember(channel, user);
-  }
+  };
 
   useEffect(() => {
     const userConnectChat = async () => {
@@ -85,16 +91,30 @@ function Header() {
       }
     });
 
-    socket.on("zpCallback", (data) => {
+    socket.on("zpCallback", async (data) => {
       console.log("socket-io zpCallback: ", data);
-      // setFlag(true);
-      // clearTimeout(timeId);
+      if (data) {
+        dispatch(updateNotiCheckout(1));
+        await getUserCart(
+          user?.data.userInfo._id,
+          user?.accessToken,
+          dispatch,
+          axiosJWT
+        );
+      }
     });
 
     return () => {
       socket.disconnect();
     };
-  }, [channels, socket]);
+  }, [
+    axiosJWT,
+    channels,
+    dispatch,
+    socket,
+    user?.accessToken,
+    user?.data.userInfo._id,
+  ]);
 
   return (
     <AppBar

@@ -8,6 +8,7 @@ const packageSlice = createSlice({
     package: [],
     numberCart: 0,
     cart: [],
+    flagCart: 0,
     noti: null,
     bill: [],
   },
@@ -20,6 +21,9 @@ const packageSlice = createSlice({
     },
     updateNumberCart: (state, action) => {
       state.numberCart = action.payload;
+    },
+    updateNotiCheckout: (state, action) => {
+      state.flagCart = action.payload;
     },
     updateShowSidebar: (state, action) => {
       state.showSidebar = action.payload;
@@ -43,6 +47,7 @@ export const {
   setInitialPackage,
   setCarts,
   updateNumberCart,
+  updateNotiCheckout,
   toggleShowSidebar,
   updateShowSidebar,
   updateProfileId,
