@@ -112,7 +112,7 @@ export const updateStorageLocation = async (
 };
 
 export const getProductItemsByStorage = async (
-  grId,
+  groupId,
   currentPage,
   limit,
   storageID,
@@ -121,9 +121,8 @@ export const getProductItemsByStorage = async (
   axiosJWT
 ) => {
   try {
-    const res = await axiosJWT.get("/prod-mgmt/items", {
+    const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}`, {
       params: {
-        groupId: grId,
         page: currentPage,
         limit: limit,
         "filter.timestamp.deletedAt": "$null",
@@ -161,7 +160,8 @@ export const getGroupProducts = async (
         Authorization: `Bearer ${token}`,
       },
     });
-    return res?.data.data;
+    console.log(res?.data);
+    return res?.data;
   } catch (error) {
     console.log(error);
   }

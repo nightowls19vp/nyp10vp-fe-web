@@ -26,7 +26,7 @@ function PackageGroup({ item, data, title }) {
 
   const user = useSelector((state) => state?.auth.login?.currentUser);
 
-  const btn = item.status === "Not activated" ? true : false;
+  const btn = item.status === "Not Activated" ? true : false;
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 

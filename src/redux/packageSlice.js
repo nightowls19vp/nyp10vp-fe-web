@@ -10,7 +10,7 @@ const packageSlice = createSlice({
     cart: [],
     flagCart: 0,
     noti: null,
-    bill: [],
+    bill: null,
   },
   reducers: {
     setInitialPackage: (state, action) => {

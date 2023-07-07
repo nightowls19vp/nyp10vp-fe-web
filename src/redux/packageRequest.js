@@ -1,7 +1,7 @@
 import apiClient from "../http/http-common.js";
 
 // import dataPackage from "../data/dataPackage.js";
-import { setCarts, setInitialPackage, updateBill, updateNotiPackage, updateNumberCart, updatePackageId } from "./packageSlice.js";
+import { setCarts, setInitialPackage, updateNotiPackage, updateNumberCart } from "./packageSlice.js";
 
 export const getAllPackage = async (dispatch) => {
   try {

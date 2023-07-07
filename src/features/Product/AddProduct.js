@@ -7,8 +7,8 @@ import {
   Typography,
   ButtonBase,
   IconButton,
-  Input,
   InputAdornment,
+  InputBase,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
@@ -45,22 +45,13 @@ function AddProduct({ grId, handleCreatePro }) {
 
   const [inputValue, setInputValue] = useState("");
   const [focusInput, setFocusInput] = useState(false);
-  const [page, setPage] = useState(1);
-  const [data, setData] = useState(null);
+  const [pageProduct, setPageProduct] = useState(1);
+  const [totalPageProduct, setTotalPageProduct] = useState(1);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue.$d);
-  };
-
-  const getDataOfGroupProducts = async () => {
-    const res = await getGroupProducts(
-      grId,
-      page,
-      10,
-      user?.accessToken,
-      axiosJWT
-    );
-    setData(res);
   };
 
   const searchDataGroupProducts = async (search) => {
@@ -70,7 +61,23 @@ function AddProduct({ grId, handleCreatePro }) {
       user?.accessToken,
       axiosJWT
     );
-    setData(res);
+    setProducts(res);
+  };
+
+  const getDataOfGroupProducts = async () => {
+    setLoading(true);
+    const res = await getGroupProducts(
+      grId,
+      pageProduct,
+      10,
+      user?.accessToken,
+      axiosJWT
+    );
+    let all = new Set([...products, ...res.data]);
+    console.log("data: ", all);
+    setTotalPageProduct(res.meta.totalPages);
+    setProducts([...all]);
+    setLoading(false);
   };
 
   const handleFocusInput = async () => {
@@ -99,10 +106,6 @@ function AddProduct({ grId, handleCreatePro }) {
     setFocusInput(false);
   };
 
-  const handleScroll = () => {
-    alert("handleScroll");
-  };
-
   useEffect(() => {
     window.onclick = (event) => {
       if (
@@ -112,40 +115,68 @@ function AddProduct({ grId, handleCreatePro }) {
         setFocusInput(false);
       }
     };
-
   }, []);
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   getGroupProducts(
+  //     grId,
+  //     pageProduct,
+  //     10,
+  //     user?.accessToken,
+  //     axiosJWT
+  //   ).then((res) => {
+  //     console.log(res);
+  //     setLoading(false);
+  //   });
+  // }, [axiosJWT, grId, pageProduct, user?.accessToken]);
+
+  const lastProductElement = (node) => {
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setPageProduct((no) => no + 1);
+        getDataOfGroupProducts();
+      }
+    });
+    if (node) observer.current.observe(node);
+  };
 
   return (
     <Stack spacing={2}>
       <Stack sx={{ width: "100%" }}>
-        <Input
-          value={inputValue}
-          fullWidth
-          onClick={handleFocusInput}
-          // onFocus={handleFocusInput}
-          // onBlur={handleBlurInput}
-          onChange={handleChangeInput}
-          ref={inputRef}
-          endAdornment={
-            <InputAdornment position="end">
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                {inputValue ? (
-                  <IconButton sx={{ opacity: 0.5 }} onClick={handleClearInput}>
-                    <ClearIcon />
-                  </IconButton>
-                ) : null}
-                {focusInput ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-              </Box>
-            </InputAdornment>
-          }
-          sx={{ height: "20px" }}
-        />
+        <Box className="box-input-product">
+          <InputBase
+            value={inputValue}
+            fullWidth
+            placeholder="Chọn nhu yếu phẩm đã có trong kho"
+            onClick={handleFocusInput}
+            // onFocus={handleFocusInput}
+            // onBlur={handleBlurInput}
+            onChange={handleChangeInput}
+            ref={inputRef}
+            endAdornment={
+              <InputAdornment position="end">
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  {inputValue ? (
+                    <IconButton
+                      sx={{ opacity: 0.5 }}
+                      onClick={handleClearInput}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  ) : null}
+                  {focusInput ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                </Box>
+              </InputAdornment>
+            }
+          />
+        </Box>
         {focusInput ? (
           <Box
             className="auto-input"
@@ -153,21 +184,19 @@ function AddProduct({ grId, handleCreatePro }) {
             spacing={2}
             ref={boxRef}
           >
-            {data != null
-              ? data.map((x, idx) => (
-                  <ButtonBase
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "flex-start",
-                    }}
-                    key={x.id}
-                    onClick={(e) => handleSelectItem(e, x)}
-                  >
-                    <Typography className="text-displayed">{x.name}</Typography>
-                  </ButtonBase>
-                ))
-              : null}
+            {products != null &&
+              products.map((p, i) => {
+                if (products.length === i + 1) {
+                  return (
+                    <div ref={lastProductElement} key={i}>
+                      {p.name}
+                    </div>
+                  );
+                } else {
+                  return <div key={i}> {p.name} </div>;
+                }
+              })}
+            <div>{loading && "loading..."}</div>
           </Box>
         ) : null}
       </Stack>

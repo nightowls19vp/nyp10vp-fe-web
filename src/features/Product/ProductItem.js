@@ -27,6 +27,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: { xs: "90%", sm: "70%", md: "60%", lg: "50%" },
+  height: "50%",
   bgcolor: "background.paper",
   border: "1px solid #000",
   boxShadow: 24,
@@ -81,13 +82,13 @@ function ProductItem({ grId, storageID }) {
           <Link underline="hover" color={Colors.textPrimary} href="/stock">
             Kho lưu trữ
           </Link>
-          <Typography color="text.primary"> Các sản phẩm trong kho </Typography>
+          <Typography color="text.primary"> Nhu yếu phẩm trong kho </Typography>
         </Breadcrumbs>
         <IconButton onClick={handleOpenAdd}>
           <MdOutlineAddBox color={Colors.textPrimary} size={30} />
         </IconButton>
       </Box>
-      {listProducts.length > 0 ? (
+      {listProducts?.length > 0 ? (
         <ListItemProduct
           item={listProducts}
           p={metaProducts}

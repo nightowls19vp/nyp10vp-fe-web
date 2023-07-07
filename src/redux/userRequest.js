@@ -681,3 +681,47 @@ export const updateStatusBill = async (id, data, token, dispatch, axiosJWT) => {
     console.log(error);
   }
 };
+
+export const deletePackageBill = async (id, token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.delete(`/pkg-mgmt/bill/${id}`, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    await getGroupByUserId(token, dispatch, axiosJWT);
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updatePackageBill = async (
+  id,
+  dataAmount,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.put(`/pkg-mgmt/bill/${id}`, dataAmount, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // await axiosJWT.put(`/pkg-mgmt/bill/${id}/status`, dataStatus, {
+    //   headers: {
+    //     accept: "*/*",
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // });
+
+    await getGroupByUserId(token, dispatch, axiosJWT);
+    console.log(res?.data);
+  } catch (error) {
+    console.log(error);
+  }
+};

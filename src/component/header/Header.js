@@ -82,7 +82,7 @@ function Header() {
     socket.connect();
 
     socket.on("joinGr", async (data) => {
-      console.log("join group: ", data.user);
+      console.log("join group: ", data);
       for (let channel of channels) {
         if (channel._id === data._id) {
           console.log("join group");

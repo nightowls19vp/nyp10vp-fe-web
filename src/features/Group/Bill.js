@@ -12,6 +12,8 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
 import "../../assets/css/Bill.scss";
 import BillDetail from "./BillDetail";
+import { useDispatch } from "react-redux";
+import { updateBill } from "../../redux/packageSlice";
 
 const style = {
   position: "absolute",
@@ -28,12 +30,16 @@ const style = {
 };
 
 function Bill({ item }) {
+  const dispatch = useDispatch();
   const day = new Date(item.date);
   const [status, setStatus] = useState(null);
 
   const [open, setOpen] = useState(false);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    dispatch(updateBill(item));
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
@@ -53,7 +59,15 @@ function Bill({ item }) {
     <>
       <ButtonBase onClick={handleOpen}>
         <Box sx={{ width: "90%", minWidth: "250px" }} className="bill">
-          <Typography variant="h6" sx={{ fontSize: 18 }}>
+          <Typography
+            variant="h6"
+            sx={{
+              fontSize: 18,
+              width: "40%",
+              display: "flex",
+              justifyContent: "flex-start",
+            }}
+          >
             {item.summary}
           </Typography>
           <Box
@@ -61,6 +75,7 @@ function Bill({ item }) {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
+              width: "30%",
             }}
           >
             <AccessTimeIcon />
@@ -72,8 +87,8 @@ function Bill({ item }) {
               {day.toDateString()}
             </Typography>
           </Box>
-          <Box className="bill-end">
-            <Avatar src="" />
+          <Box className="bill-end" sx={{ width: "30%" }}>
+            <Avatar src={item.lender.avatar ?? ""} />
             <Box
               sx={{
                 backgroundColor:
@@ -89,7 +104,7 @@ function Bill({ item }) {
                     : status === "APPROVED"
                     ? "#0000cc"
                     : "#000000",
-                    
+
                 marginLeft: "5px",
               }}
               className="status-bill"

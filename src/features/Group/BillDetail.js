@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   MenuItem,
@@ -8,6 +8,7 @@ import {
   Box,
   Stack,
   Typography,
+  InputBase,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -15,7 +16,7 @@ import { createAxios } from "../../http/createInstance";
 
 import "../../assets/css/Bill.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
-import { updateStatusBill } from "../../redux/userRequest";
+import { deletePackageBill, updatePackageBill, updateStatusBill } from "../../redux/userRequest";
 import { loginSuccess } from "../../redux/authSlice";
 
 function BillDetail({ item, statusBill }) {
@@ -23,40 +24,99 @@ function BillDetail({ item, statusBill }) {
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
   const userInfo = useSelector((state) => state?.user?.userInfo.user);
-  const [status, setStatus] = useState(statusBill);
-  const [listChange, setListChange] = useState([]);
-  const date = new Date(item?.date);
+  const bill = useSelector((state) => state?.package.bill);
 
-  const handleChange = (event, id) => {
-    setStatus(event.target.value);
-    let newArray = [...listChange.filter((data) => data.user !== id)];
-    let formData = {
-      user: id,
-      status: event.target.value
-    };
-    newArray.push(formData);
-    setListChange(newArray);
+  const initalChange = () => {
+    let arr = [];
+    for (let x of bill?.borrowers) {
+      let formData = {
+        _id: x.borrower._id,
+        amount: x.amount,
+        status: x.status,
+      };
+      arr.push(formData);
+    }
+    return arr;
   };
 
-  const handleChangeStatus = async () => {
-    let formData = {
-      borrowers: listChange
-    };
-    console.log(formData, item._id);
-    const res = await updateStatusBill(item._id, formData, user?.accessToken, dispatch, axiosJWT);
+  const [status, setStatus] = useState(statusBill);
+  const [listChange, setListChange] = useState([]);
+  const [data, setData] = useState(initalChange());
+  const date = new Date(item?.date);
+
+  const handleChangeStatus = (event, idx) => {
+    let arr = [];
+    for (let x of data) {
+      let formData = {
+        _id: x._id,
+        amount: x.amount,
+        status: x.status,
+      };
+      if (x._id === idx) {
+        formData.status = event.target.value;
+      }
+      arr.push(formData);
+    }
+    setData(arr);
+  };
+
+  const handleChangeAmount = (e, idx) => {
+    let arr = [];
+    for (let x of data) {
+      let formData = {
+        _id: x._id,
+        amount: x.amount,
+        status: x.status,
+      };
+      if (x._id === idx) {
+        formData.amount = e.target.value;
+      }
+      arr.push(formData);
+    }
+    setData(arr);
+  };
+
+  const handleDeleteBill = async () => {
+    const res = await deletePackageBill(
+      bill._id,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
     console.log(res);
-  }
+  };
+
+  const handleUpdateBill = async () => {
+    let borrowers = [];
+    for (let x of data) {
+      let formAmount = {
+        borrower: x._id,
+        amount: x.amount
+      }
+      borrowers.push(formAmount);
+    }
+
+    let formData = {
+      summary: bill.summary,
+      date: bill.date,
+      borrowers: borrowers,
+      lender: bill?.lender._id,
+      description: bill?.description
+    }
+
+    await updatePackageBill(bill._id, formData, user?.accessToken, dispatch, axiosJWT);
+  };
   return (
     <Box
       sx={{
         width: "100%",
       }}
     >
-      <Typography variant="h4">{item?.summary}</Typography>
+      <Typography variant="h4">{bill?.summary}</Typography>
       <Stack spacing={2} id="modalBillDetail" className="modalModalBillDetail">
         <Typography variant="subtitle1">{date.toDateString()}</Typography>
         <Typography variant="subtitle1" sx={{ fontStyle: "italic" }}>
-          {item?.description}
+          {bill?.description}
         </Typography>
         <Box
           sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
@@ -65,10 +125,10 @@ function BillDetail({ item, statusBill }) {
             Nguoi chi tra:
           </Typography>
           <Typography sx={{ marginLeft: "10px" }}>
-            {item?.lender.name}
+            {bill?.lender.name}
           </Typography>
         </Box>
-        {item?.borrowers.map((route, idx) =>
+        {bill?.borrowers.map((route, idx) =>
           route ? (
             <Box className="detail-bill-member" key={idx}>
               <Box
@@ -85,24 +145,27 @@ function BillDetail({ item, statusBill }) {
                 </Typography>
               </Box>
               <Box flex={1}>
-                <Typography>{route.amount}</Typography>
+                <InputBase
+                  value={data[idx].amount}
+                  onChange={(e) => handleChangeAmount(e, route.borrower._id)}
+                />
               </Box>
-              {userInfo._id === item?.lender._id ? (
+              {userInfo._id === bill?.lender._id ? (
                 <Box>
                   <FormControl
                     sx={{
-                      width: "120px",
+                      width: "130px",
                       backgroundColor:
-                        status === "PENDING"
+                        data[idx].status === "PENDING"
                           ? "#ccffdd"
-                          : status === "APPROVED"
+                          : data[idx].status === "APPROVED"
                           ? "#ccf5ff"
                           : "#f2f2f2",
 
                       borderColor:
-                        status === "PENDING"
+                        data[idx].status === "PENDING"
                           ? "#ccffdd"
-                          : status === "APPROVED"
+                          : data[idx].status === "APPROVED"
                           ? "#ccf5ff"
                           : "#f2f2f2",
                     }}
@@ -111,8 +174,10 @@ function BillDetail({ item, statusBill }) {
                       labelId="demo-simple-select-status"
                       id="demo-simple-status"
                       size="small"
-                      value={status}
-                      onChange={(event) => handleChange(event, route.borrower._id)}
+                      value={data[idx].status}
+                      onChange={(event) =>
+                        handleChangeStatus(event, route.borrower._id)
+                      }
                     >
                       <MenuItem value={"PENDING"}>
                         <Typography
@@ -150,11 +215,11 @@ function BillDetail({ item, statusBill }) {
               ) : (
                 <Box
                   sx={{
-                    width: "120px",
+                    width: "130px",
                     backgroundColor:
-                      status === "PENDING"
+                      route.status === "PENDING"
                         ? "#ccffdd"
-                        : status === "APPROVED"
+                        : route.status === "APPROVED"
                         ? "#ccf5ff"
                         : "#f2f2f2",
                     padding: "5px",
@@ -166,9 +231,9 @@ function BillDetail({ item, statusBill }) {
                   <Typography
                     sx={{
                       color:
-                        status === "PENDING"
+                        route.status === "PENDING"
                           ? "#008000"
-                          : status === "APPROVED"
+                          : route.status === "APPROVED"
                           ? "#0000cc"
                           : "#000000",
                       fontWeight: 550,
@@ -181,7 +246,7 @@ function BillDetail({ item, statusBill }) {
             </Box>
           ) : null
         )}
-        {userInfo._id === item?.lender._id ? (
+        {userInfo._id === bill?.lender._id ? (
           <Box
             sx={{
               display: "flex",
@@ -190,10 +255,14 @@ function BillDetail({ item, statusBill }) {
             }}
           >
             <Box sx={{ paddingRight: "5px" }}>
-              <CustomComponent.Button2>Xóa</CustomComponent.Button2>
+              <CustomComponent.Button2 onClick={handleDeleteBill}>
+                Xóa
+              </CustomComponent.Button2>
             </Box>
             <Box sx={{ paddingLeft: "5px" }}>
-              <CustomComponent.Button1 disabled={listChange.length > 0 ? false : true} onClick={handleChangeStatus}>
+              <CustomComponent.Button1
+                onClick={handleUpdateBill}
+              >
                 Lưu thay đổi
               </CustomComponent.Button1>
             </Box>
