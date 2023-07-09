@@ -12,14 +12,14 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
-import { createAxios } from "../../http/createInstance";
+import { createAxios } from "../../../http/createInstance";
 
-import "../../assets/css/Bill.scss";
-import * as CustomComponent from "../../component/custom/CustomComponents.js";
-import { deletePackageBill, updatePackageBill, updateStatusBill } from "../../redux/userRequest";
-import { loginSuccess } from "../../redux/authSlice";
+import "../../../assets/css/Bill.scss";
+import * as CustomComponent from "../../../component/custom/CustomComponents.js";
+import { deletePackageBill, updatePackageBill } from "../../../redux/userRequest";
+import { loginSuccess } from "../../../redux/authSlice";
 
-function BillDetail({ item, statusBill }) {
+function BillDetail() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
@@ -38,11 +38,8 @@ function BillDetail({ item, statusBill }) {
     }
     return arr;
   };
-
-  const [status, setStatus] = useState(statusBill);
-  const [listChange, setListChange] = useState([]);
   const [data, setData] = useState(initalChange());
-  const date = new Date(item?.date);
+  const date = new Date(bill?.date);
 
   const handleChangeStatus = (event, idx) => {
     let arr = [];

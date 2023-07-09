@@ -11,6 +11,7 @@ const packageSlice = createSlice({
     flagCart: 0,
     noti: null,
     bill: null,
+    todos: null,
   },
   reducers: {
     setInitialPackage: (state, action) => {
@@ -40,6 +41,9 @@ const packageSlice = createSlice({
     updateBill: (state, action) => {
       state.bill = action.payload;
     },
+    updateTodos: (state, action) => {
+      state.todos = action.payload;
+    },
   },
 });
 
@@ -53,6 +57,7 @@ export const {
   updateProfileId,
   updateNotiPackage,
   updateBill,
+  updateTodos,
 } = packageSlice.actions;
 
 export default packageSlice.reducer;

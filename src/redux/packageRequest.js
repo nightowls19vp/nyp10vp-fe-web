@@ -1,7 +1,15 @@
 import apiClient from "../http/http-common.js";
 
 // import dataPackage from "../data/dataPackage.js";
-import { setCarts, setInitialPackage, updateNotiPackage, updateNumberCart } from "./packageSlice.js";
+import {
+  setCarts,
+  setInitialPackage,
+  updateNotiPackage,
+  updateNumberCart,
+  updateTodos,
+} from "./packageSlice.js";
+import { getGroupByUserId } from "./userRequest.js";
+import { updateGroupId, updateGroupItemId } from "./userSlice.js";
 
 export const getAllPackage = async (dispatch) => {
   try {
@@ -23,16 +31,15 @@ export const getAllPackage = async (dispatch) => {
     for (let item of res.data.data) {
       dataPackage[0].child.push(item);
     }
-    
+
     dispatch(setInitialPackage(dataPackage));
 
     let formNoti = {
       statusNoti: 0,
-      msgNoti: ""
-    }
-    
-    dispatch(updateNotiPackage(formNoti));
+      msgNoti: "",
+    };
 
+    dispatch(updateNotiPackage(formNoti));
   } catch (error) {
     console.log(error);
   }
@@ -57,31 +64,113 @@ export const getUserCart = async (userID, token, dispatch, axiosJWT) => {
     });
 
     // console.log(res?.data.cart);
-    
-    dispatch(setCarts(res?.data.cart));
-    
-    dispatch(updateNumberCart(res?.data.cart.length));
 
+    dispatch(setCarts(res?.data.cart));
+
+    dispatch(updateNumberCart(res?.data.cart.length));
   } catch (error) {
     console.log(error);
   }
 };
 
-export const updateUserCart = async (userID, cart, token, dispatch, axiosJWT) => {
+export const updateUserCart = async (
+  userID,
+  cart,
+  token,
+  dispatch,
+  axiosJWT
+) => {
   try {
     const res = await axiosJWT.put(`/users/${userID}/cart`, cart, {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
-        
       },
     });
 
     await getUserCart(userID, token, dispatch, axiosJWT);
 
     return res?.data;
-    
   } catch (error) {
     console.log(error);
   }
 };
+
+export const postPackageTodos = async (
+  group_id,
+  data,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.post(`/pkg-mgmt/todos/${group_id}`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res?.data.statusCode === 200) {
+      await getGroupByUserId(token, dispatch, axiosJWT);
+      dispatch(updateGroupId(group_id));
+      dispatch(updateGroupItemId(2));
+    }
+    return res?.data;
+  } catch (error) {
+    dispatch(updateGroupItemId(2));
+    return error.response.data;
+  }
+};
+
+export const addTodo = async (grID, id, data, token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.post(`/pkg-mgmt/todos/${id}/todo`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res?.data.statusCode === 200) {
+      console.log(res?.data);
+      await getGroupByUserId(token, dispatch, axiosJWT);
+      dispatch(updateGroupId(grID));
+      dispatch(updateGroupItemId(2));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getTodo = async (id, token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get(`/pkg-mgmt/todos/${id}`, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    if (res?.data?.statusCode === 200) {
+      dispatch(updateTodos(res?.data.todos));
+    }
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const updateIsCompletedTodo = async (id, todo_id, data, token, axiosJWT) => {
+  try {
+    const res = await axiosJWT.put(`/pkg-mgmt/todos/${id}/todo/${todo_id}`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

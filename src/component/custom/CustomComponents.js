@@ -8,6 +8,7 @@ import {
   Box,
   Slider,
   IconButton,
+  Select,
 } from "@mui/material";
 
 import { Colors } from "../../config/Colors";

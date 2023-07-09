@@ -14,13 +14,13 @@ import {
 } from "@mui/material";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 
-import { createAxios } from "../../http/createInstance";
-
-import { Colors } from "../../config/Colors";
-import * as CustomComponent from "../../component/custom/CustomComponents.js";
-import DateTimePicker from "../../component/Date/DateTimePicker";
-import { postPackageBill } from "../../redux/userRequest";
-import { loginSuccess } from "../../redux/authSlice";
+import { createAxios } from "../../../http/createInstance";
+import "../../../assets/css/Group.scss";
+import { Colors } from "../../../config/Colors";
+import * as CustomComponent from "../../../component/custom/CustomComponents.js";
+import DateTimePicker from "../../../component/Date/DateTimePicker";
+import { postPackageBill } from "../../../redux/userRequest";
+import { loginSuccess } from "../../../redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 function FormSpending({ grID, item }) {
@@ -92,6 +92,12 @@ function FormSpending({ grID, item }) {
     }
   };
 
+  const handleKeyDownAmount = (e) => {
+    if (e.key === "Enter") {
+      handleAddMember();
+    }
+  };
+
   const handleGroupBill = async () => {
     let array = [...memName];
     array[idxUser].amount = money;
@@ -101,8 +107,8 @@ function FormSpending({ grID, item }) {
       if (el._id !== "0") {
         let data = {
           borrower: el._id,
-          amount: el.amount
-        }
+          amount: el.amount,
+        };
         borrowers.push(data);
       }
     }
@@ -111,29 +117,30 @@ function FormSpending({ grID, item }) {
       date: date,
       borrowers: borrowers,
       lender: hostName,
-      description: description
+      description: description,
     };
 
     console.log("bill: ", formData);
 
-    await postPackageBill(grID, formData, user?.accessToken, dispatch, axiosJWT);
-  }
+    await postPackageBill(
+      grID,
+      formData,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
+  };
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-      }}
-    >
-      <Input
-        id="modal-modal-title"
-        placeholder="Tên chi tiêu"
-        value={name}
-        fontSize={18}
-        className="name-bill"
-        onChange={(e) => setName(e.target.value)}
-      />
-      <Stack id="modalFormSpending" spacing={2} className="modalModalSpending">
+      <Stack spacing={2} id="modalFormSpending" className="modalModalSpending">
+        <Input
+          id="modal-modal-title"
+          placeholder="Tên chi tiêu"
+          value={name}
+          fontSize={20}
+          className="name-bill"
+          onChange={(e) => setName(e.target.value)}
+        />
         <Box className="title-group-spending">
           <Typography variant="body2" sx={{ minWidth: "100px" }}>
             Ngày chi tiêu:
@@ -166,18 +173,6 @@ function FormSpending({ grID, item }) {
             </Select>
           </FormControl>
         </Box>
-
-        {/* <Box className="title-group-spending">
-          <Typography variant="body2" sx={{ minWidth: "100px" }}>
-            Số tiền:
-          </Typography>
-          <TextField
-            fullWidth
-            size="small"
-            value={total}
-            onChange={(e) => setTotal(e.target.value)}
-          />
-        </Box> */}
 
         <Box className="title-group-spending">
           <Typography variant="body2" sx={{ minWidth: "100px" }}>
@@ -235,7 +230,7 @@ function FormSpending({ grID, item }) {
                       display="block"
                       sx={{ fontSize: 14, textAlign: "center" }}
                     >
-                      pedding
+                      pending
                     </Typography>
                   </Box>
                 </Box>
@@ -270,6 +265,7 @@ function FormSpending({ grID, item }) {
                       value={money}
                       placeholder="Nhập tiền"
                       onChange={(e) => handleChangeAmount(e, idx)}
+                      onKeyDown={handleKeyDownAmount}
                     />
                   </Box>
                 </Box>
@@ -291,12 +287,14 @@ function FormSpending({ grID, item }) {
         ) : null}
 
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <CustomComponent.Button2 sx={{ width: "100%" }} onClick={handleGroupBill} >
+          <CustomComponent.Button1
+            sx={{ width: "100%" }}
+            onClick={handleGroupBill}
+          >
             Hoàn thành
-          </CustomComponent.Button2>
+          </CustomComponent.Button1>
         </Box>
       </Stack>
-    </Box>
   );
 }
 

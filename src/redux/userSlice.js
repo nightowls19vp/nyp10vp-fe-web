@@ -44,7 +44,7 @@ const userSlice = createSlice({
         },
         updateChannelID: (state, action) => {
             state.channelID = action.payload;
-        }
+        },
     }
 });
 

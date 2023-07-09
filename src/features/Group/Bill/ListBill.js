@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Box } from "@mui/material";
-import Bill from "./Bill";
+import Bill from "../Bill";
 
 import "../../assets/css/Bill.scss";
 import { useSelector } from "react-redux";

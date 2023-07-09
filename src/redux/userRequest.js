@@ -136,7 +136,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
   try {
     const resSU_group = await axiosJWT.get("/pkg-mgmt/gr/user", {
       params: {
-        projection: "name;avatar;packages;members;billing",
+        projection: "name;avatar;packages;members;billing;todos;task",
         role: "Super User",
         page: 0,
         limit: 10,
@@ -150,7 +150,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
     const resU_group = await axiosJWT.get("/pkg-mgmt/gr/user", {
       params: {
-        projection: "name;avatar;packages;members;billing",
+        projection: "name;avatar;packages;members;billing;todos;task",
         role: "User",
         page: 0,
         limit: 10,
@@ -227,18 +227,26 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             billing: item.billing,
           };
 
+          let itemTodos = {
+            _id: item._id,
+            todos: item.todos,
+          };
+
           let childGroupItem = [
             {
               _id: 0,
               name: "Thông tin nhóm",
-              check: false,
               group: itemInfo,
             },
             {
               _id: 1,
               name: "Quản lý chi tiêu",
-              check: false,
               group: itemSpending,
+            },
+            {
+              _id: 2,
+              name: "Việc cần làm",
+              group: itemTodos,
             },
           ];
 
@@ -292,18 +300,26 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             billing: item.billing,
           };
 
+          let itemTodos = {
+            _id: item._id,
+            todos: item.todos,
+          };
+
           let childGroupItem = [
             {
               _id: 0,
               name: "Thông tin nhóm",
-              check: false,
               group: itemInfo,
             },
             {
               _id: 1,
               name: "Quản lý chi tiêu",
-              check: false,
               group: itemSpending,
+            },
+            {
+              _id: 2,
+              name: "Việc cần làm",
+              group: itemTodos,
             },
           ];
 
@@ -358,18 +374,26 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             billing: item.billing,
           };
 
+          let itemTodos = {
+            _id: item._id,
+            todos: item.todos,
+          };
+
           let childGroupItem = [
             {
               _id: 0,
               name: "Thông tin nhóm",
-              check: false,
               group: itemInfo,
             },
             {
               _id: 1,
               name: "Quản lý chi tiêu",
-              check: false,
               group: itemSpending,
+            },
+            {
+              _id: 2,
+              name: "Việc cần làm",
+              group: itemTodos,
             },
           ];
 
@@ -425,18 +449,25 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             billing: item.billing,
           };
 
+          let itemTodos = {
+            _id: item._id,
+          };
+
           let childGroupItem = [
             {
               _id: 0,
               name: "Thông tin nhóm",
-              check: false,
               group: itemInfo,
             },
             {
               _id: 1,
               name: "Quản lý chi tiêu",
-              check: false,
               group: itemSpending,
+            },
+            {
+              _id: 2,
+              name: "Việc cần làm",
+              group: itemTodos,
             },
           ];
 

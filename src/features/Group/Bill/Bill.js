@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
-import "../../assets/css/Bill.scss";
+import "../../../assets/css/Bill.scss";
 import BillDetail from "./BillDetail";
 import { useDispatch } from "react-redux";
-import { updateBill } from "../../redux/packageSlice";
+import { updateBill } from "../../../redux/packageSlice";
 
 const style = {
   position: "absolute",
@@ -32,7 +32,6 @@ const style = {
 function Bill({ item }) {
   const dispatch = useDispatch();
   const day = new Date(item.date);
-  const [status, setStatus] = useState(null);
 
   const [open, setOpen] = useState(false);
 
@@ -42,19 +41,6 @@ function Bill({ item }) {
   };
   const handleClose = () => setOpen(false);
 
-  useEffect(() => {
-    let searchStatus = item.borrowers.find((x) => x.status === "PENDING");
-    if (searchStatus) {
-      setStatus("PENDING");
-    } else {
-      searchStatus = item.borrowers.find((x) => x.status === "APPROVED");
-      if (searchStatus) {
-        setStatus("APPROVED");
-      } else {
-        setStatus("CANCELED");
-      }
-    }
-  }, [item.borrowers]);
   return (
     <>
       <ButtonBase onClick={handleOpen}>
@@ -63,7 +49,7 @@ function Bill({ item }) {
             variant="h6"
             sx={{
               fontSize: 18,
-              width: "40%",
+              width: "50%",
               display: "flex",
               justifyContent: "flex-start",
             }}
@@ -75,7 +61,7 @@ function Bill({ item }) {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              width: "30%",
+              width: "20%",
             }}
           >
             <AccessTimeIcon />
@@ -92,16 +78,16 @@ function Bill({ item }) {
             <Box
               sx={{
                 backgroundColor:
-                  status === "PENDING"
+                  item.status === "PENDING"
                     ? "#ccffdd"
-                    : status === "APPROVED"
+                    : item.status === "APPROVED"
                     ? "#ccf5ff"
                     : "#f2f2f2",
 
                 color:
-                  status === "PENDING"
+                item.status === "PENDING"
                     ? "#008000"
-                    : status === "APPROVED"
+                    : item.status === "APPROVED"
                     ? "#0000cc"
                     : "#000000",
 
@@ -109,7 +95,7 @@ function Bill({ item }) {
               }}
               className="status-bill"
             >
-              <Typography sx={{ fontWeight: 600 }}>{status}</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{item.status}</Typography>
             </Box>
           </Box>
         </Box>
@@ -121,7 +107,7 @@ function Bill({ item }) {
         aria-describedby="modal-modal-description-bill"
       >
         <Box sx={style}>
-          <BillDetail item={item} statusBill={status} />
+          <BillDetail />
         </Box>
       </Modal>
     </>

@@ -4,10 +4,11 @@ import SuperUser from "./SuperUser";
 import SidebarLayout from "../../layout/SidebarLayout";
 import DefaultLayout from "../../layout/DefaultLayout.js";
 import { useDispatch, useSelector } from "react-redux";
-import GroupSpending from "./GroupSpending";
+import GroupSpending from "./Bill/GroupSpending";
 import { loginSuccess } from "../../redux/authSlice";
 
 import { createAxios } from "../../http/createInstance";
+import GroupTodos from "./Todos/GroupTodos";
 
 function GroupItem() {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ function GroupItem() {
   const groups = useSelector((state) => state?.user?.groupAll);
   const selectedID = useSelector((state) => state?.user?.groupID);
   const selectedItemID = useSelector((state) => state?.user?.groupItemID);
-  
+
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   // useEffect(() => {
@@ -60,10 +61,16 @@ function GroupItem() {
                           key={route._id}
                           title={gr.name}
                         />
-                      ) : (
+                      ) : selectedItemID === 1 ? (
                         <GroupSpending
                           item={route.child[1].group}
                           key={route._id}
+                        />
+                      ) : (
+                        <GroupTodos
+                          key={route._id}
+                          grId={route._id}
+                          item={route.child[2].group}
                         />
                       )
                     ) : null

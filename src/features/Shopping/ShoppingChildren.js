@@ -407,20 +407,6 @@ export default function EnhancedTable({ item }) {
     setValueMethod(event.target.value);
   };
 
-  // useEffect(() => {
-  //   socket.connect();
-
-  //     socket.on("zpCallback", (data) => {
-  //       console.log("socket-io zpCallback: ", data);
-  //       // setFlag(true);
-  //       // clearTimeout(timeId);
-  //     });
-
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, [socket]);
-
   const handleButtonCheckout = async () => {
     if (selected.length === 0) {
       setOpenModal(true);
@@ -535,9 +521,6 @@ export default function EnhancedTable({ item }) {
                         return (
                           <TableRow
                             hover
-                            // onClick={(event) => handleClick(event, row)}
-                            // role="checkbox"
-                            // aria-checked={isItemSelected}
                             tabIndex={-1}
                             key={index}
                             selected={isItemSelected}

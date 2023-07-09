@@ -2,15 +2,11 @@ import React, { useEffect, useState } from "react";
 
 import { Stack, Box, Typography, IconButton, Modal } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 
-import { createAxios } from "../../http/createInstance";
-import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "../../redux/authSlice";
-// import { getPackageBill } from "../../redux/packageRequest";
-
-import { Colors } from "../../config/Colors";
-import ListBill from "./ListBill";
+import "../../../assets/css/Group.scss";
+import { Colors } from "../../../config/Colors";
 import FormSpending from "./FormSpending";
 import Bill from "./Bill";
 
@@ -20,6 +16,7 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: { xs: "95%", sm: "80%", md: "70%", lg: "50%" },
+  height: "50%",
   bgcolor: "background.paper",
   border:
     "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
@@ -68,17 +65,12 @@ function GroupSpending({ item }) {
         <Typography variant="h6" color={Colors.textPrimary} fontSize={22}>
           Quản lý chi tiêu trong nhóm
         </Typography>
-      </Box>
 
-      <Box
-        className="modal-content-group-spending"
-        sx={{ alignItems: "center" }}
-      >
-        <Typography>Quản lý hóa đơn chi tiêu bên ngoài</Typography>
         <IconButton onClick={handleOpen}>
-          <AddIcon color={Colors.black} />
+          <ControlPointIcon sx={{ color: Colors.textPrimary }} />
         </IconButton>
       </Box>
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -91,9 +83,6 @@ function GroupSpending({ item }) {
       </Modal>
 
       {item.billing.length > 0 ? (
-        // <Box sx={{ width: "100%" }}>
-        //   <ListBill grID={item._id} />
-        // </Box>
         <Box
           sx={{
             display: "flex",
