@@ -27,9 +27,9 @@ function ProductDetail({ grId, storageID, productId }) {
           color={Colors.textPrimary}
           href={`/stock/product-stock?grId=${grId}&storageId=${storageID}`}
         >
-          Các sản phẩm trong kho
+          Các nhu yếu phẩm trong kho
         </Link>
-        <Typography color="text.primary"> sản phẩm </Typography>
+        <Typography color="text.primary"> Nhu yếu phẩm </Typography>
       </Breadcrumbs>
       <ItemDetail item={product} />
     </Stack>

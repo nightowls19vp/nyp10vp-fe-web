@@ -10,14 +10,12 @@ import {
   InputAdornment,
   InputBase,
 } from "@mui/material";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import { createAxios } from "../../http/createInstance";
 
 import {
-  getGroupProducts,
+  addItemsToStorage,
   searchGroupProducts,
 } from "../../redux/stockRequest";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,11 +25,11 @@ import "../../assets/css/Product.scss";
 import "../../assets/css/Autocomplete.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker";
+import SelectedAddress from "../../component/Address/SelectedAddress";
 
-function AddProduct({ grId, handleCreatePro }) {
+function AddProduct({ grId, storageID, handleCreatePro }) {
   const inputRef = useRef(null);
   const boxRef = useRef();
-  const observer = useRef();
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.auth.login?.currentUser);
 
@@ -43,12 +41,10 @@ function AddProduct({ grId, handleCreatePro }) {
   const [unit, setUnit] = useState("");
   const [date, setDate] = useState(nowDate);
 
-  const [inputValue, setInputValue] = useState("");
+  const [inputProduct, setInputProduct] = useState("");
+  const [inputAddress, setInputAddress] = useState("");
   const [focusInput, setFocusInput] = useState(false);
-  const [pageProduct, setPageProduct] = useState(1);
-  const [totalPageProduct, setTotalPageProduct] = useState(1);
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue.$d);
@@ -64,46 +60,46 @@ function AddProduct({ grId, handleCreatePro }) {
     setProducts(res);
   };
 
-  const getDataOfGroupProducts = async () => {
-    setLoading(true);
-    const res = await getGroupProducts(
-      grId,
-      pageProduct,
-      10,
-      user?.accessToken,
-      axiosJWT
-    );
-    let all = new Set([...products, ...res.data]);
-    console.log("data: ", all);
-    setTotalPageProduct(res.meta.totalPages);
-    setProducts([...all]);
-    setLoading(false);
-  };
-
   const handleFocusInput = async () => {
-    await getDataOfGroupProducts();
     setFocusInput(!focusInput);
   };
-
-  // const handleBlurInput = () => {
-  //   setFocusInput(false);
-  // };
 
   const handleChangeInput = (e) => {
     let character = e.target.value;
     setTimeout(async () => {
       await searchDataGroupProducts(character);
     }, 500);
-    setInputValue(character);
+    setInputProduct(character);
   };
 
   const handleClearInput = () => {
-    setInputValue("");
+    setInputProduct("");
+    setProducts("");
   };
 
   const handleSelectItem = (e, prod) => {
-    setInputValue(prod.name);
+    setInputProduct(prod.name);
+    setProd(prod.id);
     setFocusInput(false);
+    setProducts("");
+  };
+
+  const handleSelectedAddress = (id) => {
+    setInputAddress(id);
+  };
+
+  const handleAddProd = async () => {
+    let formData = {
+      addedBy: user?.data.userInfo._id,
+      bestBefore: date,
+      quantity: quantity,
+      unit: unit,
+      groupProductId: prod,
+      storageLocationId: storageID,
+      purchaseLocationId: inputAddress,
+    };
+
+    await addItemsToStorage(formData, user?.accessToken, dispatch, axiosJWT);
   };
 
   useEffect(() => {
@@ -112,41 +108,18 @@ function AddProduct({ grId, handleCreatePro }) {
         event.target.contains(boxRef.current) &&
         event.target !== boxRef.current
       ) {
-        setFocusInput(false);
+        setInputProduct("");
+        setProducts("");
       }
     };
   }, []);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   getGroupProducts(
-  //     grId,
-  //     pageProduct,
-  //     10,
-  //     user?.accessToken,
-  //     axiosJWT
-  //   ).then((res) => {
-  //     console.log(res);
-  //     setLoading(false);
-  //   });
-  // }, [axiosJWT, grId, pageProduct, user?.accessToken]);
-
-  const lastProductElement = (node) => {
-    observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        setPageProduct((no) => no + 1);
-        getDataOfGroupProducts();
-      }
-    });
-    if (node) observer.current.observe(node);
-  };
-
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} id="idAddProduct" className="addAddProduct">
       <Stack sx={{ width: "100%" }}>
         <Box className="box-input-product">
           <InputBase
-            value={inputValue}
+            value={inputProduct}
             fullWidth
             placeholder="Chọn nhu yếu phẩm đã có trong kho"
             onClick={handleFocusInput}
@@ -163,7 +136,7 @@ function AddProduct({ grId, handleCreatePro }) {
                     alignItems: "center",
                   }}
                 >
-                  {inputValue ? (
+                  {inputProduct ? (
                     <IconButton
                       sx={{ opacity: 0.5 }}
                       onClick={handleClearInput}
@@ -171,36 +144,39 @@ function AddProduct({ grId, handleCreatePro }) {
                       <ClearIcon />
                     </IconButton>
                   ) : null}
-                  {focusInput ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
                 </Box>
               </InputAdornment>
             }
           />
         </Box>
-        {focusInput ? (
+        {inputProduct ? (
           <Box
             className="auto-input"
             id="id-auto-input"
-            spacing={2}
             ref={boxRef}
+            sx={{ width: `calc(100% - 10px)` }}
           >
-            {products != null &&
-              products.map((p, i) => {
-                if (products.length === i + 1) {
-                  return (
-                    <div ref={lastProductElement} key={i}>
-                      {p.name}
-                    </div>
-                  );
-                } else {
-                  return <div key={i}> {p.name} </div>;
-                }
-              })}
-            <div>{loading && "loading..."}</div>
+            {products !== null &&
+              products.length > 0 &&
+              products.map((p, idx) => (
+                <ButtonBase
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    paddingY: "5px",
+                  }}
+                  onClick={(e) => handleSelectItem(e, p)}
+                  key={idx}
+                  className="box-input-search"
+                >
+                  <Typography className="text-displayed">{p.name}</Typography>
+                </ButtonBase>
+              ))}
           </Box>
         ) : null}
       </Stack>
-      {focusInput === false ? (
+      {products.length === 0 || inputProduct === "" ? (
         <Stack sx={{ width: "100%" }} spacing={2}>
           <Box
             sx={{
@@ -223,12 +199,13 @@ function AddProduct({ grId, handleCreatePro }) {
               }}
             >
               <Typography sx={{ minWidth: { xs: "120px" } }}>
-                Số lượng:{" "}
+                Số lượng:
               </Typography>
               <TextField
                 sx={{ width: "100px" }}
                 value={quantity}
                 size="small"
+                onChange={(e) => setQuantity(e.target.value)}
               />
             </Box>
             <Box
@@ -241,9 +218,14 @@ function AddProduct({ grId, handleCreatePro }) {
               }}
             >
               <Typography sx={{ minWidth: { xs: "120px" } }}>
-                Đơn vị:{" "}
+                Đơn vị:
               </Typography>
-              <TextField sx={{ width: "100px" }} value={unit} size="small" />
+              <TextField
+                sx={{ width: "100px" }}
+                value={unit}
+                size="small"
+                onChange={(e) => setUnit(e.target.value)}
+              />
             </Box>
           </Box>
           <Box className="d-flex">
@@ -253,9 +235,13 @@ function AddProduct({ grId, handleCreatePro }) {
               handleDateTimePicker={handleDateTimePicker}
             />
           </Box>
+          <SelectedAddress
+            grID={grId}
+            handleSelectedAddress={handleSelectedAddress}
+          />
           {prod.length > 0 ? (
             <Box sx={{ textAlign: "end" }}>
-              <CustomComponent.Button1>
+              <CustomComponent.Button1 onClick={handleAddProd}>
                 Thêm sản phẩm vào kho
               </CustomComponent.Button1>
             </Box>

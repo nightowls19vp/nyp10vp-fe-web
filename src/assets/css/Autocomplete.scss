@@ -1,11 +1,16 @@
+.id-add-product {
+    overflow: auto;
+}
+
 .auto-input {
-    max-height: 150px;
+    max-height: 200px;
+    //width: calc(100% - 10px);
     background-color: #fff;
     border-radius: 10px;
     padding: 5px;
     margin-bottom: 20px;
-    overflow: auto;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    overflow-y: auto;
+    //box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
 
 .text-displayed {
@@ -16,17 +21,22 @@
     text-overflow: ellipsis;
 }
 
-.text-displayed:hover {
-    color: #e68a00;
-}
-
 .box-input-product {
-    // box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
     height: 50px;
     display: flex;
+    //width: 100%;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     border: 2px solid rgba(0, 0, 0, 0.16);
     border-radius: 5px 5px 0px 0px;
     padding-left: 10px;
+}
+
+.box-input-search {
+    
+}
+
+.box-input-search:hover {
+    background-color: #e6e6e6;
 }

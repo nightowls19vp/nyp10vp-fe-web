@@ -200,3 +200,42 @@ export const getProductItemById = async (groupId, id, token, dispatch, axiosJWT)
     console.log(error);
   }
 }
+
+export const searchPurchaseLocations = async (search, groupId, token, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get(`/prod-mgmt/purchase-locations/${groupId}`, {
+      params: {
+        search: search,
+        searchBy:  [
+          'address.provinceName',
+          'address.districtName',
+          'address.wardName',
+          'address.addressLine1',
+          'name',
+      ],
+      'filter.timestamp.deletedAt': '$null',
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res?.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addItemsToStorage = async (data, token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.post("/prod-mgmt/items", data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(res?.data);
+  } catch (error) {
+    console.log(error);
+  }
+}

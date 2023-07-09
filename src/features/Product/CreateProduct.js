@@ -58,7 +58,7 @@ function CreateProduct() {
     setWar(war);
   };
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} id="idAddProduct" className="addAddProduct">
       <Typography>Thêm sản phẩm</Typography>
       <Stack spacing={2} id="createProduct" className="createCreateProduct">
         <Box
