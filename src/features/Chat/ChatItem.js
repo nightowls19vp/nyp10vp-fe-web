@@ -24,12 +24,14 @@ function ChatItem() {
 
       for (let channel of channels) {
         let item = await SB.getUserChannel(channel.channel);
-        let fromData = {
-          _id: item.url,
-          name: item.name,
-          avatar: item.coverUrl,
-        };
-        newChannel.push(fromData);
+        if (item) {
+          let fromData = {
+            _id: item.url,
+            name: item.name,
+            avatar: item.coverUrl,
+          };
+          newChannel.push(fromData);
+        }
       }
       setListChannel(newChannel);
       dispatch(updateChannelID(newChannel[0]._id));

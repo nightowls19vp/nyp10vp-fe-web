@@ -87,7 +87,7 @@ function StockItem({ item, grID }) {
         sx={{
           display: "flex",
           flexWrap: "wrap",
-          justifyContent: { xs: "center", sm: "space-between" },
+          justifyContent: { xs: "center", sm: "flex-start" },
           // minWidth: 300,
           width: "100%",
         }}

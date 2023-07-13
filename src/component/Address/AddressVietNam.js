@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-import { Box, Autocomplete, TextField, Stack } from "@mui/material";
+import { Box, Autocomplete, TextField, Stack, InputBase } from "@mui/material";
+import { searchProvinceVietNam } from "../../redux/stockRequest";
 
 const options = ["Option 1", "Option 2"];
 
@@ -14,25 +15,26 @@ function AddressVietNam({ handleAddress }) {
   const [war, setWar] = useState(null);
   const [inputWar, setInputWar] = useState("");
 
+  const searchDataProvince = async (character) => {
+    await searchProvinceVietNam(character, )
+  }
+
+  const handleChangeProvince = async (e) => {
+    let character = e.target.value;
+    setTimeout(async () => {
+      //await searchDataPurchaseLocations(character);
+    }, 500);
+    setProvince(character);
+  }
+
   return (
     <Box sx={{ display: "flex", flexDirection: "row" }}>
       <Box flex={1}>
-        <Autocomplete
-          value={province}
+        <InputBase
           fullWidth
-          size="small"
-          onChange={(event, newValue) => {
-            setProvince(newValue);
-          }}
-          inputValue={inputProvince}
-          onInputChange={(event, newInputValue) => {
-            setInputProvince(newInputValue);
-          }}
-          id="controllable-states-demo"
-          options={options}
-          renderInput={(params) => (
-            <TextField {...params} label="Tỉnh/Thành phố" />
-          )}
+          value={province}
+          placeholder="Chọn tỉnh/thành phố..."
+          onChange={handleChangeProvince}
         />
       </Box>
       <Box flex={1}>

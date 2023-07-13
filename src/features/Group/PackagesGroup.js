@@ -25,7 +25,7 @@ import "../../assets/css/Group.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 import PackageGroup from "./PackageGroup";
-import { Height } from "@mui/icons-material";
+import * as SB from "../../component/Chat/SendBirdGroupChat";
 
 function PackagesGroup({ data, pkg, title }) {
   const dispatch = useDispatch();
@@ -37,6 +37,7 @@ function PackagesGroup({ data, pkg, title }) {
   const [openInvite, setOpenInvite] = useState(false);
   const [selectedPeople, setSelectedPeople] = useState([]);
   const [email, setEmail] = useState("");
+  const status = pkg?.status === "Not Activated" ? false : true;
 
   const handleClickOpenInvite = () => {
     setOpenInvite(true);
@@ -104,7 +105,7 @@ function PackagesGroup({ data, pkg, title }) {
           <Typography variant="h5" color={Colors.textPrimary}>
             Thành viên trong nhóm
           </Typography>
-          {title === "Group SUPER USER" ? (
+          {title === "Group SUPER USER" && status ? (
             <CustomComponent.Button1
               sx={{ marginBottom: "10px" }}
               onClick={handleClickOpenInvite}
@@ -120,8 +121,15 @@ function PackagesGroup({ data, pkg, title }) {
               className="package-group"
               sx={{ paddingBottom: "10px" }}
             >
-              <Avatar src={route.user.avatar} sx={{ width: "50px", height: "50px"}} />
-              <Typography variant="overline" display="block" sx={{ paddingLeft: "20px", fontSize: 18 }}>
+              <Avatar
+                src={route.user.avatar}
+                sx={{ width: "50px", height: "50px" }}
+              />
+              <Typography
+                variant="overline"
+                display="block"
+                sx={{ paddingLeft: "20px", fontSize: 18 }}
+              >
                 {route.user.name}
               </Typography>
             </Box>
@@ -153,7 +161,7 @@ function PackagesGroup({ data, pkg, title }) {
                   fullWidth
                   value={email}
                   endAdornment={
-                    <InputAdornment  position="end">
+                    <InputAdornment position="end">
                       <IconButton onClick={handleButtonSave}>
                         <RiSendPlane2Fill />
                       </IconButton>

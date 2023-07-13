@@ -5,17 +5,15 @@ import {
   Typography,
   Box,
   TextField,
-  Autocomplete,
-  IconButton,
 } from "@mui/material";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 
 import "../../assets/css/Product.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker";
-import AddressVietNam from "../../component/Address/AddressVietNam";
+import SelectedAddress from "../../component/address/SelectedAddress";
 
-function CreateProduct() {
+function CreateProduct({ grId }) {
   const nowDate = new Date();
   const [date, setDate] = useState(nowDate);
 
@@ -27,36 +25,23 @@ function CreateProduct() {
   const [region, setRegion] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("");
+  const [inputAddress, setInputAddress] = useState();
   const [province, setProvince] = useState(null);
   const [district, setDistrict] = useState(null);
   const [war, setWar] = useState(null);
   const [addr1, setAddr1] = useState("");
   const [descrip, setDescrip] = useState("");
-  const [flagAddr, setFlagAddr] = useState(false);
 
   const listAddress = [];
-
-  const defaultProps = {
-    options: listAddress,
-    getOptionLabel: (option) => option.title,
-  };
-
-  const [addr, setAddr] = React.useState(null);
-  const [inputAddr, setInputAddr] = React.useState("");
 
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue.$d);
   };
 
-  const handleButtonAddAddress = () => {
-    setFlagAddr(true);
+  const handleSelectedAddress = (id) => {
+    setInputAddress(id);
   };
 
-  const handleAddress = (prov, dis, war) => {
-    setProvince(prov);
-    setDistrict(dis);
-    setWar(war);
-  };
   return (
     <Stack spacing={2} id="idAddProduct" className="addAddProduct">
       <Typography>Thêm sản phẩm</Typography>
@@ -167,43 +152,11 @@ function CreateProduct() {
           />
         </Box>
 
-        {flagAddr ? (
-          <Stack spacing={2}>
-            <AddressVietNam handleAddress={handleAddress} />
-            <TextField
-              fullWidth
-              size="small"
-              label="Địa chỉ cụ thể"
-              value={addr1}
-              onChange={(e) => setAddr1(e.target.value)}
-            />
-          </Stack>
-        ) : (
-          <Box className="d-flex">
-            <Autocomplete
-              fullWidth
-              size="small"
-              {...defaultProps}
-              id="clear-on-escape"
-              clearOnEscape
-              noOptionsText="Không có địa chỉ"
-              value={addr}
-              onChange={(event, newValue) => {
-                setAddr(newValue);
-              }}
-              inputValue={inputAddr}
-              onInputChange={(event, newInputValue) => {
-                setInputAddr(newInputValue);
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label="Chọn địa chỉ" />
-              )}
-            />
-            <IconButton onClick={handleButtonAddAddress}>
-              <ControlPointIcon sx={{ fontSize: 35 }} />
-            </IconButton>
-          </Box>
-        )}
+        <SelectedAddress
+            grID={grId}
+            handleSelectedAddress={handleSelectedAddress}
+          />
+
         <TextField
           size="small"
           multiline

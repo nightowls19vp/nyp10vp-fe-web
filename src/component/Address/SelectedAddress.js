@@ -116,33 +116,32 @@ function SelectedAddress({ grID, handleSelectedAddress }) {
           </IconButton>
         </Tooltip>
       </Box>
-      {inputValue ? (
+      
+      {address != null && address.length > 0 ? (
         <Box
           className="auto-input"
           id="id-auto-input"
           ref={boxRef}
           sx={{ width: `calc(100% - 60px)` }}
         >
-          {address != null &&
-            address.length > 0 &&
-            address.map((p, idx) => (
-              <ButtonBase
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  paddingY: "5px",
-                }}
-                onClick={(e) => handleSelectItem(e, p)}
-                key={idx}
-                className="box-input-search"
-              >
-                <Typography className="text-displayed">
-                  {p.name}, {p.address.addressLine1} , {p.address.wardName},{" "}
-                  {p.address.districtName}, {p.address.provinceName}
-                </Typography>
-              </ButtonBase>
-            ))}
+          {address.map((p, idx) => (
+            <ButtonBase
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-start",
+                paddingY: "5px",
+              }}
+              onClick={(e) => handleSelectItem(e, p)}
+              key={idx}
+              className="box-input-search"
+            >
+              <Typography className="text-displayed">
+                {p.name}, {p.address.addressLine1} , {p.address.wardName},{" "}
+                {p.address.districtName}, {p.address.provinceName}
+              </Typography>
+            </ButtonBase>
+          ))}
         </Box>
       ) : null}
     </Stack>

@@ -29,7 +29,7 @@ const style = {
   p: 4,
 };
 
-function Bill({ item }) {
+function Bill({ grID, item }) {
   const dispatch = useDispatch();
   const day = new Date(item.date);
 
@@ -43,7 +43,7 @@ function Bill({ item }) {
 
   return (
     <>
-      <ButtonBase onClick={handleOpen}>
+      <ButtonBase onClick={handleOpen} sx={{ height: "100px"}}>
         <Box sx={{ width: "90%", minWidth: "250px" }} className="bill">
           <Typography
             variant="h6"
@@ -107,7 +107,7 @@ function Bill({ item }) {
         aria-describedby="modal-modal-description-bill"
       >
         <Box sx={style}>
-          <BillDetail />
+          <BillDetail grID={grID} />
         </Box>
       </Modal>
     </>

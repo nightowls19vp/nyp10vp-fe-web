@@ -16,12 +16,6 @@ function Stock() {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
   useEffect(() => {
     const getStock = async () => {
-      // await getStorageLocation(
-      //   "649b0193d536e02035c7b191",
-      //   user?.accessToken,
-      //   dispatch,
-      //   axiosJWT
-      // );
       await getGroupActivedByUserId(user?.accessToken, dispatch, axiosJWT);
     };
 

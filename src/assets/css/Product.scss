@@ -39,9 +39,15 @@
 }
 
 .addAddProduct {
+    //max-height: calc(100vh - 400px);
     height: 100%;
+    width: 100%;
     overflow: auto;
     padding-right: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #idAddProduct::-webkit-scrollbar {

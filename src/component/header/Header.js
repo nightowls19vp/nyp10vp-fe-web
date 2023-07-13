@@ -85,8 +85,7 @@ function Header() {
       console.log("join group: ", data);
       for (let channel of channels) {
         if (channel._id === data._id) {
-          console.log("join group");
-          inviteInGroupChannel(channel.channel, data.user);
+          await inviteInGroupChannel(channel.channel, data.user);
         }
       }
     });

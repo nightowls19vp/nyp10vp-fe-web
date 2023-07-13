@@ -451,6 +451,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
           let itemTodos = {
             _id: item._id,
+            todos: item.todos,
           };
 
           let childGroupItem = [
@@ -691,7 +692,11 @@ export const postPackageBill = async (
         Authorization: `Bearer ${token}`,
       },
     });
-    await getGroupByUserId(token, dispatch, axiosJWT);
+    if (res?.data.statusCode === 200) {
+      await getGroupByUserId(token, dispatch, axiosJWT);
+      dispatch(updateGroupId(group_id));
+      dispatch(updateGroupItemId(1));
+    }
     return res?.data;
   } catch (error) {
     console.log(error);
@@ -729,29 +734,39 @@ export const deletePackageBill = async (id, token, dispatch, axiosJWT) => {
 };
 
 export const updatePackageBill = async (
+  group_id,
   id,
   dataAmount,
+  dataStatus,
   token,
   dispatch,
   axiosJWT
 ) => {
   try {
-    const res = await axiosJWT.put(`/pkg-mgmt/bill/${id}`, dataAmount, {
+    const res1 = await axiosJWT.put(`/pkg-mgmt/bill/${id}`, dataAmount, {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
       },
     });
 
-    // await axiosJWT.put(`/pkg-mgmt/bill/${id}/status`, dataStatus, {
-    //   headers: {
-    //     accept: "*/*",
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // });
-
-    await getGroupByUserId(token, dispatch, axiosJWT);
-    console.log(res?.data);
+    if (res1?.data.statusCode === 200) {
+      const res2 = await axiosJWT.put(
+        `/pkg-mgmt/bill/${id}/status`,
+        dataStatus,
+        {
+          headers: {
+            accept: "*/*",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (res2?.data.statusCode === 200) {
+        await getGroupByUserId(token, dispatch, axiosJWT);
+        dispatch(updateGroupId(group_id));
+        dispatch(updateGroupItemId(1));
+      }
+    }
   } catch (error) {
     console.log(error);
   }

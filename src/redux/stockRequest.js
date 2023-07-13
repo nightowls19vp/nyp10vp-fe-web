@@ -1,3 +1,4 @@
+import apiClient from "../http/http-common";
 import {
   setIdOfStock,
   updateListProduct,
@@ -66,7 +67,13 @@ export const getGroupActivedByUserId = async (token, dispatch, axiosJWT) => {
   }
 };
 
-export const postStorageLocation = async (data, token, dispatch, axiosJWT) => {
+export const postStorageLocation = async (
+  grID,
+  data,
+  token,
+  dispatch,
+  axiosJWT
+) => {
   try {
     const res = await axiosJWT.post("/prod-mgmt/storage-locations", data, {
       headers: {
@@ -76,9 +83,10 @@ export const postStorageLocation = async (data, token, dispatch, axiosJWT) => {
       },
     });
     await getGroupActivedByUserId(token, dispatch, axiosJWT);
-    console.log(res?.data);
+    dispatch(setIdOfStock(grID));
+    return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -104,8 +112,33 @@ export const updateStorageLocation = async (
     );
 
     await getGroupActivedByUserId(token, dispatch, axiosJWT);
+    dispatch(setIdOfStock(groupId));
     console.log(res?.data);
     return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deletedStorageLocation = async (
+  groupId,
+  id,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.delete(
+      `/prod-mgmt/storage-locations/${groupId}/${id}`,
+      {
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    await getGroupActivedByUserId(token, dispatch, axiosJWT);
+    console.log(res?.data);
   } catch (error) {
     console.log(error);
   }
@@ -126,7 +159,7 @@ export const getProductItemsByStorage = async (
         page: currentPage,
         limit: limit,
         "filter.timestamp.deletedAt": "$null",
-        'filter.storageLocation.id': storageID,
+        "filter.storageLocation.id": storageID,
       },
       headers: {
         accept: "*/*",
@@ -186,7 +219,13 @@ export const searchGroupProducts = async (search, groupId, token, axiosJWT) => {
   }
 };
 
-export const getProductItemById = async (groupId, id, token, dispatch, axiosJWT) => {
+export const getProductItemById = async (
+  groupId,
+  id,
+  token,
+  dispatch,
+  axiosJWT
+) => {
   try {
     const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}/${id}`, {
       headers: {
@@ -199,21 +238,26 @@ export const getProductItemById = async (groupId, id, token, dispatch, axiosJWT)
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-export const searchPurchaseLocations = async (search, groupId, token, axiosJWT) => {
+export const searchPurchaseLocations = async (
+  search,
+  groupId,
+  token,
+  axiosJWT
+) => {
   try {
     const res = await axiosJWT.get(`/prod-mgmt/purchase-locations/${groupId}`, {
       params: {
         search: search,
-        searchBy:  [
-          'address.provinceName',
-          'address.districtName',
-          'address.wardName',
-          'address.addressLine1',
-          'name',
-      ],
-      'filter.timestamp.deletedAt': '$null',
+        searchBy: [
+          "address.provinceName",
+          "address.districtName",
+          "address.wardName",
+          "address.addressLine1",
+          "name",
+        ],
+        "filter.timestamp.deletedAt": "$null",
       },
       headers: {
         accept: "*/*",
@@ -238,4 +282,60 @@ export const addItemsToStorage = async (data, token, dispatch, axiosJWT) => {
   } catch (error) {
     console.log(error);
   }
-}
+};
+
+export const searchProvinceVietNam = async (search, token) => {
+  try {
+    const res = await apiClient.get("/p", {
+      params: {
+        p: search
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const searchDistrictVietNam = async (search, pCode, token) => {
+  try {
+    const res = await apiClient.get("/p", {
+      params: {
+        q: search,
+        p: pCode
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const searchWarVietNam = async (search, pCode, dCode, token) => {
+  try {
+    const res = await apiClient.get("/p", {
+      params: {
+        q: search,
+        p: pCode
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

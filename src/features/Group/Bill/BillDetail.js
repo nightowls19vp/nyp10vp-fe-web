@@ -19,7 +19,7 @@ import * as CustomComponent from "../../../component/custom/CustomComponents.js"
 import { deletePackageBill, updatePackageBill } from "../../../redux/userRequest";
 import { loginSuccess } from "../../../redux/authSlice";
 
-function BillDetail() {
+function BillDetail({ grID }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
@@ -84,24 +84,37 @@ function BillDetail() {
   };
 
   const handleUpdateBill = async () => {
-    let borrowers = [];
+    let borrowersAmount = [];
+    let borrowersStatus = [];
     for (let x of data) {
       let formAmount = {
         borrower: x._id,
         amount: x.amount
       }
-      borrowers.push(formAmount);
+      let formStatus = {
+        borrower: x._id,
+        status: x.status
+      }
+      borrowersAmount.push(formAmount);
+      borrowersStatus.push(formStatus);
     }
 
-    let formData = {
+    let formData1 = {
       summary: bill.summary,
       date: bill.date,
-      borrowers: borrowers,
+      borrowers: borrowersAmount,
       lender: bill?.lender._id,
       description: bill?.description
     }
 
-    await updatePackageBill(bill._id, formData, user?.accessToken, dispatch, axiosJWT);
+    let formData2 = {
+      borrowers: borrowersStatus
+    }
+
+    console.log(formData1);
+    console.log(formData2);
+
+    await updatePackageBill(grID, bill._id, formData1, formData2, user?.accessToken, dispatch, axiosJWT);
   };
   return (
     <Box

@@ -150,7 +150,7 @@ export const getTodo = async (id, token, dispatch, axiosJWT) => {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
       },
-    })
+    });
 
     if (res?.data?.statusCode === 200) {
       dispatch(updateTodos(res?.data.todos));
@@ -159,18 +159,50 @@ export const getTodo = async (id, token, dispatch, axiosJWT) => {
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-export const updateIsCompletedTodo = async (id, todo_id, data, token, axiosJWT) => {
+export const updateIsCompletedTodo = async (
+  id,
+  todo_id,
+  data,
+  token,
+  axiosJWT
+) => {
   try {
-    const res = await axiosJWT.put(`/pkg-mgmt/todos/${id}/todo/${todo_id}`, data, {
+    const res = await axiosJWT.put(
+      `/pkg-mgmt/todos/${id}/todo/${todo_id}`,
+      data,
+      {
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return res?.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deletedTodos = async (grID, id, token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.delete(`/pkg-mgmt/todos/${id}`, {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
       },
     });
+    if (res?.data.statusCode === 200) {
+      console.log(res?.data);
+      await getGroupByUserId(token, dispatch, axiosJWT);
+      dispatch(updateGroupId(grID));
+      dispatch(updateGroupItemId(2));
+    }
     return res?.data;
   } catch (error) {
-    console.log(error);
+    dispatch(updateGroupId(grID));
+    dispatch(updateGroupItemId(2));
+    return error.response.data;
   }
-}
+};

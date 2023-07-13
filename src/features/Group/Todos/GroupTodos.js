@@ -9,16 +9,22 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  AccordionActions,
 } from "@mui/material";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
-import EventIcon from "@mui/icons-material/Event";
+//import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import AddTaskIcon from "@mui/icons-material/AddTask";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import DeleteIcon from "@mui/icons-material/Delete";
+// import EventIcon from "@mui/icons-material/Event";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
+import { createAxios } from "../../../http/createInstance";
 import { Colors } from "../../../config/Colors";
 import FormTodos from "./FormTodos";
 import TodoDetail from "./TodoDetail";
 import { useDispatch, useSelector } from "react-redux";
 import { updateTodos } from "../../../redux/packageSlice";
+import { deletedTodos } from "../../../redux/packageRequest";
+import { loginSuccess } from "../../../redux/authSlice";
 
 const style = {
   position: "absolute",
@@ -36,8 +42,9 @@ const style = {
 
 function GroupTodos({ grId, item }) {
   const dispatch = useDispatch();
-  const listTodo = useSelector((state) => state?.package?.todos);
-  const userInfo = useSelector((state) => state?.user?.userInfo.user);
+
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = React.useState(false);
@@ -49,22 +56,28 @@ function GroupTodos({ grId, item }) {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  return (
-    <Stack sx={{ width: "100%" }}>
-      <Box className="title-group-spending">
-        <EventIcon
-          sx={{
-            paddingRight: "10px",
-            color: Colors.textPrimary,
-            fontSize: "50px",
-          }}
-        />
-        <Typography variant="h6" color={Colors.textPrimary} fontSize={22}>
-          Các việc cần làm trong nhóm
-        </Typography>
 
+  const handleDeleteTodos = async (e, todo) => {
+    const res = await deletedTodos(grId, todo._id, user?.accessToken, dispatch, axiosJWT);
+    console.log(res);
+  }
+  return (
+    <Stack sx={{ width: "100%" }} spacing={2}>
+      <Box className="flex-group">
+        <Box className="title-group-spending">
+          <TaskAltIcon
+            sx={{
+              paddingRight: "10px",
+              color: Colors.textPrimary,
+              fontSize: "50px",
+            }}
+          />
+          <Typography variant="h6" color={Colors.textPrimary} fontSize={22}>
+            Các việc cần làm trong nhóm
+          </Typography>
+        </Box>
         <IconButton onClick={handleOpen}>
-          <ControlPointIcon sx={{ color: Colors.textPrimary }} />
+          <AddTaskIcon sx={{ color: Colors.textPrimary }} />
         </IconButton>
       </Box>
 
@@ -79,25 +92,32 @@ function GroupTodos({ grId, item }) {
         </Box>
       </Modal>
 
-      {item.todos !== null && item.todos.length > 0
-        ? item.todos.map((todo, idx) => (
-            <Accordion
-              key={idx}
-              expanded={expanded === todo._id}
-              onChange={handleChangeAccordion(todo)}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls={`${todo._id}-content`}
-                id={`${todo._id}-header`}
+      {item?.todos !== null && item?.todos?.length > 0
+        ? item.todos.map((todo, idx) =>
+            todo ? (
+              <Accordion
+                key={idx}
+                expanded={expanded === todo._id}
+                onChange={handleChangeAccordion(todo)}
               >
-                <Typography>{todo.summary}</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                {todo !== null && <TodoDetail grID={grId} item={todo} />}
-              </AccordionDetails>
-            </Accordion>
-          ))
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls={`${todo._id}-content`}
+                  id={`${todo._id}-header`}
+                >
+                  <Typography>{todo.summary}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  {todo !== null && <TodoDetail grID={grId} item={todo} />}
+                </AccordionDetails>
+                <AccordionActions>
+                  <IconButton onClick={(e) => handleDeleteTodos(e, todo)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </AccordionActions>
+              </Accordion>
+            ) : null
+          )
         : null}
     </Stack>
   );

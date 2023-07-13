@@ -122,7 +122,7 @@ function SuperUser({ item, title }) {
       spacing={2}
       sx={{ paddingX: { xs: "0px", sm: "0px", md: "10px" }, width: "100%" }}
     >
-      <Box className="title-group">
+      <Box className="title-group-spending">
         <Box align={"center"} sx={{ paddingRight: "15px" }}>
           <CustomComponent.ButtonAvatar onClick={handleClick}>
             <CustomComponent.ImageSrc
@@ -185,7 +185,7 @@ function SuperUser({ item, title }) {
         <TabContext value={value}>
           <Box
             sx={{ borderBottom: 1, borderColor: "divider" }}
-            className="title-packages-group"
+            className="title-group-spending"
           >
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab

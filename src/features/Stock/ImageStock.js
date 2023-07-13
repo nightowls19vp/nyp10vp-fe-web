@@ -40,8 +40,9 @@ function ImageStock({ item, grID }) {
   return (
     <Box
       sx={{
-        padding: "10px",
+        margin: "20px",
         width: { xs: "40%", sm: "30%", md: "20%" },
+        minWidth: "200px",
         position: "relative",
       }}
     >

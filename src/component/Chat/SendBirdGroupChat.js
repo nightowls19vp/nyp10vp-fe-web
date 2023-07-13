@@ -58,8 +58,10 @@ export const getUserChannel = async (CHANNEL_URL) => {
 };
 
 export const inviteMember = async (CHANNEL_URL, USER_ID) => {
+  let userIds = [];
+  userIds.push(USER_ID);
   const channel = await getUserChannel(CHANNEL_URL);
-  await channel.inviteWithUserIds(USER_ID);
+  await channel.inviteWithUserIds(userIds);
 }
 
 export const updateNameChannel = async (CHANNEL_URL, NAME) => {

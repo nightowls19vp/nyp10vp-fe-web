@@ -1,6 +1,12 @@
 import React, { useRef, useState } from "react";
 
-import { TextField, Stack, Typography, Box } from "@mui/material";
+import {
+  TextField,
+  Stack,
+  Typography,
+  Box,
+  CircularProgress,
+} from "@mui/material";
 
 import { createAxios } from "../../http/createInstance.js";
 
@@ -21,6 +27,7 @@ function ModalAddStock({ grID, handleClose }) {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [nameImg, setNameImg] = useState("");
+  const [flag, setFlag] = useState(false);
 
   const handleChangeNameStock = (e) => {
     setNameStock(e.target.value);
@@ -28,7 +35,7 @@ function ModalAddStock({ grID, handleClose }) {
 
   const handleChangeDescription = (e) => {
     setDescription(e.target.value);
-  }
+  };
 
   const handleClick = () => {
     inputRef.current.click();
@@ -45,20 +52,30 @@ function ModalAddStock({ grID, handleClose }) {
 
   const handleAddStock = async () => {
     let formData = {
-        groupId: grID,
-        name: nameStock,
-        addedBy: user?.data.userInfo._id,
-        file: image,
-        description: description
-    }
+      groupId: grID,
+      name: nameStock,
+      addedBy: user?.data.userInfo._id,
+      file: image,
+      description: description,
+    };
+    setFlag(true);
+    const res = await postStorageLocation(
+      grID,
+      formData,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
 
-    await postStorageLocation(formData, user?.accessToken, dispatch, axiosJWT);
+    if (res) {
+      setFlag(false);
+    }
 
     handleClose();
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", position: "relative" }}>
       <Typography
         id="modal-modal-title"
         variant="h6"
@@ -67,8 +84,13 @@ function ModalAddStock({ grID, handleClose }) {
       >
         Thêm kho mới
       </Typography>
-      <Stack id="modalAddStock" spacing={2} className="modalModalAddStock">
-      <Box className="input-modal-description">
+      <Stack
+        id="modalAddStock"
+        spacing={2}
+        className="modalModalAddStock"
+        sx={{ opacity: flag ? 0.5 : 1 }}
+      >
+        <Box className="input-modal-description">
           <CustomComponent.Button2
             onClick={handleClick}
             sx={{ minWidth: "150px" }}
@@ -108,10 +130,17 @@ function ModalAddStock({ grID, handleClose }) {
             onChange={(e) => handleChangeDescription(e)}
           />
         </Box>
-        <Box sx={{ textAlign: "end"}}>
-            <CustomComponent.Button1 onClick={handleAddStock}>Tạo kho mới</CustomComponent.Button1>
+        <Box sx={{ textAlign: "end" }}>
+          <CustomComponent.Button1 onClick={handleAddStock}>
+            Tạo kho mới
+          </CustomComponent.Button1>
         </Box>
       </Stack>
+      {flag && (
+        <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
+          <CircularProgress />
+        </Box>
+      )}
     </Box>
   );
 }

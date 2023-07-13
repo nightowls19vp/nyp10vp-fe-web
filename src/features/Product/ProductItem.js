@@ -27,8 +27,9 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: { xs: "90%", sm: "70%", md: "60%", lg: "50%" },
-  minHeight: "300px",
-  height: { xs: "90%", sm: "70%", md: "60%", lg: "50%" },
+  //minHeight: "300px",
+  //height: "50%",
+  height: { xs: "90%", sm: "70%", md: "50%" },
   bgcolor: "background.paper",
   border: "1px solid #000",
   boxShadow: 24,
@@ -115,10 +116,9 @@ function ProductItem({ grId, storageID }) {
         aria-describedby="modal-modal-product"
       >
         <Box sx={style}>
-          <CreateProduct />
+          <CreateProduct grId={grId} />
         </Box>
       </Modal>
-      {/* <AddressVietNam handleAddress={handleAddress} /> */}
     </Stack>
   );
 }

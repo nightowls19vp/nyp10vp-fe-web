@@ -9,6 +9,7 @@ import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
 import {
+  deletedStorageLocation,
   postStorageLocation,
   updateStorageLocation,
 } from "../../redux/stockRequest";
@@ -65,17 +66,28 @@ function ModalEditStock({ item, grID, handleClose }) {
     handleClose();
   };
 
-  //   const handleAddStock = async () => {
-  //     let formData = {
-  //         groupId: grID,
-  //         name: nameStock,
-  //         addedBy: user?.data.userInfo._id,
-  //         file: image,
-  //         description: description
-  //     }
+  const handleDeleteStock = async () => {
+    const res = await deletedStorageLocation(
+      grID,
+      item.id,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
+    handleClose();
+  };
 
-  //     await postStorageLocation(formData, user?.accessToken, dispatch, axiosJWT);
-  //   };
+    // const handleAddStock = async () => {
+    //   let formData = {
+    //       groupId: grID,
+    //       name: nameStock,
+    //       addedBy: user?.data.userInfo._id,
+    //       file: image,
+    //       description: description
+    //   }
+
+    //   await postStorageLocation(grID, formData, user?.accessToken, dispatch, axiosJWT);
+    // };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -128,10 +140,41 @@ function ModalEditStock({ item, grID, handleClose }) {
             onChange={(e) => handleChangeDescription(e)}
           />
         </Box>
-        <Box sx={{ textAlign: "end" }}>
-          <CustomComponent.Button1 onClick={handleEditStock}>
-            Lưu thay đổi
-          </CustomComponent.Button1>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "flex-end",
+          }}
+        >
+          <Box
+            sx={{
+              width: {
+                xs: "100%",
+                md: "115px",
+              },
+              marginY: "3px",
+              marginRight: { xs: "0px", md: "3px" },
+            }}
+          >
+            <CustomComponent.Button2 fullWidth onClick={handleDeleteStock}>
+              Xóa kho
+            </CustomComponent.Button2>
+          </Box>
+          <Box
+            sx={{
+              width: {
+                xs: "100%",
+                md: "115px",
+              },
+              marginY: "3px",
+              marginLeft: { xs: "0px", md: "3px" },
+            }}
+          >
+            <CustomComponent.Button1 fullWidth onClick={handleEditStock}>
+              Lưu thay đổi
+            </CustomComponent.Button1>
+          </Box>
         </Box>
       </Stack>
     </Box>
