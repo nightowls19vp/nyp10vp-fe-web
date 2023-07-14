@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Stack, Box, Typography, IconButton, Modal } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 
 import "../../../assets/css/Group.scss";
@@ -54,23 +54,23 @@ function GroupSpending({ item }) {
 
   return (
     <Stack sx={{ width: "100%" }}>
-      <Box className="title-group-spending">
-        <MonetizationOnOutlinedIcon
-          sx={{
-            paddingRight: "10px",
-            color: Colors.textPrimary,
-            fontSize: "50px",
-          }}
-        />
-        <Typography variant="h6" color={Colors.textPrimary} fontSize={22}>
-          Quản lý chi tiêu trong nhóm
-        </Typography>
-
+      <Box className="flex-group">
+        <Box className="title-group-spending">
+          <MonetizationOnOutlinedIcon
+            sx={{
+              paddingRight: "10px",
+              color: Colors.textPrimary,
+              fontSize: "50px",
+            }}
+          />
+          <Typography variant="h6" color={Colors.textPrimary} fontSize={22}>
+            Quản lý chi tiêu trong nhóm
+          </Typography>
+        </Box>
         <IconButton onClick={handleOpen}>
-          <ControlPointIcon sx={{ color: Colors.textPrimary }} />
+          <ControlPointIcon sx={{ color: Colors.textPrimary, fontSize: "32px" }} />
         </IconButton>
       </Box>
-
       <Modal
         open={open}
         onClose={handleClose}
@@ -78,7 +78,7 @@ function GroupSpending({ item }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <FormSpending grID={item._id} item={listMember} />
+          <FormSpending grID={item._id} item={listMember} handleClose={handleClose} />
         </Box>
       </Modal>
 

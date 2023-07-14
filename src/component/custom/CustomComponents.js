@@ -86,7 +86,7 @@ export const ButtonProduct = styled(ButtonBase)(({ theme }) => ({
   position: "relative",
   // borderRadius: "50%",
   width: "250px",
-  height: "500px",
+  height: "250px",
   [theme.breakpoints.down("md")]: {
     width: "180px !important", // Overrides inline-style
     height: "200px",
@@ -120,11 +120,10 @@ export const ImageProduct = styled("span")(({ theme }) => ({
   position: "absolute",
   left: 0,
   right: -5,
-  top: 350,
   bottom: 0,
-  [theme.breakpoints.down("md")]: {
-    top: 150,
-  },
+  // [theme.breakpoints.down("md")]: {
+  //   top: 0,
+  // },
   display: "flex",
   alignItems: "center",
   justifyContent: "flex-end",

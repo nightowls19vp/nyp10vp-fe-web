@@ -24,7 +24,6 @@ import "../../assets/css/Group.scss";
 import ImgAvatar from "../../assets/img/user.png";
 import { Colors } from "../../config/Colors";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
-import CalculateDate from "../../component/Date/CalculateDate";
 import PackagesGroup from "./PackagesGroup";
 import OtherPackages from "./OtherPackages";
 
@@ -185,7 +184,7 @@ function SuperUser({ item, title }) {
         <TabContext value={value}>
           <Box
             sx={{ borderBottom: 1, borderColor: "divider" }}
-            className="title-group-spending"
+            className="title-packages"
           >
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab

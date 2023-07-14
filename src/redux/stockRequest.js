@@ -25,7 +25,7 @@ export const getStorageLocation = async (groupId, token, axiosJWT) => {
     // dispatch(updateListStock(res?.data.data));
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -63,7 +63,7 @@ export const getGroupActivedByUserId = async (token, dispatch, axiosJWT) => {
       dispatch(setIdOfStock(formData[0]._id));
     }
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -116,7 +116,7 @@ export const updateStorageLocation = async (
     console.log(res?.data);
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -140,7 +140,7 @@ export const deletedStorageLocation = async (
     await getGroupActivedByUserId(token, dispatch, axiosJWT);
     console.log(res?.data);
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -170,7 +170,7 @@ export const getProductItemsByStorage = async (
     dispatch(updateListProduct(res?.data.data));
     dispatch(updateMetaListProduct(res?.data.meta));
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -196,7 +196,7 @@ export const getGroupProducts = async (
     console.log(res?.data);
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -215,7 +215,7 @@ export const searchGroupProducts = async (search, groupId, token, axiosJWT) => {
     });
     return res?.data.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -236,7 +236,7 @@ export const getProductItemById = async (
 
     dispatch(updateProductItem(res?.data.data));
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -266,7 +266,7 @@ export const searchPurchaseLocations = async (
     });
     return res?.data.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -280,7 +280,7 @@ export const addItemsToStorage = async (data, token, dispatch, axiosJWT) => {
     });
     console.log(res?.data);
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -288,7 +288,7 @@ export const searchProvinceVietNam = async (search, token) => {
   try {
     const res = await apiClient.get("/p", {
       params: {
-        p: search
+        p: search,
       },
       headers: {
         accept: "*/*",
@@ -298,7 +298,7 @@ export const searchProvinceVietNam = async (search, token) => {
 
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -307,7 +307,7 @@ export const searchDistrictVietNam = async (search, pCode, token) => {
     const res = await apiClient.get("/p", {
       params: {
         q: search,
-        p: pCode
+        p: pCode,
       },
       headers: {
         accept: "*/*",
@@ -317,16 +317,16 @@ export const searchDistrictVietNam = async (search, pCode, token) => {
 
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
-export const searchWarVietNam = async (search, pCode, dCode, token) => {
+export const searchWarVietNam = async (search, pCode, token) => {
   try {
     const res = await apiClient.get("/p", {
       params: {
         q: search,
-        p: pCode
+        p: pCode,
       },
       headers: {
         accept: "*/*",
@@ -336,6 +336,30 @@ export const searchWarVietNam = async (search, pCode, dCode, token) => {
 
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
+  }
+};
+
+export const searchStorageLocation = async (
+  groupId,
+  search,
+  token,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.get(`/prod-mgmt/storage-locations/${groupId}`, {
+      params: {
+        search: search,
+        searchBy: "name",
+        "filter.timestamp.deletedAt": "$null",
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res?.data;
+  } catch (error) {
+    return error.response.data;
   }
 };

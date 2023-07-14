@@ -9,6 +9,7 @@ const packageSlice = createSlice({
     numberCart: 0,
     cart: [],
     flagCart: 0,
+    myPackages: null,
     noti: null,
     bill: null,
     todos: null,
@@ -35,6 +36,9 @@ const packageSlice = createSlice({
     updateProfileId: (state, action) => {
       state.profileID = action.payload;
     },
+    updateMyPackages: (state, action) => {
+      state.myPackages = action.payload;
+    },
     updateNotiPackage: (state, action) => {
       state.noti = action.payload;
     },
@@ -55,6 +59,7 @@ export const {
   toggleShowSidebar,
   updateShowSidebar,
   updateProfileId,
+  updateMyPackages,
   updateNotiPackage,
   updateBill,
   updateTodos,

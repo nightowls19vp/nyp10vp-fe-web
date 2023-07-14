@@ -5,13 +5,8 @@ import {
   Stack,
   TextField,
   Typography,
-  ButtonBase,
-  IconButton,
-  InputAdornment,
-  InputBase,
   Autocomplete,
 } from "@mui/material";
-import ClearIcon from "@mui/icons-material/Clear";
 
 import { createAxios } from "../../http/createInstance";
 

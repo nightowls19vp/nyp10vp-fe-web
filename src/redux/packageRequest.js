@@ -4,6 +4,7 @@ import apiClient from "../http/http-common.js";
 import {
   setCarts,
   setInitialPackage,
+  updateMyPackages,
   updateNotiPackage,
   updateNumberCart,
   updateTodos,
@@ -41,7 +42,7 @@ export const getAllPackage = async (dispatch) => {
 
     dispatch(updateNotiPackage(formNoti));
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -50,7 +51,7 @@ export const getDetailPackage = async (pakageID) => {
     const res = await apiClient.get(`/pkg-mgmt/pkg/${pakageID}`);
     return res.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -69,7 +70,7 @@ export const getUserCart = async (userID, token, dispatch, axiosJWT) => {
 
     dispatch(updateNumberCart(res?.data.cart.length));
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -92,7 +93,7 @@ export const updateUserCart = async (
 
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -118,6 +119,7 @@ export const postPackageTodos = async (
     }
     return res?.data;
   } catch (error) {
+    dispatch(updateGroupId(group_id));
     dispatch(updateGroupItemId(2));
     return error.response.data;
   }
@@ -139,7 +141,7 @@ export const addTodo = async (grID, id, data, token, dispatch, axiosJWT) => {
       dispatch(updateGroupItemId(2));
     }
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -157,7 +159,7 @@ export const getTodo = async (id, token, dispatch, axiosJWT) => {
     }
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -181,7 +183,7 @@ export const updateIsCompletedTodo = async (
     );
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -203,6 +205,28 @@ export const deletedTodos = async (grID, id, token, dispatch, axiosJWT) => {
   } catch (error) {
     dispatch(updateGroupId(grID));
     dispatch(updateGroupItemId(2));
+    return error.response.data;
+  }
+};
+
+export const GetGroupSuperUser = async (token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get(`/pkg-mgmt/gr/user`, {
+      params: {
+        projection: "packages",
+        role: "Super User",
+        page: 0,
+        sort: "-createdAt",
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res?.data.statusCode === 200) {
+      dispatch(updateMyPackages(res?.data.groups));
+    }
+  } catch (error) {
     return error.response.data;
   }
 };

@@ -4,7 +4,7 @@ import { Colors } from "../../config/Colors";
 import { useSelector } from "react-redux";
 import ItemDetail from "./ItemDetail";
 
-function ProductDetail({ grId, storageID, productId }) {
+function ProductDetail({ grId, storageID }) {
   const product = useSelector((state) => state?.stock?.productItem);
   return (
     <Stack
@@ -31,7 +31,7 @@ function ProductDetail({ grId, storageID, productId }) {
         </Link>
         <Typography color="text.primary"> Nhu yếu phẩm </Typography>
       </Breadcrumbs>
-      <ItemDetail item={product} />
+      <ItemDetail item={product} grId={grId} />
     </Stack>
   );
 }

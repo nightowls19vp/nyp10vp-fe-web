@@ -77,7 +77,7 @@ function GroupTodos({ grId, item }) {
           </Typography>
         </Box>
         <IconButton onClick={handleOpen}>
-          <AddTaskIcon sx={{ color: Colors.textPrimary }} />
+          <AddTaskIcon sx={{ color: Colors.textPrimary, fontSize: "32px" }} />
         </IconButton>
       </Box>
 
@@ -88,7 +88,7 @@ function GroupTodos({ grId, item }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <FormTodos todoID={item._id} />
+          <FormTodos todoID={item._id} handleClose={handleClose} />
         </Box>
       </Modal>
 

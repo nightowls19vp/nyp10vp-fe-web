@@ -1,25 +1,41 @@
 import React, { useRef, useState } from "react";
 
 import {
+  Autocomplete,
   Box,
+  IconButton,
   Input,
   InputAdornment,
+  InputBase,
+  OutlinedInput,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import { AiFillCamera } from "react-icons/ai";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
+
+import { createAxios } from "../../http/createInstance";
 
 import { Colors } from "../../config/Colors";
 import "../../assets/css/Product.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker";
+import { searchStorageLocation } from "../../redux/stockRequest";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess } from "../../redux/authSlice";
 
-function ItemDetail({ item }) {
+function ItemDetail({ item, grId }) {
   const inputRef = useRef();
   const avatarRef = useRef();
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const purchaseLocation = () => {
     let addr =
@@ -40,7 +56,10 @@ function ItemDetail({ item }) {
   const [money, setMoney] = useState(item?.groupProduct.price ?? 0);
   const [expDate, setExpDate] = useState(item?.bestBefore);
   const [storage, setStorage] = useState(item?.storageLocation.name);
-  const [purchase, setPurchase] = useState(purchaseLocation());
+  const [inputStorage, setInputStorage] = useState("");
+  //const [purchase, setPurchase] = useState(purchaseLocation());
+  const [listStorage, setListStorage] = useState([]);
+  const [idStorage, setIdStorage] = useState();
 
   const handleClick = () => {
     inputRef.current.click();
@@ -58,13 +77,60 @@ function ItemDetail({ item }) {
     setExpDate(dateValue.$d);
   };
 
+  const handleQuantityPlus = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const handleQuantityMoins = () => {
+    if (quantity > 0) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const handleMoneyPlus = () => {
+    setMoney(money + 1000);
+  };
+
+  const handleMoneyMoins = () => {
+    if (money > 1000) {
+      setMoney(money - 1000);
+    }
+  };
+
+  const searchDataStorageLocation = async (search) => {
+    const res = await searchStorageLocation(
+      grId,
+      search,
+      user?.accessToken,
+      axiosJWT
+    );
+
+    if (res.statusCode === 200) {
+      setListStorage(res.data);
+    }
+  };
+
+  const handleChangeInputStorage = (e) => {
+    let character = e.target.value;
+    setTimeout(async () => {
+      await searchDataStorageLocation(character);
+    }, 300);
+    setInputStorage(character);
+  };
+
+  const handleSelectedStorage = (e, op) => {
+    if (op != null) {
+      setIdStorage(op.id);
+    }
+  };
+
   return (
     <Box
       sx={{
         width: "100%",
         display: "flex",
-        flexDirection: { xs: "column", sm: "row" },
-        alignItems: { xs: "center", sm: "flex-start" },
+        flexDirection: { xs: "column", md: "row" },
+        alignItems: { xs: "center", md: "flex-start" },
       }}
     >
       <Box flex={1} className="flex-column">
@@ -83,12 +149,12 @@ function ItemDetail({ item }) {
             <CustomComponent.ImageBackdrop className="MuiImageBackdrop-root" />
             <CustomComponent.ImageProduct>
               <Box bgcolor={Colors.camera} borderRadius={"50%"} padding={"8px"}>
-                <AiFillCamera color={Colors.black} size={25} />
+                <AddAPhotoIcon color={Colors.black} size={25} />
               </Box>
             </CustomComponent.ImageProduct>
           </CustomComponent.ButtonProduct>
         </Box>
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{ width: "100%", paddingY: "5px" }}>
           <TextField
             label="Barcode"
             variant="filled"
@@ -98,86 +164,77 @@ function ItemDetail({ item }) {
           />
         </Box>
       </Box>
-      <Box flex={2}>
+      <Box flex={2} sx={{ width: "100%"}}>
         <Box className="quantity-product">
           <Typography
             variant="subtitle1"
-            sx={{ fontSize: 20, fontWeight: 500, width: "150px" }}
+            sx={{ fontSize: 20, fontWeight: 500, minWidth: "150px" }}
           >
             Tên sản phẩm
           </Typography>
           <TextField
             multiline
-            sx={{ width: { xs: "100%", sm: "80%", md: "60%" } }}
+            fullWidth
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
         </Box>
         <Box className="flex-row-wrap">
           <Box className="quantity-product">
-            <Typography
-              variant="subtitle1"
-              sx={{ fontSize: 20, fontWeight: 500, width: "150px" }}
-            >
-              Số lượng
-            </Typography>
-            <Input
-              variant="standard"
+            <IconButton onClick={handleQuantityPlus}>
+              <AddIcon />
+            </IconButton>
+            <TextField
+              label="Số lượng"
+              id="outlined-start-adornment-quantity"
+              sx={{ m: 1, width: "130px" }}
+              type="number"
               value={quantity}
-              endAdornment={
-                <InputAdornment position="end">
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ fontSize: 18, fontWeight: 400 }}
-                  >
-                    unit
-                  </Typography>
-                </InputAdornment>
-              }
               onChange={(e) => setQuantity(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">unit</InputAdornment>
+                ),
+              }}
             />
+            <IconButton onClick={handleQuantityMoins}>
+              <RemoveOutlinedIcon />
+            </IconButton>
           </Box>
           <Box className="quantity-product">
-            <Typography
-              variant="subtitle1"
-              sx={{
-                fontSize: 20,
-                fontWeight: 500,
-                width: { xs: "150px", sm: "100px" },
-              }}
-            >
-              Giá tiền
-            </Typography>
-            <Input
-              variant="standard"
+            <IconButton onClick={handleMoneyPlus}>
+              <AddIcon />
+            </IconButton>
+            <TextField
+              label="Giá tiền"
+              id="outlined-start-adornment-money"
+              sx={{ m: 1, width: "150px" }}
+              type="number"
               value={money}
-              endAdornment={
-                <InputAdornment position="end">
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ fontSize: 18, fontWeight: 400 }}
-                  >
-                    VND
-                  </Typography>
-                </InputAdornment>
-              }
               onChange={(e) => setMoney(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">vnd</InputAdornment>
+                ),
+              }}
             />
+            <IconButton onClick={handleMoneyMoins}>
+              <RemoveOutlinedIcon />
+            </IconButton>
           </Box>
         </Box>
         <Box
           className="quantity-product"
-          sx={{ width: { xs: "100%", sm: "80%", md: "60%" } }}
         >
           <Typography
             variant="subtitle1"
             sx={{
               fontSize: 20,
               fontWeight: 500,
-              width: { xs: "150px", sm: "200px" },
+              minWidth: { xs: "150px", md: "200px" },
             }}
           >
-            Hết hạn
+            Ngày hết hạn
           </Typography>
           <DateTimePicker
             valueDay={expDate}
@@ -185,31 +242,37 @@ function ItemDetail({ item }) {
           />
         </Box>
         <Box className="quantity-product">
-          <Typography
-            variant="subtitle1"
-            sx={{ fontSize: 20, fontWeight: 500, width: "150px" }}
-          >
-            Vị trí
-          </Typography>
-          <TextField
-            sx={{ width: { xs: "100%", sm: "80%", md: "60%" } }}
-            value={storage}
+          <Autocomplete
+            id="free-solo-storage"
+            freeSolo
+            fullWidth
+            options={listStorage}
+            getOptionLabel={(option) => option.name}
+            onChange={(e, op) => handleSelectedStorage(e, op)}
+            inputValue={storage}
+            onInputChange={(event, newInputValue) => {
+              setStorage(newInputValue);
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                value={inputStorage}
+                onChange={handleChangeInputStorage}
+                placeholder="Chọn vị trí" 
+              />
+            )}
           />
         </Box>
-        <Box className="quantity-product">
+        {/* <Box className="quantity-product">
           <LocationOnIcon sx={{ color: Colors.textPrimary }} />
           <Typography>{purchase}</Typography>
-        </Box>
+        </Box> */}
         <Box className="flex-flex-end">
           <Box sx={{ paddingRight: "5px" }}>
-            <CustomComponent.Button1 >
-              Lưu thay đổi
-            </CustomComponent.Button1>
+            <CustomComponent.Button1>Lưu thay đổi</CustomComponent.Button1>
           </Box>
           <Box sx={{ paddingLeft: "5px" }}>
-            <CustomComponent.Button2 >
-              Xóa sản phẩm
-            </CustomComponent.Button2>
+            <CustomComponent.Button2>Xóa sản phẩm</CustomComponent.Button2>
           </Box>
         </Box>
       </Box>

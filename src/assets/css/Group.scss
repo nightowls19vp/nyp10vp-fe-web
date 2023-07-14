@@ -25,6 +25,12 @@
     flex-direction: column;
 }
 
+.title-packages {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 .title-group-spending {
     display: flex;
     flex-direction: row;

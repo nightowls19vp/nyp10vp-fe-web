@@ -30,7 +30,7 @@ export const getJoinGroup = async (token, tokenJoinGr) => {
     });
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -101,7 +101,7 @@ export const getValidateGG = async (token, dispatch, navigate, axiosJWT) => {
     navigate('/');
 
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 }
 

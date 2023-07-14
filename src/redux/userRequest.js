@@ -46,7 +46,7 @@ export const updateInformationUser = async (
 
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
     dispatch(getUserInforFailed());
   }
 };
@@ -62,7 +62,7 @@ export const uploadFile = async (id, token, file) => {
     });
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -83,7 +83,7 @@ export const updateAvatarUser = async (
     await getInformationUser(userID, token, dispatch, axiosJWT);
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -92,7 +92,7 @@ export const getSettingUser = async (userID) => {
     const res = await apiClient.get(`/users/${userID}/setting`);
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -112,7 +112,7 @@ export const updateSettingUser = async (
     });
     await getInformationUser(userID, token, dispatch, axiosJWT);
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -128,7 +128,7 @@ export const userCheckout = async (token, dispatch, user, axiosJWT) => {
     dispatch(setOrder(res?.data));
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -232,6 +232,11 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             todos: item.todos,
           };
 
+          let itemCalendar = {
+            _id: item._id,
+            todos: item.tasks,
+          };
+
           let childGroupItem = [
             {
               _id: 0,
@@ -247,6 +252,11 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
               _id: 2,
               name: "Việc cần làm",
               group: itemTodos,
+            },
+            {
+              _id: 3,
+              name: "Lịch biểu",
+              group: itemCalendar,
             },
           ];
 
@@ -305,6 +315,11 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             todos: item.todos,
           };
 
+          let itemCalendar = {
+            _id: item._id,
+            todos: item.tasks,
+          };
+
           let childGroupItem = [
             {
               _id: 0,
@@ -320,6 +335,11 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
               _id: 2,
               name: "Việc cần làm",
               group: itemTodos,
+            },
+            {
+              _id: 3,
+              name: "Lịch biểu",
+              group: itemCalendar,
             },
           ];
 
@@ -379,6 +399,11 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             todos: item.todos,
           };
 
+          let itemCalendar = {
+            _id: item._id,
+            todos: item.tasks,
+          };
+
           let childGroupItem = [
             {
               _id: 0,
@@ -394,6 +419,11 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
               _id: 2,
               name: "Việc cần làm",
               group: itemTodos,
+            },
+            {
+              _id: 3,
+              name: "Lịch biểu",
+              group: itemCalendar,
             },
           ];
 
@@ -454,6 +484,11 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             todos: item.todos,
           };
 
+          let itemCalendar = {
+            _id: item._id,
+            todos: item.tasks,
+          };
+
           let childGroupItem = [
             {
               _id: 0,
@@ -469,6 +504,11 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
               _id: 2,
               name: "Việc cần làm",
               group: itemTodos,
+            },
+            {
+              _id: 3,
+              name: "Lịch biểu",
+              group: itemCalendar,
             },
           ];
 
@@ -489,7 +529,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
       dispatch(updateGroupItemId(0));
     }
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -506,7 +546,7 @@ export const usersSearch = async (token, search, axiosJWT) => {
     });
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -520,7 +560,7 @@ export const usersInvitePeople = async (token, data, axiosJWT) => {
     });
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -535,7 +575,7 @@ export const uploadAvatarGroup = async (id, token, file, axiosJWT) => {
     });
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -562,7 +602,7 @@ export const updateAvatarGroup = async (
 
     // await SB.updateAvatarChannel(channel, file.file);
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -585,7 +625,7 @@ export const updateGroupName = async (
 
     await getGroupByUserId(token, dispatch, axiosJWT);
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -609,7 +649,7 @@ export const updateActivatePackage = async (
     dispatch(updateGroupId(id));
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -624,7 +664,7 @@ export const userRenewGroup = async (grId, token, dispatch, data, axiosJWT) => {
     dispatch(setOrder(res?.data));
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -651,7 +691,7 @@ export const getGroupChannel = async (token, dispatch, axiosJWT) => {
     console.log(newArray);
     dispatch(getChannels(newArray));
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -674,7 +714,7 @@ export const updateGroupChannel = async (
 
     await getGroupChannel(token, dispatch, axiosJWT);
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -699,7 +739,7 @@ export const postPackageBill = async (
     }
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -714,11 +754,17 @@ export const updateStatusBill = async (id, data, token, dispatch, axiosJWT) => {
     await getGroupByUserId(token, dispatch, axiosJWT);
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
-export const deletePackageBill = async (id, token, dispatch, axiosJWT) => {
+export const deletePackageBill = async (
+  group_id,
+  id,
+  token,
+  dispatch,
+  axiosJWT
+) => {
   try {
     const res = await axiosJWT.delete(`/pkg-mgmt/bill/${id}`, {
       headers: {
@@ -726,10 +772,14 @@ export const deletePackageBill = async (id, token, dispatch, axiosJWT) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    await getGroupByUserId(token, dispatch, axiosJWT);
+    if (res?.data.statusCode === 200) {
+      await getGroupByUserId(token, dispatch, axiosJWT);
+      dispatch(updateGroupId(group_id));
+      dispatch(updateGroupItemId(1));
+    }
     return res?.data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };
 
@@ -768,6 +818,6 @@ export const updatePackageBill = async (
       }
     }
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 };

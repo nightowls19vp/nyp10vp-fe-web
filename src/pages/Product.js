@@ -2,11 +2,9 @@ import React, { useEffect } from "react";
 
 import { createAxios } from "../http/createInstance";
 
-import ProductItem from "../features/Product/ProductItem";
 import DefaultLayout from "../layout/DefaultLayout";
 import {
   getProductItemById,
-  getProductItemsByStorage,
 } from "../redux/stockRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../redux/authSlice";

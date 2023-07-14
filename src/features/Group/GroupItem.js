@@ -9,6 +9,7 @@ import { loginSuccess } from "../../redux/authSlice";
 
 import { createAxios } from "../../http/createInstance";
 import GroupTodos from "./Todos/GroupTodos";
+import GroupTasks from "./Tasks/GroupTasks";
 
 function GroupItem() {
   const dispatch = useDispatch();
@@ -66,11 +67,15 @@ function GroupItem() {
                           item={route.child[1].group}
                           key={route._id}
                         />
-                      ) : (
+                      ) : selectedItemID === 2 ? (
                         <GroupTodos
                           key={route._id}
                           grId={route._id}
                           item={route.child[2].group}
+                        />
+                      ) : (
+                        <GroupTasks
+                        key={route._id}
                         />
                       )
                     ) : null

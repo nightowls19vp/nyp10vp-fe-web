@@ -11,6 +11,7 @@ import {
   Typography,
   Select,
   MenuItem,
+  CircularProgress,
 } from "@mui/material";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 
@@ -21,7 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as CustomComponent from "../../../component/custom/CustomComponents";
 import { postPackageTodos } from "../../../redux/packageRequest";
 
-function FormTodos({ todoID }) {
+function FormTodos({ todoID, handleClose }) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state?.auth.login?.currentUser);
@@ -33,6 +34,7 @@ function FormTodos({ todoID }) {
   const [msg, setMsg] = useState("");
   const [status, setStatus] = useState("Public");
   const [listTodo, setListTodo] = useState([]);
+  const [flag, setFlag] = useState(false);
 
   const handleChangeStatus = (event) => {
     setStatus(event.target.value);
@@ -80,16 +82,24 @@ function FormTodos({ todoID }) {
     let formData = {
       summary: name,
       todos: listTodo,
-      state: status
+      state: status,
     };
-    
-    await postPackageTodos(
+
+    setFlag(true);
+
+    const res = await postPackageTodos(
       todoID,
       formData,
       user?.accessToken,
       dispatch,
       axiosJWT
     );
+
+    if (res != null) {
+      setFlag(false);
+    }
+
+    handleClose();
   };
 
   useEffect(() => {
@@ -99,7 +109,7 @@ function FormTodos({ todoID }) {
   }, [todo]);
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} sx={{ position: "relative" }}>
       <Box
         className="title-group-spending"
         sx={{ justifyContent: "space-between" }}
@@ -177,9 +187,17 @@ function FormTodos({ todoID }) {
           ))}
         </Stack>
       ) : null}
-      <CustomComponent.Button1 fullWidth onClick={handleAddTodos}>
-        Hoàn thành
-      </CustomComponent.Button1>
+      {listTodo.length > 0 && listTodo !== null ? (
+        <CustomComponent.Button1 fullWidth onClick={handleAddTodos}>
+          Lưu
+        </CustomComponent.Button1>
+      ) : null}
+
+      {flag && (
+        <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
+          <CircularProgress />
+        </Box>
+      )}
     </Stack>
   );
 }

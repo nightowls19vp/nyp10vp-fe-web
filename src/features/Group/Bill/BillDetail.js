@@ -9,15 +9,21 @@ import {
   Stack,
   Typography,
   InputBase,
+  IconButton,
 } from "@mui/material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useDispatch, useSelector } from "react-redux";
 
 import { createAxios } from "../../../http/createInstance";
 
 import "../../../assets/css/Bill.scss";
 import * as CustomComponent from "../../../component/custom/CustomComponents.js";
-import { deletePackageBill, updatePackageBill } from "../../../redux/userRequest";
+import {
+  deletePackageBill,
+  updatePackageBill,
+} from "../../../redux/userRequest";
 import { loginSuccess } from "../../../redux/authSlice";
+import { Colors } from "../../../config/Colors";
 
 function BillDetail({ grID }) {
   const dispatch = useDispatch();
@@ -75,6 +81,7 @@ function BillDetail({ grID }) {
 
   const handleDeleteBill = async () => {
     const res = await deletePackageBill(
+      grID,
       bill._id,
       user?.accessToken,
       dispatch,
@@ -89,12 +96,12 @@ function BillDetail({ grID }) {
     for (let x of data) {
       let formAmount = {
         borrower: x._id,
-        amount: x.amount
-      }
+        amount: x.amount,
+      };
       let formStatus = {
         borrower: x._id,
-        status: x.status
-      }
+        status: x.status,
+      };
       borrowersAmount.push(formAmount);
       borrowersStatus.push(formStatus);
     }
@@ -104,17 +111,22 @@ function BillDetail({ grID }) {
       date: bill.date,
       borrowers: borrowersAmount,
       lender: bill?.lender._id,
-      description: bill?.description
-    }
+      description: bill?.description,
+    };
 
     let formData2 = {
-      borrowers: borrowersStatus
-    }
+      borrowers: borrowersStatus,
+    };
 
-    console.log(formData1);
-    console.log(formData2);
-
-    await updatePackageBill(grID, bill._id, formData1, formData2, user?.accessToken, dispatch, axiosJWT);
+    await updatePackageBill(
+      grID,
+      bill._id,
+      formData1,
+      formData2,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
   };
   return (
     <Box
@@ -270,9 +282,7 @@ function BillDetail({ grID }) {
               </CustomComponent.Button2>
             </Box>
             <Box sx={{ paddingLeft: "5px" }}>
-              <CustomComponent.Button1
-                onClick={handleUpdateBill}
-              >
+              <CustomComponent.Button1 onClick={handleUpdateBill}>
                 Lưu thay đổi
               </CustomComponent.Button1>
             </Box>

@@ -13,7 +13,7 @@ import {
   TablePagination,
 } from "@mui/material";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 import { useSelector } from "react-redux";
 
@@ -40,7 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function MyPackage() {
-  const groups = useSelector((state) => state?.user?.groupAll);
+  const packages = useSelector((state) => state?.package?.myPackages);
 
   const [pkgSU, setPkgSU] = useState([]);
   const [page, setPage] = React.useState(0);
@@ -59,16 +59,15 @@ function MyPackage() {
   };
 
   useEffect(() => {
-    if (groups.length > 0) {
-      const groupsSuperUser = groups[0].child;
-
+    if (packages.length > 0) {
       let packageSuperUser = [];
 
-      for (let group of groupsSuperUser) {
-        let i = 0;
-        for (let pkg of group.child[0].group.packages) {
+      for (let pkgs of packages) {
+        let i = pkgs._id;
+        for (let pkg of pkgs.packages) {
+          let j = 0;
           let formData = {
-            _id: group._id + i,
+            _id: i+j,
             name: pkg.package.name,
             duration: pkg.package.duration,
             price: pkg.package.price,
@@ -76,8 +75,8 @@ function MyPackage() {
             createdAt: pkg.package.createdAt,
             updatedAt: pkg.package.updatedAt,
           };
-          i++;
           packageSuperUser.push(formData);
+          j++;
         }
       }
 
@@ -85,7 +84,7 @@ function MyPackage() {
     } else {
       setPkgSU([]);
     }
-  }, [groups]);
+  }, [packages]);
 
   return (
     <Stack paddingX={"20px"}>
@@ -162,8 +161,6 @@ function MyPackage() {
                     rowsPerPageOptions={[
                       5,
                       10,
-                      20,
-                      { label: "All", value: -1 },
                     ]}
                     labelRowsPerPage="Số hàng trên trang"
                     count={pkgSU.length}

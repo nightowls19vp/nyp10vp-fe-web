@@ -67,7 +67,7 @@ function ModalAddStock({ grID, handleClose }) {
       axiosJWT
     );
 
-    if (res) {
+    if (res != null) {
       setFlag(false);
     }
 
