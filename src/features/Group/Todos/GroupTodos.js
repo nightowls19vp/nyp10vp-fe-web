@@ -58,9 +58,15 @@ function GroupTodos({ grId, item }) {
   const handleClose = () => setOpen(false);
 
   const handleDeleteTodos = async (e, todo) => {
-    const res = await deletedTodos(grId, todo._id, user?.accessToken, dispatch, axiosJWT);
+    const res = await deletedTodos(
+      grId,
+      todo._id,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
     console.log(res);
-  }
+  };
   return (
     <Stack sx={{ width: "100%" }} spacing={2}>
       <Box className="flex-group">
@@ -105,14 +111,28 @@ function GroupTodos({ grId, item }) {
                   aria-controls={`${todo._id}-content`}
                   id={`${todo._id}-header`}
                 >
-                  <Typography>{todo.summary}</Typography>
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    sx={{
+                      fontSize: "26px",
+                      color: Colors.textPrimary,
+                      width: "33%",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {todo.summary}
+                  </Typography>
+                  {/* <Typography sx={{ color: "text.secondary" }}>
+                    2/3
+                  </Typography> */}
                 </AccordionSummary>
                 <AccordionDetails>
                   {todo !== null && <TodoDetail grID={grId} item={todo} />}
                 </AccordionDetails>
                 <AccordionActions>
                   <IconButton onClick={(e) => handleDeleteTodos(e, todo)}>
-                    <DeleteIcon />
+                    <DeleteIcon sx={{ color: Colors.error }} />
                   </IconButton>
                 </AccordionActions>
               </Accordion>

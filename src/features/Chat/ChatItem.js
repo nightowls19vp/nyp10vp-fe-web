@@ -24,20 +24,20 @@ function ChatItem() {
 
       for (let channel of channels) {
         let item = await SB.getUserChannel(channel.channel);
+        console.log("item: ", item);
         if (item) {
           let fromData = {
             _id: item.url,
             name: item.name,
             avatar: item.coverUrl,
+            lastMess: item.lastMessage != null ? item.lastMessage.message : "",
           };
           newChannel.push(fromData);
         }
       }
       setListChannel(newChannel);
       dispatch(updateChannelID(newChannel[0]._id));
-      console.log("get channel");
       let c = await SB.getUserChannel(channels[0].channel);
-      console.log("channel: ", c);
       setChannelFirst(c);
 
       let m = await SB.receiveMessage(c);

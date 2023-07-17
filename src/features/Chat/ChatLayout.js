@@ -10,6 +10,7 @@ import {
   Typography,
   Badge,
   Divider,
+  Chip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -68,6 +69,8 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
   const [listMessage, setListMessage] = useState(messageFirst);
   const [channelUser, setChannelUser] = useState(channelFisrt);
   const [open, setOpen] = useState(true);
+
+  console.log(channelUser);
 
   const handleChoseChannel = async (event, id) => {
     let c = await SB.getUserChannel(id);
@@ -129,7 +132,7 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
           <Box id="scrollBar-list" className="list-channels">
             {item.map((channel, idx) =>
               channel ? (
-                <Box key={channel._id} sx={{ paddingY: "3px"}}>
+                <Box key={channel._id} sx={{ paddingY: "3px" }}>
                   <CustomComponent.GroupChat
                     sx={{
                       backgroundColor:
@@ -140,11 +143,25 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
                     <CustomComponent.ImageSrcGC>
                       <Avatar
                         src={channel.avatar}
-                        sx={{ width: 50, height: 50 }}
+                        sx={{ width: 60, height: 60 }}
                       />
-                      <Typography sx={{ paddingLeft: "8px" }}>
-                        {channel.name}
-                      </Typography>
+
+                      <Stack
+                        direction="column"
+                        justifyContent="center"
+                        alignItems="flex-start"
+                      >
+                        <Typography
+                          sx={{ paddingLeft: "8px", fontSize: "20px" }}
+                        >
+                          {channel.name}
+                        </Typography>
+                        <Typography
+                          sx={{ paddingLeft: "8px", color: "#737373" }}
+                        >
+                          {channel.lastMess}
+                        </Typography>
+                      </Stack>
                     </CustomComponent.ImageSrcGC>
                   </CustomComponent.GroupChat>
                 </Box>
@@ -270,7 +287,14 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
                 ) : (
                   <Avatar src={member?.profileUrl} />
                 )}
-                <Typography sx={{ paddingLeft: "5px"}}> {member.nickname} </Typography>
+                <Typography sx={{ paddingX: "10px" }}>
+                  {member.nickname}
+                </Typography>
+                {member.role === "operator" ? (
+                  <Chip label="Super User" />
+                ) : (
+                  <Chip label="User" />
+                )}
               </Box>
             ) : null
           )}

@@ -3,6 +3,10 @@ import React, { useRef, useState } from "react";
 import {
   Autocomplete,
   Box,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
   IconButton,
   Input,
   InputAdornment,
@@ -164,7 +168,48 @@ function ItemDetail({ item, grId }) {
           />
         </Box>
       </Box>
-      <Box flex={2} sx={{ width: "100%"}}>
+      <Box flex={2} sx={{ width: "100%" }}>
+        <Card>
+          <CardContent>
+            <Box className="quantity-product">
+              <Typography
+                variant="subtitle1"
+                sx={{ fontSize: 20, fontWeight: 500, minWidth: "150px" }}
+              >
+                Tên sản phẩm
+              </Typography>
+              <TextField
+                multiline
+                fullWidth
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </Box>
+            <Box className="quantity-product">
+              <IconButton onClick={handleQuantityPlus}>
+                <AddIcon />
+              </IconButton>
+              <TextField
+                label="Số lượng"
+                id="outlined-start-adornment-quantity"
+                sx={{ m: 1, width: "130px" }}
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">unit</InputAdornment>
+                  ),
+                }}
+              />
+              <IconButton onClick={handleQuantityMoins}>
+                <RemoveOutlinedIcon />
+              </IconButton>
+            </Box>
+          </CardContent>
+        </Card>
+      </Box>
+      {/* <Box flex={2} sx={{ width: "100%"}}>
         <Box className="quantity-product">
           <Typography
             variant="subtitle1"
@@ -263,10 +308,6 @@ function ItemDetail({ item, grId }) {
             )}
           />
         </Box>
-        {/* <Box className="quantity-product">
-          <LocationOnIcon sx={{ color: Colors.textPrimary }} />
-          <Typography>{purchase}</Typography>
-        </Box> */}
         <Box className="flex-flex-end">
           <Box sx={{ paddingRight: "5px" }}>
             <CustomComponent.Button1>Lưu thay đổi</CustomComponent.Button1>
@@ -275,7 +316,7 @@ function ItemDetail({ item, grId }) {
             <CustomComponent.Button2>Xóa sản phẩm</CustomComponent.Button2>
           </Box>
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 }

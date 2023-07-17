@@ -43,10 +43,10 @@ function SidebarLayout({ data, title, selectedID, children }) {
         }}
       >
         <Box
-          bgcolor={Colors.search}
+          bgcolor={Colors.background}
           sx={{
             display: { xs: showSidebar ? "flex" : "none", sm: "flex" },
-            maxWidth: '300px',
+            maxWidth: '350px',
           }}
           ref={refSidebar}
         >
@@ -61,6 +61,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
             justifyContent: "space-between",
             alignItems: "stretch",
             paddingX: { sx: 0, sm: "15px", md: "20px", lg: "30px"},
+            backgroundColor: Colors.bgGray,
           }}
           paddingY={5}
         >

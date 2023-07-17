@@ -1,24 +1,13 @@
 import React, { useState } from "react";
 
-import { Box, Stack, Typography, IconButton } from "@mui/material";
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateRangeCalendar } from '@mui/x-date-pickers-pro/DateRangeCalendar';
+import { Box, Stack, Typography } from "@mui/material";
 
 import { Colors } from "../../../config/Colors";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import CalendarComponent from "../../../component/calendar/Calendar";
 
 function GroupTasks() {
-    const [value, setValue] = useState({
-        startDate: new Date(),
-        endDate: new Date().setMonth(11)
-    });
-    
-    const handleValueChange = (newValue) => {
-        console.log("newValue:", newValue);
-        setValue(newValue);
-    }
+
   return (
     <Stack sx={{ width: "100%" }} spacing={2}>
       <Box className="flex-group">
@@ -31,23 +20,11 @@ function GroupTasks() {
             }}
           />
           <Typography variant="h6" color={Colors.textPrimary} fontSize={22}>
-            Các việc cần làm trong nhóm
+            Sự kiện trong nhóm
           </Typography>
         </Box>
-        {/* <IconButton >
-          <AddTaskIcon sx={{ color: Colors.textPrimary, fontSize: "32px" }} />
-        </IconButton> */}
       </Box>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DateRangeCalendar', 'DateRangeCalendar']}>
-        <DemoItem label="Controlled calendar">
-          <DateRangeCalendar
-            value={value}
-            onChange={(newValue) => setValue(newValue)}
-          />
-        </DemoItem>
-      </DemoContainer>
-    </LocalizationProvider>
+      <CalendarComponent />
     </Stack>
   );
 }

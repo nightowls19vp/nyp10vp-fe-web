@@ -15,6 +15,7 @@ import { loginSuccess } from "../../../redux/authSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { addTodo, updateIsCompletedTodo } from "../../../redux/packageRequest";
 import { updateTodos } from "../../../redux/packageSlice";
+import * as CustomComponent from "../../../component/custom/CustomComponents";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -128,9 +129,9 @@ function TodoDetail({ grID, item }) {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="All" {...a11yProps(0)} />
-          <Tab label="Active" {...a11yProps(1)} />
-          <Tab label="Completed" {...a11yProps(2)} />
+          <Tab label="Tất cả" {...a11yProps(0)} />
+          <Tab label="Đang làm" {...a11yProps(1)} />
+          <Tab label="Hoàn thành" {...a11yProps(2)} />
         </Tabs>
       </Box>
 
@@ -138,9 +139,10 @@ function TodoDetail({ grID, item }) {
         <TextField
           label="Công việc"
           variant="outlined"
+          size="small"
           value={todo}
           onChange={(e) => setTodo(e.target.value)}
-          sx={{ margin: "5px", width: { xs: "100%", md: "50%" } }}
+          sx={{ margin: "5px", width: { xs: "100%", md: "50%" }, borderRadius: "20px"}}
         />
         <Box
           sx={{
@@ -153,19 +155,13 @@ function TodoDetail({ grID, item }) {
           <TextField
             label="Mô tả"
             fullWidth
+            size="small"
             variant="outlined"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            sx={{ margin: "5px" }}
+            sx={{ margin: "5px", borderRadius: "20px" }}
           />
-          <Button
-            variant="contained"
-            color="success"
-            sx={{ height: "56px" }}
-            onClick={handleAddTodo}
-          >
-            Thêm
-          </Button>
+          <CustomComponent.Button2 onClick={handleAddTodo}>Thêm</CustomComponent.Button2>
         </Box>
       </Box>
       <Typography className="todo-msg">{msg}</Typography>
@@ -178,9 +174,11 @@ function TodoDetail({ grID, item }) {
               <Checkbox
                 checked={todo.isCompleted}
                 onChange={(e) => handleIsCompleted(e, idx)}
+                sx={{ fontSize: "24px"}}
               />
               <Typography
                 sx={{
+                  fontSize: "24px",
                   textDecoration: todo.isCompleted ? "line-through" : "none",
                 }}
               >

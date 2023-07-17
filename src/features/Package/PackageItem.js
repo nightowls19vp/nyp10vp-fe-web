@@ -5,8 +5,8 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useSelector } from "react-redux";
 
 import "../../assets/css/Package.scss";
-import DetailItem from "../../component/package/DetailItem";
-import DetailItemRenew from "../../component/package/DetailItemRenew";
+import DetailItem from "./DetailItem";
+import DetailItemRenew from "./DetailItemRenew";
 
 function PackageItem({ data, grpId }) {
   const notiPkg = useSelector((state) => state?.package?.noti);
