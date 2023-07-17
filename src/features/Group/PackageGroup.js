@@ -105,7 +105,7 @@ function PackageGroup({ item, data, title }) {
           <Typography variant="h5" color={Colors.textPrimary}>
             Gói người dùng
           </Typography>
-          {title === "Group SUPER USER" ? (
+          {title === "SUPER USER" ? (
             <Box>
               {btn ? (
                 <Button

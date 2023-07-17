@@ -8,6 +8,7 @@ import QueryBuilderIcon from "@mui/icons-material/QueryBuilder";
 
 import "../../assets/css/Home.scss";
 import ImgPanda from "../../assets/img/panda.jpg";
+import ImgCat from "../../assets/img/meo.jpg";
 import * as CustomComponent from "../../component/custom/CustomComponents";
 import BoxGroup from "./BoxGroup";
 import BoxNotification from "./BoxNotification";
@@ -40,7 +41,7 @@ function HomeLayout() {
             <BoxGroup title={"Group A"} img={ImgPanda} />
           </Box>
           <Box sx={{ width: "40%", paddingY: "10px" }}>
-            <BoxGroup title={"Group B"} img={ImgPanda} />
+            <BoxGroup title={"Group B"} img={ImgCat} />
           </Box>
           <IconButton>
             <ArrowForwardIosIcon sx={{ fontSize: "40px" }} />

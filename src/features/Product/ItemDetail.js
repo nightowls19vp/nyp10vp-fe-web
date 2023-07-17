@@ -4,6 +4,7 @@ import {
   Autocomplete,
   Box,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
   CardMedia,
@@ -168,6 +169,7 @@ function ItemDetail({ item, grId }) {
           />
         </Box>
       </Box>
+
       <Box flex={2} sx={{ width: "100%" }}>
         <Card>
           <CardContent>
@@ -185,10 +187,7 @@ function ItemDetail({ item, grId }) {
                 onChange={(e) => setName(e.target.value)}
               />
             </Box>
-            <Box className="quantity-product">
-              <IconButton onClick={handleQuantityPlus}>
-                <AddIcon />
-              </IconButton>
+            <Box className="flex-row-wrap">
               <TextField
                 label="Số lượng"
                 id="outlined-start-adornment-quantity"
@@ -196,127 +195,91 @@ function ItemDetail({ item, grId }) {
                 type="number"
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
+                inputProps={{
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                  min: 1,
+                  step: 1,
+                }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">unit</InputAdornment>
                   ),
                 }}
               />
-              <IconButton onClick={handleQuantityMoins}>
-                <RemoveOutlinedIcon />
-              </IconButton>
+              <TextField
+                label="Giá tiền"
+                id="outlined-start-adornment-money"
+                sx={{ m: 1, width: "150px" }}
+                type="number"
+                value={money}
+                onChange={(e) => setMoney(e.target.value)}
+                inputProps={{
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                  min: 1000,
+                  step: 1000,
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">vnd</InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+            <Box className="quantity-product">
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  fontSize: 20,
+                  fontWeight: 500,
+                  minWidth: "150px",
+                }}
+              >
+                Ngày hết hạn
+              </Typography>
+              <DateTimePicker
+                valueDay={expDate}
+                handleDateTimePicker={handleDateTimePicker}
+              />
+            </Box>
+            <Box className="quantity-product">
+              <Autocomplete
+                id="free-solo-storage"
+                freeSolo
+                fullWidth
+                options={listStorage}
+                getOptionLabel={(option) => option.name}
+                onChange={(e, op) => handleSelectedStorage(e, op)}
+                inputValue={storage}
+                onInputChange={(event, newInputValue) => {
+                  setStorage(newInputValue);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    value={inputStorage}
+                    onChange={handleChangeInputStorage}
+                    placeholder="Chọn vị trí"
+                  />
+                )}
+              />
             </Box>
           </CardContent>
+          <CardActions>
+            <CustomComponent.Button2>Xóa sản phẩm</CustomComponent.Button2>
+            <CustomComponent.Button1>Lưu thay đổi</CustomComponent.Button1>
+            {/* <Box className="flex-flex-end">
+            <Box sx={{ paddingRight: "5px" }}>
+              <CustomComponent.Button1>Lưu thay đổi</CustomComponent.Button1>
+            </Box>
+            <Box sx={{ paddingLeft: "5px" }}>
+              <CustomComponent.Button2>Xóa sản phẩm</CustomComponent.Button2>
+            </Box>
+            </Box> */}
+          </CardActions>
         </Card>
       </Box>
-      {/* <Box flex={2} sx={{ width: "100%"}}>
-        <Box className="quantity-product">
-          <Typography
-            variant="subtitle1"
-            sx={{ fontSize: 20, fontWeight: 500, minWidth: "150px" }}
-          >
-            Tên sản phẩm
-          </Typography>
-          <TextField
-            multiline
-            fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </Box>
-        <Box className="flex-row-wrap">
-          <Box className="quantity-product">
-            <IconButton onClick={handleQuantityPlus}>
-              <AddIcon />
-            </IconButton>
-            <TextField
-              label="Số lượng"
-              id="outlined-start-adornment-quantity"
-              sx={{ m: 1, width: "130px" }}
-              type="number"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">unit</InputAdornment>
-                ),
-              }}
-            />
-            <IconButton onClick={handleQuantityMoins}>
-              <RemoveOutlinedIcon />
-            </IconButton>
-          </Box>
-          <Box className="quantity-product">
-            <IconButton onClick={handleMoneyPlus}>
-              <AddIcon />
-            </IconButton>
-            <TextField
-              label="Giá tiền"
-              id="outlined-start-adornment-money"
-              sx={{ m: 1, width: "150px" }}
-              type="number"
-              value={money}
-              onChange={(e) => setMoney(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">vnd</InputAdornment>
-                ),
-              }}
-            />
-            <IconButton onClick={handleMoneyMoins}>
-              <RemoveOutlinedIcon />
-            </IconButton>
-          </Box>
-        </Box>
-        <Box
-          className="quantity-product"
-        >
-          <Typography
-            variant="subtitle1"
-            sx={{
-              fontSize: 20,
-              fontWeight: 500,
-              minWidth: { xs: "150px", md: "200px" },
-            }}
-          >
-            Ngày hết hạn
-          </Typography>
-          <DateTimePicker
-            valueDay={expDate}
-            handleDateTimePicker={handleDateTimePicker}
-          />
-        </Box>
-        <Box className="quantity-product">
-          <Autocomplete
-            id="free-solo-storage"
-            freeSolo
-            fullWidth
-            options={listStorage}
-            getOptionLabel={(option) => option.name}
-            onChange={(e, op) => handleSelectedStorage(e, op)}
-            inputValue={storage}
-            onInputChange={(event, newInputValue) => {
-              setStorage(newInputValue);
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                value={inputStorage}
-                onChange={handleChangeInputStorage}
-                placeholder="Chọn vị trí" 
-              />
-            )}
-          />
-        </Box>
-        <Box className="flex-flex-end">
-          <Box sx={{ paddingRight: "5px" }}>
-            <CustomComponent.Button1>Lưu thay đổi</CustomComponent.Button1>
-          </Box>
-          <Box sx={{ paddingLeft: "5px" }}>
-            <CustomComponent.Button2>Xóa sản phẩm</CustomComponent.Button2>
-          </Box>
-        </Box>
-      </Box> */}
     </Box>
   );
 }

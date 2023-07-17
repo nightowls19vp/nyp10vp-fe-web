@@ -3,6 +3,7 @@ import { Stack } from "@mui/material";
 
 import Welcome from "../features/Login/Welcome";
 import FormSignIn from "../features/Login/FormSignIn";
+import { Colors } from "../config/Colors";
 
 class Login extends Component {
   render() {
@@ -10,7 +11,7 @@ class Login extends Component {
       <Stack
         justifyContent="center"
         alignItems="center"
-        bgcolor={"#ffeacc"}
+        bgcolor={Colors.bgGray}
         sx={{ height: "100vh", width: "100%" }}
       >
         <Stack

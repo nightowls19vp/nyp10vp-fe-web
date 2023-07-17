@@ -174,6 +174,7 @@ function PersonalInformation() {
           justifyContent: "space-between",
           alignItems: { xs: "center", md: "flex-start" },
           width: "100%",
+          backgroundColor: Colors.bgGray,
         }}
         spacing={2}
       >
@@ -207,7 +208,7 @@ function PersonalInformation() {
             >
               Họ & tên
             </Typography>
-            <Box sx={{ width: `${widthDate}px` }}>
+            <Box sx={{ width: `${widthDate}px`, backgroundColor: Colors.background }}>
               <TextField
                 fullWidth
                 id="name"
@@ -227,7 +228,7 @@ function PersonalInformation() {
             >
               Email
             </Typography>
-            <Box sx={{ width: `${widthDate}px` }}>
+            <Box sx={{ width: `${widthDate}px`, backgroundColor: Colors.background }}>
               <TextField
                 fullWidth
                 disabled
@@ -247,7 +248,7 @@ function PersonalInformation() {
             >
               Số điện thoại
             </Typography>
-            <Box sx={{ width: `${widthDate}px` }}>
+            <Box sx={{ width: `${widthDate}px`, backgroundColor: Colors.background }}>
               <TextField
                 fullWidth
                 id="phone"
@@ -267,7 +268,7 @@ function PersonalInformation() {
             >
               Ngày sinh
             </Typography>
-            <Box ref={dateRef}>
+            <Box ref={dateRef} sx={{ backgroundColor: Colors.background}}>
               <DateTimePicker
                 valueDay={dob}
                 handleDateTimePicker={handleDateTimePicker}
@@ -280,7 +281,8 @@ function PersonalInformation() {
           flex={2}
           sx={{
             paddingX: "10px",
-            bgcolor: Colors.search,
+            bgcolor: Colors.background,
+            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
             width: { xs: `calc(${widthDate}px + 100px)`, md: "100%" },
           }}
           className="form-connect-social-network"
@@ -312,6 +314,7 @@ function PersonalInformation() {
           display: "flex",
           justifyContent: { xs: "center", md: "flex-start" },
           paddingLeft: { xs: "0px", md: `calc(${widthAvatar}px + 120px)` },
+          backgroundColor: Colors.bgGray,
         }}
       >
         <CustomComponent.Button1 onClick={handleButtonChange}>

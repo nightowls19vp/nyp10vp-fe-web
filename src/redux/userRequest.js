@@ -168,13 +168,13 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
     ) {
       let dataGroup = [
         {
-          name: "Group SUPER USER",
+          name: "SUPER USER",
           _id: 0,
           status: true,
           child: [],
         },
         {
-          name: "Group USER",
+          name: "USER",
           _id: 1,
           status: false,
           child: [],

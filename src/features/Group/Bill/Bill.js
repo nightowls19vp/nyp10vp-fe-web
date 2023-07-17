@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import { FaMoneyBillWave } from "react-icons/fa";
 
 import "../../../assets/css/Bill.scss";
 import BillDetail from "./BillDetail";
@@ -49,7 +50,7 @@ function Bill({ grID, item }) {
             variant="h6"
             sx={{
               fontSize: 18,
-              width: "50%",
+              width: "30%",
               display: "flex",
               justifyContent: "flex-start",
             }}
@@ -64,11 +65,28 @@ function Bill({ grID, item }) {
               width: "20%",
             }}
           >
+            <FaMoneyBillWave size={25} />
+            <Typography
+              variant="overline"
+              display="block"
+              sx={{ paddingLeft: "10px", fontSize: "16px" }}
+            >
+              {item.total}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              width: "20%",
+            }}
+          >
             <AccessTimeIcon />
             <Typography
               variant="overline"
               display="block"
-              sx={{ fontStyle: "italic" }}
+              sx={{ fontStyle: "italic", paddingLeft: "10px" }}
             >
               {day.toDateString()}
             </Typography>

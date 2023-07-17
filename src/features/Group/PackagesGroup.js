@@ -105,7 +105,7 @@ function PackagesGroup({ data, pkg, title }) {
           <Typography variant="h5" color={Colors.textPrimary}>
             Thành viên trong nhóm
           </Typography>
-          {title === "Group SUPER USER" && status ? (
+          {title === "SUPER USER" && status ? (
             <CustomComponent.Button1
               sx={{ marginBottom: "10px" }}
               onClick={handleClickOpenInvite}

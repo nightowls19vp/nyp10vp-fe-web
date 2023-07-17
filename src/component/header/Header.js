@@ -31,6 +31,7 @@ import HeaderAvatar from "./HeaderAvatar.js";
 
 import * as SB from "../Chat/SendBirdGroupChat.js";
 import { getUserCart } from "../../redux/packageRequest.js";
+import LogoMegoo from "../../assets/img/Megoo.png";
 
 const topSearch = [];
 
@@ -130,9 +131,10 @@ function Header() {
               <AiOutlineBars />
             </IconButton>
           </Box>
-          <Typography sx={{ color: Colors.primary, fontWeight: 600 }}>
+          {/* <Typography sx={{ color: Colors.primary, fontWeight: 600 }}>
             Megoo
-          </Typography>
+          </Typography> */}
+          <img src={LogoMegoo} alt="Logo" width={80} />
         </Stack>
         <Box
           flex={{ xs: 3, sm: 2 }}

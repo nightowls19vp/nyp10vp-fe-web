@@ -4,6 +4,7 @@ import { Avatar, Box, Typography } from "@mui/material";
 import "../../assets/css/Chat.scss";
 
 function Message({ mess, userId }) {
+  console.log("mess", mess);
   return (
     <Box
       sx={{
@@ -14,10 +15,10 @@ function Message({ mess, userId }) {
         alignItems: "flex-end",
       }}
     >
-      {/* {userId !== mess.user._id ? (
-        <Avatar sx={{ width: 24, height: 24 }} />
+      {userId !== mess.user._id ? (
+        <Avatar src={mess.user.avatar} sx={{ width: 24, height: 24 }} />
       ) : null}
-      {mess.type === "file" ? (
+      {/* {mess.type === "file" ? (
         <img src={mess.url} alt="Logo" width={25} />
       ) : (
         <Box className="message">

@@ -103,7 +103,7 @@ function FormSignIn() {
   return (
     <Box
       flex={2}
-      sx={{ display: { xs: "flex" } }}
+      sx={{ display: { xs: "flex" }, borderRadius: "0px 10px 10px 0px", }}
       bgcolor={Colors.background}
       className="page-sigin"
     >

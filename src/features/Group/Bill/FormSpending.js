@@ -144,6 +144,9 @@ function FormSpending({ grID, item, handleClose }) {
       spacing={2}
       id="modalFormSpending"
       className="modalModalSpending"
+      direction="column"
+      justifyContent="space-between"
+      alignItems="stretch"
       sx={{ position: "relative" }}
     >
       <Input
