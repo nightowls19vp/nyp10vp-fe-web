@@ -30,12 +30,12 @@ const profile = [
     name: "Thông tin & quyền",
     action: <InformationRulers />,
   },
-  {
-    _id: 4,
-    icon: <TbPackage size={20} />,
-    name: "Tùy chọn quảng cáo",
-    action: <ChangePassword />,
-  },
+  // {
+  //   _id: 4,
+  //   icon: <TbPackage size={20} />,
+  //   name: "Tùy chọn quảng cáo",
+  //   action: <ChangePassword />,
+  // },
   {
     _id: 5,
     icon: <TbPackage size={20} />,

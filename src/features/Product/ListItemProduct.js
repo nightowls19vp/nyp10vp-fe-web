@@ -128,9 +128,9 @@ function ListItemProduct({ item, p, grId, storageID }) {
                 {row.name}
               </StyledTableCell>
               <StyledTableCell align="right">
-                {row.quantity}/{row.unit}
+                {row.quantity} chai
               </StyledTableCell>
-              <StyledTableCell align="right">{row.money ?? 0}</StyledTableCell>
+              <StyledTableCell align="right">70.000</StyledTableCell>
               <StyledTableCell align="right">{row.exp}</StyledTableCell>
             </StyledTableRow>
           ))}

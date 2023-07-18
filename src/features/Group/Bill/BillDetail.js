@@ -144,7 +144,7 @@ function BillDetail({ grID }) {
           sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
         >
           <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
-            Nguoi chi tra:
+            Nguời chi trả:
           </Typography>
           <Typography sx={{ marginLeft: "10px" }}>
             {bill?.lender.name}

@@ -26,7 +26,7 @@ function ModalAddStock({ grID, handleClose }) {
   const [nameStock, setNameStock] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-  const [nameImg, setNameImg] = useState("");
+  const [fileImg, setFileImg] = useState(null);
   const [flag, setFlag] = useState(false);
 
   const handleChangeNameStock = (e) => {
@@ -47,7 +47,7 @@ function ModalAddStock({ grID, handleClose }) {
       return;
     }
     setImage(fileObj);
-    setNameImg(fileObj.name);
+    setFileImg(URL.createObjectURL(fileObj));
   };
 
   const handleAddStock = async () => {
@@ -84,63 +84,85 @@ function ModalAddStock({ grID, handleClose }) {
       >
         Thêm kho mới
       </Typography>
-      <Stack
-        id="modalAddStock"
-        spacing={2}
-        className="modalModalAddStock"
-        sx={{ opacity: flag ? 0.5 : 1 }}
-      >
-        <Box className="input-modal-description">
-          <CustomComponent.Button2
-            onClick={handleClick}
-            sx={{ minWidth: "150px" }}
+      <Box className="d-flex-stock">
+        {fileImg !== null ? (
+          <Box flex={1} sx={{ marginRight: "10px" }}>
+            <img src={fileImg} alt="ImageStock" className="file-image" />
+          </Box>
+        ) : null}
+        <Box flex={3}>
+          <Stack
+            id="modalAddStock"
+            spacing={2}
+            className="modalModalAddStock"
+            sx={{ opacity: flag ? 0.5 : 1 }}
           >
-            <Typography variant="body2">Chọn hình ảnh</Typography>
-            <input
-              style={{ display: "none" }}
-              ref={inputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-            />
-          </CustomComponent.Button2>
-          <Typography className="name-image-stock">{nameImg}</Typography>
+            <CustomComponent.Button2
+                onClick={handleClick}
+                sx={{ width: "fit-content" }}
+              >
+                <Typography variant="body2">Chọn hình ảnh</Typography>
+                <input
+                  style={{ display: "none" }}
+                  ref={inputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </CustomComponent.Button2>
+            {/* <Box className="input-modal-description">
+              <CustomComponent.Button2
+                onClick={handleClick}
+                sx={{ minWidth: "150px" }}
+              >
+                <Typography variant="body2">Chọn hình ảnh</Typography>
+                <input
+                  style={{ display: "none" }}
+                  ref={inputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </CustomComponent.Button2>
+              <Typography className="name-image-stock">{nameImg}</Typography>
+            </Box> */}
+            <Box className="input-modal-description">
+              <Typography variant="body2" sx={{ minWidth: "130px" }}>
+                Nhập tên kho:
+              </Typography>
+              <TextField
+                value={nameStock}
+                size="small"
+                fullWidth
+                onChange={(e) => handleChangeNameStock(e)}
+              />
+            </Box>
+            <Box className="input-modal-description">
+              <Typography variant="body2" sx={{ minWidth: "130px" }}>
+                Nhập mô tả kho:
+              </Typography>
+              <TextField
+                value={description}
+                size="small"
+                multiline
+                rows={2}
+                fullWidth
+                onChange={(e) => handleChangeDescription(e)}
+              />
+            </Box>
+            <Box sx={{ textAlign: "end" }}>
+              <CustomComponent.Button1 onClick={handleAddStock}>
+                Tạo kho mới
+              </CustomComponent.Button1>
+            </Box>
+          </Stack>
+          {flag && (
+            <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
+              <CircularProgress />
+            </Box>
+          )}
         </Box>
-        <Box className="input-modal-description">
-          <Typography variant="body2" sx={{ minWidth: "130px" }}>
-            Nhập tên kho:
-          </Typography>
-          <TextField
-            value={nameStock}
-            size="small"
-            fullWidth
-            onChange={(e) => handleChangeNameStock(e)}
-          />
-        </Box>
-        <Box className="input-modal-description">
-          <Typography variant="body2" sx={{ minWidth: "130px" }}>
-            Nhập mô tả kho:
-          </Typography>
-          <TextField
-            value={description}
-            size="small"
-            multiline
-            rows={2}
-            fullWidth
-            onChange={(e) => handleChangeDescription(e)}
-          />
-        </Box>
-        <Box sx={{ textAlign: "end" }}>
-          <CustomComponent.Button1 onClick={handleAddStock}>
-            Tạo kho mới
-          </CustomComponent.Button1>
-        </Box>
-      </Stack>
-      {flag && (
-        <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
-          <CircularProgress />
-        </Box>
-      )}
+      </Box>
     </Box>
   );
 }

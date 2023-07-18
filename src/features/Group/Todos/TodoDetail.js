@@ -69,9 +69,16 @@ function TodoDetail({ grID, item }) {
       todos.push(formTodo);
       let formData = {
         todos: todos,
-        state: item.state
+        state: item.state,
       };
-      await addTodo(grID, item._id, formData, user?.accessToken, dispatch, axiosJWT);
+      await addTodo(
+        grID,
+        item._id,
+        formData,
+        user?.accessToken,
+        dispatch,
+        axiosJWT
+      );
       setTodo("");
       setDescription("");
     }
@@ -98,7 +105,7 @@ function TodoDetail({ grID, item }) {
       }
       newTodo.push(formData);
     }
-    
+
     const res = await updateIsCompletedTodo(
       item._id,
       todo_id,
@@ -108,8 +115,7 @@ function TodoDetail({ grID, item }) {
     );
     if (res?.statusCode === 200) {
       setListTodo(newTodo);
-    }
-    else {
+    } else {
       setListTodo(newArray);
     }
   };
@@ -142,7 +148,11 @@ function TodoDetail({ grID, item }) {
           size="small"
           value={todo}
           onChange={(e) => setTodo(e.target.value)}
-          sx={{ margin: "5px", width: { xs: "100%", md: "50%" }, borderRadius: "20px"}}
+          sx={{
+            margin: "5px",
+            width: { xs: "100%", md: "50%" },
+            borderRadius: "20px",
+          }}
         />
         <Box
           sx={{
@@ -161,7 +171,9 @@ function TodoDetail({ grID, item }) {
             onChange={(e) => setDescription(e.target.value)}
             sx={{ margin: "5px", borderRadius: "20px" }}
           />
-          <CustomComponent.Button2 onClick={handleAddTodo}>Thêm</CustomComponent.Button2>
+          <CustomComponent.Button2 onClick={handleAddTodo}>
+            Thêm
+          </CustomComponent.Button2>
         </Box>
       </Box>
       <Typography className="todo-msg">{msg}</Typography>
@@ -174,15 +186,24 @@ function TodoDetail({ grID, item }) {
               <Checkbox
                 checked={todo.isCompleted}
                 onChange={(e) => handleIsCompleted(e, idx)}
-                sx={{ fontSize: "24px"}}
+                sx={{ fontSize: "20px" }}
               />
               <Typography
                 sx={{
-                  fontSize: "24px",
+                  fontSize: "20px",
                   textDecoration: todo.isCompleted ? "line-through" : "none",
                 }}
               >
                 {todo.todo}
+              </Typography>
+              <Typography
+                sx={{
+                  paddingLeft: "20px",
+                  fontSize: "16px",
+                  fontStyle: "italic",
+                }}
+              >
+                {todo.description}
               </Typography>
             </Box>
           ))}

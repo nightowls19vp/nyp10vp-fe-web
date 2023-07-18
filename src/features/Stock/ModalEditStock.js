@@ -24,7 +24,7 @@ function ModalEditStock({ item, grID, handleClose }) {
   const [nameStock, setNameStock] = useState(item.name);
   const [description, setDescription] = useState(item.description);
   const [image, setImage] = useState(null);
-  const [nameImg, setNameImg] = useState("");
+  const [fileImg, setFileImg] = useState(item.image);
   const [status, setStatus] = useState(true);
 
   const handleChangeNameStock = (e) => {
@@ -45,7 +45,7 @@ function ModalEditStock({ item, grID, handleClose }) {
       return;
     }
     setImage(fileObj);
-    setNameImg(fileObj.name);
+    setFileImg(URL.createObjectURL(fileObj));
   };
 
   const handleEditStock = async () => {
@@ -77,17 +77,17 @@ function ModalEditStock({ item, grID, handleClose }) {
     handleClose();
   };
 
-    // const handleAddStock = async () => {
-    //   let formData = {
-    //       groupId: grID,
-    //       name: nameStock,
-    //       addedBy: user?.data.userInfo._id,
-    //       file: image,
-    //       description: description
-    //   }
+  // const handleAddStock = async () => {
+  //   let formData = {
+  //       groupId: grID,
+  //       name: nameStock,
+  //       addedBy: user?.data.userInfo._id,
+  //       file: image,
+  //       description: description
+  //   }
 
-    //   await postStorageLocation(grID, formData, user?.accessToken, dispatch, axiosJWT);
-    // };
+  //   await postStorageLocation(grID, formData, user?.accessToken, dispatch, axiosJWT);
+  // };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -99,11 +99,18 @@ function ModalEditStock({ item, grID, handleClose }) {
       >
         Chỉnh sửa kho
       </Typography>
-      <Stack id="modalAddStock" spacing={2} className="modalModalAddStock">
-        <Box className="input-modal-description">
+      <Box className="d-flex-stock">
+        {fileImg !== null ? (
+          <Box flex={1} sx={{ marginRight: "10px" }}>
+            <img src={fileImg} alt="ImageStock" className="file-image" />
+          </Box>
+        ) : null}
+     
+      <Box flex={3}>
+        <Stack id="modalAddStock" spacing={2} className="modalModalAddStock">
           <CustomComponent.Button2
             onClick={handleClick}
-            sx={{ minWidth: "150px" }}
+            sx={{ width: "fit-content" }}
           >
             <Typography variant="body2">Chọn hình ảnh</Typography>
             <input
@@ -114,69 +121,69 @@ function ModalEditStock({ item, grID, handleClose }) {
               onChange={handleFileChange}
             />
           </CustomComponent.Button2>
-          <Typography className="name-image-stock">{nameImg}</Typography>
-        </Box>
-        <Box className="input-modal-description">
-          <Typography variant="body2" sx={{ minWidth: "130px" }}>
-            Nhập tên kho:
-          </Typography>
-          <TextField
-            value={nameStock}
-            size="small"
-            fullWidth
-            onChange={(e) => handleChangeNameStock(e)}
-          />
-        </Box>
-        <Box className="input-modal-description">
-          <Typography variant="body2" sx={{ minWidth: "130px" }}>
-            Nhập mô tả kho:
-          </Typography>
-          <TextField
-            value={description}
-            size="small"
-            multiline
-            rows={2}
-            fullWidth
-            onChange={(e) => handleChangeDescription(e)}
-          />
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", md: "row" },
-            justifyContent: "flex-end",
-          }}
-        >
-          <Box
-            sx={{
-              width: {
-                xs: "100%",
-                md: "115px",
-              },
-              marginY: "3px",
-              marginRight: { xs: "0px", md: "3px" },
-            }}
-          >
-            <CustomComponent.Button2 fullWidth onClick={handleDeleteStock}>
-              Xóa kho
-            </CustomComponent.Button2>
+          <Box className="input-modal-description">
+            <Typography variant="body2" sx={{ minWidth: "130px" }}>
+              Nhập tên kho:
+            </Typography>
+            <TextField
+              value={nameStock}
+              size="small"
+              fullWidth
+              onChange={(e) => handleChangeNameStock(e)}
+            />
+          </Box>
+          <Box className="input-modal-description">
+            <Typography variant="body2" sx={{ minWidth: "130px" }}>
+              Nhập mô tả kho:
+            </Typography>
+            <TextField
+              value={description}
+              size="small"
+              multiline
+              rows={2}
+              fullWidth
+              onChange={(e) => handleChangeDescription(e)}
+            />
           </Box>
           <Box
             sx={{
-              width: {
-                xs: "100%",
-                md: "115px",
-              },
-              marginY: "3px",
-              marginLeft: { xs: "0px", md: "3px" },
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              justifyContent: "flex-end",
             }}
           >
-            <CustomComponent.Button1 fullWidth onClick={handleEditStock}>
-              Lưu thay đổi
-            </CustomComponent.Button1>
+            <Box
+              sx={{
+                width: {
+                  xs: "100%",
+                  md: "115px",
+                },
+                marginY: "3px",
+                marginRight: { xs: "0px", md: "3px" },
+              }}
+            >
+              <CustomComponent.Button2 fullWidth onClick={handleDeleteStock}>
+                Xóa kho
+              </CustomComponent.Button2>
+            </Box>
+            <Box
+              sx={{
+                width: {
+                  xs: "100%",
+                  md: "115px",
+                },
+                marginY: "3px",
+                marginLeft: { xs: "0px", md: "3px" },
+              }}
+            >
+              <CustomComponent.Button1 fullWidth onClick={handleEditStock}>
+                Lưu thay đổi
+              </CustomComponent.Button1>
+            </Box>
           </Box>
-        </Box>
-      </Stack>
+        </Stack>
+      </Box>
+      </Box>
     </Box>
   );
 }

@@ -35,12 +35,8 @@ function DetailItem({ item }) {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [member, setMember] = useState(item.noOfMember);
-  // const [arrowLeftMem, setArrowLeftMem] = useState(true);
-  // const [arrowRightMem, setArrowRightMem] = useState(false);
 
   const [duration, setDuration] = useState(item.duration);
-  // const [arrowLeftDura, setArrowLeftDura] = useState(true);
-  // const [arrowRightDura, setArrowRightDura] = useState(false);
 
   const [money, setMoney] = useState(item.price);
 
@@ -61,20 +57,6 @@ function DetailItem({ item }) {
       setDuration(10);
     }
   };
-
-  // const handleArrowLeftMem = () => {
-  //   setMember(member - 1);
-  // };
-  // const handleArrowRightMem = () => {
-  //   setMember(member + 1);
-  // };
-
-  // const handleArrowLeftDura = () => {
-  //   setDuration(duration - 1);
-  // };
-  // const handleArrowRightDura = () => {
-  //   setDuration(duration + 1);
-  // };
 
   const handleButtonAdd = async (event, item) => {
     let day = new Date();
@@ -246,30 +228,6 @@ function DetailItem({ item }) {
   };
 
   useEffect(() => {
-    // if (member <= item.noOfMember) {
-    //   setArrowLeftMem(true);
-    // } else {
-    //   setArrowLeftMem(false);
-    // }
-
-    // if (member > 100) {
-    //   setArrowRightMem(true);
-    // } else {
-    //   setArrowRightMem(false);
-    // }
-
-    // if (duration <= item.duration) {
-    //   setArrowLeftDura(true);
-    // } else {
-    //   setArrowLeftDura(false);
-    // }
-
-    // if (duration > 100) {
-    //   setArrowRightDura(true);
-    // } else {
-    //   setArrowRightDura(false);
-    // }
-
     if (duration >= 12) {
       setMoney(
         (item.price + (member - 2) * duration * (item.coefficient ?? 0)) * 0.7
@@ -336,7 +294,7 @@ function DetailItem({ item }) {
               />
               <Input
                 size="small"
-                sx={{ width: '40px', paddingLeft: '12px' }}
+                sx={{ width: "40px", paddingLeft: "12px" }}
                 value={member}
                 onBlur={handleBlur}
                 onChange={handleInputChange}
@@ -359,27 +317,6 @@ function DetailItem({ item }) {
             </Box>
           ) : (
             <Box className="item">
-              {/* <IconButton
-                disabled={arrowLeftDura}
-                onClick={handleArrowLeftDura}
-              >
-                <CiSquareMinus
-                  color={arrowLeftDura ? null : Colors.textPrimary}
-                  size={30}
-                />
-              </IconButton>
-              <Typography variant="subtitle1" fontSize={18}>
-                {duration}
-              </Typography>
-              <IconButton
-                disabled={arrowRightDura}
-                onClick={handleArrowRightDura}
-              >
-                <CiSquarePlus
-                  color={arrowRightDura ? null : Colors.textPrimary}
-                  size={30}
-                />
-              </IconButton> */}
               <CustomComponents.PrettoSlider
                 valueLabelDisplay="auto"
                 aria-label="pretto slider"
@@ -390,7 +327,7 @@ function DetailItem({ item }) {
               />
               <Input
                 size="small"
-                sx={{ width: '40px', paddingLeft: '12px'}}
+                sx={{ width: "40px", paddingLeft: "12px" }}
                 value={duration}
                 onBlur={handleBlur}
                 onChange={handleInputChange}

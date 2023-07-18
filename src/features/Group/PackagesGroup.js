@@ -82,25 +82,27 @@ function PackagesGroup({ data, pkg, title }) {
   };
 
   return (
-    <Stack spacing={3} sx={{ width: "70%" }}>
+    <Stack
+      spacing={3}
+      sx={{ width: { xs: "90%", sm: "85%", md: "70%" }, maxWidth: "600px" }}
+    >
       {pkg ? <PackageGroup item={pkg} data={data} title={title} /> : null}
       <Stack
         spacing={1}
         sx={{
-          width: "100%",
+          //width: "100%",
           bgcolor: Colors.background,
           borderRadius: "10px",
           boxShadow: "2px 2px 5px #8c8c8c",
+          padding: "20px",
         }}
       >
         <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingX: "20px",
-            paddingTop: "10px",
-          }}
+          // sx={{
+          //   paddingX: "20px",
+          //   paddingTop: "10px",
+          // }}
+          className="flex-group"
         >
           <Typography variant="h5" color={Colors.textPrimary}>
             Thành viên trong nhóm

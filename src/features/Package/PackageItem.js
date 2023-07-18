@@ -44,7 +44,7 @@ function PackageItem({ data, grpId }) {
                   display: "flex",
                   flexDirection: "row",
                   flexWrap: { xs: "wrap", sm: "wrap", lg: "nowrap" },
-                  justifyContent: "center",
+                  justifyContent: { xs: "center", md: "flex-start"},
                   paddingY: "3%",
                 }}
               >

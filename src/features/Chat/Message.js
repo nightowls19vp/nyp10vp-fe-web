@@ -2,6 +2,7 @@ import React from "react";
 import { Avatar, Box, Typography } from "@mui/material";
 
 import "../../assets/css/Chat.scss";
+import { Colors } from "../../config/Colors";
 
 function Message({ mess, userId }) {
   console.log("mess", mess);
@@ -25,7 +26,13 @@ function Message({ mess, userId }) {
           <Typography> {mess.text} </Typography>
         </Box>
       )} */}
-      <Box className="message">
+      <Box
+        className="message"
+        sx={{
+          backgroundColor:
+            userId !== mess.user._id ? Colors.gray : Colors.chat,
+        }}
+      >
         <Typography> {mess.text} </Typography>
       </Box>
     </Box>

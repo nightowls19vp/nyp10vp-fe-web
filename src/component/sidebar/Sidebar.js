@@ -10,7 +10,7 @@ function SideBar({ data, title, selectedID }) {
   return (
     <List
       sx={{
-        // display: { xs: status ? "block" : "none", sm: "block" },
+        width: "max-content",
       }}
     >
       {dataSidebar.map((route, index) =>

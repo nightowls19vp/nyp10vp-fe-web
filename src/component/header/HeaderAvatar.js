@@ -11,26 +11,26 @@ import { loginSuccess } from "../../redux/authSlice.js";
 import { logoutUser } from "../../redux/authRequest.js";
 
 function HeaderAvatar({ data, user }) {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-    let axiosJWT = createAxios(user, dispatch, loginSuccess);
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-    const image = user?.data.userInfo.avatar ?? "";
-    const [isShown, setIsShown] = useState(false);
+  const image = user?.data.userInfo.avatar ?? "";
+  const [isShown, setIsShown] = useState(false);
 
-    const handleClickProfile = () => {
-        navigate("/profile");
-      };
-    
-      const handleClickLogout = async () => {
-        console.log(user?.accessToken);
-        await logoutUser(user?.accessToken, dispatch, navigate, axiosJWT);
-      };
-    
-      const handleClickLogin = () => {
-        navigate("/login");
-      };
+  const handleClickProfile = () => {
+    navigate("/profile");
+  };
+
+  const handleClickLogout = async () => {
+    console.log(user?.accessToken);
+    await logoutUser(user?.accessToken, dispatch, navigate, axiosJWT);
+  };
+
+  const handleClickLogin = () => {
+    navigate("/login");
+  };
   return (
     <>
       {data.map((data, index) => (
@@ -55,7 +55,7 @@ function HeaderAvatar({ data, user }) {
               flexDirection: "column",
               width: "200px",
               boxShadow: "2px 2px 5px #8c8c8c",
-              borderRadius: "20px",
+              borderRadius: "10px",
             }}
           >
             {user ? (

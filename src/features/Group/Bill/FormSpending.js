@@ -14,6 +14,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import ClearIcon from "@mui/icons-material/Clear";
 
 import { createAxios } from "../../../http/createInstance";
 import "../../../assets/css/Group.scss";
@@ -231,23 +232,34 @@ function FormSpending({ grID, item, handleClose }) {
             {route._id !== "0" && route.amount !== 0 ? (
               <Box className="added-member-success">
                 <Box flex={2}>
-                  <Typography variant="button" display="block" fontSize={14}>
+                  <Typography
+                    variant="button"
+                    display="block"
+                    sx={{ fontSize: 14 }}
+                  >
                     {route.name}
-                  </Typography>
-                </Box>
-                <Box flex={1}>
-                  <Typography variant="button" display="block" fontSize={14}>
-                    {route.amount} vnd
                   </Typography>
                 </Box>
                 <Box flex={1}>
                   <Typography
                     variant="button"
                     display="block"
-                    sx={{ fontSize: 14, textAlign: "center" }}
+                    sx={{ fontSize: 14 }}
+                  >
+                    {route.amount} vnd
+                  </Typography>
+                </Box>
+                <Box flex={1} className="bill-end">
+                  <Typography
+                    variant="button"
+                    display="block"
+                    sx={{ fontSize: 14 }}
                   >
                     pending
                   </Typography>
+                  <IconButton>
+                    <ClearIcon sx={{ color: Colors.error }} />
+                  </IconButton>
                 </Box>
               </Box>
             ) : (
@@ -259,7 +271,7 @@ function FormSpending({ grID, item, handleClose }) {
                   <Select
                     labelId="demo-simple-select-member"
                     id="select-member"
-                    size="small"
+                    //size="small"
                     value={route._id}
                     label="Chọn thành viên"
                     onChange={handleChangeMember}
@@ -277,7 +289,9 @@ function FormSpending({ grID, item, handleClose }) {
                 <Box sx={{ width: "50%", paddingLeft: "10px" }}>
                   <TextField
                     fullWidth
-                    size="small"
+                    type="number"
+                    min={1000}
+                    //size="small"
                     value={money}
                     placeholder="Nhập tiền"
                     onChange={(e) => handleChangeAmount(e, idx)}
@@ -307,7 +321,7 @@ function FormSpending({ grID, item, handleClose }) {
           sx={{ width: "100%" }}
           onClick={handleGroupBill}
         >
-          Hoàn thành
+          Lưu chi tiêu
         </CustomComponent.Button1>
       </Box>
       {flag && (

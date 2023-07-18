@@ -46,7 +46,9 @@ function SidebarLayout({ data, title, selectedID, children }) {
           bgcolor={Colors.background}
           sx={{
             display: { xs: showSidebar ? "flex" : "none", sm: "flex" },
+            //width: { xs: "80%", sm: "300px", lg: "350px"},
             maxWidth: '350px',
+            width: "max-content",
           }}
           ref={refSidebar}
         >
@@ -60,7 +62,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
             flexDirection: "column",
             justifyContent: "space-between",
             alignItems: "stretch",
-            paddingX: { sx: 0, sm: "15px", md: "20px", lg: "30px"},
+            paddingX: { xs: "0px", md: "2%", lg: "5%"},
             backgroundColor: Colors.bgGray,
           }}
           paddingY={5}

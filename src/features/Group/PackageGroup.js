@@ -87,20 +87,15 @@ function PackageGroup({ item, data, title }) {
       <Stack
         spacing={1}
         sx={{
-          width: "100%",
+          //width: "100%",
           bgcolor: Colors.background,
           borderRadius: "10px",
           boxShadow: "2px 2px 5px #8c8c8c",
+          padding: "20px",
         }}
       >
         <Box
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingX: "20px",
-            paddingTop: "10px",
-          }}
+         className="flex-group"
         >
           <Typography variant="h5" color={Colors.textPrimary}>
             Gói người dùng

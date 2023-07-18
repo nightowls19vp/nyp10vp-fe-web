@@ -16,4 +16,5 @@ export const Colors = {
     camera: "#e0e4eb",
     error: "#e60000",
     success: "#009933",
+    chat: "#ffca80",
 };

@@ -131,9 +131,6 @@ function Header() {
               <AiOutlineBars />
             </IconButton>
           </Box>
-          {/* <Typography sx={{ color: Colors.primary, fontWeight: 600 }}>
-            Megoo
-          </Typography> */}
           <img src={LogoMegoo} alt="Logo" width={80} />
         </Stack>
         <Box

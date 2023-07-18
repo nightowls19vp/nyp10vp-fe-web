@@ -177,7 +177,6 @@ function SuperUser({ item, title }) {
 
       <Box
         sx={{
-          // width: { xs: "100%", lg: "70%" },
           width: "100%",
           typography: "body1",
         }}
@@ -214,7 +213,10 @@ function SuperUser({ item, title }) {
             </TabPanel>
           </Box>
           <Box sx={{ width: "100%" }}>
-            <TabPanel value="2" sx={{ display: "flex", justifyContent: "center" }}>
+            <TabPanel
+              value="2"
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
               {item.packages.otherPakages.length > 0 ? (
                 <OtherPackages item={item.packages.otherPakages} />
               ) : null}
