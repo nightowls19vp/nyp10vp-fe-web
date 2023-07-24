@@ -304,7 +304,7 @@ export const searchProvinceVietNam = async (search, token) => {
 
 export const searchDistrictVietNam = async (search, pCode, token) => {
   try {
-    const res = await apiClient.get("/p", {
+    const res = await apiClient.get("/d", {
       params: {
         q: search,
         p: pCode,
@@ -321,12 +321,12 @@ export const searchDistrictVietNam = async (search, pCode, token) => {
   }
 };
 
-export const searchWarVietNam = async (search, pCode, token) => {
+export const searchWarVietNam = async (search, dCode, token) => {
   try {
-    const res = await apiClient.get("/p", {
+    const res = await apiClient.get("/w", {
       params: {
         q: search,
-        p: pCode,
+        d: dCode,
       },
       headers: {
         accept: "*/*",
@@ -356,6 +356,21 @@ export const searchStorageLocation = async (
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
+      },
+    });
+    return res?.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const addPurchaseLocations = async (data, token, axiosJWT) => {
+  try {
+    const res = await axiosJWT.post("/prod-mgmt/purchase-locations", data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     });
     return res?.data;

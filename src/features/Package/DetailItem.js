@@ -356,11 +356,13 @@ function DetailItem({ item }) {
       >
         <CustomComponents.Button2
           onClick={(event) => handleButtonAdd(event, item)}
+          sx={{ width: "50%"}}
         >
           Thêm vào giỏ hàng
         </CustomComponents.Button2>
         <CustomComponents.Button1
           onClick={(event) => handleButtonBuy(event, item)}
+          sx={{ width: "50%"}}
         >
           Mua gói
         </CustomComponents.Button1>

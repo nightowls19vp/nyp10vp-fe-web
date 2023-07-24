@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 
 import {
   Box,
@@ -6,7 +6,10 @@ import {
   TextField,
   Typography,
   Autocomplete,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
+import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 
 import { createAxios } from "../../http/createInstance";
 
@@ -22,8 +25,9 @@ import "../../assets/css/Product.scss";
 import "../../assets/css/Autocomplete.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker";
+import { Colors } from "../../config/Colors";
 
-function AddProduct({ grId, storageID, handleCreatePro }) {
+function AddProduct({ grId, storageID, handleCreatePro, handleAddAddress }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.auth.login?.currentUser);
 
@@ -59,7 +63,7 @@ function AddProduct({ grId, storageID, handleCreatePro }) {
     let character = e.target.value;
     setTimeout(async () => {
       await searchDataGroupProducts(character);
-    }, 300);
+    }, 200);
     setInputProduct(character);
   };
 
@@ -70,21 +74,39 @@ function AddProduct({ grId, storageID, handleCreatePro }) {
       user?.accessToken,
       axiosJWT
     );
-    
-    setListAdrress(res);
+    let arr = [];
+    for (let el of res) {
+      let formData = {
+        id: el.id,
+        name:
+          el.name +
+          ", " +
+          el.address.addressLine1 +
+          ", " +
+          el.address.wardName +
+          ", " +
+          el.address.districtName +
+          ", " +
+          el.address.provinceName,
+      };
+      arr.push(formData);
+    }
+    setListAdrress(arr);
   };
-  
+
   const handleChangeInputAddress = (e) => {
     let character = e.target.value;
     setTimeout(async () => {
       await searchDataPurchaseLocations(character);
-    }, 300);
+    }, 200);
     setInputAddress(character);
-  }
+  };
 
   const handleSelectedAddress = (e, op) => {
     if (op) {
       setAddr(op.id);
+    } else {
+      setAddr(null);
     }
   };
 
@@ -182,35 +204,42 @@ function AddProduct({ grId, storageID, handleCreatePro }) {
           handleDateTimePicker={handleDateTimePicker}
         />
       </Box>
-      <Autocomplete
-        id="free-solo-address"
-        freeSolo
-        fullWidth
-        options={listAddress}
-        getOptionLabel={(option) => option.name}
-        onChange={(e, op) => handleSelectedAddress(e, op)}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            value={inputAddress}
-            onChange={handleChangeInputAddress}
-            placeholder="Chọn nơi mua"
-          />
-        )}
-      />
-      {prod !== null ? (
-        <Box sx={{ textAlign: "end" }}>
+      <Box className="d-flex" sx={{ width: "100%" }}>
+        <Autocomplete
+          id="free-solo-address"
+          fullWidth
+          freeSolo
+          options={listAddress}
+          getOptionLabel={(option) => option.name}
+          onChange={(e, op) => handleSelectedAddress(e, op)}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              value={inputAddress}
+              onChange={handleChangeInputAddress}
+              placeholder="Chọn nơi mua"
+            />
+          )}
+        />
+        <Tooltip title="Thêm địa chỉ mới">
+          <IconButton onClick={handleAddAddress}>
+            <AddLocationAltIcon
+              sx={{ fontSize: "40px", color: Colors.textPrimary }}
+            />
+          </IconButton>
+        </Tooltip>
+      </Box>
+      <Box>
+        {prod !== null ? (
           <CustomComponent.Button1 onClick={handleAddProd}>
             Thêm sản phẩm vào kho
           </CustomComponent.Button1>
-        </Box>
-      ) : (
-        <Box sx={{ textAlign: "end" }}>
-          <CustomComponent.Button1 onClick={(event) => handleCreatePro(true)}>
+        ) : (
+          <CustomComponent.Button1 onClick={(event) => handleCreatePro()}>
             Tạo sản phẩm mới
           </CustomComponent.Button1>
-        </Box>
-      )}
+        )}
+      </Box>
     </Stack>
   );
 }

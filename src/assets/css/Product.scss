@@ -39,8 +39,7 @@
 }
 
 .addAddProduct {
-    //max-height: calc(100vh - 400px);
-    height: 100%;
+    max-height: calc(100vh - 300px);
     width: 100%;
     overflow: auto;
     padding-right: 10px;
@@ -61,7 +60,7 @@
 
 
 .createCreateProduct {
-    height: calc(100vh - 300px);
+    height: calc(100vh - 100px);
     overflow: auto;
     padding-right: 10px;
 }

@@ -20,6 +20,7 @@ import AddProduct from "./AddProduct";
 import CreateProduct from "./CreateProduct";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
+import AddAddress from "./AddAddress";
 
 const style = {
   position: "absolute",
@@ -27,9 +28,6 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: { xs: "90%", sm: "70%", md: "60%", lg: "50%" },
-  //minHeight: "300px",
-  //height: "50%",
-  height: { xs: "90%", sm: "70%", md: "50%" },
   bgcolor: "background.paper",
   border: "1px solid #000",
   boxShadow: 24,
@@ -43,22 +41,27 @@ function ProductItem({ grId, storageID }) {
 
   const [openAdd, setOpenAdd] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
+  const [openAddress, setOpenAddress] = useState(false);
+  const [number, setNumber] = useState(0);
 
-  const handleOpenAdd = async () => {
+  const handleOpenAdd = () => {
     setOpenAdd(true);
   };
   const handleCloseAdd = () => setOpenAdd(false);
 
-  const handleCreatePro = (flag) => {
+  const handleCreatePro = () => {
     setOpenAdd(false);
     setOpenCreate(true);
   };
 
   const handleCloseCreatePro = () => setOpenCreate(false);
 
-  // const handleAddress = (p, d, w) => {
-  //   console.log(p, d, w);
-  // }
+  const handleAddress = () => {
+    setOpenAdd(false);
+    setOpenAddress(true);
+  }
+
+  const handleCloseAddress = () => setOpenAddress(false);
 
   return (
     <Stack
@@ -105,18 +108,34 @@ function ProductItem({ grId, storageID }) {
         aria-describedby="modal-modal-product"
       >
         <Box sx={style}>
-          <AddProduct grId={grId} storageID={storageID} handleCreatePro={handleCreatePro} />
+          <AddProduct
+            grId={grId}
+            storageID={storageID}
+            handleCreatePro={handleCreatePro}
+            handleAddAddress={handleAddress}
+          />
         </Box>
       </Modal>
 
       <Modal
         open={openCreate}
         onClose={handleCloseCreatePro}
-        aria-labelledby="modal-modal-add-product"
+        aria-labelledby="modal-modal-creat-product"
         aria-describedby="modal-modal-product"
       >
         <Box sx={style}>
           <CreateProduct grId={grId} />
+        </Box>
+      </Modal>
+
+      <Modal
+        open={openAddress}
+        onClose={handleCloseAddress}
+        aria-labelledby="modal-modal-add-address"
+        aria-describedby="modal-modal-address"
+      >
+        <Box sx={style}>
+          <AddAddress grID={grId} />
         </Box>
       </Modal>
     </Stack>
