@@ -6,6 +6,8 @@ import {
   Typography,
   Box,
   CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 import { createAxios } from "../../http/createInstance.js";
@@ -15,6 +17,7 @@ import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
 import { postStorageLocation } from "../../redux/stockRequest";
+import { updateMessage, updateOpenSnackbar, updateStatus } from "../../redux/messageSlice.js";
 
 function ModalAddStock({ grID, handleClose }) {
   const inputRef = useRef();
@@ -66,9 +69,18 @@ function ModalAddStock({ grID, handleClose }) {
       dispatch,
       axiosJWT
     );
-
+   
     if (res != null) {
       setFlag(false);
+      if (res?.statusCode === 200) {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Tạo kho lưu trữ thành công!"));
+      } else {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Tạo kho lưu trữ thất bại!"));
+      }
     }
 
     handleClose();
@@ -98,34 +110,18 @@ function ModalAddStock({ grID, handleClose }) {
             sx={{ opacity: flag ? 0.5 : 1 }}
           >
             <CustomComponent.Button2
-                onClick={handleClick}
-                sx={{ width: "fit-content" }}
-              >
-                <Typography variant="body2">Chọn hình ảnh</Typography>
-                <input
-                  style={{ display: "none" }}
-                  ref={inputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-              </CustomComponent.Button2>
-            {/* <Box className="input-modal-description">
-              <CustomComponent.Button2
-                onClick={handleClick}
-                sx={{ minWidth: "150px" }}
-              >
-                <Typography variant="body2">Chọn hình ảnh</Typography>
-                <input
-                  style={{ display: "none" }}
-                  ref={inputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-              </CustomComponent.Button2>
-              <Typography className="name-image-stock">{nameImg}</Typography>
-            </Box> */}
+              onClick={handleClick}
+              sx={{ width: "fit-content" }}
+            >
+              <Typography variant="body2">Chọn hình ảnh</Typography>
+              <input
+                style={{ display: "none" }}
+                ref={inputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+            </CustomComponent.Button2>
             <Box className="input-modal-description">
               <Typography variant="body2" sx={{ minWidth: "130px" }}>
                 Nhập tên kho:

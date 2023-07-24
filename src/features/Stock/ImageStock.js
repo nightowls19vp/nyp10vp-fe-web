@@ -26,6 +26,9 @@ function ImageStock({ item, grID }) {
 
   const [openDetail, setOpenDetail] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  // const [status, setStatus] = useState(false);
+  // const [msg, setMsg] = useState("");
+  // const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const handleClickImage = () => {
     navigate(`/stock/product-stock?grId=${grID}&storageId=${item.id}`);
@@ -35,7 +38,9 @@ function ImageStock({ item, grID }) {
     setOpenEdit(true);
   };
 
-  const handleClose = () => setOpenEdit(false);
+  const handleClose = () => {
+    setOpenEdit(false);
+  };
 
   return (
     <Box

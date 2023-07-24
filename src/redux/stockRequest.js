@@ -113,7 +113,6 @@ export const updateStorageLocation = async (
 
     await getGroupActivedByUserId(token, dispatch, axiosJWT);
     dispatch(setIdOfStock(groupId));
-    console.log(res?.data);
     return res?.data;
   } catch (error) {
     return error.response.data;
@@ -138,7 +137,7 @@ export const deletedStorageLocation = async (
       }
     );
     await getGroupActivedByUserId(token, dispatch, axiosJWT);
-    console.log(res?.data);
+    return res?.data;
   } catch (error) {
     return error.response.data;
   }

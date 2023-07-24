@@ -7,6 +7,7 @@ import {
   Typography,
   Alert,
   AlertTitle,
+  CircularProgress,
 } from "@mui/material";
 import { AiFillCamera } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,7 +49,7 @@ function PersonalInformation() {
   const socialAcc = userInfo.socialAccounts !== undefined ? true : false;
   const [widthDate, setWidthDate] = useState(0);
   const [widthAvatar, setWidthAvatar] = useState(0);
-  const [status, setStatus] = useState(0);
+  const [status, setStatus] = useState(false);
   const [msg, setMsg] = useState("");
 
   const handleClick = () => {
@@ -60,6 +61,7 @@ function PersonalInformation() {
     if (!fileObj) {
       return;
     }
+    setStatus(true);
     const form = new FormData();
     form.append("file", fileObj);
     const res = await uploadFile(
@@ -67,7 +69,6 @@ function PersonalInformation() {
       user?.accessToken,
       form
     );
-
     const formAvatar = new FormData();
     formAvatar.append("avatar", res.data);
     const resImg = await updateAvatarUser(
@@ -78,19 +79,23 @@ function PersonalInformation() {
       axiosJWT
     );
 
-    if (resImg.statusCode === 200) {
-      setImage(res.data);
-      setStatus(1);
-      setMsg("Cập nhật thông tin thành công");
-    } else {
-      setStatus(2);
-      setMsg("Cập nhật thông tin thất bại!");
+    if (resImg != null) {
+      setStatus(false);
     }
 
-    setTimeout(() => {
-      setStatus(0);
-      setMsg("");
-    }, 5000);
+    // if (resImg.statusCode === 200) {
+    //   setImage(res.data);
+    //   setStatus(1);
+    //   setMsg("Cập nhật thông tin thành công");
+    // } else {
+    //   setStatus(2);
+    //   setMsg("Cập nhật thông tin thất bại!");
+    // }
+
+    // setTimeout(() => {
+    //   setStatus(0);
+    //   setMsg("");
+    // }, 5000);
   };
 
   const handleDateTimePicker = (dateValue) => {
@@ -125,19 +130,19 @@ function PersonalInformation() {
       axiosJWT
     );
 
-    if (res?.statusCode === 200) {
-      setStatus(1);
-      setMsg("Cập nhật thông tin thành công");
-      return;
-    } else {
-      setStatus(2);
-      setMsg("Cập nhật thông tin thất bại!");
-    }
+    // if (res?.statusCode === 200) {
+    //   setStatus(1);
+    //   setMsg("Cập nhật thông tin thành công");
+    //   return;
+    // } else {
+    //   setStatus(2);
+    //   setMsg("Cập nhật thông tin thất bại!");
+    // }
 
-    setTimeout(() => {
-      setStatus(0);
-      setMsg("");
-    }, 3000);
+    // setTimeout(() => {
+    //   setStatus(0);
+    //   setMsg("");
+    // }, 3000);
   };
 
   const handleConnectSocialAcc = () => {
@@ -164,6 +169,7 @@ function PersonalInformation() {
       sx={{
         backgroundColor: Colors.background,
         borderRadius: "10px",
+        position: "relative"
       }}
     >
       <Stack
@@ -334,6 +340,11 @@ function PersonalInformation() {
           </Alert>
         )}
       </Box>
+      {status && (
+            <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
+              <CircularProgress />
+            </Box>
+          )}
     </Stack>
   );
 }

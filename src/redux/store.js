@@ -16,6 +16,7 @@ import authReducer from "./authSlice";
 import packageSlice from "./packageSlice";
 import userSlice from "./userSlice";
 import stockSlide from "./stockSlide";
+import messageSlice from "./messageSlice";
 
 
 // export const store = configureStore({
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   package: packageSlice,
   user: userSlice,
   stock: stockSlide,
+  message: messageSlice,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, Snackbar, Alert } from "@mui/material";
 
 import HeaderComponent from "../component/header/Header";
 import SideBarComponent from "../component/sidebar/Sidebar";
@@ -7,9 +7,11 @@ import FooterComponent from "../component/footer/Footer";
 
 import { Colors } from "../config/Colors";
 import "../assets/css/Content.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateOpenSnackbar } from "../redux/messageSlice";
 
 function SidebarLayout({ data, title, selectedID, children }) {
+  const dispatch = useDispatch();
   const refHeader = useRef(null);
   const refFooter = useRef(null);
   const refSidebar = useRef(null);
@@ -19,6 +21,17 @@ function SidebarLayout({ data, title, selectedID, children }) {
   const [widthContent, setWidthContent] = useState(0);
 
   const showSidebar = useSelector((state) => state?.package?.showSidebar);
+  const openSnackbar = useSelector((state) => state?.message.flag);
+  const statusSnackbar = useSelector((state) => state?.message.status);
+  const msgSnackbar = useSelector((state) => state?.message.msg);
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    dispatch(updateOpenSnackbar(false));
+  };
 
   useEffect(() => {
     setHeightHeader(refHeader.current.offsetHeight);
@@ -47,7 +60,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
           sx={{
             display: { xs: showSidebar ? "flex" : "none", sm: "flex" },
             //width: { xs: "80%", sm: "300px", lg: "350px"},
-            maxWidth: '350px',
+            maxWidth: "350px",
             width: "max-content",
           }}
           ref={refSidebar}
@@ -62,14 +75,27 @@ function SidebarLayout({ data, title, selectedID, children }) {
             flexDirection: "column",
             justifyContent: "space-between",
             alignItems: "stretch",
-            paddingX: { xs: "0px", md: "2%", lg: "5%"},
+            paddingX: { xs: "0px", md: "2%", lg: "5%" },
             backgroundColor: Colors.bgGray,
           }}
           paddingY={5}
         >
           {children}
+          <Snackbar
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            open={openSnackbar}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+          >
+            <Alert
+            onClose={handleCloseSnackbar}
+            severity={statusSnackbar ? "success" : "error"}
+            sx={{ width: "100%" }}
+          >
+            {msgSnackbar}
+          </Alert>
+          </Snackbar>
         </Box>
-        
       </Box>
 
       <Box ref={refFooter} zIndex={1}>
