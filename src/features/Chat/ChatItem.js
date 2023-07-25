@@ -21,23 +21,6 @@ function ChatItem() {
       let newChannel = [];
 
       await SB.connectSendBird(userInfo?._id);
-      let arr = [
-        "sendbird_group_channel_400431429_7a67d5a7ebe3030fd7c2dce3aaf90f06d40b9608",
-        "sendbird_group_channel_400431429_e7a01439a896b4d3bd7606528a8fb4a63bf6407f",
-        "sendbird_group_channel_400430300_479cf91bc8150e9a9eaede7568e6a2e7ff8ec075"
-      ];
-      // for (let channel of arr) {
-      //   let item = await SB.getUserChannel(channel);
-      //   if (item) {
-      //     let fromData = {
-      //       _id: item.url,
-      //       name: item.name,
-      //       avatar: item.coverUrl,
-      //       lastMess: item.lastMessage != null ? item.lastMessage.message : "",
-      //     };
-      //     newChannel.push(fromData);
-      //   }
-      // }
       for (let channel of channels) {
         let item = await SB.getUserChannel(channel.channel);
         if (item) {

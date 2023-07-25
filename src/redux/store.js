@@ -17,6 +17,7 @@ import packageSlice from "./packageSlice";
 import userSlice from "./userSlice";
 import stockSlide from "./stockSlide";
 import messageSlice from "./messageSlice";
+import homeSlide from "./homeSlice";
 
 
 // export const store = configureStore({
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   user: userSlice,
   stock: stockSlide,
   message: messageSlice,
+  home: homeSlide,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

@@ -1,12 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Stack, Box } from "@mui/material";
+import { Stack, Box, Snackbar, Alert } from "@mui/material";
 
 import HeaderComponent from "../component/header/Header";
 import FooterComponent from "../component/footer/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { updateOpenSnackbar } from "../redux/messageSlice";
 
 function DefaultLayout({ children }) {
+  const dispatch = useDispatch();
   const refHeader = useRef(null);
   const refFooter = useRef(null);
+
+  const openSnackbar = useSelector((state) => state?.message.flag);
+  const statusSnackbar = useSelector((state) => state?.message.status);
+  const msgSnackbar = useSelector((state) => state?.message.msg);
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    dispatch(updateOpenSnackbar(false));
+  };
 
   const [heightHeader, setHeightHeader] = useState(0);
   const [heightFooter, setHeightFooter] = useState(0);
@@ -24,10 +39,24 @@ function DefaultLayout({ children }) {
       <Box
         sx={{
           minHeight: `calc(100vh - ${heightHeader}px - ${heightFooter}px)`,
-          display: 'flex',
+          display: "flex",
         }}
       >
         {children}
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          open={openSnackbar}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={statusSnackbar ? "success" : "error"}
+            sx={{ width: "100%" }}
+          >
+            {msgSnackbar}
+          </Alert>
+        </Snackbar>
       </Box>
       <Box ref={refFooter} zIndex={1}>
         <FooterComponent />

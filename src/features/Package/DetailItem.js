@@ -24,6 +24,7 @@ import "../../assets/css/Content.scss";
 import { updateUserCart } from "../../redux/packageRequest";
 import { loginSuccess } from "../../redux/authSlice";
 import { updateNotiPackage } from "../../redux/packageSlice.js";
+import { updateMessage, updateOpenSnackbar, updateStatus } from "../../redux/messageSlice.js";
 
 function DetailItem({ item }) {
   const dispatch = useDispatch();
@@ -117,28 +118,16 @@ function DetailItem({ item }) {
         axiosJWT
       );
 
-      let formNoti = {};
 
       if (res?.statusCode === 200) {
-        formNoti = {
-          statusNoti: 1,
-          msgNoti: "Cập nhật giỏ hàng thành công",
-        };
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Cập nhật giỏ hàng thành công!"));
       } else {
-        formNoti = {
-          statusNoti: 2,
-          msgNoti: "Cập nhật giỏ hàng thất bại!",
-        };
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Cập nhật giỏ hàng thất bại!"));
       }
-      dispatch(updateNotiPackage(formNoti));
-
-      formNoti = {
-        statusNoti: 0,
-        msgNoti: "",
-      };
-      setTimeout(() => {
-        dispatch(updateNotiPackage(formNoti));
-      }, 2000);
     } else {
       navigate("/login");
     }

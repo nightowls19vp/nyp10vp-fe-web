@@ -11,17 +11,20 @@ import {
   logoutSuccess,
   logoutFailed,
 } from "./authSlice";
+import {
+  updateHomeChats,
+  updateHomeGroups,
+  updateHomeTodos,
+} from "./homeSlice";
 import { getAllPackage, getUserCart } from "./packageRequest";
 import { updateProfileId } from "./packageSlice";
 import { getInformationUser } from "./userRequest";
-
-// import * as SB from "../component/Chat/SendBirdGroupChat.js";
 
 export const getJoinGroup = async (token, tokenJoinGr) => {
   try {
     const res = await apiClient.get("/pkg-mgmt/gr/join", {
       params: {
-        token : tokenJoinGr,
+        token: tokenJoinGr,
       },
       headers: {
         accept: "*/*",
@@ -34,33 +37,121 @@ export const getJoinGroup = async (token, tokenJoinGr) => {
   }
 };
 
-export const loginUser = async (user, dispatch, navigate, tokenJoinGr, axiosJWT) => {
+export const getGroupsUser = async (token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get("/pkg-mgmt/gr/user", {
+      params: {
+        projection: "name;avatar",
+        page: 0,
+        limit: 10,
+        sort: "-createdAt",
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    dispatch(updateHomeGroups(res?.data.groups));
+  } catch (error) {
+    dispatch(updateHomeGroups([]));
+  }
+};
+
+export const getChatsUser = async (token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get("/pkg-mgmt/gr/user", {
+      params: {
+        projection: "name;channel",
+        page: 0,
+        limit: 10,
+        sort: "-createdAt",
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    let arr = [];
+    for (let c of res?.data.groups) {
+      if (c.channel) {
+        arr.push(c);
+      }
+    }
+    dispatch(updateHomeChats(arr));
+  } catch (error) {
+    dispatch(updateHomeChats([]));
+  }
+};
+
+export const getTodosUser = async (token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get("/pkg-mgmt/gr/user", {
+      params: {
+        projection: "todos",
+        page: 0,
+        limit: 10,
+        sort: "-createdAt",
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    let arr = [];
+    for (let t of res?.data.groups) {
+      if (t.todos.length > 0) {
+        for (let tt of t.todos) {
+          arr.push(tt);
+        }
+      }
+    }
+    dispatch(updateHomeTodos(arr));
+  } catch (error) {
+    dispatch(updateHomeTodos([]));
+  }
+};
+
+export const loginUser = async (
+  user,
+  dispatch,
+  navigate,
+  tokenJoinGr,
+  axiosJWT
+) => {
   dispatch(loginStart());
   try {
     const res = await apiClient.post("/auth/login", user, {
       withCredentials: true,
     });
-    // localStorage.setItem("accessToken", res.data.accessToken);
     dispatch(loginSuccess(res?.data));
-    
+
     if (tokenJoinGr !== "") {
       const resJoin = await getJoinGroup(res.data.accessToken, tokenJoinGr);
       console.log(resJoin);
     }
-    
-    await getInformationUser(res?.data.data.userInfo._id, res?.data.accessToken, dispatch, axiosJWT);
+
+    await getInformationUser(
+      res?.data.data.userInfo._id,
+      res?.data.accessToken,
+      dispatch,
+      axiosJWT
+    );
 
     dispatch(setTokenJoinGroup(""));
 
     await getAllPackage(dispatch);
 
-    await getUserCart(res?.data.data.userInfo._id, res?.data.accessToken, dispatch, axiosJWT);
+    await getUserCart(
+      res?.data.data.userInfo._id,
+      res?.data.accessToken,
+      dispatch,
+      axiosJWT
+    );
 
     dispatch(updateProfileId(1));
-
-    // await SB.connectSendBird(res?.data.data.userInfo._id);
-    // await SB.setupUser(res?.data.data.userInfo._id, res?.data.data.userInfo.name, res?.data.data.userInfo.avatar);
-
     navigate("/");
   } catch (error) {
     dispatch(loginFailed(error.response.data));
@@ -88,22 +179,26 @@ export const getValidateGG = async (token, dispatch, navigate, axiosJWT) => {
     });
 
     console.log(res?.data);
-    
+
     let formData = {
       accessToken: token,
-      data: res?.data
-    }
+      data: res?.data,
+    };
 
     dispatch(loginSuccess(formData));
 
-    await getInformationUser(res?.data?.userInfo._id, token, dispatch, axiosJWT);
+    await getInformationUser(
+      res?.data?.userInfo._id,
+      token,
+      dispatch,
+      axiosJWT
+    );
 
-    navigate('/');
-
+    navigate("/");
   } catch (error) {
     return error.response.data;
   }
-}
+};
 
 export const logoutUser = async (token, dispatch, navigate, axiosJWT) => {
   dispatch(logoutStart());
