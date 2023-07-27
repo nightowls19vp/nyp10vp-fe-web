@@ -202,6 +202,7 @@ function AddProduct({ grId, storageID, handleCreatePro, handleAddAddress }) {
         <DateTimePicker
           valueDay={date}
           handleDateTimePicker={handleDateTimePicker}
+          sizeDateTime={"medium"}
         />
       </Box>
       <Box className="d-flex" sx={{ width: "100%" }}>

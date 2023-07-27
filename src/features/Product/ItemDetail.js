@@ -241,6 +241,7 @@ function ItemDetail({ item, grId }) {
               <DateTimePicker
                 valueDay={expDate}
                 handleDateTimePicker={handleDateTimePicker}
+                sizeDateTime={"medium"}
               />
             </Box>
             <Box className="quantity-product">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useLayoutEffect, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Card,
@@ -7,11 +7,9 @@ import {
   Typography,
   Stack,
   Box,
-  IconButton,
   Divider,
   Input,
 } from "@mui/material";
-import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
 import { useNavigate } from "react-router-dom";
 import { createAxios } from "../../http/createInstance.js";
@@ -20,13 +18,19 @@ import jwtDecode from "jwt-decode";
 
 import { Colors } from "../../config/Colors";
 import * as CustomComponents from "../../component/custom/CustomComponents.js";
+import * as FormatNumber from "../../component/custom/FormatDateNumber.js";
 import "../../assets/css/Content.scss";
 import { updateUserCart } from "../../redux/packageRequest";
 import { loginSuccess } from "../../redux/authSlice";
 import { updateNotiPackage } from "../../redux/packageSlice.js";
-import { updateMessage, updateOpenSnackbar, updateStatus } from "../../redux/messageSlice.js";
+import {
+  updateMessage,
+  updateOpenSnackbar,
+  updateStatus,
+} from "../../redux/messageSlice.js";
 
 function DetailItem({ item }) {
+  const refBtn = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -39,7 +43,9 @@ function DetailItem({ item }) {
 
   const [duration, setDuration] = useState(item.duration);
 
-  const [money, setMoney] = useState(item.price);
+  const [money, setMoney] = useState(FormatNumber.formatCurrency(item.price));
+
+  const [heightBtn, setHeightBtn] = useState(0);
 
   const handleInputChange = (event) => {
     setMember(event.target.value === "" ? "" : Number(event.target.value));
@@ -117,7 +123,6 @@ function DetailItem({ item }) {
         dispatch,
         axiosJWT
       );
-
 
       if (res?.statusCode === 200) {
         dispatch(updateOpenSnackbar(true));
@@ -217,12 +222,22 @@ function DetailItem({ item }) {
   };
 
   useEffect(() => {
+    setHeightBtn(refBtn.current.offsetHeight);
+  }, []);
+
+  useEffect(() => {
     if (duration >= 12) {
       setMoney(
-        (item.price + (member - 2) * duration * (item.coefficient ?? 0)) * 0.7
+        FormatNumber.formatCurrency(
+          (item.price + (member - 2) * duration * (item.coefficient ?? 0)) * 0.7
+        )
       );
     } else {
-      setMoney(item.price + (member - 2) * duration * (item.coefficient ?? 0));
+      setMoney(
+        FormatNumber.formatCurrency(
+          item.price + (member - 2) * duration * (item.coefficient ?? 0)
+        )
+      );
     }
   }, [duration, item.coefficient, item.price, member]);
 
@@ -332,29 +347,37 @@ function DetailItem({ item }) {
           fontSize={25}
           paddingTop={2}
         >
-          {Math.round(money)} VNĐ
+          {money}
         </Typography>
       </CardContent>
-      <CardActions
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          paddingBottom: "20px",
-        }}
-      >
-        <CustomComponents.Button2
-          onClick={(event) => handleButtonAdd(event, item)}
-          sx={{ width: "50%"}}
+      <CardActions>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            paddingBottom: "20px",
+            width: "100%",
+          }}
         >
-          Thêm vào giỏ hàng
-        </CustomComponents.Button2>
-        <CustomComponents.Button1
-          onClick={(event) => handleButtonBuy(event, item)}
-          sx={{ width: "50%"}}
-        >
-          Mua gói
-        </CustomComponents.Button1>
+          <Box sx={{ width: "50%", marginRight: "5px" }} ref={refBtn}>
+            <CustomComponents.Button2
+              onClick={(event) => handleButtonAdd(event, item)}
+              fullWidth
+            >
+              Thêm vào giỏ hàng
+            </CustomComponents.Button2>
+          </Box>
+          <Box sx={{ width: "50%", marginLeft: "5px" }}>
+            <CustomComponents.Button1
+              onClick={(event) => handleButtonBuy(event, item)}
+              sx={{ height: "100%" }}
+              fullWidth
+            >
+              Mua gói
+            </CustomComponents.Button1>
+          </Box>
+        </Box>
       </CardActions>
     </Card>
   );

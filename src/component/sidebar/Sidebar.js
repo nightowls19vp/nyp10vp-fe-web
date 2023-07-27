@@ -1,5 +1,5 @@
 import React from "react";
-import { List } from "@mui/material";
+import { Drawer, List } from "@mui/material";
 
 import SidebarItemCollapse from "./SidebarItemCollapse.js";
 import SidebarItem from "./SidebarItem.js";
@@ -10,7 +10,8 @@ function SideBar({ data, title, selectedID }) {
   return (
     <List
       sx={{
-        width: "max-content",
+        width: "300px",
+        marginY: "7%",
       }}
     >
       {dataSidebar.map((route, index) =>

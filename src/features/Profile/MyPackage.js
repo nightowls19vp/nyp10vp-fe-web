@@ -18,6 +18,7 @@ import { styled } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 
 import { Colors } from "../../config/Colors";
+import * as FormatNumber from "../../component/custom/FormatDateNumber.js";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -141,10 +142,10 @@ function MyPackage() {
                       {pkg.noOfMember}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {pkg.price}
+                      {FormatNumber.formatCurrency(pkg.price)}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      {pkg.createdAt}
+                      {FormatNumber.formatDate(pkg.createdAt)}
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}

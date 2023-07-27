@@ -20,31 +20,29 @@ function Password({ title, id, onChangeValue }) {
     event.preventDefault();
   };
   return (
-    <Box>
-      <FormControl variant="outlined">
-        <InputLabel shrink htmlFor="passwork-input">
-          {title}
-        </InputLabel>
-        <Custom.PasswordInput
-          placeholder={title}
-          id={`adornment-password-${id}`}
-          type={showPassword ? "text" : "password"}
-          onChange={(e) => onChangeValue(e.target.value, id)}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                edge="end"
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-        />
-      </FormControl>
-    </Box>
+    <FormControl variant="outlined">
+      <InputLabel shrink htmlFor="passwork-input">
+        {title}
+      </InputLabel>
+      <Custom.PasswordInput
+        placeholder={title}
+        id={`adornment-password-${id}`}
+        type={showPassword ? "text" : "password"}
+        onChange={(e) => onChangeValue(e.target.value, id)}
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton
+              aria-label="toggle password visibility"
+              onClick={handleClickShowPassword}
+              onMouseDown={handleMouseDownPassword}
+              edge="end"
+            >
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        }
+      />
+    </FormControl>
   );
 }
 

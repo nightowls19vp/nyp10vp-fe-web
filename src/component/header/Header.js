@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import {
   AppBar,
   Toolbar,
-  Typography,
   Stack,
   InputBase,
   Divider,
@@ -105,7 +104,10 @@ function Header() {
     });
 
     return () => {
-      socket.disconnect();
+      if (socket.readyState === 1) {
+        // <-- This is important
+        socket.disconnect();
+      }
     };
   }, [
     axiosJWT,
@@ -125,8 +127,8 @@ function Header() {
       className="header"
     >
       <Toolbar>
-        <Stack flex={{ xs: 2, sm: 1 }} className="app-bar">
-          <Box display={{ xs: "block", sm: "none" }}>
+        <Stack flex={{ xs: 2, md: 1 }} className="app-bar">
+          <Box display={{ xs: "block", md: "none" }}>
             <IconButton onClick={handleHeaderBars}>
               <AiOutlineBars />
             </IconButton>

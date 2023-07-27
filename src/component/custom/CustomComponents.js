@@ -194,6 +194,7 @@ export const PasswordInput = styled(OutlinedInput)(({ theme }) => ({
   "label + &": {
     marginTop: theme.spacing(2),
   },
+  backgroundColor: "#fff",
   "& .MuiOutlinedInput-input": {
     borderRadius: 4,
     position: "relative",

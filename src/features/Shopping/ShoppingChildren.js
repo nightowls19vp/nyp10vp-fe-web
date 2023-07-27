@@ -31,13 +31,13 @@ import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
 import { useDispatch, useSelector } from "react-redux";
 import { userCheckout } from "../../redux/userRequest";
-import { useNavigate } from "react-router-dom";
 
 import { createAxios } from "../../http/createInstance.js";
 import SockectIO from "../../http/socket.js";
 
 import "../../assets/css/Shopping.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
+import * as FormatNumber from "../../component/custom/FormatDateNumber.js";
 import { loginSuccess } from "../../redux/authSlice";
 import { getUserCart, updateUserCart } from "../../redux/packageRequest";
 import {
@@ -571,7 +571,7 @@ export default function EnhancedTable({ item }) {
                                 </IconButton>
                               </Box>
                             </TableCell>
-                            <TableCell align="center">{row.money}</TableCell>
+                            <TableCell align="center">{FormatNumber.formatCurrency(row.money)}</TableCell>
                           </TableRow>
                         );
                       })}

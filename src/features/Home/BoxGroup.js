@@ -12,12 +12,12 @@ function BoxGroup() {
   const homeGroup = useSelector((state) => state?.home.homeGroup);
 
   const handleChooseGroup = (e, id) => {
-    navigate(`/group?groupId=${id}`);
+    //navigate(`/group?groupId=${id}&Id=0`);
   };
   return (
     <>
       {homeGroup.length > 0 ? (
-        <Carousel cols={2} rows={1} gap={10} loop>
+        <Carousel cols={3} rows={1} gap={10} loop>
           {homeGroup.map((gr, idx) =>
             gr ? (
               <Carousel.Item key={gr._id}>

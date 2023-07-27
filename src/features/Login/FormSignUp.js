@@ -10,7 +10,7 @@ import {
   Button,
 } from "@mui/material";
 
-import '../../assets/css/FormSignUp.scss'
+import "../../assets/css/FormSignUp.scss";
 import LogoGG from "../../assets/img/google.png";
 import LogoFB from "../../assets/img/facebook.png";
 import * as CustomButton from "../../component/custom/CustomComponents.js";
@@ -61,7 +61,7 @@ export default function FormSignUp() {
 
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue);
-  }
+  };
 
   const handleValidation = () => {
     var validUsername =
@@ -69,7 +69,8 @@ export default function FormSignUp() {
 
     var validEmail = "/^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$/";
 
-    var validPassword = "^(?=[.\\S]*[A-Z][.\\S]*)(?=[.\\S]*[0-9][.\\S]*)(?=[.\\S]*[a-z][.\\S]*)[.\\S]{8,255}$";
+    var validPassword =
+      "^(?=[.\\S]*[A-Z][.\\S]*)(?=[.\\S]*[0-9][.\\S]*)(?=[.\\S]*[a-z][.\\S]*)[.\\S]{8,255}$";
 
     var validPhone = "/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/";
 
@@ -136,7 +137,6 @@ export default function FormSignUp() {
   };
 
   const handleRegister = () => {
-
     // handleValidation();
 
     let formData = {
@@ -162,11 +162,7 @@ export default function FormSignUp() {
 
   return (
     <Container disableGutters maxWidth={false}>
-      <CustomButton.Button1
-        variant="contained"
-        fullWidth
-        onClick={handleOpen}
-      >
+      <CustomButton.Button1 variant="contained" fullWidth onClick={handleOpen}>
         Tạo tài khoản
       </CustomButton.Button1>
       <Modal
@@ -176,7 +172,7 @@ export default function FormSignUp() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2" >
+          <Typography id="modal-modal-title" variant="h6" component="h2">
             Đăng ký
           </Typography>
           <Stack
@@ -254,7 +250,11 @@ export default function FormSignUp() {
               error={rePasswordError}
               helperText={rePasswordText}
             />
-            <DateTimePicker valueDay={null} handleDateTimePicker={handleDateTimePicker} />
+            <DateTimePicker
+              valueDay={null}
+              handleDateTimePicker={handleDateTimePicker}
+              sizeDateTime={"small"}
+            />
             <CustomButton.Button1
               variant="contained"
               fullWidth

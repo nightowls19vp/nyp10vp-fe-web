@@ -165,6 +165,7 @@ function FormSpending({ grID, item, handleClose }) {
         <DateTimePicker
           valueDay={date}
           handleDateTimePicker={handleDateTimePicker}
+          sizeDateTime={"medium"}
         />
       </Box>
 

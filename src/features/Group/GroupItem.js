@@ -10,6 +10,7 @@ import { loginSuccess } from "../../redux/authSlice";
 import { createAxios } from "../../http/createInstance";
 import GroupTodos from "./Todos/GroupTodos";
 import GroupTasks from "./Tasks/GroupTasks";
+import { updateGroupId, updateGroupItemId } from "../../redux/userSlice";
 
 function GroupItem() {
   const dispatch = useDispatch();
@@ -21,17 +22,9 @@ function GroupItem() {
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  // useEffect(() => {
-  //   const getBillInGroup = async () => {
-  //     await getPackageBill(selectedID, user?.accessToken, dispatch, axiosJWT);
-  //   };
-
-  //   getBillInGroup().catch(console.error);
-
-  //   return () => {
-  //     getBillInGroup();
-  //   };
-  // }, [axiosJWT, dispatch, selectedID, user?.accessToken]);
+  // const searchParams = new URLSearchParams(document.location.search);
+  // dispatch(updateGroupId(searchParams.get("groupId")));
+  // dispatch(updateGroupItemId(parseInt(searchParams.get("Id"))));
 
   return (
     <>

@@ -9,9 +9,7 @@ import { useSelector } from "react-redux";
 function BoxChat() {
   const homeChat = useSelector((state) => state?.home.homeChat);
   return (
-    <>
-      {homeChat.length > 0 ? (
-        <Stack spacing={2}>
+        <Stack spacing={2} sx={{ height: "100%"}}>
           <Typography sx={{ fontSize: "22px", fontWeight: 600 }}>
             Nhóm chat của tôi
           </Typography>
@@ -29,8 +27,6 @@ function BoxChat() {
             ) : null
           )}
         </Stack>
-      ) : null}
-    </>
   );
 }
 

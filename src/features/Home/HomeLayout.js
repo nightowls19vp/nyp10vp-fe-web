@@ -13,12 +13,12 @@ import { useSelector } from "react-redux";
 
 function HomeLayout() {
   const boxTranRef = useRef(null);
-  const [height, setHeight] = useState(0);
-  const homeTodos = useSelector((state) => state?.home.homeTodos);
 
-  useLayoutEffect(() => {
-    setHeight(boxTranRef.current.offsetHeight);
-  }, []);
+  const homeTodos = useSelector((state) => state?.home.homeTodos);
+  const homeBilling = useSelector((state) => state?.home.homeBilling);
+  const homeChat = useSelector((state) => state?.home.homeChat);
+
+
   return (
     <Box
       sx={{
@@ -42,13 +42,11 @@ function HomeLayout() {
           sx={{ width: "100%" }}
           className="flex-align-start home-box-2-right"
         >
-          <Box className="box-box-2-left" flex={1} ref={boxTranRef}>
+          <Box className="box-box-2-left">
             <BoxTransaction />
           </Box>
           <Box
             className="box-box-2-right"
-            flex={1}
-            sx={{ height: `calc(${height}px - 40px)` }}
           >
             <BoxChat />
           </Box>
@@ -67,21 +65,10 @@ function HomeLayout() {
         >
           Thông báo
         </Typography>
-        <BoxNotification
-          name="Bill tiền sinh nhật"
-          date="2023-6-10"
-          description="sinh nhat Thanh Ha"
-        />
-        <BoxNotification
-          name="Tiền nước tháng 6"
-          date="2023-6-1"
-          description=""
-        />
-        <BoxNotification
-          name="Bill - siêu thị"
-          date="2023-6-10"
-          description="Thanh toán hóa đơn siêu thị"
-        />
+        {homeBilling.length > 0 &&
+          homeBilling.map((bill, idx) =>
+            bill ? <BoxNotification bill={bill} key={idx} /> : null
+          )}
       </Stack>
     </Box>
   );

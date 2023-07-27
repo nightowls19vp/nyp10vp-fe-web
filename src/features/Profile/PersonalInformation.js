@@ -8,8 +8,15 @@ import {
   Alert,
   AlertTitle,
   CircularProgress,
+  InputAdornment,
+  Card,
+  CardContent,
 } from "@mui/material";
 import { AiFillCamera } from "react-icons/ai";
+import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
+import PhoneIcon from "@mui/icons-material/Phone";
+import EmailIcon from "@mui/icons-material/Email";
+import CakeIcon from "@mui/icons-material/Cake";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -41,16 +48,13 @@ function PersonalInformation() {
   const [image, setImage] = useState(userInfo.avatar ?? ImgAvatar);
   const email = userInfo.email;
   const [name, setName] = useState(userInfo.name);
-  const [phone, setPhone] = useState(userInfo.phone ?? null);
+  const [phone, setPhone] = useState(userInfo.phone ?? "");
   const [dob, setDob] = useState(userInfo.dob ?? null);
   // const [socialAcc, setSocialAcc] = useState(
   //   userInfo.socialAccounts !== undefined ? true : false
   // );
   const socialAcc = userInfo.socialAccounts !== undefined ? true : false;
-  const [widthDate, setWidthDate] = useState(0);
-  const [widthAvatar, setWidthAvatar] = useState(0);
   const [status, setStatus] = useState(false);
-  const [msg, setMsg] = useState("");
 
   const handleClick = () => {
     inputRef.current.click();
@@ -159,192 +163,132 @@ function PersonalInformation() {
     }
   };
 
-  useEffect(() => {
-    setWidthDate(dateRef.current.offsetWidth);
-    setWidthAvatar(avatarRef.current.offsetWidth);
-  }, []);
-
   return (
     <Stack
       sx={{
-        backgroundColor: Colors.background,
-        borderRadius: "10px",
-        position: "relative"
+        paddingY: 5,
+        display: "flex",
+        flexDirection: { xs: "column", lg: "row" },
+        justifyContent: "space-between",
+        alignItems: { xs: "center", lg: "flex-start" },
+        width: "100%",
+        backgroundColor: Colors.bgGray,
       }}
+      spacing={2}
     >
+      <Box paddingX={"10px"} align={"center"} sx={{ width: { xs: "70%", lg: "30%" } }}>
+        <CustomComponent.ButtonAvatar onClick={handleClick}>
+          <CustomComponent.ImageSrc
+            style={{ backgroundImage: `url(${image})` }}
+          />
+          <input
+            style={{ display: "none" }}
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+          <CustomComponent.ImageBackdrop className="MuiImageBackdrop-root" />
+          <CustomComponent.Image>
+            <Box bgcolor={Colors.camera} borderRadius={"50%"} padding={"8px"}>
+              <AiFillCamera color={Colors.black} size={25} />
+            </Box>
+          </CustomComponent.Image>
+        </CustomComponent.ButtonAvatar>
+      </Box>
       <Stack
-        sx={{
-          paddingY: 5,
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          justifyContent: "space-between",
-          alignItems: { xs: "center", md: "flex-start" },
-          width: "100%",
-          backgroundColor: Colors.bgGray,
-        }}
+        sx={{ width: { xs: "70%", lg: "40%" } }}
+        className="form-personal-infor"
         spacing={2}
       >
-        <Box flex={1} paddingX={"10px"} align={"center"} ref={avatarRef}>
-          <CustomComponent.ButtonAvatar onClick={handleClick}>
-            <CustomComponent.ImageSrc
-              style={{ backgroundImage: `url(${image})` }}
-            />
-            <input
-              style={{ display: "none" }}
-              ref={inputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-            />
-            <CustomComponent.ImageBackdrop className="MuiImageBackdrop-root" />
-            <CustomComponent.Image>
-              <Box bgcolor={Colors.camera} borderRadius={"50%"} padding={"8px"}>
-                <AiFillCamera color={Colors.black} size={25} />
-              </Box>
-            </CustomComponent.Image>
-          </CustomComponent.ButtonAvatar>
+        <Box sx={{ maxWidth: "450px", width: "70%" }}>
+          <Typography>Họ & tên</Typography>
+          <TextField
+            fullWidth
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <ContactEmergencyIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ backgroundColor: Colors.background }}
+          />
         </Box>
-        <Box flex={3} paddingX={"10px"}>
-          <Grid className="form-personal-infor">
-            <Typography
-              width={"100px"}
-              variant="overline"
-              display="block"
-              gutterBottom
-            >
-              Họ & tên
-            </Typography>
-            <Box sx={{ width: `${widthDate}px`, backgroundColor: Colors.background }}>
-              <TextField
-                fullWidth
-                id="name"
-                variant="outlined"
-                size="small"
-                defaultValue={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </Box>
-          </Grid>
-          <Grid className="form-personal-infor">
-            <Typography
-              width={"100px"}
-              variant="overline"
-              display="block"
-              gutterBottom
-            >
-              Email
-            </Typography>
-            <Box sx={{ width: `${widthDate}px`, backgroundColor: Colors.background }}>
-              <TextField
-                fullWidth
-                disabled
-                id="email"
-                variant="outlined"
-                size="small"
-                defaultValue={email}
-              />
-            </Box>
-          </Grid>
-          <Grid className="form-personal-infor">
-            <Typography
-              width={"100px"}
-              variant="overline"
-              display="block"
-              gutterBottom
-            >
-              Số điện thoại
-            </Typography>
-            <Box sx={{ width: `${widthDate}px`, backgroundColor: Colors.background }}>
-              <TextField
-                fullWidth
-                id="phone"
-                variant="outlined"
-                size="small"
-                defaultValue={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </Box>
-          </Grid>
-          <Grid className="form-personal-infor">
-            <Typography
-              width={"100px"}
-              variant="overline"
-              display="block"
-              gutterBottom
-            >
-              Ngày sinh
-            </Typography>
-            <Box ref={dateRef} sx={{ backgroundColor: Colors.background}}>
-              <DateTimePicker
-                valueDay={dob}
-                handleDateTimePicker={handleDateTimePicker}
-              />
-            </Box>
-          </Grid>
+        <Box sx={{ maxWidth: "450px", width: "70%" }}>
+          <Typography>Số điện thoại</Typography>
+          <TextField
+            fullWidth
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <PhoneIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ backgroundColor: Colors.background }}
+          />
         </Box>
-
+        <Box sx={{ maxWidth: "450px", width: "70%" }}>
+          <Typography>Ngày sinh</Typography>
+          <DateTimePicker
+            valueDay={dob}
+            handleDateTimePicker={handleDateTimePicker}
+            sizeDateTime={"medium"}
+          />
+        </Box>
+        <Box sx={{ maxWidth: "450px", width: "70%" }}>
+          <Typography>Email</Typography>
+          <TextField
+            fullWidth
+            defaultValue={email}
+            disabled
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <EmailIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ backgroundColor: Colors.background }}
+          />
+        </Box>
         <Box
-          flex={2}
           sx={{
-            paddingX: "10px",
-            bgcolor: Colors.background,
-            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-            width: { xs: `calc(${widthDate}px + 100px)`, md: "100%" },
+            maxWidth: "450px",
+            width: "70%",
+            display: "flex",
+            justifyContent: "flex-end",
           }}
-          className="form-connect-social-network"
         >
-          <Stack paddingX={"5px"} paddingTop={"10px"} paddingBottom={"15px"}>
-            <Typography variant="button" display="block" gutterBottom>
-              Liên kết mạng xã hội
-            </Typography>
-            <Box className="connect-social-network">
-              <Stack direction="row" spacing={"5px"}>
-                <img src={LogoGG} alt="Logo" width={25} height={25} />
-                <Typography display="block" gutterBottom>
-                  Tài khoản GG
-                </Typography>
-              </Stack>
-              <CustomComponent.Button2
-                size="small"
-                disabled={socialAcc}
-                onClick={handleConnectSocialAcc}
-              >
-                Liên kết
-              </CustomComponent.Button2>
-            </Box>
-          </Stack>
+          <CustomComponent.Button1>Lưu thay đổi</CustomComponent.Button1>
         </Box>
       </Stack>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: { xs: "center", md: "flex-start" },
-          paddingLeft: { xs: "0px", md: `calc(${widthAvatar}px + 120px)` },
-          backgroundColor: Colors.bgGray,
-        }}
+      <Stack
+        spacing={2}
+        className="form-connect-social-network"
+        sx={{ width: { xs: "70%", lg: "40%" } }}
       >
-        <CustomComponent.Button1 onClick={handleButtonChange}>
-          Lưu thay đổi
-        </CustomComponent.Button1>
-      </Box>
-      <Box sx={{ position: "fixed", right: 20, bottom: 20 }} >
-        {status === 0 ? null : status === 1 ? (
-          <Alert severity="success">
-            <AlertTitle>Thành công</AlertTitle>
-            {msg}
-          </Alert>
-        ) : (
-          <Alert severity="error">
-            <AlertTitle>Thất bại</AlertTitle>
-            {msg}
-          </Alert>
-        )}
-      </Box>
-      {status && (
-            <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
-              <CircularProgress />
-            </Box>
-          )}
+        <Typography variant="button" display="block" gutterBottom>
+          Liên kết mạng xã hội
+        </Typography>
+        <Box className="btn-connect">
+          <Stack direction={"row"} spacing={2}>
+            <img src={LogoGG} alt="Logo" width={25} height={25} />
+            <Typography>Tài khoản GG</Typography>
+          </Stack>
+          <CustomComponent.Button2
+            disabled={socialAcc}
+            onClick={handleConnectSocialAcc}
+          >
+            Liên kết
+          </CustomComponent.Button2>
+        </Box>
+      </Stack>
     </Stack>
   );
 }

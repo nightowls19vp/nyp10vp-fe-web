@@ -11,7 +11,6 @@ function ChangePassword() {
   const [passwordCurrent, setPasswordCurrent] = useState("");
   const [passwordNew, setPasswordNew] = useState("");
   const [rePasswordNew, setRePasswordNew] = useState("");
-  const [widthContent, setWidthContent] = useState("");
 
   const onChangeValue = (newValue, id) => {
     if (id === 1) {
@@ -27,48 +26,23 @@ function ChangePassword() {
     //
   };
 
-  useEffect(() => {
-    setWidthContent(refContainer.current.offsetWidth);
-    console.log(refContainer.current.offsetWidth);
-  }, [])
-
   return (
-    <Stack
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      spacing={2.5}
-    >
-      <Box ref={refContainer}>
-        <PasswordComponent
-          title="Mật khẩu hiện tại"
-          id={1}
-          onChangeValue={onChangeValue}
-        />
-      </Box>
-      <Box>
-        <PasswordComponent
-          title="Mật khẩu mới"
-          id={2}
-          onChangeValue={onChangeValue}
-        />
-      </Box>
-      <Box>
-        <PasswordComponent
+    <Stack spacing={2.5} className="box-change-password" sx={{ width: "70%"}}>
+      <PasswordComponent
+        title="Mật khẩu hiện tại"
+        id={1}
+        onChangeValue={onChangeValue}
+      />
+      <PasswordComponent
+        title="Mật khẩu mới"
+        id={2}
+        onChangeValue={onChangeValue}
+      />
+      <PasswordComponent
           title="Nhập lại mật khẩu mới"
           id={3}
           onChangeValue={onChangeValue}
         />
-      </Box>
-      <Box >
-        <Custom.Button1
-          disabled={!(passwordCurrent && passwordNew && rePasswordNew)}
-          onClick={handleChangePassword}
-          sx={{ width: `${widthContent}px` }}
-        >
-          Lưu thay đổi
-        </Custom.Button1>
-      </Box>
     </Stack>
   );
 }

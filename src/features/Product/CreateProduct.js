@@ -125,6 +125,7 @@ function CreateProduct({ grId, handleAddAddress }) {
         <DateTimePicker
           valueDay={date}
           handleDateTimePicker={handleDateTimePicker}
+          sizeDateTime={"medium"}
         />
       </Box>
       <Box

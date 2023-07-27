@@ -8,7 +8,7 @@ import { createAxios } from "../http/createInstance.js";
 import { getUserCart } from "../redux/packageRequest.js";
 import { getGroupChannel } from "../redux/userRequest.js";
 import HomeLayout from "../features/Home/HomeLayout.js";
-import { getChatsUser, getGroupsUser, getTodosUser } from "../redux/authRequest.js";
+import { getBillingsUser, getChatsUser, getGroupsUser, getTodosUser } from "../redux/homeRequest.js";
 
 function Home() {
   const dispatch = useDispatch();
@@ -34,6 +34,8 @@ function Home() {
       await getChatsUser(user?.accessToken, dispatch, axiosJWT);
 
       await getTodosUser(user?.accessToken, dispatch, axiosJWT);
+
+      await getBillingsUser(user?.accessToken, dispatch, axiosJWT);
     };
 
     if (user !== null) {

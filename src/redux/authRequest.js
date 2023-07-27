@@ -11,11 +11,7 @@ import {
   logoutSuccess,
   logoutFailed,
 } from "./authSlice";
-import {
-  updateHomeChats,
-  updateHomeGroups,
-  updateHomeTodos,
-} from "./homeSlice";
+
 import { getAllPackage, getUserCart } from "./packageRequest";
 import { updateProfileId } from "./packageSlice";
 import { getInformationUser } from "./userRequest";
@@ -34,83 +30,6 @@ export const getJoinGroup = async (token, tokenJoinGr) => {
     return res?.data;
   } catch (error) {
     return error.response.data;
-  }
-};
-
-export const getGroupsUser = async (token, dispatch, axiosJWT) => {
-  try {
-    const res = await axiosJWT.get("/pkg-mgmt/gr/user", {
-      params: {
-        projection: "name;avatar",
-        page: 0,
-        limit: 10,
-        sort: "-createdAt",
-      },
-      headers: {
-        accept: "*/*",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    dispatch(updateHomeGroups(res?.data.groups));
-  } catch (error) {
-    dispatch(updateHomeGroups([]));
-  }
-};
-
-export const getChatsUser = async (token, dispatch, axiosJWT) => {
-  try {
-    const res = await axiosJWT.get("/pkg-mgmt/gr/user", {
-      params: {
-        projection: "name;channel",
-        page: 0,
-        limit: 10,
-        sort: "-createdAt",
-      },
-      headers: {
-        accept: "*/*",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    let arr = [];
-    for (let c of res?.data.groups) {
-      if (c.channel) {
-        arr.push(c);
-      }
-    }
-    dispatch(updateHomeChats(arr));
-  } catch (error) {
-    dispatch(updateHomeChats([]));
-  }
-};
-
-export const getTodosUser = async (token, dispatch, axiosJWT) => {
-  try {
-    const res = await axiosJWT.get("/pkg-mgmt/gr/user", {
-      params: {
-        projection: "todos",
-        page: 0,
-        limit: 10,
-        sort: "-createdAt",
-      },
-      headers: {
-        accept: "*/*",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    let arr = [];
-    for (let t of res?.data.groups) {
-      if (t.todos.length > 0) {
-        for (let tt of t.todos) {
-          arr.push(tt);
-        }
-      }
-    }
-    dispatch(updateHomeTodos(arr));
-  } catch (error) {
-    dispatch(updateHomeTodos([]));
   }
 };
 

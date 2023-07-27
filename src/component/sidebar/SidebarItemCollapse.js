@@ -42,6 +42,7 @@ function SidebarItemCollapse({ item, title, selectedID }) {
                 sx={{
                   color: open ? Colors.textPrimary : Colors.text,
                   fontWeight: open ? 600 : null,
+                  fontSize: 20,
                 }}
               >
                 {item.name}

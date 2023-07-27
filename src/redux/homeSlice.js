@@ -6,6 +6,7 @@ const homeSlide = createSlice({
     homeGroup: [],
     homeTodos: [],
     homeChat: [],
+    homeBilling: [],
   },
   reducers: {
     updateHomeGroups: (state, action) => {
@@ -17,6 +18,9 @@ const homeSlide = createSlice({
     updateHomeTodos: (state, action) => {
         state.homeTodos = action.payload;
     },
+    updateHomeBilling: (state, action) => {
+      state.homeBilling = action.payload;
+    },
   },
 });
 
@@ -24,6 +28,7 @@ export const {
     updateHomeGroups,
     updateHomeChats,
     updateHomeTodos,
+    updateHomeBilling,
 } = homeSlide.actions;
 
 export default homeSlide.reducer;

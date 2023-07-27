@@ -5,6 +5,7 @@ import HeaderComponent from "../component/header/Header";
 import FooterComponent from "../component/footer/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { updateOpenSnackbar } from "../redux/messageSlice";
+import { Colors } from "../config/Colors";
 
 function DefaultLayout({ children }) {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ function DefaultLayout({ children }) {
         sx={{
           minHeight: `calc(100vh - ${heightHeader}px - ${heightFooter}px)`,
           display: "flex",
+          backgroundColor: Colors.bgGray
         }}
       >
         {children}

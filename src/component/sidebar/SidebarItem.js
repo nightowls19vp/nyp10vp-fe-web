@@ -81,6 +81,7 @@ function SidebarItem({ item, title, selectedID }) {
                 ? 800
                 : null,
               paddingLeft: item.icon ? "10px" : null,
+              fontSize: 18
             }}
           >
             {item.name}
