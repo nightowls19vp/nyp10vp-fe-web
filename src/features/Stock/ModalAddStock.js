@@ -6,9 +6,9 @@ import {
   Typography,
   Box,
   CircularProgress,
-  Snackbar,
-  Alert,
 } from "@mui/material";
+
+import NoImg from "../../assets/img/image.png";
 
 import { createAxios } from "../../http/createInstance.js";
 
@@ -17,7 +17,11 @@ import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
 import { postStorageLocation } from "../../redux/stockRequest";
-import { updateMessage, updateOpenSnackbar, updateStatus } from "../../redux/messageSlice.js";
+import {
+  updateMessage,
+  updateOpenSnackbar,
+  updateStatus,
+} from "../../redux/messageSlice.js";
 
 function ModalAddStock({ grID, handleClose }) {
   const inputRef = useRef();
@@ -29,7 +33,7 @@ function ModalAddStock({ grID, handleClose }) {
   const [nameStock, setNameStock] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-  const [fileImg, setFileImg] = useState(null);
+  const [fileImg, setFileImg] = useState(NoImg);
   const [flag, setFlag] = useState(false);
 
   const handleChangeNameStock = (e) => {
@@ -69,7 +73,7 @@ function ModalAddStock({ grID, handleClose }) {
       dispatch,
       axiosJWT
     );
-   
+
     if (res != null) {
       setFlag(false);
       if (res?.statusCode === 200) {
@@ -97,11 +101,9 @@ function ModalAddStock({ grID, handleClose }) {
         Thêm kho mới
       </Typography>
       <Box className="d-flex-stock">
-        {fileImg !== null ? (
-          <Box flex={1} sx={{ marginRight: "10px" }}>
-            <img src={fileImg} alt="ImageStock" className="file-image" />
-          </Box>
-        ) : null}
+        <Box flex={1} sx={{ marginRight: "10px" }}>
+          <img src={fileImg} alt="ImageStock" className="file-image" />
+        </Box>
         <Box flex={3}>
           <Stack
             id="modalAddStock"

@@ -287,7 +287,7 @@ export const ImageButtonStock = styled(ButtonBase)(({ theme }) => ({
   borderRadius: "20px",
   [theme.breakpoints.down("sm")]: {
     width: "100% !important", // Overrides inline-style
-    height: 100,
+    height: 150,
   },
 }));
 
@@ -406,7 +406,7 @@ export const ImageButtonBoxGroup = styled(ButtonBase)(({ theme }) => ({
   borderRadius: "10px",
   [theme.breakpoints.down('sm')]: {
     width: '100% !important', // Overrides inline-style
-    height: 100,
+    height: 150,
   },
   '&:hover, &.Mui-focusVisible': {
     zIndex: 1,

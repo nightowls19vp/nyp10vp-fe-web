@@ -16,6 +16,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { createAxios } from "../../http/createInstance";
 
 import { Colors } from "../../config/Colors";
+import * as FormatNumber from "../../component/custom/FormatDateNumber.js";
 import { getProductItemsByStorage } from "../../redux/stockRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
@@ -128,10 +129,10 @@ function ListItemProduct({ item, p, grId, storageID }) {
                 {row.name}
               </StyledTableCell>
               <StyledTableCell align="right">
-                {row.quantity} chai
+                {row.quantity} {row.unit}
               </StyledTableCell>
-              <StyledTableCell align="right">70.000</StyledTableCell>
-              <StyledTableCell align="right">{row.exp}</StyledTableCell>
+              <StyledTableCell align="right">{FormatNumber.formatCurrency(row.money)}</StyledTableCell>
+              <StyledTableCell align="right">{FormatNumber.formatDate(row.exp)}</StyledTableCell>
             </StyledTableRow>
           ))}
 

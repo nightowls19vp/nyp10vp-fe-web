@@ -22,24 +22,31 @@ function BoxTodos() {
       {homeTodos.map((todo, idx) =>
         todo ? (
           <Carousel.Item key={idx}>
-            <Card>
+            <Card
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
               <CardHeader title={todo.summary} />
               <CardContent>
-              {todo.todos.map((t, idx) =>
-                t && idx < 3 ? (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                    key={t._id}
-                  >
-                    <Checkbox checked={t.isCompleted} />
-                    <Typography>{t.todo}</Typography>
-                  </Box>
-                ) : null
-              )}
+                {todo.todos.map((t, idx) =>
+                  t && idx < 3 ? (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                      key={t._id}
+                    >
+                      <Checkbox checked={t.isCompleted} />
+                      <Typography>{t.todo}</Typography>
+                    </Box>
+                  ) : null
+                )}
               </CardContent>
               <CardActions>
                 <Button>Xem thêm</Button>

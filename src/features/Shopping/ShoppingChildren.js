@@ -493,7 +493,7 @@ export default function EnhancedTable({ item }) {
         <Box sx={{ width: { xs: "100%", lg: "70%" } }}>
           <Stack>
             <Box sx={{ width: "100%" }}>
-              <Paper sx={{ width: "100%", mb: 2 }}>
+              <Paper sx={{ width: "100%", mb: 2, borderRadius: "20px" }}>
                 {selected.length > 0 ? (
                   <EnhancedTableToolbar
                     numSelected={selected.length}

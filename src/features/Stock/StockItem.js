@@ -60,8 +60,7 @@ function StockItem({ item, grID }) {
   return (
     <Stack
       spacing={3}
-      //sx={{ backgroundColor: Colors.bgGray }}
-      // sx={{ paddingX: { xs: "2%", md: "5%" }, width: "100%", paddingY: "40px" }}
+      sx={{ marginX: "5%" }}
     >
       <Box className="title-stock" sx={{ justifyContent: "space-between" }}>
         <Box className="title-stock">
@@ -86,7 +85,9 @@ function StockItem({ item, grID }) {
           </Modal>
         </Box>
       </Box>
-      <Box
+
+      {item.length > 0 ? <ImageStock item={item} grID={grID} /> : null }
+      {/* <Box
         sx={{
           display: "flex",
           flexWrap: "wrap",
@@ -98,7 +99,7 @@ function StockItem({ item, grID }) {
         {item.map((stock) =>
           stock ? <ImageStock item={stock} grID={grID} key={stock.id} /> : null
         )}
-      </Box>
+      </Box> */}
     </Stack>
   );
 }

@@ -54,7 +54,6 @@ function Home() {
       <DefaultLayout>
         <HomeLayout />
       </DefaultLayout>
-      {/* <Mapbox /> */}
     </>
   );
 }

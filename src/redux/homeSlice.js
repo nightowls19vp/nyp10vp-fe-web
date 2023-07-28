@@ -4,19 +4,23 @@ const homeSlide = createSlice({
   name: "home",
   initialState: {
     homeGroup: [],
+    homeTrans: [],
     homeTodos: [],
     homeChat: [],
     homeBilling: [],
   },
   reducers: {
     updateHomeGroups: (state, action) => {
-        state.homeGroup = action.payload;
+      state.homeGroup = action.payload;
+    },
+    updateHomeTrans: (state, action) => {
+      state.homeTrans = action.payload;
     },
     updateHomeChats: (state, action) => {
-        state.homeChat = action.payload;
+      state.homeChat = action.payload;
     },
     updateHomeTodos: (state, action) => {
-        state.homeTodos = action.payload;
+      state.homeTodos = action.payload;
     },
     updateHomeBilling: (state, action) => {
       state.homeBilling = action.payload;
@@ -25,10 +29,11 @@ const homeSlide = createSlice({
 });
 
 export const {
-    updateHomeGroups,
-    updateHomeChats,
-    updateHomeTodos,
-    updateHomeBilling,
+  updateHomeGroups,
+  updateHomeTrans,
+  updateHomeChats,
+  updateHomeTodos,
+  updateHomeBilling,
 } = homeSlide.actions;
 
 export default homeSlide.reducer;

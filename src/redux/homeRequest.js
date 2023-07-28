@@ -5,6 +5,7 @@ import {
   updateHomeChats,
   updateHomeGroups,
   updateHomeTodos,
+  updateHomeTrans,
 } from "./homeSlice";
 
 export const getGroupsUser = async (token, dispatch, axiosJWT) => {
@@ -25,6 +26,21 @@ export const getGroupsUser = async (token, dispatch, axiosJWT) => {
     dispatch(updateHomeGroups(res?.data.groups));
   } catch (error) {
     dispatch(updateHomeGroups([]));
+  }
+};
+
+export const getTransitionUser = async (token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get("/txn/user", {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    dispatch(updateHomeTrans(res?.data));
+  } catch (error) {
+    dispatch(updateHomeTrans([]));
   }
 };
 

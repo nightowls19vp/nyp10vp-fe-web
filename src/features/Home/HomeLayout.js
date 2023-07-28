@@ -12,12 +12,9 @@ import BoxTransaction from "./BoxTransaction";
 import { useSelector } from "react-redux";
 
 function HomeLayout() {
-  const boxTranRef = useRef(null);
-
   const homeTodos = useSelector((state) => state?.home.homeTodos);
   const homeBilling = useSelector((state) => state?.home.homeBilling);
   const homeChat = useSelector((state) => state?.home.homeChat);
-
 
   return (
     <Box
@@ -38,22 +35,10 @@ function HomeLayout() {
       <Stack sx={{ width: "70%", marginRight: "5px" }} spacing={3}>
         <BoxGroup />
 
-        <Box
-          sx={{ width: "100%" }}
-          className="flex-align-start home-box-2-right"
-        >
-          <Box className="box-box-2-left">
-            <BoxTransaction />
-          </Box>
-          <Box
-            className="box-box-2-right"
-          >
-            <BoxChat />
-          </Box>
-        </Box>
+        <BoxTransaction className="home-box-3-trans" />
 
         {homeTodos.length > 0 ? (
-          <BoxTodos className="home-box-3-carousel" />
+          <BoxTodos className="home-box-3-todos" />
         ) : null}
       </Stack>
 
