@@ -20,22 +20,23 @@ function Password({ title, id, onChangeValue }) {
     event.preventDefault();
   };
   return (
-    <FormControl variant="outlined">
+    <FormControl variant="outlined" sx={{ width: "100%"}}>
       <InputLabel shrink htmlFor="passwork-input">
         {title}
       </InputLabel>
       <Custom.PasswordInput
         placeholder={title}
+        fullWidth
         id={`adornment-password-${id}`}
         type={showPassword ? "text" : "password"}
         onChange={(e) => onChangeValue(e.target.value, id)}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
-              aria-label="toggle password visibility"
+              //aria-label="toggle password visibility"
               onClick={handleClickShowPassword}
               onMouseDown={handleMouseDownPassword}
-              edge="end"
+              //edge="end"
             >
               {showPassword ? <VisibilityOff /> : <Visibility />}
             </IconButton>

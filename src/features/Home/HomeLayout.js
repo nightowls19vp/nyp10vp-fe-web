@@ -38,18 +38,18 @@ function HomeLayout() {
         <BoxTransaction className="home-box-3-trans" />
 
         {homeTodos.length > 0 ? (
-          <BoxTodos className="home-box-3-todos" />
+          <BoxTodos className="home-box-3-todos" homeTodos={homeTodos} />
         ) : null}
       </Stack>
 
       <Stack sx={{ width: "30%", marginLeft: "5px" }} spacing={2}>
-        <Typography
+        {/* <Typography
           variant="button"
           display="block"
           sx={{ fontSize: "26px", color: Colors.textPrimary }}
         >
           Thông báo
-        </Typography>
+        </Typography> */}
         {homeBilling.length > 0 &&
           homeBilling.map((bill, idx) =>
             bill ? <BoxNotification bill={bill} key={idx} /> : null

@@ -8,6 +8,7 @@ import {
   Autocomplete,
   IconButton,
   Tooltip,
+  CircularProgress,
 } from "@mui/material";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 
@@ -26,8 +27,9 @@ import "../../assets/css/Autocomplete.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker";
 import { Colors } from "../../config/Colors";
+import { updateMessage, updateOpenSnackbar, updateStatus } from "../../redux/messageSlice";
 
-function AddProduct({ grId, storageID, handleCreatePro, handleAddAddress }) {
+function AddProduct({ grId, storageID, handleCreatePro, handleAddAddress, handleCloseAdd }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.auth.login?.currentUser);
 
@@ -44,6 +46,8 @@ function AddProduct({ grId, storageID, handleCreatePro, handleAddAddress }) {
   const [inputAddress, setInputAddress] = useState("");
   const [products, setProducts] = useState([]);
   const [listAddress, setListAdrress] = useState([]);
+
+  const [flag, setFlag] = useState(false);
 
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue.$d);
@@ -129,11 +133,38 @@ function AddProduct({ grId, storageID, handleCreatePro, handleAddAddress }) {
       purchaseLocationId: addr,
     };
 
-    await addItemsToStorage(formData, user?.accessToken, dispatch, axiosJWT);
+    setFlag(true);
+    const res = await addItemsToStorage(
+      grId,
+      storageID,
+      formData,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
+    if (res != null) {
+      setFlag(flag);
+      if (res?.statusCode === 201) {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Thêm nhu yếu phẩm mới thành công!"));
+      } else {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Thêm nhu yếu phẩm mới thất bại!"));
+      }
+    }
+
+    handleCloseAdd();
   };
 
   return (
-    <Stack spacing={2} id="idAddProduct" className="addAddProduct">
+    <Stack
+      spacing={2}
+      id="idAddProduct"
+      className="addAddProduct"
+      sx={{ position: "relative", opacity: flag ? 0.5 : 1 }}
+    >
       <Autocomplete
         id="free-solo-product"
         freeSolo
@@ -241,6 +272,11 @@ function AddProduct({ grId, storageID, handleCreatePro, handleAddAddress }) {
           </CustomComponent.Button1>
         )}
       </Box>
+      {flag && (
+        <Box sx={{ position: "absolute", top: "40%", left: "50%" }}>
+          <CircularProgress />
+        </Box>
+      )}
     </Stack>
   );
 }

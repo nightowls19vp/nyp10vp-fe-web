@@ -22,7 +22,11 @@ function BoxTransaction() {
       <Stack
         spacing={1}
         className="home-box-2-right"
-        sx={{ width: { xs: "calc(100% - 40px)px", md: "50%" } }}
+        sx={{
+          width: { xs: "calc(100% - 40px)px", md: "50%" },
+          marginLeft: "15px",
+          marginRight: "10px",
+        }}
       >
         <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
           Giao dịch gần đây
@@ -95,12 +99,16 @@ function BoxTransaction() {
       <Stack
         spacing={2}
         className="home-box-2-right"
-        sx={{ width: { xs: "calc(100% - 40px)px", md: "50%" } }}
+        sx={{
+          width: { xs: "calc(100% - 40px)px", md: "50%" },
+          marginLeft: "10px",
+          marginRight: "15px",
+        }}
       >
         <Typography sx={{ fontSize: "22px", fontWeight: 600 }}>
           Nhóm chat của tôi
         </Typography>
-        {/* {homeChat.map((chat, idx) =>
+        {homeChat.map((chat, idx) =>
           chat ? (
             <Box className="d-flex" key={idx}>
               <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -109,13 +117,12 @@ function BoxTransaction() {
                   {chat?.name}
                 </Typography>
               </Box>
-              <IconButton sx={{ fontSize: "30px", color: Colors.textPrimary}}>
+              <IconButton sx={{ fontSize: "30px", color: Colors.textPrimary }}>
                 <BsFillChatDotsFill />
               </IconButton>
             </Box>
           ) : null
-        )} */}
-
+        )}
       </Stack>
     </Box>
   );

@@ -291,12 +291,16 @@ function FormSpending({ grID, item, handleClose }) {
                   <TextField
                     fullWidth
                     type="number"
-                    min={1000}
-                    //size="small"
                     value={money}
                     placeholder="Nhập tiền"
                     onChange={(e) => handleChangeAmount(e, idx)}
                     onKeyDown={handleKeyDownAmount}
+                    inputProps={{
+                      inputMode: "numeric",
+                      pattern: "[0-9]*",
+                      min: 1000,
+                      step: 1000,
+                    }}
                   />
                 </Box>
               </Box>

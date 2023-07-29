@@ -7,7 +7,7 @@ import { Colors } from "../../config/Colors";
 import CakeIcon from "@mui/icons-material/Cake";
 import { InputAdornment } from "@mui/material";
 
-export default function DateTimePicker({
+export default function DateOfBird({
   valueDay,
   handleDateTimePicker,
   sizeDateTime,
@@ -21,7 +21,14 @@ export default function DateTimePicker({
       <DatePicker
         slotProps={{
           textField: {
-            size: sizeDateTime
+            size: sizeDateTime,
+            InputProps: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <CakeIcon />
+                </InputAdornment>
+              ),
+            },
           },
         }}
         value={dateTime}
@@ -29,7 +36,12 @@ export default function DateTimePicker({
           setDateTime(newValue);
           handleDateTimePicker(newValue);
         }}
-        sx={{ width: "100%", backgroundColor: Colors.background }}
+        sx={{
+          width: "100%",
+        //   display: "flex",
+        //   alignItems: "center",
+          backgroundColor: Colors.background,
+        }}
       />
     </LocalizationProvider>
   );

@@ -165,7 +165,6 @@ export const getProductItemsByStorage = async (
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res?.data);
     dispatch(updateListProduct(res?.data.data));
     dispatch(updateMetaListProduct(res?.data.meta));
   } catch (error) {
@@ -192,7 +191,6 @@ export const getGroupProducts = async (
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res?.data);
     return res?.data;
   } catch (error) {
     return error.response.data;
@@ -269,7 +267,7 @@ export const searchPurchaseLocations = async (
   }
 };
 
-export const addItemsToStorage = async (data, token, dispatch, axiosJWT) => {
+export const addItemsToStorage = async (grId, storageId, data, token, dispatch, axiosJWT) => {
   try {
     const res = await axiosJWT.post("/prod-mgmt/items", data, {
       headers: {
@@ -277,7 +275,10 @@ export const addItemsToStorage = async (data, token, dispatch, axiosJWT) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res?.data);
+
+    await getProductItemsByStorage(grId, 1, 5, storageId, token, dispatch, axiosJWT);
+    
+    return res?.data;
   } catch (error) {
     return error.response.data;
   }

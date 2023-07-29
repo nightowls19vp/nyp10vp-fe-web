@@ -33,6 +33,7 @@ import "../../assets/css/Content.scss";
 import { Colors } from "../../config/Colors";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker";
+import DateOfBird from "../../component/Date/DateOfBird";
 
 function PersonalInformation() {
   const inputRef = useRef();
@@ -176,7 +177,11 @@ function PersonalInformation() {
       }}
       spacing={2}
     >
-      <Box paddingX={"10px"} align={"center"} sx={{ width: { xs: "70%", lg: "30%" } }}>
+      <Box
+        paddingX={"10px"}
+        align={"center"}
+        sx={{ width: { xs: "70%", lg: "30%" } }}
+      >
         <CustomComponent.ButtonAvatar onClick={handleClick}>
           <CustomComponent.ImageSrc
             style={{ backgroundImage: `url(${image})` }}
@@ -196,98 +201,111 @@ function PersonalInformation() {
           </CustomComponent.Image>
         </CustomComponent.ButtonAvatar>
       </Box>
-      <Stack
-        sx={{ width: { xs: "70%", lg: "40%" } }}
-        className="form-personal-infor"
-        spacing={2}
-      >
-        <Box sx={{ maxWidth: "450px", width: "70%" }}>
-          <Typography>Họ & tên</Typography>
-          <TextField
-            fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <ContactEmergencyIcon />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ backgroundColor: Colors.background }}
-          />
-        </Box>
-        <Box sx={{ maxWidth: "450px", width: "70%" }}>
-          <Typography>Số điện thoại</Typography>
-          <TextField
-            fullWidth
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <PhoneIcon />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ backgroundColor: Colors.background }}
-          />
-        </Box>
-        <Box sx={{ maxWidth: "450px", width: "70%" }}>
-          <Typography>Ngày sinh</Typography>
-          <DateTimePicker
-            valueDay={dob}
-            handleDateTimePicker={handleDateTimePicker}
-            sizeDateTime={"medium"}
-          />
-        </Box>
-        <Box sx={{ maxWidth: "450px", width: "70%" }}>
-          <Typography>Email</Typography>
-          <TextField
-            fullWidth
-            defaultValue={email}
-            disabled
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <EmailIcon />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ backgroundColor: Colors.background }}
-          />
-        </Box>
-        <Box
-          sx={{
-            maxWidth: "450px",
-            width: "70%",
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
+      <Stack spacing={2} className="content-information">
+        <Stack
+          sx={{ width: "90%" }}
+          className="form-personal-infor"
+          spacing={2}
         >
-          <CustomComponent.Button1>Lưu thay đổi</CustomComponent.Button1>
-        </Box>
-      </Stack>
-      <Stack
-        spacing={2}
-        className="form-connect-social-network"
-        sx={{ width: { xs: "70%", lg: "40%" } }}
-      >
-        <Typography variant="button" display="block" gutterBottom>
-          Liên kết mạng xã hội
-        </Typography>
-        <Box className="btn-connect">
-          <Stack direction={"row"} spacing={2}>
-            <img src={LogoGG} alt="Logo" width={25} height={25} />
-            <Typography>Tài khoản GG</Typography>
-          </Stack>
-          <CustomComponent.Button2
-            disabled={socialAcc}
-            onClick={handleConnectSocialAcc}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: {
+                xs: "column",
+                sm: "row",
+                md: "column",
+                lg: "row",
+              },
+              width: "100%",
+            }}
           >
-            Liên kết
-          </CustomComponent.Button2>
-        </Box>
+            <Box flex={1} sx={{ m: 1}}>
+              <Typography>Họ & tên</Typography>
+              <TextField
+                fullWidth
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <ContactEmergencyIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+            <Box flex={1} sx={{ m: 1}}>
+              <Typography>Số điện thoại</Typography>
+              <TextField
+                fullWidth
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PhoneIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+          </Box>
+          <Box sx={{
+              display: "flex",
+              flexDirection: {
+                xs: "column",
+                sm: "row",
+                md: "column",
+                lg: "row",
+              },
+              width: "100%"
+            }}>
+            <Box flex={1} sx={{ m: 1}}>
+              <Typography>Ngày sinh</Typography>
+              <DateOfBird
+                valueDay={dob}
+                handleDateTimePicker={handleDateTimePicker}
+                sizeDateTime={"medium"}
+              />
+            </Box>
+            <Box flex={1} sx={{ m: 1}}>
+              <Typography>Email</Typography>
+              <TextField
+                fullWidth
+                defaultValue={email}
+                disabled
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+          </Box>
+        </Stack>
+        <Stack
+          spacing={2}
+          className="form-connect-social-network"
+          sx={{ width: "90%" }}
+        >
+          <Typography variant="button" display="block" gutterBottom>
+            Liên kết mạng xã hội
+          </Typography>
+          <Box className="btn-connect">
+            <Stack direction={"row"} spacing={2}>
+              <img src={LogoGG} alt="Logo" width={25} height={25} />
+              <Typography>Tài khoản GG</Typography>
+            </Stack>
+            <CustomComponent.Button2
+              disabled={socialAcc}
+              onClick={handleConnectSocialAcc}
+            >
+              Liên kết
+            </CustomComponent.Button2>
+          </Box>
+        </Stack>
       </Stack>
     </Stack>
   );

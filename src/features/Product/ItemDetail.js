@@ -22,6 +22,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
+import { FaBarcode } from "react-icons/fa";
 
 import { createAxios } from "../../http/createInstance";
 
@@ -82,26 +83,6 @@ function ItemDetail({ item, grId }) {
     setExpDate(dateValue.$d);
   };
 
-  const handleQuantityPlus = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const handleQuantityMoins = () => {
-    if (quantity > 0) {
-      setQuantity(quantity - 1);
-    }
-  };
-
-  const handleMoneyPlus = () => {
-    setMoney(money + 1000);
-  };
-
-  const handleMoneyMoins = () => {
-    if (money > 1000) {
-      setMoney(money - 1000);
-    }
-  };
-
   const searchDataStorageLocation = async (search) => {
     const res = await searchStorageLocation(
       grId,
@@ -129,69 +110,107 @@ function ItemDetail({ item, grId }) {
     }
   };
 
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "flex",
-        flexDirection: { xs: "column", md: "row" },
-        alignItems: { xs: "center", md: "flex-start" },
-      }}
-    >
-      <Box flex={1} className="flex-column">
-        <Box paddingX={"10px"} align={"center"} ref={avatarRef}>
-          <CustomComponent.ButtonProduct onClick={handleClick}>
-            <CustomComponent.ImageSrcProduct
-              style={{ backgroundImage: `url(${image})` }}
-            />
-            <input
-              style={{ display: "none" }}
-              ref={inputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-            />
-            <CustomComponent.ImageBackdrop className="MuiImageBackdrop-root" />
-            <CustomComponent.ImageProduct>
-              <Box bgcolor={Colors.camera} borderRadius={"50%"} padding={"8px"}>
-                <AddAPhotoIcon color={Colors.black} size={25} />
-              </Box>
-            </CustomComponent.ImageProduct>
-          </CustomComponent.ButtonProduct>
-        </Box>
-        <Box sx={{ width: "100%", paddingY: "5px" }}>
-          <TextField
-            label="Barcode"
-            variant="filled"
-            sx={{ width: "250px" }}
-            value={barcode}
-            onChange={(e) => setBarcode(e.target.value)}
-          />
-        </Box>
-      </Box>
+  const handleChangeProduct = () => {
 
-      <Box flex={2} sx={{ width: "100%" }}>
-        <Card>
-          <CardContent>
-            <Box className="quantity-product">
-              <Typography
-                variant="subtitle1"
-                sx={{ fontSize: 20, fontWeight: 500, minWidth: "150px" }}
-              >
-                Tên sản phẩm
-              </Typography>
-              <TextField
-                multiline
-                fullWidth
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+  }
+
+  return (
+    <Stack spacing={1.5}>
+      <Typography variant="h6" gutterBottom sx={{ color: Colors.textPrimary }}>
+        Thông tin chi tiết của nhu yếu phẩm
+      </Typography>
+      <Stack
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-between",
+          alignItems: { xs: "center", md: "flex-start" },
+          width: "100%",
+          backgroundColor: Colors.bgGray,
+        }}
+        spacing={2}
+      >
+        <Box
+          className="box-img-product"
+          sx={{
+            width: { xs: "100%", sm: "80%", md: "30%" },
+            height: "calc(100% - 40px)",
+          }}
+        >
+          <Box paddingX={"10px"} align={"center"} ref={avatarRef}>
+            <CustomComponent.ButtonProduct onClick={handleClick}>
+              <CustomComponent.ImageSrcProduct
+                style={{ backgroundImage: `url(${image})` }}
               />
-            </Box>
-            <Box className="flex-row-wrap">
+              <input
+                style={{ display: "none" }}
+                ref={inputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+              <CustomComponent.ImageBackdrop className="MuiImageBackdrop-root" />
+              <CustomComponent.ImageProduct>
+                <Box
+                  bgcolor={Colors.camera}
+                  borderRadius={"50%"}
+                  padding={"8px"}
+                >
+                  <AddAPhotoIcon color={Colors.black} size={25} />
+                </Box>
+              </CustomComponent.ImageProduct>
+            </CustomComponent.ButtonProduct>
+          </Box>
+          <Box
+            sx={{
+              width: "100%",
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <TextField
+              label={"barcode"}
+              value={barcode}
+              onChange={(e) => setBarcode(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FaBarcode />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+        </Box>
+        <Stack
+          className="box-img-product"
+          sx={{
+            width: { xs: "100%", sm: "80%", md: "70%" },
+            height: "calc(100% - 40px)",
+          }}
+          spacing={2}
+        >
+          <Box sx={{ width: { xs: "90%", sm: "80%", md: "100%", lg: "80%" } }}>
+            <Typography>Tên sản phẩm</Typography>
+            <TextField
+              multiline
+              fullWidth
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              width: { xs: "90%", sm: "80%", md: "100%", lg: "80%" },
+            }}
+          >
+            <Box sx={{ mr: 1, mt: 1, mb: 1, }}>
+              <Typography>Số lượng</Typography>
               <TextField
-                label="Số lượng"
                 id="outlined-start-adornment-quantity"
-                sx={{ m: 1, width: "130px" }}
                 type="number"
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
@@ -206,11 +225,13 @@ function ItemDetail({ item, grId }) {
                     <InputAdornment position="start">unit</InputAdornment>
                   ),
                 }}
+                sx={{ width: "130px" }}
               />
+            </Box>
+            <Box sx={{ m: 1,  }}>
+              <Typography>Giá tiền</Typography>
               <TextField
-                label="Giá tiền"
                 id="outlined-start-adornment-money"
-                sx={{ m: 1, width: "150px" }}
                 type="number"
                 value={money}
                 onChange={(e) => setMoney(e.target.value)}
@@ -225,63 +246,53 @@ function ItemDetail({ item, grId }) {
                     <InputAdornment position="start">vnd</InputAdornment>
                   ),
                 }}
+                sx={{ width: "150px" }}
               />
             </Box>
-            <Box className="quantity-product">
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  fontSize: 20,
-                  fontWeight: 500,
-                  minWidth: "150px",
-                }}
-              >
-                Ngày hết hạn
-              </Typography>
+            <Box sx={{ ml: 1, mt: 1, mb: 1, width: "100%" }}>
+              <Typography>Ngày hết hạn</Typography>
               <DateTimePicker
                 valueDay={expDate}
                 handleDateTimePicker={handleDateTimePicker}
                 sizeDateTime={"medium"}
               />
             </Box>
-            <Box className="quantity-product">
-              <Autocomplete
-                id="free-solo-storage"
-                freeSolo
-                fullWidth
-                options={listStorage}
-                getOptionLabel={(option) => option.name}
-                onChange={(e, op) => handleSelectedStorage(e, op)}
-                inputValue={storage}
-                onInputChange={(event, newInputValue) => {
-                  setStorage(newInputValue);
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    value={inputStorage}
-                    onChange={handleChangeInputStorage}
-                    placeholder="Chọn vị trí"
-                  />
-                )}
-              />
-            </Box>
-          </CardContent>
-          <CardActions>
-            <CustomComponent.Button2>Xóa sản phẩm</CustomComponent.Button2>
-            <CustomComponent.Button1>Lưu thay đổi</CustomComponent.Button1>
-            {/* <Box className="flex-flex-end">
-            <Box sx={{ paddingRight: "5px" }}>
-              <CustomComponent.Button1>Lưu thay đổi</CustomComponent.Button1>
-            </Box>
-            <Box sx={{ paddingLeft: "5px" }}>
-              <CustomComponent.Button2>Xóa sản phẩm</CustomComponent.Button2>
-            </Box>
-            </Box> */}
-          </CardActions>
-        </Card>
-      </Box>
-    </Box>
+          </Box>
+          <Box sx={{ width: { xs: "90%", sm: "80%", md: "100%", lg: "80%" } }}>
+            <Typography>Vị trí lưu trữ</Typography>
+            <Autocomplete
+              id="free-solo-storage"
+              freeSolo
+              fullWidth
+              options={listStorage}
+              getOptionLabel={(option) => option.name}
+              onChange={(e, op) => handleSelectedStorage(e, op)}
+              inputValue={storage}
+              onInputChange={(event, newInputValue) => {
+                setStorage(newInputValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  value={inputStorage}
+                  onChange={handleChangeInputStorage}
+                  placeholder="Chọn vị trí"
+                />
+              )}
+            />
+          </Box>
+          <Box
+            sx={{
+              width: { xs: "90%", sm: "80%", md: "100%", lg: "80%" },
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <CustomComponent.Button1 onClick={handleChangeProduct}>Lưu thay đổi</CustomComponent.Button1>
+          </Box>
+        </Stack>
+      </Stack>
+    </Stack>
   );
 }
 

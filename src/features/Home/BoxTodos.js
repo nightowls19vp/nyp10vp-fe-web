@@ -13,10 +13,10 @@ import {
 } from "@mui/material";
 import Carousel from "better-react-carousel";
 import "../../assets/css/Home.scss";
-import { useSelector } from "react-redux";
+//import { useSelector } from "react-redux";
 
-function BoxTodos() {
-  const homeTodos = useSelector((state) => state?.home.homeTodos);
+function BoxTodos({ homeTodos }) {
+  //const homeTodos = useSelector((state) => state?.home.homeTodos);
   return (
     <Carousel cols={3} rows={1} gap={10} loop>
       {homeTodos.map((todo, idx) =>

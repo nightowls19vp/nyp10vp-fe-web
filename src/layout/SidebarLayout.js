@@ -127,7 +127,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
             <Alert
               onClose={handleCloseSnackbar}
               severity={statusSnackbar ? "success" : "error"}
-              sx={{ width: "100%" }}
+              sx={{ width: "100%", height: "100px" }}
             >
               {msgSnackbar}
             </Alert>

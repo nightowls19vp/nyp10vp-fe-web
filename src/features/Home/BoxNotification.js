@@ -22,7 +22,7 @@ import * as FormatNumber from "../../component/custom/FormatDateNumber";
 
 function BoxNotification({ bill }) {
   return (
-    <Card sx={{ display: "flex", justifyContent: "space-between" }}>
+    <Card sx={{ display: "flex", justifyContent: "space-between", borderRadius: "20px" }}>
       {/* <Box
         flex={1}
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}

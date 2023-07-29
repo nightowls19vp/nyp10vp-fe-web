@@ -90,6 +90,7 @@ function ImageStock({ item, grID }) {
             <Box
               sx={{
                 position: "relative",
+                width: { xs: "70%", md: "100%"}
               }}
              
             >

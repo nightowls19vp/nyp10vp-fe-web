@@ -38,7 +38,7 @@ export const getTransitionUser = async (token, dispatch, axiosJWT) => {
       },
     });
 
-    dispatch(updateHomeTrans(res?.data));
+    dispatch(updateHomeTrans(res?.data.data));
   } catch (error) {
     dispatch(updateHomeTrans([]));
   }

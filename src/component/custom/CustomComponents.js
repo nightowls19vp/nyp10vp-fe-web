@@ -200,7 +200,7 @@ export const PasswordInput = styled(OutlinedInput)(({ theme }) => ({
     position: "relative",
     backgroundColor: theme.palette.mode === "light" ? "#fcfcfb" : "#2b2b2b",
     fontSize: 16,
-    width: "auto",
+    //width: "auto",
     padding: "10px 12px",
     transition: theme.transitions.create([
       "border-color",
@@ -285,10 +285,10 @@ export const ImageButtonStock = styled(ButtonBase)(({ theme }) => ({
   position: "relative",
   height: 250,
   borderRadius: "20px",
-  [theme.breakpoints.down("sm")]: {
-    width: "100% !important", // Overrides inline-style
-    height: 150,
-  },
+  // [theme.breakpoints.down("sm")]: {
+  //   //width: "100% !important", // Overrides inline-style
+  //   height: 200,
+  // },
 }));
 
 export const ImageSrcStock = styled("span")({

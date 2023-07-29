@@ -42,11 +42,11 @@ function ProductItem({ grId, storageID }) {
   const [openAdd, setOpenAdd] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
   const [openAddress, setOpenAddress] = useState(false);
-  const [number, setNumber] = useState(0);
 
   const handleOpenAdd = () => {
     setOpenAdd(true);
   };
+
   const handleCloseAdd = () => setOpenAdd(false);
 
   const handleCreatePro = () => {
@@ -113,6 +113,7 @@ function ProductItem({ grId, storageID }) {
             storageID={storageID}
             handleCreatePro={handleCreatePro}
             handleAddAddress={handleAddress}
+            handleCloseAdd={handleCloseAdd}
           />
         </Box>
       </Modal>

@@ -12,6 +12,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { FaMoneyBillWave } from "react-icons/fa";
 
 import "../../../assets/css/Bill.scss";
+import * as FormatNumber from "../../../component/custom/FormatDateNumber";
 import BillDetail from "./BillDetail";
 import { useDispatch } from "react-redux";
 import { updateBill } from "../../../redux/packageSlice";
@@ -32,7 +33,6 @@ const style = {
 
 function Bill({ grID, item }) {
   const dispatch = useDispatch();
-  const day = new Date(item.date);
 
   const [open, setOpen] = useState(false);
 
@@ -55,7 +55,7 @@ function Bill({ grID, item }) {
               justifyContent: "flex-start",
             }}
           >
-            {item.summary}
+            {item?.summary}
           </Typography>
           <Box
             sx={{
@@ -71,7 +71,7 @@ function Bill({ grID, item }) {
               display="block"
               sx={{ paddingLeft: "10px", fontSize: "16px" }}
             >
-              {item.total}
+              {FormatNumber.formatCurrency(item?.total)}
             </Typography>
           </Box>
           <Box
@@ -88,7 +88,7 @@ function Bill({ grID, item }) {
               display="block"
               sx={{ fontStyle: "italic", paddingLeft: "10px" }}
             >
-              {day.toDateString()}
+              {FormatNumber.formatDate(item?.date)}
             </Typography>
           </Box>
           <Box className="bill-end" sx={{ width: "30%" }}>
