@@ -112,7 +112,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
             flexDirection: "column",
             justifyContent: "space-between",
             alignItems: "stretch",
-            paddingX: { xs: "0px", md: "2%", lg: "5%" },
+            paddingX: { xs: "2%", lg: "5%" },
             backgroundColor: Colors.bgGray,
           }}
           paddingY={5}
@@ -127,7 +127,12 @@ function SidebarLayout({ data, title, selectedID, children }) {
             <Alert
               onClose={handleCloseSnackbar}
               severity={statusSnackbar ? "success" : "error"}
-              sx={{ width: "100%", height: "100px" }}
+              sx={{
+                width: "100%",
+                height: "50px",
+                display: "flex",
+                alignItems: "center",
+              }}
             >
               {msgSnackbar}
             </Alert>

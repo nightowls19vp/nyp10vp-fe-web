@@ -21,6 +21,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as CustomComponent from "../../../component/custom/CustomComponents";
 import { postPackageTodos } from "../../../redux/packageRequest";
+import {
+  updateMessage,
+  updateOpenSnackbar,
+  updateStatus,
+} from "../../../redux/messageSlice";
 
 function FormTodos({ todoID, handleClose }) {
   const dispatch = useDispatch();
@@ -79,6 +84,11 @@ function FormTodos({ todoID, handleClose }) {
   };
 
   const handleAddTodos = async () => {
+    if (name.length <= 0) {
+      setMsg("Vui lòng điền vào mục TIÊU ĐỀ!");
+      return;
+    }
+
     let formData = {
       summary: name,
       todos: listTodo,
@@ -97,6 +107,15 @@ function FormTodos({ todoID, handleClose }) {
 
     if (res != null) {
       setFlag(false);
+      if (res?.statusCode === 201) {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Thêm 1 việc cần làm thành công!"));
+      } else {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Thêm 1 việc cần làm thất bại!"));
+      }
     }
 
     handleClose();
@@ -109,7 +128,10 @@ function FormTodos({ todoID, handleClose }) {
   }, [todo]);
 
   return (
-    <Stack spacing={2} sx={{ position: "relative" }}>
+    <Stack
+      spacing={2}
+      sx={{ position: "relative", opacity: flag === true ? 0.75 : 1 }}
+    >
       <Box
         className="title-group-spending"
         sx={{ justifyContent: "space-between" }}

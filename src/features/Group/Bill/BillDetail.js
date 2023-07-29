@@ -9,21 +9,42 @@ import {
   Stack,
   Typography,
   InputBase,
-  IconButton,
+  Modal,
+  CircularProgress,
 } from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useDispatch, useSelector } from "react-redux";
 
 import { createAxios } from "../../../http/createInstance";
 
 import "../../../assets/css/Bill.scss";
 import * as CustomComponent from "../../../component/custom/CustomComponents.js";
+import * as FormatNumber from "../../../component/custom/FormatDateNumber.js";
 import {
   deletePackageBill,
   updatePackageBill,
 } from "../../../redux/userRequest";
 import { loginSuccess } from "../../../redux/authSlice";
-import { Colors } from "../../../config/Colors";
+import {
+  updateMessage,
+  updateOpenSnackbar,
+  updateStatus,
+} from "../../../redux/messageSlice";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 300,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  borderRadius: "15px",
+  bgcolor: "background.paper",
+  border: "1px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 function BillDetail({ grID }) {
   const dispatch = useDispatch();
@@ -44,8 +65,12 @@ function BillDetail({ grID }) {
     }
     return arr;
   };
+  const initalData = initalChange();
   const [data, setData] = useState(initalChange());
-  const date = new Date(bill?.date);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [flag, setFlag] = useState(false);
 
   const handleChangeStatus = (event, idx) => {
     let arr = [];
@@ -80,6 +105,7 @@ function BillDetail({ grID }) {
   };
 
   const handleDeleteBill = async () => {
+    setFlag(true);
     const res = await deletePackageBill(
       grID,
       bill._id,
@@ -87,10 +113,35 @@ function BillDetail({ grID }) {
       dispatch,
       axiosJWT
     );
-    console.log(res);
+
+    if (res != null) {
+      setFlag(false);
+      if (res?.statusCode === 200) {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Xóa chi tiêu thành công!"));
+      } else {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Xóa chi tiêu thất bại!"));
+      }
+    }
   };
 
   const handleUpdateBill = async () => {
+    let checkAmount = false;
+    let checkStatus = false;
+    for (let el1 of data) {
+      for (let el2 of initalData) {
+        if (el1._id === el2._id && el1.amount !== el2.amount) {
+          checkAmount = true;
+        }
+        if (el1._id === el2._id && el1.status !== el2.status) {
+          checkStatus = true;
+        }
+      }
+    }
+
     let borrowersAmount = [];
     let borrowersStatus = [];
     for (let x of data) {
@@ -118,25 +169,48 @@ function BillDetail({ grID }) {
       borrowers: borrowersStatus,
     };
 
-    await updatePackageBill(
-      grID,
-      bill._id,
-      formData1,
-      formData2,
-      user?.accessToken,
-      dispatch,
-      axiosJWT
-    );
+    if (checkAmount === true || checkStatus === true) {
+      setFlag(true);
+
+      const res = await updatePackageBill(
+        grID,
+        bill._id,
+        formData1,
+        checkAmount,
+        formData2,
+        checkStatus,
+        user?.accessToken,
+        dispatch,
+        axiosJWT
+      );
+
+      if (res != null) {
+        setFlag(false);
+        if (res === true) {
+          dispatch(updateOpenSnackbar(true));
+          dispatch(updateStatus(true));
+          dispatch(updateMessage("Chỉnh sửa chi tiêu thành công!"));
+        } else {
+          dispatch(updateOpenSnackbar(true));
+          dispatch(updateStatus(false));
+          dispatch(updateMessage("Chỉnh sửa chi tiêu thất bại!"));
+        }
+      }
+    }
   };
   return (
     <Box
       sx={{
         width: "100%",
+        position: "relative",
+        opacity: flag === true ? 0.75 : 1,
       }}
     >
       <Typography variant="h4">{bill?.summary}</Typography>
       <Stack spacing={2} id="modalBillDetail" className="modalModalBillDetail">
-        <Typography variant="subtitle1">{date.toDateString()}</Typography>
+        <Typography variant="subtitle1">
+          {FormatNumber.formatDate(bill?.date)}
+        </Typography>
         <Typography variant="subtitle1" sx={{ fontStyle: "italic" }}>
           {bill?.description}
         </Typography>
@@ -277,7 +351,7 @@ function BillDetail({ grID }) {
             }}
           >
             <Box sx={{ paddingRight: "5px" }}>
-              <CustomComponent.Button2 onClick={handleDeleteBill}>
+              <CustomComponent.Button2 onClick={handleOpen}>
                 Xóa
               </CustomComponent.Button2>
             </Box>
@@ -289,6 +363,30 @@ function BillDetail({ grID }) {
           </Box>
         ) : null}
       </Stack>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={style}>
+          <Typography>Bạn có muốn xóa chi tiêu này không?</Typography>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CustomComponent.Button1
+              sx={{ width: "40px", marginRight: "10px" }}
+              onClick={handleDeleteBill}
+            >
+              Có
+            </CustomComponent.Button1>
+            <CustomComponent.Button2
+              sx={{ width: "40px", marginLeft: "10px" }}
+              onClick={handleClose}
+            >
+              Không
+            </CustomComponent.Button2>
+          </Box>
+        </Box>
+      </Modal>
+      {flag && (
+        <Box sx={{ position: "absolute", top: "40%", left: "50%" }}>
+          <CircularProgress />
+        </Box>
+      )}
     </Box>
   );
 }

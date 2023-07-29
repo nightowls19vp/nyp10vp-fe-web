@@ -8,11 +8,11 @@
 }
 
 .form-personal-infor {
-    @include boxStype();
+    @include boxStyle();
 }
 
 .form-connect-social-network {
-    @include boxStype();
+    @include boxStyle();
     width: 100%;
     .btn-connect {
         @include flexRowStyle();
@@ -20,12 +20,28 @@
 }
 
 .box-change-password {
-    @include boxStype();
+    @include boxStyle();
     justify-content: center;
     .title {
         color: $textPrimary;
         font-size: 20px;
         font-weight: 500;
+    }
+}
+
+.box-my-package {
+    @include flexColumnStyle();
+    width: 100%;
+    .title {
+        width: 96%;
+        @include flexRowStyle();
+        justify-content: flex-start;
+        margin-bottom: 2%;
+        .text {
+            color: $textPrimary;
+            font-size: 20px;
+            font-weight: 500;
+        }
     }
 }
 

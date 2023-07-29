@@ -122,9 +122,6 @@ function GroupTodos({ grId, item }) {
                   >
                     {todo.summary}
                   </Typography>
-                  {/* <Typography sx={{ color: "text.secondary" }}>
-                    2/3
-                  </Typography> */}
                 </AccordionSummary>
                 <AccordionDetails>
                   {todo !== null && <TodoDetail grID={grId} item={todo} />}

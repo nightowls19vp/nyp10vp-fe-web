@@ -41,7 +41,7 @@ function DefaultLayout({ children }) {
         sx={{
           minHeight: `calc(100vh - ${heightHeader}px - ${heightFooter}px)`,
           display: "flex",
-          backgroundColor: Colors.bgGray
+          backgroundColor: Colors.bgGray,
         }}
       >
         {children}
@@ -54,7 +54,12 @@ function DefaultLayout({ children }) {
           <Alert
             onClose={handleCloseSnackbar}
             severity={statusSnackbar ? "success" : "error"}
-            sx={{ width: "100%", height: "100px" }}
+            sx={{
+              width: "100%",
+              height: "50px",
+              display: "flex",
+              alignItems: "center",
+            }}
           >
             {msgSnackbar}
           </Alert>

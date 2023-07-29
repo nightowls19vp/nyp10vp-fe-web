@@ -26,6 +26,8 @@ import {
   Modal,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { tableCellClasses } from '@mui/material/TableCell';
+import { styled } from '@mui/material/styles';
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
@@ -45,6 +47,7 @@ import {
   updateNotiCheckout,
   updateNumberCart,
 } from "../../redux/packageSlice";
+import { Colors } from "../../config/Colors";
 
 const style = {
   position: "absolute",
@@ -65,6 +68,19 @@ const styleProgress = {
   transform: "translate(-50%, -50%)",
   bgcolor: "background.paper",
 };
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: Colors.chat,
+    color: theme.palette.common.black,
+  },
+  '&:nth-of-type(1)': {
+    borderRadius: "15px 0px 0px 0px",
+  },
+  '&:nth-of-type(6)': {
+    borderRadius: "0px 15px 0px 0px",
+  },
+}));
 
 function createData(id, name, quantity, member, duration, money) {
   return {
@@ -116,7 +132,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        <StyledTableCell padding="checkbox">
           <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -126,9 +142,9 @@ function EnhancedTableHead(props) {
               "aria-label": "select all",
             }}
           />
-        </TableCell>
+        </StyledTableCell>
         {headCells.map((headCell) => (
-          <TableCell
+          <StyledTableCell
             key={headCell.id}
             align={headCell.numeric ? "center" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
@@ -138,7 +154,7 @@ function EnhancedTableHead(props) {
                 {headCell.label}
               </Typography>
             </TableSortLabel>
-          </TableCell>
+          </StyledTableCell>
         ))}
       </TableRow>
     </TableHead>
@@ -493,7 +509,7 @@ export default function EnhancedTable({ item }) {
         <Box sx={{ width: { xs: "100%", lg: "70%" } }}>
           <Stack>
             <Box sx={{ width: "100%" }}>
-              <Paper sx={{ width: "100%", mb: 2, borderRadius: "20px" }}>
+              <Paper sx={{ width: "100%", mb: 2, borderRadius: "15px" }}>
                 {selected.length > 0 ? (
                   <EnhancedTableToolbar
                     numSelected={selected.length}

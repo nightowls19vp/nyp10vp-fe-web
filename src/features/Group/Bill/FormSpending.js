@@ -24,6 +24,7 @@ import DateTimePicker from "../../../component/Date/DateTimePicker";
 import { postPackageBill } from "../../../redux/userRequest";
 import { loginSuccess } from "../../../redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { updateMessage, updateOpenSnackbar, updateStatus } from "../../../redux/messageSlice";
 
 function FormSpending({ grID, item, handleClose }) {
   const nowDate = new Date();
@@ -41,6 +42,7 @@ function FormSpending({ grID, item, handleClose }) {
   const [idxUser, setIdxUser] = useState(0);
   const [description, setDescription] = useState("");
   const [addFlag, setAddFlag] = useState(false);
+  const [msg, setMsg] = useState("");
   const [flag, setFlag] = useState(false);
 
   const handleDateTimePicker = (dateValue) => {
@@ -77,6 +79,7 @@ function FormSpending({ grID, item, handleClose }) {
     let last_it = memName[memName.length - 1];
     if (money === "" || last_it._id === "0") {
       setAddFlag(true);
+      setMsg("Vui lòng điền đầy đủ!")
       return;
     }
 
@@ -101,10 +104,31 @@ function FormSpending({ grID, item, handleClose }) {
     }
   };
 
+  const handleClearMember = (e, id) => {
+    let arr = [...memName];
+    arr = [...arr.filter((data) => data._id !== id)];
+    if (arr.length === 0) {
+      let formData = {
+        _id: "0",
+        name: "",
+        amount: 0,
+      };
+      arr.push(formData);
+    }
+    setMemName(arr);
+  };
+
   const handleGroupBill = async () => {
     let array = [...memName];
     array[idxUser].amount = money;
+    setMoney("");
 
+    if (name.length === 0) {
+      setAddFlag(true);
+      setMsg("Vui lòng điền vào ô tiêu đề!");
+      return;
+    }
+    
     let borrowers = [];
     for (let el of array) {
       if (el._id !== "0") {
@@ -115,6 +139,21 @@ function FormSpending({ grID, item, handleClose }) {
         borrowers.push(data);
       }
     }
+
+    if (hostName.length === 0 || borrowers.length === 0) {
+      setAddFlag(true);
+      setMsg("Vui lòng điền chọn thành viên!");
+      return;
+    }
+
+    for (let mem of borrowers) {
+      if (hostName === mem.borrower) {
+        setAddFlag(true);
+        setMsg("Người chi trả và thành viên mượn tiền trùng nhau!");
+        return;
+      }
+    }
+
     let formData = {
       summary: name,
       date: date,
@@ -135,6 +174,15 @@ function FormSpending({ grID, item, handleClose }) {
 
     if (res != null) {
       setFlag(false);
+      if (res?.statusCode === 201) {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Thêm chi tiêu mới thành công!"));
+      } else {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Thêm chi tiêu mới thất bại!"));
+      }
     }
 
     handleClose();
@@ -177,7 +225,6 @@ function FormSpending({ grID, item, handleClose }) {
           <Select
             labelId="demo-simple-select-host-name"
             id="select-host-name"
-            size="small"
             value={hostName}
             onChange={handleChangeHost}
           >
@@ -219,17 +266,7 @@ function FormSpending({ grID, item, handleClose }) {
 
       {memName?.map((route, idx) =>
         route ? (
-          <Box
-            sx={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              paddingY: "5px",
-            }}
-            key={idx}
-          >
+          <Box className="form-add-member" key={idx}>
             {route._id !== "0" && route.amount !== 0 ? (
               <Box className="added-member-success">
                 <Box flex={2}>
@@ -258,7 +295,7 @@ function FormSpending({ grID, item, handleClose }) {
                   >
                     pending
                   </Typography>
-                  <IconButton>
+                  <IconButton onClick={(e) => handleClearMember(e, route._id)}>
                     <ClearIcon sx={{ color: Colors.error }} />
                   </IconButton>
                 </Box>
@@ -272,7 +309,6 @@ function FormSpending({ grID, item, handleClose }) {
                   <Select
                     labelId="demo-simple-select-member"
                     id="select-member"
-                    //size="small"
                     value={route._id}
                     label="Chọn thành viên"
                     onChange={handleChangeMember}
@@ -316,7 +352,7 @@ function FormSpending({ grID, item, handleClose }) {
             color={Colors.error}
             sx={{ fontStyle: "italic" }}
           >
-            Vui lòng điền đầy đủ!
+            {msg}
           </Typography>
         </Box>
       ) : null}

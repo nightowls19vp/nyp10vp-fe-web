@@ -90,6 +90,14 @@ function Header() {
       }
     });
 
+    socket.on("createdBill", (data) => {
+      console.log("created bill: ", data);
+    });
+
+    socket.on("updatedBill", (data) => {
+      console.log("updated bill: ", data);
+    });
+
     socket.on("zpCallback", async (data) => {
       console.log("socket-io zpCallback: ", data);
       if (data) {

@@ -1,15 +1,14 @@
+@import "mixins";
+@import "color";
+
 .header-group {
-    display: flex;
-    flex-direction: row;
+    @include flexRowStyle();
     justify-content: center;
     align-items: flex-start;
 }
 
 .flex-group {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    @include flexRowStyle();
 }
 
 .package-group {
@@ -35,6 +34,9 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    .icon-title {
+        @include iconStyle();
+    }
 }
 
 .modal-content-group-spending {
@@ -46,6 +48,7 @@
     height: 100%;
     padding-top: 10px;
     overflow: auto;
+    padding-right: 10px;
 }
 
 #modalFormSpending::-webkit-scrollbar {
@@ -66,25 +69,27 @@
 
 .added-member {
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    @include flexRowStyle();
     align-items: flex-end;
     padding: 10px;
     border-radius: 5px;
 }
 
-.added-member-success {
+.form-add-member {
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #ffebcc;
-    color: #000;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-    border-radius: 5px;
+    @include flexRowStyle();
+    align-items: flex-end;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    .added-member-success {
+        width: 100%;
+        @include flexRowStyle();
+        padding: 10px;
+        background-color: #ffebcc;
+        color: #000;
+        box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+        border-radius: 5px;
+    }
 }
 
 .todo-msg {
@@ -93,14 +98,11 @@
 }
 
 .demo-simple-todos {
-    background-color: #ffe0b3;
+    //background-color: #ffe0b3;
     font-weight: 550;
     margin-left: 10px;
 }
 
 .box-todo {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    @include flexRowStyle();
 }

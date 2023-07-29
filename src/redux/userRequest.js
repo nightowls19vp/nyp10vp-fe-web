@@ -732,7 +732,7 @@ export const postPackageBill = async (
         Authorization: `Bearer ${token}`,
       },
     });
-    if (res?.data.statusCode === 200) {
+    if (res?.data.statusCode === 201) {
       await getGroupByUserId(token, dispatch, axiosJWT);
       dispatch(updateGroupId(group_id));
       dispatch(updateGroupItemId(1));
@@ -779,6 +779,8 @@ export const deletePackageBill = async (
     }
     return res?.data;
   } catch (error) {
+    dispatch(updateGroupId(group_id));
+    dispatch(updateGroupItemId(1));
     return error.response.data;
   }
 };
@@ -787,37 +789,40 @@ export const updatePackageBill = async (
   group_id,
   id,
   dataAmount,
+  checkAmount,
   dataStatus,
+  checkStatus,
   token,
   dispatch,
   axiosJWT
 ) => {
   try {
-    const res1 = await axiosJWT.put(`/pkg-mgmt/bill/${id}`, dataAmount, {
-      headers: {
-        accept: "*/*",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res1?.data.statusCode === 200) {
-      const res2 = await axiosJWT.put(
-        `/pkg-mgmt/bill/${id}/status`,
-        dataStatus,
-        {
-          headers: {
-            accept: "*/*",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (res2?.data.statusCode === 200) {
-        await getGroupByUserId(token, dispatch, axiosJWT);
-        dispatch(updateGroupId(group_id));
-        dispatch(updateGroupItemId(1));
-      }
+    if (checkAmount) {
+      await axiosJWT.put(`/pkg-mgmt/bill/${id}`, dataAmount, {
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
     }
+
+    if (checkStatus) {
+      await axiosJWT.put(`/pkg-mgmt/bill/${id}/status`, dataStatus, {
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+
+    await getGroupByUserId(token, dispatch, axiosJWT);
+    dispatch(updateGroupId(group_id));
+    dispatch(updateGroupItemId(1));
+
+    return true;
   } catch (error) {
-    return error.response.data;
+    dispatch(updateGroupId(group_id));
+    dispatch(updateGroupItemId(1));
+    return false;
   }
 };
