@@ -1,44 +1,49 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import {
   Stack,
-  Tab,
-  Tabs,
   Box,
   Checkbox,
   Typography,
   TextField,
-  Button,
+  IconButton,
+  CircularProgress,
+  Modal,
 } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 import { createAxios } from "../../../http/createInstance";
 import { loginSuccess } from "../../../redux/authSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { addTodo, updateIsCompletedTodo } from "../../../redux/packageRequest";
+import {
+  addTodo,
+  deleteTodo,
+  updateIsCompletedTodo,
+} from "../../../redux/packageRequest";
 import { updateTodos } from "../../../redux/packageSlice";
 import * as CustomComponent from "../../../component/custom/CustomComponents";
+import "../../../assets/css/Todos.scss";
+import { Colors } from "../../../config/Colors";
+import {
+  updateMessage,
+  updateOpenSnackbar,
+  updateStatus,
+} from "../../../redux/messageSlice";
 
-function CustomTabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 1 }}>{children}</Box>}
-    </div>
-  );
-}
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 300,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  borderRadius: "15px",
+  bgcolor: "background.paper",
+  border: "1px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 function TodoDetail({ grID, item }) {
   const dispatch = useDispatch();
@@ -46,15 +51,18 @@ function TodoDetail({ grID, item }) {
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  const [value, setValue] = React.useState(0);
   const [todo, setTodo] = useState("");
   const [description, setDescription] = useState("");
   const [msg, setMsg] = useState("");
   const [listTodo, setListTodo] = useState(item?.todos);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const [idxTodo, setIdxTodo] = useState("");
+  const [flag, setFlag] = useState(false);
+  const [open, setOpen] = useState(false);
+  const handleOpen = (e, idx) => {
+    setIdxTodo(idx);
+    setOpen(true);
   };
+  const handleClose = () => setOpen(false);
 
   const handleAddTodo = async () => {
     if (todo.length <= 0) {
@@ -71,7 +79,8 @@ function TodoDetail({ grID, item }) {
         todos: todos,
         state: item.state,
       };
-      await addTodo(
+      setFlag(true);
+      const res = await addTodo(
         grID,
         item._id,
         formData,
@@ -79,9 +88,47 @@ function TodoDetail({ grID, item }) {
         dispatch,
         axiosJWT
       );
-      setTodo("");
-      setDescription("");
+
+      if (res != null) {
+        setFlag(false);
+        if (res?.statusCode === 200) {
+          dispatch(updateOpenSnackbar(true));
+          dispatch(updateStatus(true));
+          dispatch(updateMessage("Thêm việc cần làm thành công!"));
+          setTodo("");
+          setDescription("");
+        } else {
+          dispatch(updateOpenSnackbar(true));
+          dispatch(updateStatus(false));
+          dispatch(updateMessage("Thêm việc cần làm thất bại!"));
+        }
+      }
     }
+  };
+
+  const handleDeleteTodo = async () => {
+    let newArray = [...listTodo];
+    newArray = [...newArray.filter((x) => x._id !== idxTodo)];
+
+    let todos = [];
+    let formData = {
+      _id: idxTodo,
+    };
+    todos.push(formData);
+
+    const res = await deleteTodo(item._id, todos, user?.accessToken, axiosJWT);
+    console.log(res);
+    if (res?.statusCode === 200) {
+      setListTodo(newArray);
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(true));
+      dispatch(updateMessage("Xóa việc cần làm thành công!"));
+    } else {
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(false));
+      dispatch(updateMessage("Xóa việc cần làm thất bại!"));
+    }
+    handleClose();
   };
 
   const handleIsCompleted = async (e, idx) => {
@@ -121,26 +168,10 @@ function TodoDetail({ grID, item }) {
   };
 
   return (
-    <Stack spacing={2} sx={{ width: "100%" }}>
-      <Box
-        sx={{
-          borderBottom: 1,
-          borderColor: "divider",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="Tất cả" {...a11yProps(0)} />
-          <Tab label="Đang làm" {...a11yProps(1)} />
-          <Tab label="Hoàn thành" {...a11yProps(2)} />
-        </Tabs>
-      </Box>
-
+    <Stack
+      spacing={2}
+      sx={{ width: "100%", position: "relative", opacity: flag ? 0.5 : 1 }}
+    >
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}>
         <TextField
           label="Công việc"
@@ -156,11 +187,9 @@ function TodoDetail({ grID, item }) {
         />
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
             width: { xs: "100%", md: "50%" },
           }}
+          className="form-add-todo"
         >
           <TextField
             label="Mô tả"
@@ -177,78 +206,107 @@ function TodoDetail({ grID, item }) {
         </Box>
       </Box>
       <Typography className="todo-msg">{msg}</Typography>
-
-      <CustomTabPanel value={value} index={0}>
-        {listTodo.length > 0 &&
-          listTodo !== null &&
-          listTodo.map((todo, idx) => (
-            <Box className="title-group-spending" key={idx}>
-              <Checkbox
-                checked={todo.isCompleted}
-                onChange={(e) => handleIsCompleted(e, idx)}
-                sx={{ fontSize: "20px" }}
-              />
-              <Typography
-                sx={{
-                  fontSize: "20px",
-                  textDecoration: todo.isCompleted ? "line-through" : "none",
-                }}
-              >
-                {todo.todo}
-              </Typography>
-              <Typography
-                sx={{
-                  paddingLeft: "20px",
-                  fontSize: "16px",
-                  fontStyle: "italic",
-                }}
-              >
-                {todo.description}
-              </Typography>
-            </Box>
-          ))}
-      </CustomTabPanel>
-
-      <CustomTabPanel value={value} index={1}>
-        {listTodo.length > 0 &&
-          listTodo !== null &&
-          listTodo.map(
-            (todo, idx) =>
-              todo.isCompleted === false && (
-                <Box className="title-group-spending" key={idx}>
-                  <Checkbox
-                    checked={todo.isCompleted}
-                    onChange={(e) => handleIsCompleted(e, idx)}
-                  />
-                  <Typography
-                    sx={{
-                      textDecoration: todo.isCompleted
-                        ? "line-through"
-                        : "none",
-                    }}
-                  >
-                    {todo.todo}
-                  </Typography>
-                </Box>
-              )
-          )}
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        {listTodo.length > 0 &&
-          listTodo !== null &&
-          listTodo.map(
-            (todo, idx) =>
-              todo.isCompleted && (
-                <Box className="title-group-spending" key={idx}>
-                  <Checkbox
-                    checked={todo.isCompleted}
-                    onChange={(e) => handleIsCompleted(e, idx)}
-                  />
-                  <Typography>{todo.todo}</Typography>
-                </Box>
-              )
-          )}
-      </CustomTabPanel>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: { xs: "column", sm: "row" },
+          justifyContent: "space-between",
+        }}
+      >
+        <Box
+          sx={{ width: { xs: "calc(100% - 40px)", sm: "calc(50% - 40px)" } }}
+          className="box-todo"
+        >
+          <Box className="title-box">
+            <Typography className="text-title">Đang thực hiện</Typography>
+          </Box>
+          <Stack spacing={1} sx={{ width: "100%" }}>
+            {listTodo.length > 0 &&
+              listTodo !== null &&
+              listTodo.map(
+                (todo, idx) =>
+                  todo.isCompleted === false && (
+                    <Box className="list-todo" key={idx}>
+                      <Box>
+                        <Box className="todos">
+                          <Checkbox
+                            checked={todo.isCompleted}
+                            onChange={(e) => handleIsCompleted(e, idx)}
+                          />
+                          <Typography>{todo.todo}</Typography>
+                        </Box>
+                        <Typography className="text-todo">
+                          {todo.description}
+                        </Typography>
+                      </Box>
+                      <IconButton onClick={(e) => handleOpen(e, todo._id)}>
+                        <ClearIcon sx={{ color: Colors.error }} />
+                      </IconButton>
+                    </Box>
+                  )
+              )}
+          </Stack>
+        </Box>
+        <Box
+          sx={{ width: { xs: "calc(100% - 40px)", sm: "calc(50% - 40px)" } }}
+          className="box-todo"
+        >
+          <Box className="title-box">
+            <Typography className="text-title">Đã hoàn thành</Typography>
+          </Box>
+          <Stack spacing={1} sx={{ width: "100%" }}>
+            {listTodo.length > 0 &&
+              listTodo !== null &&
+              listTodo.map(
+                (todo, idx) =>
+                  todo.isCompleted === true && (
+                    <Box className="list-todo" key={idx}>
+                      <Box>
+                        <Box className="todos">
+                          <Checkbox
+                            checked={todo.isCompleted}
+                            onChange={(e) => handleIsCompleted(e, idx)}
+                          />
+                          <Typography>{todo.todo}</Typography>
+                        </Box>
+                        <Typography className="text-todo">
+                          {todo.description}
+                        </Typography>
+                      </Box>
+                      <IconButton onClick={(e) => handleOpen(e, todo._id)}>
+                        <ClearIcon sx={{ color: Colors.error }} />
+                      </IconButton>
+                    </Box>
+                  )
+              )}
+          </Stack>
+        </Box>
+      </Box>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={style}>
+          <Typography>Bạn có muốn xóa chi tiêu này không?</Typography>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CustomComponent.Button1
+              sx={{ width: "40px", marginRight: "10px" }}
+              onClick={handleDeleteTodo}
+            >
+              Có
+            </CustomComponent.Button1>
+            <CustomComponent.Button2
+              sx={{ width: "40px", marginLeft: "10px" }}
+              onClick={handleClose}
+            >
+              Không
+            </CustomComponent.Button2>
+          </Box>
+        </Box>
+      </Modal>
+      {flag && (
+        <Box sx={{ position: "absolute", top: "40%", left: "50%" }}>
+          <CircularProgress />
+        </Box>
+      )}
     </Stack>
   );
 }

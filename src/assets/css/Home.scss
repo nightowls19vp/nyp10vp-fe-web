@@ -1,3 +1,6 @@
+@import "mixins";
+@import "color";
+
 .modal-user-join {
     display: flex;
     flex-direction: row;
@@ -16,6 +19,14 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
+}
+
+.home-box {
+    width: 100%;
+    background-color: $bgGray;
+    margin: 5%;
+    //padding: 3em;
+    border-radius: 10px;
 }
 
 .home-box-1-left {

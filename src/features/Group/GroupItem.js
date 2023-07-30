@@ -68,7 +68,9 @@ function GroupItem() {
                         />
                       ) : (
                         <GroupTasks
-                        key={route._id}
+                          key={route._id}
+                          grId={route._id}
+                          item={route.child[3].group}
                         />
                       )
                     ) : null

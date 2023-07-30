@@ -61,14 +61,16 @@ export const loginUser = async (
 
     dispatch(setTokenJoinGroup(""));
 
-    await getAllPackage(dispatch);
+    console.log(res?.data);
 
-    await getUserCart(
-      res?.data.data.userInfo._id,
-      res?.data.accessToken,
-      dispatch,
-      axiosJWT
-    );
+    // await getAllPackage(dispatch);
+
+    // await getUserCart(
+    //   res?.data.data.userInfo._id,
+    //   res?.data.accessToken,
+    //   dispatch,
+    //   axiosJWT
+    // );
 
     dispatch(updateProfileId(1));
     navigate("/");

@@ -10,6 +10,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   AccordionActions,
+  CircularProgress,
 } from "@mui/material";
 //import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import AddTaskIcon from "@mui/icons-material/AddTask";
@@ -25,6 +26,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateTodos } from "../../../redux/packageSlice";
 import { deletedTodos } from "../../../redux/packageRequest";
 import { loginSuccess } from "../../../redux/authSlice";
+import * as CustomComponent from "../../../component/custom/CustomComponents";
+import {
+  updateMessage,
+  updateOpenSnackbar,
+  updateStatus,
+} from "../../../redux/messageSlice";
 
 const style = {
   position: "absolute",
@@ -40,6 +47,22 @@ const style = {
   p: 4,
 };
 
+const styleModal = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 300,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  borderRadius: "15px",
+  bgcolor: "background.paper",
+  border: "1px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 function GroupTodos({ grId, item }) {
   const dispatch = useDispatch();
 
@@ -47,6 +70,9 @@ function GroupTodos({ grId, item }) {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [open, setOpen] = useState(false);
+  const [idxTodo, setIdxTodo] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [flag, setFlag] = useState(false);
   const [expanded, setExpanded] = React.useState(false);
 
   const handleChangeAccordion = (todo) => (event, isExpanded) => {
@@ -57,18 +83,41 @@ function GroupTodos({ grId, item }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleDeleteTodos = async (e, todo) => {
+  const handleOpenModal = (e, todo) => {
+    setIdxTodo(todo._id);
+    setOpenModal(true);
+  };
+  const handleCloseModal = () => setOpenModal(false);
+
+  const handleDeleteTodos = async () => {
+    handleCloseModal();
+    setFlag(true);
     const res = await deletedTodos(
       grId,
-      todo._id,
+      idxTodo,
       user?.accessToken,
       dispatch,
       axiosJWT
     );
-    console.log(res);
+
+    if (res != null) {
+      setFlag(false);
+      if (res?.statusCode === 200) {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Xóa việc cần làm thành công!"));
+      } else {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Xóa việc cần làm thất bại!"));
+      }
+    }
   };
   return (
-    <Stack sx={{ width: "100%" }} spacing={2}>
+    <Stack
+      sx={{ width: "100%", position: "relative", opacity: flag ? 0.5 : 1 }}
+      spacing={2}
+    >
       <Box className="flex-group">
         <Box className="title-group-spending">
           <TaskAltIcon
@@ -127,7 +176,7 @@ function GroupTodos({ grId, item }) {
                   {todo !== null && <TodoDetail grID={grId} item={todo} />}
                 </AccordionDetails>
                 <AccordionActions>
-                  <IconButton onClick={(e) => handleDeleteTodos(e, todo)}>
+                  <IconButton onClick={(e) => handleOpenModal(e, todo)}>
                     <DeleteIcon sx={{ color: Colors.error }} />
                   </IconButton>
                 </AccordionActions>
@@ -135,6 +184,30 @@ function GroupTodos({ grId, item }) {
             ) : null
           )
         : null}
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <Box sx={styleModal}>
+          <Typography>Bạn có muốn xóa chi tiêu này không?</Typography>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CustomComponent.Button1
+              sx={{ width: "40px", marginRight: "10px" }}
+              onClick={handleDeleteTodos}
+            >
+              Có
+            </CustomComponent.Button1>
+            <CustomComponent.Button2
+              sx={{ width: "40px", marginLeft: "10px" }}
+              onClick={handleCloseModal}
+            >
+              Không
+            </CustomComponent.Button2>
+          </Box>
+        </Box>
+      </Modal>
+      {flag && (
+        <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
+          <CircularProgress />
+        </Box>
+      )}
     </Stack>
   );
 }

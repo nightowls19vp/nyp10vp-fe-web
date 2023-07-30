@@ -19,23 +19,18 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 import { Colors } from "../../config/Colors";
 import * as FormatNumber from "../../component/custom/FormatDateNumber";
+import { useDispatch } from "react-redux";
+import { updateHomeBilling } from "../../redux/homeSlice";
 
-function BoxNotification({ bill }) {
+function BoxNotification({ bill, homeBilling }) {
+  const dispatch = useDispatch();
+  const handleClearBill = () => {
+    let arr = [...homeBilling];
+    arr = [...arr.filter((x) => x._id !== bill._id)];
+    dispatch(updateHomeBilling(arr));
+  }
   return (
     <Card sx={{ display: "flex", justifyContent: "space-between", borderRadius: "20px" }}>
-      {/* <Box
-        flex={1}
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-      >
-        <AttachMoneyIcon
-          sx={{
-            backgroundColor: Colors.btnOutline,
-            padding: "20px",
-            fontSize: "36px",
-            borderRadius: "50%"
-          }}
-        />
-      </Box> */}
       <Box flex={3} sx={{ display: "flex", flexDirection: "column" }}>
         <CardHeader
           avatar={
@@ -51,7 +46,7 @@ function BoxNotification({ bill }) {
           title={bill.summary}
           subheader={FormatNumber.formatDate(bill.date)}
           action={
-            <IconButton>
+            <IconButton onClick={handleClearBill}>
               <ClearIcon sx={{ color: Colors.error }} />
             </IconButton>
           }

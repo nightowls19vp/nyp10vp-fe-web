@@ -1,0 +1,44 @@
+@import "mixins";
+@import "color";
+
+.form-add-todo {
+    @include flexRowStyle();
+}
+
+.todo-msg {
+    color: #ff3333;
+    font-style: italic;
+}
+
+.box-todo {
+    @include flexColumnStyle();
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    margin: 10px !important;
+    background-color: #fff;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    border-radius: 20px;
+    .title-box {
+        width: 100%;
+        @include flexRowStyle();
+        justify-content: center;
+        .text-title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+    }
+}
+
+.list-todo {
+    @include flexRowStyle();
+    width: 100%;
+    .text-todo {
+        margin-left: 42px;
+        font-style: italic;
+    }
+    .todos {
+        @include flexRowStyle();
+        justify-content: flex-start;
+    }
+}

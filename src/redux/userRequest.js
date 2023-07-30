@@ -234,7 +234,8 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
           let itemCalendar = {
             _id: item._id,
-            todos: item.tasks,
+            members: item.members,
+            task: item.task,
           };
 
           let childGroupItem = [
@@ -317,7 +318,8 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
           let itemCalendar = {
             _id: item._id,
-            todos: item.tasks,
+            members: item.members,
+            task: item.task,
           };
 
           let childGroupItem = [
@@ -401,7 +403,8 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
           let itemCalendar = {
             _id: item._id,
-            todos: item.tasks,
+            members: item.members,
+            task: item.task,
           };
 
           let childGroupItem = [
@@ -486,7 +489,8 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
           let itemCalendar = {
             _id: item._id,
-            todos: item.tasks,
+            members: item.members,
+            task: item.task,
           };
 
           let childGroupItem = [

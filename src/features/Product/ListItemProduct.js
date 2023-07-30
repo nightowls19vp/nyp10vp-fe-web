@@ -118,7 +118,7 @@ function ListItemProduct({ item, p, grId, storageID }) {
         <TableBody>
           {rows.map((row) => (
             <StyledTableRow
-              key={row.name}
+              key={row.id}
               sx={{
                 cursor: "pointer",
                 "&:last-child td, &:last-child th": { border: 0 },

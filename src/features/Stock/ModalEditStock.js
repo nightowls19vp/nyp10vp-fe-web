@@ -6,6 +6,7 @@ import {
   Typography,
   Box,
   CircularProgress,
+  Modal,
 } from "@mui/material";
 
 import { createAxios } from "../../http/createInstance.js";
@@ -19,7 +20,27 @@ import {
   postStorageLocation,
   updateStorageLocation,
 } from "../../redux/stockRequest";
-import { updateMessage, updateOpenSnackbar, updateStatus } from "../../redux/messageSlice.js";
+import {
+  updateMessage,
+  updateOpenSnackbar,
+  updateStatus,
+} from "../../redux/messageSlice.js";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 300,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  borderRadius: "15px",
+  bgcolor: "background.paper",
+  border: "1px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 function ModalEditStock({ item, grID, handleClose }) {
   const inputRef = useRef();
@@ -33,6 +54,12 @@ function ModalEditStock({ item, grID, handleClose }) {
   const [image, setImage] = useState(null);
   const [fileImg, setFileImg] = useState(item.image);
   const [flag, setFlag] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const handleOpenModal = (e, idx) => {
+    setOpen(true);
+  };
+  const handleCloseModal = () => setOpen(false);
 
   const handleChangeNameStock = (e) => {
     setNameStock(e.target.value);
@@ -88,6 +115,8 @@ function ModalEditStock({ item, grID, handleClose }) {
   };
 
   const handleDeleteStock = async () => {
+    handleCloseModal();
+    setFlag(true);
     const res = await deletedStorageLocation(
       grID,
       item.id,
@@ -112,7 +141,7 @@ function ModalEditStock({ item, grID, handleClose }) {
   };
 
   return (
-    <Box sx={{ width: "100%", position: "relative" }}>
+    <Box sx={{ width: "100%", position: "relative", opacity: flag ? 0.5 : 1 }}>
       <Typography
         id="modal-modal-title"
         variant="h6"
@@ -184,7 +213,7 @@ function ModalEditStock({ item, grID, handleClose }) {
                   marginRight: { xs: "0px", md: "3px" },
                 }}
               >
-                <CustomComponent.Button2 fullWidth onClick={handleDeleteStock}>
+                <CustomComponent.Button2 fullWidth onClick={handleOpenModal}>
                   Xóa kho
                 </CustomComponent.Button2>
               </Box>
@@ -206,6 +235,25 @@ function ModalEditStock({ item, grID, handleClose }) {
           </Stack>
         </Box>
       </Box>
+      <Modal open={open} onClose={handleCloseModal}>
+        <Box sx={style}>
+          <Typography>Bạn có muốn xóa chi tiêu này không?</Typography>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CustomComponent.Button1
+              sx={{ width: "40px", marginRight: "10px" }}
+              onClick={handleDeleteStock}
+            >
+              Có
+            </CustomComponent.Button1>
+            <CustomComponent.Button2
+              sx={{ width: "40px", marginLeft: "10px" }}
+              onClick={handleCloseModal}
+            >
+              Không
+            </CustomComponent.Button2>
+          </Box>
+        </Box>
+      </Modal>
       {flag && (
         <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
           <CircularProgress />

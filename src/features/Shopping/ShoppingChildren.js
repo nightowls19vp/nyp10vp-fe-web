@@ -71,15 +71,15 @@ const styleProgress = {
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: Colors.chat,
+    //backgroundColor: Colors.chat,
     color: theme.palette.common.black,
   },
-  '&:nth-of-type(1)': {
-    borderRadius: "15px 0px 0px 0px",
-  },
-  '&:nth-of-type(6)': {
-    borderRadius: "0px 15px 0px 0px",
-  },
+  // '&:nth-of-type(1)': {
+  //   borderRadius: "15px 0px 0px 0px",
+  // },
+  // '&:nth-of-type(6)': {
+  //   borderRadius: "0px 15px 0px 0px",
+  // },
 }));
 
 function createData(id, name, quantity, member, duration, money) {
@@ -503,13 +503,13 @@ export default function EnhancedTable({ item }) {
           justifyContent: "space-between",
           alignItems: "flex-start",
           paddingY: "30px",
-          opacity: flag === 2 ? 0.3 : 1,
+          opacity: flag === 2 ? 0.75 : 1,
         }}
       >
         <Box sx={{ width: { xs: "100%", lg: "70%" } }}>
           <Stack>
             <Box sx={{ width: "100%" }}>
-              <Paper sx={{ width: "100%", mb: 2, borderRadius: "15px" }}>
+              <Paper sx={{ width: "100%", mb: 2 }}>
                 {selected.length > 0 ? (
                   <EnhancedTableToolbar
                     numSelected={selected.length}

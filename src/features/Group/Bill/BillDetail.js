@@ -67,10 +67,10 @@ function BillDetail({ grID }) {
   };
   const initalData = initalChange();
   const [data, setData] = useState(initalChange());
+  const [flag, setFlag] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [flag, setFlag] = useState(false);
 
   const handleChangeStatus = (event, idx) => {
     let arr = [];
@@ -203,7 +203,7 @@ function BillDetail({ grID }) {
       sx={{
         width: "100%",
         position: "relative",
-        opacity: flag === true ? 0.75 : 1,
+        opacity: flag === true ? 0.5 : 1,
       }}
     >
       <Typography variant="h4">{bill?.summary}</Typography>
@@ -241,10 +241,14 @@ function BillDetail({ grID }) {
                 </Typography>
               </Box>
               <Box flex={1}>
-                <InputBase
-                  value={data[idx].amount}
-                  onChange={(e) => handleChangeAmount(e, route.borrower._id)}
-                />
+                {userInfo._id === bill?.lender._id ? (
+                  <InputBase
+                    value={data[idx].amount}
+                    onChange={(e) => handleChangeAmount(e, route.borrower._id)}
+                  />
+                ) : (
+                  <Typography>{FormatNumber.formatCurrency(data[idx].amount)}</Typography>
+                )}
               </Box>
               {userInfo._id === bill?.lender._id ? (
                 <Box>

@@ -267,7 +267,14 @@ export const searchPurchaseLocations = async (
   }
 };
 
-export const addItemsToStorage = async (grId, storageId, data, token, dispatch, axiosJWT) => {
+export const addItemsToStorage = async (
+  grId,
+  storageId,
+  data,
+  token,
+  dispatch,
+  axiosJWT
+) => {
   try {
     const res = await axiosJWT.post("/prod-mgmt/items", data, {
       headers: {
@@ -276,8 +283,38 @@ export const addItemsToStorage = async (grId, storageId, data, token, dispatch, 
       },
     });
 
-    await getProductItemsByStorage(grId, 1, 5, storageId, token, dispatch, axiosJWT);
-    
+    await getProductItemsByStorage(
+      grId,
+      1,
+      5,
+      storageId,
+      token,
+      dispatch,
+      axiosJWT
+    );
+
+    return res?.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const addGroupProducts = async (
+  grId,
+  storageId,
+  data1,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.post("/prod-mgmt/group-products", data1, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return res?.data;
   } catch (error) {
     return error.response.data;

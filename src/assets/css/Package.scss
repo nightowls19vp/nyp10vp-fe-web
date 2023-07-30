@@ -1,3 +1,6 @@
+@import "color";
+@import "mixins";
+
 .containerPackage {
     display: flex;
     flex-direction: row;
@@ -18,4 +21,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.interest-rate {
+    margin: 2%;
+    .title {
+        color: $textPrimary;
+        font-size: 25px;
+    }
+    .summary {
+        font-style: italic;
+    }
 }

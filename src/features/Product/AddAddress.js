@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Autocomplete, Box, TextField, Stack } from "@mui/material";
+import { Autocomplete, Box, TextField, Stack, CircularProgress } from "@mui/material";
 import { createAxios } from "../../http/createInstance";
 import {
   addPurchaseLocations,
@@ -13,7 +13,9 @@ import { useDispatch, useSelector } from "react-redux";
 import * as CustomComponent from "../../component/custom/CustomComponents";
 import { loginSuccess } from "../../redux/authSlice";
 
-function AddAddress({ grID }) {
+import { updateMessage, updateOpenSnackbar, updateStatus } from "../../redux/messageSlice";
+
+function AddAddress({ grID, handleCloseAddress }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
@@ -33,6 +35,7 @@ function AddAddress({ grID }) {
   const [name, setName] = useState("");
   const [street, setStreet] = useState("");
   const [btnDisable, setBtnDisable] = useState(true);
+  const [flag, setFlag] = useState(false);
 
   const searchDataProvince = async (search) => {
     const res = await searchProvinceVietNam(search, user?.accessToken);
@@ -98,6 +101,7 @@ function AddAddress({ grID }) {
   };
 
   const handleAddAddress = async () => {
+    setFlag(true);
     let address = {
       addressLine1: street,
       addressLine2: "",
@@ -114,7 +118,20 @@ function AddAddress({ grID }) {
     };
 
     const res = await addPurchaseLocations(formData, user?.accessToken, axiosJWT);
-    console.log(res);
+    if (res != null) {
+      setFlag(false);
+      if (res?.statusCode === 201) {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Thêm địa chỉ thành công!"));
+      } else {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Thêm địa chỉ thất bại!"));
+      }
+    }
+
+    handleCloseAddress();
   };
 
   useEffect(() => {
@@ -125,7 +142,7 @@ function AddAddress({ grID }) {
     }
   }, [dist, prov, street, war]);
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} sx={{ position: "relative", opacity: flag ? 0.5 : 1}}>
       <Autocomplete
         clearOnEscape
         noOptionsText=""
@@ -200,9 +217,9 @@ function AddAddress({ grID }) {
         variant="standard"
       />
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <CustomComponent.Button2 sx={{ width: "120px", marginRight: "5px" }}>
+        {/* <CustomComponent.Button2 sx={{ width: "120px", marginRight: "5px" }}>
           Trở lại
-        </CustomComponent.Button2>
+        </CustomComponent.Button2> */}
         <CustomComponent.Button1
           sx={{ width: "120px", marginLeft: "5px" }}
           disabled={btnDisable}
@@ -211,6 +228,11 @@ function AddAddress({ grID }) {
           Thêm địa chỉ
         </CustomComponent.Button1>
       </Box>
+      {flag && (
+        <Box sx={{ position: "absolute", top: "40%", left: "50%" }}>
+          <CircularProgress />
+        </Box>
+      )}
     </Stack>
   );
 }

@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import "../../assets/css/Package.scss";
 import DetailItem from "./DetailItem";
 import DetailItemRenew from "./DetailItemRenew";
+import BankInterestRate from "./BankInterestRate";
 
 function PackageItem({ data, grpId }) {
   const [value, setValue] = React.useState("1");
@@ -61,7 +62,9 @@ function PackageItem({ data, grpId }) {
             </Box>
           </Stack>
         </TabPanel>
-        <TabPanel value="2"> </TabPanel>
+        <TabPanel value="2">
+          <BankInterestRate />
+        </TabPanel>
       </TabContext>
     </Box>
   );

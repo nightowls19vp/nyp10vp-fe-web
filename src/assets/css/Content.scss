@@ -15,6 +15,7 @@
     @include boxStyle();
     width: 100%;
     .btn-connect {
+        width: 100%;
         @include flexRowStyle();
     }
 }

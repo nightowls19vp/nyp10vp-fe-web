@@ -143,15 +143,15 @@ function AddProduct({ grId, storageID, handleCreatePro, handleAddAddress, handle
       axiosJWT
     );
     if (res != null) {
-      setFlag(flag);
+      setFlag(false);
       if (res?.statusCode === 201) {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
-        dispatch(updateMessage("Thêm nhu yếu phẩm mới thành công!"));
+        dispatch(updateMessage("Thêm nhu yếu phẩm vào kho lưu trữ thành công!"));
       } else {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(false));
-        dispatch(updateMessage("Thêm nhu yếu phẩm mới thất bại!"));
+        dispatch(updateMessage("Thêm nhu yếu phẩm vào kho lưu trữ thất bại!"));
       }
     }
 

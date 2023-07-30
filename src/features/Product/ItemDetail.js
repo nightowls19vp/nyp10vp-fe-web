@@ -115,7 +115,7 @@ function ItemDetail({ item, grId }) {
   }
 
   return (
-    <Stack spacing={1.5}>
+    <Stack sx={{ marginBottom: "3% !important" }} spacing={1}>
       <Typography variant="h6" gutterBottom sx={{ color: Colors.textPrimary }}>
         Thông tin chi tiết của nhu yếu phẩm
       </Typography>

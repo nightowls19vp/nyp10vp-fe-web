@@ -44,23 +44,23 @@ function ProductItem({ grId, storageID }) {
   const [openAddress, setOpenAddress] = useState(false);
 
   const handleOpenAdd = () => {
+    setOpenAddress(false);
+    setOpenCreate(false);
     setOpenAdd(true);
   };
-
-  const handleCloseAdd = () => setOpenAdd(false);
 
   const handleCreatePro = () => {
     setOpenAdd(false);
     setOpenCreate(true);
   };
 
-  const handleCloseCreatePro = () => setOpenCreate(false);
-
   const handleAddress = () => {
     setOpenAdd(false);
     setOpenAddress(true);
-  }
+  };
 
+  const handleCloseAdd = () => setOpenAdd(false);
+  const handleCloseCreatePro = () => setOpenCreate(false);
   const handleCloseAddress = () => setOpenAddress(false);
 
   return (
@@ -125,7 +125,13 @@ function ProductItem({ grId, storageID }) {
         aria-describedby="modal-modal-product"
       >
         <Box sx={style}>
-          <CreateProduct grId={grId} />
+          <CreateProduct
+            grId={grId}
+            storageID={storageID}
+            handleAddAddress={handleAddress}
+            handleOpenAdd={handleOpenAdd}
+            handleCloseCreatePro={handleCloseCreatePro}
+          />
         </Box>
       </Modal>
 
@@ -136,7 +142,7 @@ function ProductItem({ grId, storageID }) {
         aria-describedby="modal-modal-address"
       >
         <Box sx={style}>
-          <AddAddress grID={grId} />
+          <AddAddress grID={grId} handleCloseAddress={handleCloseAddress} />
         </Box>
       </Modal>
     </Stack>

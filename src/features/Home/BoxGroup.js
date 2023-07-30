@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Typography } from "@mui/material";
 import Carousel from "better-react-carousel";
@@ -11,13 +11,35 @@ function BoxGroup() {
   const navigate = useNavigate();
   const homeGroup = useSelector((state) => state?.home.homeGroup);
 
+  const [widthContent, setWidthContent] = useState(window.innerWidth);
+
   const handleChooseGroup = (e, id) => {
     //navigate(`/group?groupId=${id}&Id=0`);
   };
+
+  const BreakpointCarousel = () => {
+    if (widthContent > 900) {
+      return 3;
+    } else if (widthContent > 700) {
+      return 2;
+    }
+  };
+
+  useEffect(() => {
+    function handleWindowResize() {
+      setWidthContent(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleWindowResize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
   return (
     <>
       {homeGroup.length > 0 ? (
-        <Carousel cols={3} rows={1} gap={10} loop>
+        <Carousel cols={BreakpointCarousel()} rows={1} gap={10} loop>
           {homeGroup.map((gr, idx) =>
             gr ? (
               <Carousel.Item key={gr._id}>

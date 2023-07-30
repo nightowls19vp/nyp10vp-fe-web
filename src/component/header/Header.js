@@ -98,6 +98,18 @@ function Header() {
       console.log("updated bill: ", data);
     });
 
+    socket.on("createdTodos", (data) => {
+      console.log("created bill: ", data);
+    });
+
+    socket.on("updatedTodos", (data) => {
+      console.log("updated bill: ", data);
+    });
+
+    socket.on("taskReminder", (data) => {
+      console.log("taskReminder: ", data);
+    });
+
     socket.on("zpCallback", async (data) => {
       console.log("socket-io zpCallback: ", data);
       if (data) {
@@ -112,10 +124,10 @@ function Header() {
     });
 
     return () => {
-      if (socket.readyState === 1) {
-        // <-- This is important
-        socket.disconnect();
-      }
+      // if (socket.readyState === 1) {
+      //   socket.disconnect();
+      // }
+      socket.disconnect();
     };
   }, [
     axiosJWT,

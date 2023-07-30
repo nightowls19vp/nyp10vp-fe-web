@@ -1,15 +1,13 @@
+@import "color";
+@import "mixins";
+
 .d-flex {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    @include flexRowStyle();
 }
 
 .flex-flex-end {
-    display: flex;
-    flex-direction: row;
+    @include flexRowStyle();
     justify-content: flex-end;
-    align-items: center;
 }
 
 .flex-column {
@@ -24,6 +22,14 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+}
+
+.box-img-create-product {
+    @include flexRowStyle();
+    .file-img {
+        width: 50%;
+        height: auto;
+    }
 }
 
 .box-img-product {

@@ -26,6 +26,8 @@ import {
   updateOpenSnackbar,
   updateStatus,
 } from "../../../redux/messageSlice";
+import { Colors } from "../../../config/Colors";
+import "../../../assets/css/Todos.scss";
 
 function FormTodos({ todoID, handleClose }) {
   const dispatch = useDispatch();
@@ -191,19 +193,24 @@ function FormTodos({ todoID, handleClose }) {
       <Typography className="todo-msg">{msg}</Typography>
 
       {listTodo.length > 0 && listTodo !== null ? (
-        <Stack spacing={2}>
+        <Stack spacing={2} sx={{ width: "100%"}}>
           <Typography>Danh sách việc đã thêm</Typography>
           {listTodo.map((todo, idx) => (
-            <Box key={idx} className="box-todo">
-              <Box className="title-group-spending">
-                <Checkbox
-                  checked={todo.isComplete}
-                  onChange={(e) => handleIsComplete(e, idx)}
-                />
-                <Typography>{todo.todo}</Typography>
+            <Box className="list-todo" key={idx}>
+              <Box>
+                <Box className="todos">
+                  <Checkbox
+                    checked={todo.isCompleted}
+                    onChange={(e) => handleIsComplete(e, idx)}
+                  />
+                  <Typography>{todo.todo}</Typography>
+                </Box>
+                <Typography className="text-todo">
+                  {todo.description}
+                </Typography>
               </Box>
               <IconButton onClick={(e) => handleDeleteTodo(e, idx)}>
-                <BackspaceIcon sx={{ color: "#ff3333" }} />
+                <BackspaceIcon sx={{ color: Colors.error }} />
               </IconButton>
             </Box>
           ))}

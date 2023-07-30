@@ -134,8 +134,7 @@ export const addTodo = async (grID, id, data, token, dispatch, axiosJWT) => {
       },
     });
 
-    if (res?.data.statusCode === 201) {
-      console.log(res?.data);
+    if (res?.data.statusCode === 200) {
       await getGroupByUserId(token, dispatch, axiosJWT);
       dispatch(updateGroupId(grID));
       dispatch(updateGroupItemId(2));
@@ -160,6 +159,20 @@ export const getTodo = async (id, token, dispatch, axiosJWT) => {
     if (res?.data?.statusCode === 200) {
       dispatch(updateTodos(res?.data.todos));
     }
+    return res?.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const deleteTodo = async (id, data, token, axiosJWT) => {
+  try {
+    const res = await axiosJWT.delete(`/pkg-mgmt/todos/${id}/todo`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return res?.data;
   } catch (error) {
     return error.response.data;
@@ -199,7 +212,6 @@ export const deletedTodos = async (grID, id, token, dispatch, axiosJWT) => {
       },
     });
     if (res?.data.statusCode === 200) {
-      console.log(res?.data);
       await getGroupByUserId(token, dispatch, axiosJWT);
       dispatch(updateGroupId(grID));
       dispatch(updateGroupItemId(2));
@@ -211,6 +223,27 @@ export const deletedTodos = async (grID, id, token, dispatch, axiosJWT) => {
     return error.response.data;
   }
 };
+
+export const postPackageTask = async (grID, data, token, dispatch, axiosJWT) => {
+  try {
+    const res = await axiosJWT.post(`/pkg-mgmt/task/${grID}`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res?.data.statusCode === 201) {
+      await getGroupByUserId(token, dispatch, axiosJWT);
+      dispatch(updateGroupId(grID));
+      dispatch(updateGroupItemId(3));
+    }
+    return res?.data;
+  } catch (error) {
+    dispatch(updateGroupId(grID));
+    dispatch(updateGroupItemId(3));
+    return error.response.data;
+  }
+}
 
 export const GetGroupSuperUser = async (token, dispatch, axiosJWT) => {
   try {
