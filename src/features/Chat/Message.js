@@ -2,6 +2,7 @@ import React from "react";
 import { Avatar, Box, Typography } from "@mui/material";
 
 import "../../assets/css/Chat.scss";
+import TigerImg from "../../assets/img/tiger.jpg";
 import { Colors } from "../../config/Colors";
 
 function Message({ mess, userId }) {
@@ -25,7 +26,7 @@ function Message({ mess, userId }) {
         }}
       >
         {userId !== mess.user._id ? (
-          <Avatar src={mess.user.avatar} sx={{ width: 24, height: 24 }} />
+          <Avatar src={TigerImg} sx={{ width: 24, height: 24 }} />
         ) : null}
         <Box
           className="message"

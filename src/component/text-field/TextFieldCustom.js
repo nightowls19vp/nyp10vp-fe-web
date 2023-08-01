@@ -56,7 +56,7 @@ NumericFormatCustom.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-export default function TextFieldCustom({ sizeText, ChangeValue }) {
+export default function TextFieldCustom({ labelText, sizeText, ChangeValue }) {
   const [values, setValues] = React.useState({
     numberformat: "",
   });
@@ -73,7 +73,7 @@ export default function TextFieldCustom({ sizeText, ChangeValue }) {
     <TextField
       size={sizeText}
       fullWidth
-      label="Giá tiền"
+      label={labelText}
       value={values.numberformat}
       onChange={handleChange}
       name="numberformat"

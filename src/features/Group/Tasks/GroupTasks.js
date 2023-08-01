@@ -52,7 +52,7 @@ function GroupTasks({ grId, item }) {
         let formData = {
           title: el.summary,
           start: el.startDate,
-          end: el.recurrence.ends,
+          end: el.recurrence?.ends ?? el.startDate,
         };
         allEvent.push(formData);
       }

@@ -46,8 +46,8 @@ export const updateInformationUser = async (
 
     return res?.data;
   } catch (error) {
-    return error.response.data;
     dispatch(getUserInforFailed());
+    return error.response.data;
   }
 };
 

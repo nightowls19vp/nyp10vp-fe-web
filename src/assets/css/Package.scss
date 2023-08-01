@@ -32,4 +32,14 @@
     .summary {
         font-style: italic;
     }
+    .box-interest-rate {
+        margin: 10px;
+        justify-content: flex-start;
+        .box-textfield {
+            margin: 10px;
+            .title-textfield {
+                min-width: 130px;
+            }
+        }
+    }
 }

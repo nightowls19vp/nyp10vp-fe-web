@@ -276,6 +276,7 @@ export const addItemsToStorage = async (
   axiosJWT
 ) => {
   try {
+    console.log("formdata: ", data);
     const res = await axiosJWT.post("/prod-mgmt/items", data, {
       headers: {
         accept: "*/*",

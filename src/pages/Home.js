@@ -9,6 +9,7 @@ import { getUserCart } from "../redux/packageRequest.js";
 import { getGroupChannel } from "../redux/userRequest.js";
 import HomeLayout from "../features/Home/HomeLayout.js";
 import { getBillingsUser, getChatsUser, getGroupsUser, getTodosUser, getTransitionUser } from "../redux/homeRequest.js";
+import HomeLayoutNoGroup from "../features/Home/HomeLayoutNoGroup.js";
 
 function Home() {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ function Home() {
     if (user !== null) {
       //getCartAndChannel().catch(console.error);
       getHomeGroupsUser().catch(console.error);
+      //dispatch(loginSuccess(null));
     }
 
     return () => {
@@ -54,7 +56,8 @@ function Home() {
   return (
     <>
       <DefaultLayout>
-        <HomeLayout />
+        {/* <HomeLayout /> */}
+        <HomeLayoutNoGroup />
       </DefaultLayout>
     </>
   );

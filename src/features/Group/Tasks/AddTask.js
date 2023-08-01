@@ -107,6 +107,7 @@ function AddTask({ grID, item, handleClose }) {
       repeatOn: formats,
       ends: statusEnd === 1 ? "" : endDate,
     };
+    console.log(recurrence);
 
     let members = item.map((mem) => {
       return mem._id;

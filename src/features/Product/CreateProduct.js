@@ -147,7 +147,7 @@ function CreateProduct({
 
     setFlag(true);
 
-    const res = await addGroupProducts(
+    const resProduct = await addGroupProducts(
       grId,
       storageID,
       formData1,
@@ -156,7 +156,7 @@ function CreateProduct({
       axiosJWT
     );
 
-    if (res?.statusCode !== 201) {
+    if (resProduct?.statusCode !== 201) {
       dispatch(updateOpenSnackbar(true));
       dispatch(updateStatus(false));
       dispatch(updateMessage("Thêm nhu yếu phẩm vào kho lưu trữ thất bại!"));
@@ -164,12 +164,14 @@ function CreateProduct({
       return;
     }
 
+    console.log("product:", resProduct);
+
     let formData2 = {
       addedBy: user?.data.userInfo._id,
       bestBefore: date,
       quantity: quantity,
       unit: unit,
-      groupProductId: res?.id,
+      groupProductId: resProduct?.data.id,
       storageLocationId: storageID,
       purchaseLocationId: addr,
     };
@@ -185,7 +187,7 @@ function CreateProduct({
 
     if (resItem != null) {
       setFlag(false);
-      if (res?.statusCode === 201) {
+      if (resItem?.statusCode === 201) {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
         dispatch(
@@ -281,7 +283,7 @@ function CreateProduct({
           }}
           onChange={(e) => setPrice(e.target.value)}
         /> */}
-        <TextFieldCustom sizeText={"small"} ChangeValue={ChangeValue} />
+        <TextFieldCustom labelText="Giá tiền" sizeText={"small"} ChangeValue={ChangeValue} />
         <TextField
           size="small"
           fullWidth
@@ -306,7 +308,7 @@ function CreateProduct({
         />
       </Box>
       <Box className="d-flex">
-        <Typography sx={{ minWidth: "120px" }}>Region:</Typography>
+        <Typography sx={{ minWidth: "120px" }}>Khu vực:</Typography>
         <TextField
           size="small"
           fullWidth
@@ -315,7 +317,7 @@ function CreateProduct({
         />
       </Box>
       <Box className="d-flex">
-        <Typography sx={{ minWidth: "120px" }}>Brand:</Typography>
+        <Typography sx={{ minWidth: "120px" }}>Nhãn hiệu:</Typography>
         <TextField
           size="small"
           fullWidth
@@ -324,7 +326,7 @@ function CreateProduct({
         />
       </Box>
       <Box className="d-flex">
-        <Typography sx={{ minWidth: "120px" }}>Category:</Typography>
+        <Typography sx={{ minWidth: "120px" }}>Loại:</Typography>
         <TextField
           size="small"
           fullWidth

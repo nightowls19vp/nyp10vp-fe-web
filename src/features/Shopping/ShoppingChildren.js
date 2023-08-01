@@ -666,11 +666,11 @@ export default function EnhancedTable({ item }) {
           </Stack>
         </Box>
       </Box>
-      {flag === 2 ? (
+      {/* {flag === 2 ? (
         <Box sx={{ position: "fixed", top: "50%", left: "50%" }}>
           <CircularProgress />
         </Box>
-      ) : null}
+      ) : null} */}
     </>
   );
 }

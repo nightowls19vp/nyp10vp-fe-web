@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Stack, Tab, Alert, AlertTitle } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
+import Banner from "../../assets/img/Banner.png";
 
 import { useSelector } from "react-redux";
 
@@ -17,6 +18,7 @@ function PackageItem({ data, grpId }) {
   };
   return (
     <Box sx={{ width: "100%", typography: "body1" }}>
+      <img src={Banner} alt="Logo" width={"100%"} />
       <TabContext value={value}>
         <Box
           sx={{ borderBottom: 1, borderColor: "divider" }}

@@ -25,6 +25,10 @@ import * as CustomComponent from "../../component/custom/CustomComponents.js";
 
 import { updateChannelID } from "../../redux/userSlice.js";
 
+import DogImg from "../../assets/img/dog.jpg";
+import TigerImg from "../../assets/img/tiger.jpg";
+
+
 import * as SB from "../../component/Chat/SendBirdGroupChat.js";
 import Message from "./Message.js";
 
@@ -273,20 +277,23 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
             Thành viên trong nhóm
           </Typography>
 
-          {channelUser.members?.map((member) =>
+          {channelUser.members?.map((member, idx) =>
             member ? (
               <Box className="member-group-channel" key={member.userId}>
-                {member.connectionStatus === "online" ? (
+               {idx === 0 ? (
+                <Avatar src={DogImg} />
+               ) : (<Avatar src={TigerImg}/>)}
+                {/* {member.connectionStatus === "online" ? (
                   <StyledBadge
                     overlap="circular"
                     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                     variant="dot"
                   >
-                    <Avatar src={member?.profileUrl} />
+                    <Avatar src={member?.plainProfileUrl} />
                   </StyledBadge>
                 ) : (
-                  <Avatar src={member?.profileUrl} />
-                )}
+                  <Avatar src={member?.plainProfileUrl} />
+                )} */}
                 <Typography sx={{ paddingX: "10px" }}>
                   {member.nickname}
                 </Typography>
