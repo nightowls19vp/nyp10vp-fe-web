@@ -3,14 +3,14 @@ import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
 function SockectIO() {
-  const URL = "http://localhost:3001";
+  const URL = "https://megoo.103-97-124-110.flashvps.xyz/socket/";
   const user = useSelector((state) => state?.auth.login?.currentUser);
 
   const token = user?.data.userInfo._id;
-  
+
   const socket = new io(URL, {
     autoConnect: false,
-    query: {token},
+    query: { token },
     // withCredentials: true
   });
 
