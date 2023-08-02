@@ -9,7 +9,7 @@ function SockectIO() {
   const token = user?.data.userInfo._id;
 
   const socket = new io(URL, {
-    // autoConnect: false,
+    autoConnect: false,
     path: "/ws/",
     query: { token },
     // withCredentials: true
