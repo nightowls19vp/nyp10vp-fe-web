@@ -600,13 +600,12 @@ export const updateAvatarGroup = async (
       },
     });
 
-    await getGroupByUserId(token, "Super User", dispatch, axiosJWT);
+    await getGroupByUserId(token, dispatch, axiosJWT);
 
-    // await SB.connectSendBird(userID);
-
-    // await SB.updateAvatarChannel(channel, file.file);
+    return true;
   } catch (error) {
-    return error.response.data;
+    // return error.response.data;
+    return false;
   }
 };
 

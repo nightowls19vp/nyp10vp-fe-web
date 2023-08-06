@@ -56,8 +56,8 @@ function Home() {
   return (
     <>
       <DefaultLayout>
-        {/* <HomeLayout /> */}
-        <HomeLayoutNoGroup />
+        <HomeLayout />
+        {/* <HomeLayoutNoGroup /> */}
       </DefaultLayout>
     </>
   );

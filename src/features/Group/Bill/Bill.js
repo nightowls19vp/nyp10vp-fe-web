@@ -62,7 +62,7 @@ function Bill({ grID, item }) {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              width: "20%",
+              width: "30%",
             }}
           >
             <FaMoneyBillWave size={25} />
@@ -91,7 +91,7 @@ function Bill({ grID, item }) {
               {FormatNumber.formatDate(item?.date)}
             </Typography>
           </Box>
-          <Box className="bill-end" sx={{ width: "30%" }}>
+          <Box className="bill-end" sx={{ width: "20%" }}>
             <Avatar src={item.lender.avatar ?? ""} />
             <Box
               sx={{

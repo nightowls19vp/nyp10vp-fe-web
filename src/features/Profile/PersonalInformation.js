@@ -34,6 +34,7 @@ import { Colors } from "../../config/Colors";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker";
 import DateOfBird from "../../component/Date/DateOfBird";
+import { updateMessage, updateOpenSnackbar, updateProgress, updateStatus } from "../../redux/messageSlice";
 
 function PersonalInformation() {
   const inputRef = useRef();
@@ -55,7 +56,6 @@ function PersonalInformation() {
   //   userInfo.socialAccounts !== undefined ? true : false
   // );
   const socialAcc = userInfo.socialAccounts !== undefined ? true : false;
-  const [status, setStatus] = useState(false);
 
   const handleClick = () => {
     inputRef.current.click();
@@ -66,7 +66,7 @@ function PersonalInformation() {
     if (!fileObj) {
       return;
     }
-    setStatus(true);
+    dispatch(updateProgress(true));
     const form = new FormData();
     form.append("file", fileObj);
     const res = await uploadFile(
@@ -85,22 +85,18 @@ function PersonalInformation() {
     );
 
     if (resImg != null) {
-      setStatus(false);
+      dispatch(updateProgress(false));
+      if (resImg.statusCode === 200) {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Cập nhật avatar thành công"));
+        setImage(res.data);
+      } else {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Cập nhật avatar thất bại!"));
+      }
     }
-
-    // if (resImg.statusCode === 200) {
-    //   setImage(res.data);
-    //   setStatus(1);
-    //   setMsg("Cập nhật thông tin thành công");
-    // } else {
-    //   setStatus(2);
-    //   setMsg("Cập nhật thông tin thất bại!");
-    // }
-
-    // setTimeout(() => {
-    //   setStatus(0);
-    //   setMsg("");
-    // }, 5000);
   };
 
   const handleDateTimePicker = (dateValue) => {
@@ -108,6 +104,7 @@ function PersonalInformation() {
   };
 
   const handleButtonChange = async () => {
+    dispatch(updateProgress(true));
     let formData = {};
     if (dob === null) {
       formData = {
@@ -134,6 +131,19 @@ function PersonalInformation() {
       dispatch,
       axiosJWT
     );
+
+    if (res != null) {
+      dispatch(updateProgress(false));
+      if (res?.statusCode === 200) {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Cập nhật thông tin thành công"));
+      } else {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Cập nhật thông tin thất bại!"));
+      }
+    }
 
     // if (res?.statusCode === 200) {
     //   setStatus(1);

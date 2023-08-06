@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as CustomComponent from "../../component/custom/CustomComponents";
 import { loginSuccess } from "../../redux/authSlice";
 
-import { updateMessage, updateOpenSnackbar, updateStatus } from "../../redux/messageSlice";
+import { updateMessage, updateOpenSnackbar, updateProgress, updateStatus } from "../../redux/messageSlice";
 
 function AddAddress({ grID, handleCloseAddress }) {
   const dispatch = useDispatch();
@@ -101,7 +101,8 @@ function AddAddress({ grID, handleCloseAddress }) {
   };
 
   const handleAddAddress = async () => {
-    setFlag(true);
+    handleCloseAddress();
+    dispatch(updateProgress(true));
     let address = {
       addressLine1: street,
       addressLine2: "",
@@ -119,7 +120,7 @@ function AddAddress({ grID, handleCloseAddress }) {
 
     const res = await addPurchaseLocations(formData, user?.accessToken, axiosJWT);
     if (res != null) {
-      setFlag(false);
+      dispatch(updateProgress(false));
       if (res?.statusCode === 201) {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
@@ -130,8 +131,6 @@ function AddAddress({ grID, handleCloseAddress }) {
         dispatch(updateMessage("Thêm địa chỉ thất bại!"));
       }
     }
-
-    handleCloseAddress();
   };
 
   useEffect(() => {

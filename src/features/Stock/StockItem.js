@@ -14,29 +14,8 @@ import ImageStock from "./ImageStock";
 
 import { Colors } from "../../config/Colors";
 import "../../assets/css/Stock.scss";
-import ImgAvatar from "../../assets/img/panda.jpg";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import ModalAddStock from "./ModalAddStock";
-
-const images = [
-  {
-    url: ImgAvatar,
-    title: "Breakfast",
-    width: "30%",
-  },
-  {
-    url: ImgAvatar,
-    title: "Burgers",
-  },
-  {
-    url: ImgAvatar,
-    title: "Camera",
-  },
-  {
-    url: ImgAvatar,
-    title: "iphone",
-  },
-];
 
 const style = {
   position: "absolute",

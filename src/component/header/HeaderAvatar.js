@@ -6,7 +6,7 @@ import { Box, Button, Avatar } from "@mui/material";
 
 import * as CustomComponent from "../custom/CustomComponents.js";
 import MenuItemRow from "./MenuItemRow.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice.js";
 import { logoutUser } from "../../redux/authRequest.js";
 
@@ -15,8 +15,9 @@ function HeaderAvatar({ data, user }) {
   const dispatch = useDispatch();
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
+  const userInfo = useSelector((state) => state?.user?.userInfo.user);
 
-  const image = user?.data.userInfo.avatar ?? "";
+  const image = userInfo.avatar ?? "";
   const [isShown, setIsShown] = useState(false);
 
   const handleClickProfile = () => {

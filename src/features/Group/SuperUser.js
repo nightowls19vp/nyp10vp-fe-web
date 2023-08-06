@@ -26,6 +26,7 @@ import { Colors } from "../../config/Colors";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import PackagesGroup from "./PackagesGroup";
 import OtherPackages from "./OtherPackages";
+import { updateMessage, updateOpenSnackbar, updateProgress, updateStatus } from "../../redux/messageSlice";
 
 const style = {
   position: "absolute",
@@ -72,6 +73,7 @@ function SuperUser({ item, title }) {
 
     const form = new FormData();
     form.append("file", fileObj);
+    dispatch(updateProgress(true));
     const res = await uploadAvatarGroup(
       item._id,
       user?.accessToken,
@@ -79,11 +81,9 @@ function SuperUser({ item, title }) {
       axiosJWT
     );
 
-    console.log(res?.data);
-
     const formAvatar = new FormData();
     formAvatar.append("avatar", res?.data);
-    await updateAvatarGroup(
+    const result = await updateAvatarGroup(
       item._id,
       user?.accessToken,
       item.channel,
@@ -92,8 +92,18 @@ function SuperUser({ item, title }) {
       dispatch,
       axiosJWT
     );
-
-    setImage(res.data);
+    if (result) {
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(true));
+      dispatch(updateMessage("Cập nhật avatar nhóm thành công!"));
+      setImage(res.data);
+    } else {
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(true));
+      dispatch(updateMessage("Cập nhật avatar nhóm thất bại!"));
+    }
   };
 
   const handleButtonSave = async () => {

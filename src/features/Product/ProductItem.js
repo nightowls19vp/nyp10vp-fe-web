@@ -43,11 +43,21 @@ function ProductItem({ grId, storageID }) {
   const [openCreate, setOpenCreate] = useState(false);
   const [openAddress, setOpenAddress] = useState(false);
 
-  const handleOpenAdd = () => {
-    setOpenAddress(false);
+  const handleOpen = () => {
+    // setOpenAddress(false);
+    // setOpenCreate(false);
+    // setOpenAdd(true);
+    if (listProducts.length > 0) {
+      setOpenAdd(true);
+    } else {
+      setOpenCreate(true);
+    }
+   };
+
+   const handleOpenAdd = () => {
     setOpenCreate(false);
     setOpenAdd(true);
-  };
+   }
 
   const handleCreatePro = () => {
     setOpenAdd(false);
@@ -55,7 +65,7 @@ function ProductItem({ grId, storageID }) {
   };
 
   const handleAddress = () => {
-    setOpenAdd(false);
+    //setOpenAdd(false);
     setOpenAddress(true);
   };
 
@@ -89,7 +99,7 @@ function ProductItem({ grId, storageID }) {
           </Link>
           <Typography color="text.primary"> Nhu yếu phẩm trong kho </Typography>
         </Breadcrumbs>
-        <IconButton onClick={handleOpenAdd}>
+        <IconButton onClick={handleOpen}>
           <MdOutlineAddBox color={Colors.textPrimary} size={30} />
         </IconButton>
       </Box>

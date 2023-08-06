@@ -28,6 +28,7 @@ import NoImg from "../../assets/img/image.png";
 import {
   updateMessage,
   updateOpenSnackbar,
+  updateProgress,
   updateStatus,
 } from "../../redux/messageSlice";
 import TextFieldCustom from "../../component/text-field/TextFieldCustom";
@@ -144,8 +145,8 @@ function CreateProduct({
       groupId: grId,
       file: image,
     };
-
-    setFlag(true);
+    handleCloseCreatePro();
+    dispatch(updateProgress(true));
 
     const resProduct = await addGroupProducts(
       grId,
@@ -163,8 +164,6 @@ function CreateProduct({
       handleCloseCreatePro();
       return;
     }
-
-    console.log("product:", resProduct);
 
     let formData2 = {
       addedBy: user?.data.userInfo._id,
@@ -186,7 +185,7 @@ function CreateProduct({
     );
 
     if (resItem != null) {
-      setFlag(false);
+      dispatch(updateProgress(false));
       if (resItem?.statusCode === 201) {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
@@ -199,7 +198,7 @@ function CreateProduct({
         dispatch(updateMessage("Thêm nhu yếu phẩm vào kho lưu trữ thất bại!"));
       }
     }
-    handleCloseCreatePro();
+    
   };
 
   return (

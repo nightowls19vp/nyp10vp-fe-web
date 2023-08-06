@@ -30,7 +30,6 @@ import {
 } from "../../redux/messageSlice.js";
 
 function DetailItem({ item }) {
-  const refBtn = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -44,8 +43,6 @@ function DetailItem({ item }) {
   const [duration, setDuration] = useState(item.duration);
 
   const [money, setMoney] = useState(FormatNumber.formatCurrency(item.price));
-
-  const [heightBtn, setHeightBtn] = useState(0);
 
   const handleInputChange = (event) => {
     setMember(event.target.value === "" ? "" : Number(event.target.value));
@@ -222,10 +219,6 @@ function DetailItem({ item }) {
   };
 
   useEffect(() => {
-    setHeightBtn(refBtn.current.offsetHeight);
-  }, []);
-
-  useEffect(() => {
     if (duration >= 12) {
       setMoney(
         FormatNumber.formatCurrency(
@@ -360,7 +353,7 @@ function DetailItem({ item }) {
             width: "100%",
           }}
         >
-          <Box sx={{ width: "50%", marginRight: "5px" }} ref={refBtn}>
+          <Box sx={{ width: "50%", marginRight: "5px" }}>
             <CustomComponents.Button2
               onClick={(event) => handleButtonAdd(event, item)}
               fullWidth
