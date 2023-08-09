@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import {
   MenuItem,
@@ -10,7 +10,6 @@ import {
   Typography,
   InputBase,
   Modal,
-  CircularProgress,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -27,6 +26,7 @@ import { loginSuccess } from "../../../redux/authSlice";
 import {
   updateMessage,
   updateOpenSnackbar,
+  updateProgress,
   updateStatus,
 } from "../../../redux/messageSlice";
 
@@ -46,7 +46,7 @@ const style = {
   p: 4,
 };
 
-function BillDetail({ grID }) {
+function BillDetail({ grID, handleClose }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
@@ -67,10 +67,9 @@ function BillDetail({ grID }) {
   };
   const initalData = initalChange();
   const [data, setData] = useState(initalChange());
-  const [flag, setFlag] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleCloseDeleted = () => setOpen(false);
 
   const handleChangeStatus = (event, idx) => {
     let arr = [];
@@ -105,7 +104,8 @@ function BillDetail({ grID }) {
   };
 
   const handleDeleteBill = async () => {
-    setFlag(true);
+    handleCloseDeleted();
+    dispatch(updateProgress(true));
     const res = await deletePackageBill(
       grID,
       bill._id,
@@ -115,7 +115,7 @@ function BillDetail({ grID }) {
     );
 
     if (res != null) {
-      setFlag(false);
+      dispatch(updateProgress(false));
       if (res?.statusCode === 200) {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
@@ -142,6 +142,12 @@ function BillDetail({ grID }) {
       }
     }
 
+    if (checkAmount === false && checkStatus === false) {
+      return;
+    }
+
+    handleClose();
+    dispatch(updateProgress(true));
     let borrowersAmount = [];
     let borrowersStatus = [];
     for (let x of data) {
@@ -169,32 +175,28 @@ function BillDetail({ grID }) {
       borrowers: borrowersStatus,
     };
 
-    if (checkAmount === true || checkStatus === true) {
-      setFlag(true);
+    const res = await updatePackageBill(
+      grID,
+      bill._id,
+      formData1,
+      checkAmount,
+      formData2,
+      checkStatus,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
 
-      const res = await updatePackageBill(
-        grID,
-        bill._id,
-        formData1,
-        checkAmount,
-        formData2,
-        checkStatus,
-        user?.accessToken,
-        dispatch,
-        axiosJWT
-      );
-
-      if (res != null) {
-        setFlag(false);
-        if (res === true) {
-          dispatch(updateOpenSnackbar(true));
-          dispatch(updateStatus(true));
-          dispatch(updateMessage("Chỉnh sửa chi tiêu thành công!"));
-        } else {
-          dispatch(updateOpenSnackbar(true));
-          dispatch(updateStatus(false));
-          dispatch(updateMessage("Chỉnh sửa chi tiêu thất bại!"));
-        }
+    if (res != null) {
+      dispatch(updateProgress(false));
+      if (res === true) {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Chỉnh sửa chi tiêu thành công!"));
+      } else {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Chỉnh sửa chi tiêu thất bại!"));
       }
     }
   };
@@ -202,8 +204,6 @@ function BillDetail({ grID }) {
     <Box
       sx={{
         width: "100%",
-        position: "relative",
-        opacity: flag === true ? 0.5 : 1,
       }}
     >
       <Typography variant="h4">{bill?.summary}</Typography>
@@ -247,7 +247,9 @@ function BillDetail({ grID }) {
                     onChange={(e) => handleChangeAmount(e, route.borrower._id)}
                   />
                 ) : (
-                  <Typography>{FormatNumber.formatCurrency(data[idx].amount)}</Typography>
+                  <Typography>
+                    {FormatNumber.formatCurrency(data[idx].amount)}
+                  </Typography>
                 )}
               </Box>
               {userInfo._id === bill?.lender._id ? (
@@ -367,7 +369,7 @@ function BillDetail({ grID }) {
           </Box>
         ) : null}
       </Stack>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleCloseDeleted}>
         <Box sx={style}>
           <Typography>Bạn có muốn xóa chi tiêu này không?</Typography>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -379,18 +381,13 @@ function BillDetail({ grID }) {
             </CustomComponent.Button1>
             <CustomComponent.Button2
               sx={{ width: "40px", marginLeft: "10px" }}
-              onClick={handleClose}
+              onClick={handleCloseDeleted}
             >
               Không
             </CustomComponent.Button2>
           </Box>
         </Box>
       </Modal>
-      {flag && (
-        <Box sx={{ position: "absolute", top: "40%", left: "50%" }}>
-          <CircularProgress />
-        </Box>
-      )}
     </Box>
   );
 }

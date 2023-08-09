@@ -1,22 +1,15 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import {
   Stack,
   Box,
-  Grid,
   TextField,
   Typography,
-  Alert,
-  AlertTitle,
-  CircularProgress,
   InputAdornment,
-  Card,
-  CardContent,
 } from "@mui/material";
 import { AiFillCamera } from "react-icons/ai";
 import ContactEmergencyIcon from "@mui/icons-material/ContactEmergency";
 import PhoneIcon from "@mui/icons-material/Phone";
 import EmailIcon from "@mui/icons-material/Email";
-import CakeIcon from "@mui/icons-material/Cake";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -32,29 +25,34 @@ import ImgAvatar from "../../assets/img/user.png";
 import "../../assets/css/Content.scss";
 import { Colors } from "../../config/Colors";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
-import DateTimePicker from "../../component/Date/DateTimePicker";
 import DateOfBird from "../../component/Date/DateOfBird";
-import { updateMessage, updateOpenSnackbar, updateProgress, updateStatus } from "../../redux/messageSlice";
+import {
+  updateMessage,
+  updateOpenSnackbar,
+  updateProgress,
+  updateStatus,
+} from "../../redux/messageSlice";
 
 function PersonalInformation() {
   const inputRef = useRef();
-  const dateRef = useRef();
-  const avatarRef = useRef();
-
   const user = useSelector((state) => state?.auth.login?.currentUser);
   const userInfo = useSelector((state) => state?.user?.userInfo.user);
 
   const dispatch = useDispatch();
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
+  const initialData = {
+    name: userInfo.name,
+    phone: userInfo.phone ?? "",
+    dob: userInfo.dob ?? null,
+  };
+
   const [image, setImage] = useState(userInfo.avatar ?? ImgAvatar);
   const email = userInfo.email;
   const [name, setName] = useState(userInfo.name);
   const [phone, setPhone] = useState(userInfo.phone ?? "");
   const [dob, setDob] = useState(userInfo.dob ?? null);
-  // const [socialAcc, setSocialAcc] = useState(
-  //   userInfo.socialAccounts !== undefined ? true : false
-  // );
+
   const socialAcc = userInfo.socialAccounts !== undefined ? true : false;
 
   const handleClick = () => {
@@ -93,7 +91,7 @@ function PersonalInformation() {
         setImage(res.data);
       } else {
         dispatch(updateOpenSnackbar(true));
-        dispatch(updateStatus(true));
+        dispatch(updateStatus(false));
         dispatch(updateMessage("Cập nhật avatar thất bại!"));
       }
     }
@@ -104,6 +102,13 @@ function PersonalInformation() {
   };
 
   const handleButtonChange = async () => {
+    if (
+      initialData.name === name &&
+      initialData.phone === phone &&
+      initialData.dob === dob
+    ) {
+      return;
+    }
     dispatch(updateProgress(true));
     let formData = {};
     if (dob === null) {
@@ -140,24 +145,10 @@ function PersonalInformation() {
         dispatch(updateMessage("Cập nhật thông tin thành công"));
       } else {
         dispatch(updateOpenSnackbar(true));
-        dispatch(updateStatus(true));
+        dispatch(updateStatus(false));
         dispatch(updateMessage("Cập nhật thông tin thất bại!"));
       }
     }
-
-    // if (res?.statusCode === 200) {
-    //   setStatus(1);
-    //   setMsg("Cập nhật thông tin thành công");
-    //   return;
-    // } else {
-    //   setStatus(2);
-    //   setMsg("Cập nhật thông tin thất bại!");
-    // }
-
-    // setTimeout(() => {
-    //   setStatus(0);
-    //   setMsg("");
-    // }, 3000);
   };
 
   const handleConnectSocialAcc = () => {
@@ -229,7 +220,7 @@ function PersonalInformation() {
               width: "100%",
             }}
           >
-            <Box flex={1} sx={{ m: 1}}>
+            <Box flex={1} sx={{ m: 1 }}>
               <Typography>Họ & tên</Typography>
               <TextField
                 fullWidth
@@ -244,12 +235,14 @@ function PersonalInformation() {
                 }}
               />
             </Box>
-            <Box flex={1} sx={{ m: 1}}>
+            <Box flex={1} sx={{ m: 1 }}>
               <Typography>Số điện thoại</Typography>
               <TextField
                 fullWidth
+                type="number"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -260,7 +253,8 @@ function PersonalInformation() {
               />
             </Box>
           </Box>
-          <Box sx={{
+          <Box
+            sx={{
               display: "flex",
               flexDirection: {
                 xs: "column",
@@ -268,9 +262,10 @@ function PersonalInformation() {
                 md: "column",
                 lg: "row",
               },
-              width: "100%"
-            }}>
-            <Box flex={1} sx={{ m: 1}}>
+              width: "100%",
+            }}
+          >
+            <Box flex={1} sx={{ m: 1 }}>
               <Typography>Ngày sinh</Typography>
               <DateOfBird
                 valueDay={dob}
@@ -278,7 +273,7 @@ function PersonalInformation() {
                 sizeDateTime={"medium"}
               />
             </Box>
-            <Box flex={1} sx={{ m: 1}}>
+            <Box flex={1} sx={{ m: 1 }}>
               <Typography>Email</Typography>
               <TextField
                 fullWidth
@@ -293,6 +288,13 @@ function PersonalInformation() {
                 }}
               />
             </Box>
+          </Box>
+          <Box
+            sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
+          >
+            <CustomComponent.Button1 onClick={handleButtonChange} sx={{ m: 1 }}>
+              Lưu thay đổi
+            </CustomComponent.Button1>
           </Box>
         </Stack>
         <Stack

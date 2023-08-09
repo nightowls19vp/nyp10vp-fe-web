@@ -31,11 +31,13 @@ import HeaderAvatar from "./HeaderAvatar.js";
 import * as SB from "../Chat/SendBirdGroupChat.js";
 import { getUserCart } from "../../redux/packageRequest.js";
 import LogoMegoo from "../../assets/img/Megoo.png";
+import { useToast } from "rc-toastr";
 
 const topSearch = [];
 
 function Header() {
   const dispatch = useDispatch();
+  const { toast } = useToast();
 
   let user = useSelector((state) => state?.auth.login?.currentUser);
   const channels = useSelector((state) => state?.user?.channel);
@@ -92,18 +94,30 @@ function Header() {
 
     socket.on("createdBill", (data) => {
       console.log("created bill: ", data);
+      if (data.createdBy !== user?.data.userInfo._id) {
+        toast.default(`Bạn có một chi tiêu "${data.summary}"`);
+      }
     });
 
     socket.on("updatedBill", (data) => {
       console.log("updated bill: ", data);
+      if (data.updatedBy !== user?.data.userInfo._id) {
+        toast.default(`Chi tiêu "${data.summary}" đã được chỉnh sửa`);
+      }
     });
 
     socket.on("createdTodos", (data) => {
-      console.log("created bill: ", data);
+      console.log("created todo: ", data);
+      if (data.createdBy !== user?.data.userInfo._id) {
+        toast.default(`Bạn có một danh sách cần làm "${data.summary}"`);
+      }
     });
 
     socket.on("updatedTodos", (data) => {
-      console.log("updated bill: ", data);
+      console.log("updated todo: ", data);
+      if (data.updatedBy !== user?.data.userInfo._id) {
+        toast.default(`Danh sách "${data.summary}" đã được chỉnh sửa`);
+      }
     });
 
     socket.on("taskReminder", (data) => {
@@ -134,6 +148,7 @@ function Header() {
     channels,
     dispatch,
     socket,
+    toast,
     user?.accessToken,
     user?.data.userInfo._id,
   ]);

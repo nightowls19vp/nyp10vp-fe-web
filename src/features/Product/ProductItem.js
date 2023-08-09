@@ -12,14 +12,14 @@ import {
 
 import { MdOutlineAddBox } from "react-icons/md";
 
-import { createAxios } from "../../http/createInstance";
+// import { createAxios } from "../../http/createInstance";
 
 import { Colors } from "../../config/Colors";
 import ListItemProduct from "./ListItemProduct.js";
 import AddProduct from "./AddProduct";
 import CreateProduct from "./CreateProduct";
-import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "../../redux/authSlice";
+import { useSelector } from "react-redux";
+// import { loginSuccess } from "../../redux/authSlice";
 import AddAddress from "./AddAddress";
 
 const style = {

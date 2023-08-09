@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, {  } from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import {
@@ -22,20 +22,17 @@ import {
   FormLabel,
   FormControl,
   Stack,
-  CircularProgress,
   Modal,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
 import { useDispatch, useSelector } from "react-redux";
 import { userCheckout } from "../../redux/userRequest";
 
 import { createAxios } from "../../http/createInstance.js";
-import SockectIO from "../../http/socket.js";
 
 import "../../assets/css/Shopping.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
@@ -47,7 +44,6 @@ import {
   updateNotiCheckout,
   updateNumberCart,
 } from "../../redux/packageSlice";
-import { Colors } from "../../config/Colors";
 
 const style = {
   position: "absolute",
@@ -59,14 +55,6 @@ const style = {
   border: "1px solid #d9d9d9",
   boxShadow: 24,
   p: 4,
-};
-
-const styleProgress = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
 };
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -275,8 +263,6 @@ export default function EnhancedTable({ item }) {
   const userInfo = useSelector((state) => state?.user?.userInfo);
   const order = useSelector((state) => state?.auth?.order);
   const flag = useSelector((state) => state?.package?.flagCart);
-
-  const socket = SockectIO();
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 

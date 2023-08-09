@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Stack, Box, Typography, LinearProgress } from "@mui/material";
 
 import PasswordComponent from "../../component/password/Password";

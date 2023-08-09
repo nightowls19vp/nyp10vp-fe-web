@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Box,
   Stack,
@@ -101,7 +101,7 @@ function SuperUser({ item, title }) {
     } else {
       dispatch(updateProgress(false));
       dispatch(updateOpenSnackbar(true));
-      dispatch(updateStatus(true));
+      dispatch(updateStatus(false));
       dispatch(updateMessage("Cập nhật avatar nhóm thất bại!"));
     }
   };

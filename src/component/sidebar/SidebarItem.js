@@ -42,7 +42,9 @@ function SidebarItem({ item, title, selectedID }) {
           )
             ? Colors.primary
             : null,
-          "&: hover": { backgroundColor: Colors.gray },
+          borderRadius: "10px",
+          marginY: "2px",
+          "&: hover": { backgroundColor: Colors.gray, borderRadius: "10px" },
         }}
         onClick={() => {
           handleButtonItemID(item._id);
@@ -81,7 +83,7 @@ function SidebarItem({ item, title, selectedID }) {
                 ? 800
                 : null,
               paddingLeft: item.icon ? "10px" : null,
-              fontSize: 18
+              fontSize: 18,
             }}
           >
             {item.name}

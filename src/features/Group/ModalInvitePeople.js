@@ -6,9 +6,6 @@ import {
   Modal,
   Typography,
   Autocomplete,
-  IconButton,
-  Divider,
-  InputBase,
   TextField,
 } from "@mui/material";
 

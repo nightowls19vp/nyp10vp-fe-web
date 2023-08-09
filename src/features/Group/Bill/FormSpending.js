@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import {
   Stack,
@@ -11,7 +11,6 @@ import {
   Input,
   FormControl,
   InputLabel,
-  CircularProgress,
 } from "@mui/material";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -24,7 +23,12 @@ import DateTimePicker from "../../../component/Date/DateTimePicker";
 import { postPackageBill } from "../../../redux/userRequest";
 import { loginSuccess } from "../../../redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { updateMessage, updateOpenSnackbar, updateStatus } from "../../../redux/messageSlice";
+import {
+  updateMessage,
+  updateOpenSnackbar,
+  updateProgress,
+  updateStatus,
+} from "../../../redux/messageSlice";
 
 function FormSpending({ grID, item, handleClose }) {
   const nowDate = new Date();
@@ -43,7 +47,6 @@ function FormSpending({ grID, item, handleClose }) {
   const [description, setDescription] = useState("");
   const [addFlag, setAddFlag] = useState(false);
   const [msg, setMsg] = useState("");
-  const [flag, setFlag] = useState(false);
 
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue.$d);
@@ -79,7 +82,7 @@ function FormSpending({ grID, item, handleClose }) {
     let last_it = memName[memName.length - 1];
     if (money === "" || last_it._id === "0") {
       setAddFlag(true);
-      setMsg("Vui lòng điền đầy đủ!")
+      setMsg("Vui lòng điền đầy đủ!");
       return;
     }
 
@@ -120,6 +123,11 @@ function FormSpending({ grID, item, handleClose }) {
 
   const handleGroupBill = async () => {
     let array = [...memName];
+    if (money <= 0) {
+      setAddFlag(true);
+      setMsg("Vui lòng điền đầy đủ!");
+      return;
+    }
     array[idxUser].amount = money;
     setMoney("");
 
@@ -128,7 +136,7 @@ function FormSpending({ grID, item, handleClose }) {
       setMsg("Vui lòng điền vào ô tiêu đề!");
       return;
     }
-    
+
     let borrowers = [];
     for (let el of array) {
       if (el._id !== "0") {
@@ -162,7 +170,8 @@ function FormSpending({ grID, item, handleClose }) {
       description: description,
     };
 
-    setFlag(true);
+    handleClose();
+    dispatch(updateProgress(true));
 
     const res = await postPackageBill(
       grID,
@@ -173,7 +182,7 @@ function FormSpending({ grID, item, handleClose }) {
     );
 
     if (res != null) {
-      setFlag(false);
+      dispatch(updateProgress(false));
       if (res?.statusCode === 201) {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
@@ -184,8 +193,6 @@ function FormSpending({ grID, item, handleClose }) {
         dispatch(updateMessage("Thêm chi tiêu mới thất bại!"));
       }
     }
-
-    handleClose();
   };
 
   return (
@@ -287,7 +294,7 @@ function FormSpending({ grID, item, handleClose }) {
                     {route.amount} vnd
                   </Typography>
                 </Box>
-                <Box flex={1} className="bill-end">
+                <Box flex={1} className="bill-btn-deleted">
                   <Typography
                     variant="button"
                     display="block"
@@ -365,11 +372,6 @@ function FormSpending({ grID, item, handleClose }) {
           Lưu chi tiêu
         </CustomComponent.Button1>
       </Box>
-      {flag && (
-        <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
-          <CircularProgress />
-        </Box>
-      )}
     </Stack>
   );
 }

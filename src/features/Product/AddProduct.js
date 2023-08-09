@@ -8,7 +8,6 @@ import {
   Autocomplete,
   IconButton,
   Tooltip,
-  CircularProgress,
 } from "@mui/material";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 
@@ -46,8 +45,6 @@ function AddProduct({ grId, storageID, handleCreatePro, handleAddAddress, handle
   const [inputAddress, setInputAddress] = useState("");
   const [products, setProducts] = useState([]);
   const [listAddress, setListAdrress] = useState([]);
-
-  const [flag, setFlag] = useState(false);
 
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue.$d);

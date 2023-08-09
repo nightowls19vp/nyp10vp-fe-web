@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import {
-  Alert,
   Box,
   IconButton,
   Modal,
-  Snackbar,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { MdOutlineInventory2, MdOutlineAddBox } from "react-icons/md";
@@ -14,7 +11,7 @@ import ImageStock from "./ImageStock";
 
 import { Colors } from "../../config/Colors";
 import "../../assets/css/Stock.scss";
-import * as CustomComponent from "../../component/custom/CustomComponents.js";
+// import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import ModalAddStock from "./ModalAddStock";
 
 const style = {

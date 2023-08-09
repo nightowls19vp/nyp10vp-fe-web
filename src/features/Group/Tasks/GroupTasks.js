@@ -48,14 +48,20 @@ function GroupTasks({ grId, item }) {
       setListMember(array);
 
       let allEvent = [];
+      
       for (let el of item.task) {
+        let x = el.startDate;
+        if (el.recurrence?.ends) {
+          x = el.recurrence?.ends;
+        }
         let formData = {
           title: el.summary,
-          start: el.startDate,
-          end: el.recurrence?.ends ?? el.startDate,
+          start: new Date(el.startDate),
+          end: new Date(x),
         };
         allEvent.push(formData);
       }
+      console.log(item.task);
       setEvents(allEvent);
     };
 

@@ -120,14 +120,15 @@ export const ImageSrcProduct = styled("span")({
 export const ImageProduct = styled("span")(({ theme }) => ({
   position: "absolute",
   left: 0,
-  right: -5,
+  right: 0,
+  top: 0,
   bottom: 0,
   // [theme.breakpoints.down("md")]: {
   //   top: 0,
   // },
   display: "flex",
   alignItems: "center",
-  justifyContent: "flex-end",
+  justifyContent: "center",
 }));
 
 export const ButtonAvatar = styled(ButtonBase)(({ theme }) => ({

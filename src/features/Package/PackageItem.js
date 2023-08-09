@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Stack, Tab, Alert, AlertTitle } from "@mui/material";
+import { Box, Stack, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Banner from "../../assets/img/Banner.png";
 
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 import "../../assets/css/Package.scss";
 import DetailItem from "./DetailItem";

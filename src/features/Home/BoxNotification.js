@@ -1,14 +1,11 @@
 import React from "react";
 
 import {
-  Avatar,
   Box,
   Card,
   CardContent,
   CardHeader,
-  CardMedia,
   IconButton,
-  Stack,
   Typography,
 } from "@mui/material";
 import "../../assets/css/Home.scss";
@@ -28,9 +25,16 @@ function BoxNotification({ bill, homeBilling }) {
     let arr = [...homeBilling];
     arr = [...arr.filter((x) => x._id !== bill._id)];
     dispatch(updateHomeBilling(arr));
-  }
+  };
   return (
-    <Card sx={{ display: "flex", justifyContent: "space-between", borderRadius: "20px" }}>
+    <Card
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        borderRadius: "20px",
+        //maxWidth: "300px",
+      }}
+    >
       <Box flex={3} sx={{ display: "flex", flexDirection: "column" }}>
         <CardHeader
           avatar={
@@ -54,7 +58,7 @@ function BoxNotification({ bill, homeBilling }) {
         <CardContent>
           <Box className="box-date">
             <FaMoneyBillWave />
-            <Typography variant="h5" component="div" sx={{ marginLeft: "5px"}}>
+            <Typography variant="h5" component="div" sx={{ marginLeft: "5px" }}>
               {FormatNumber.formatCurrency(bill.total)}
             </Typography>
           </Box>

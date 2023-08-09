@@ -5,7 +5,6 @@ import {
   Stack,
   Typography,
   Box,
-  CircularProgress,
   Modal,
 } from "@mui/material";
 
@@ -17,7 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
 import {
   deletedStorageLocation,
-  postStorageLocation,
   updateStorageLocation,
 } from "../../redux/stockRequest";
 import {
@@ -54,7 +52,6 @@ function ModalEditStock({ item, grID, handleClose }) {
   const [descr, setDescr] = useState(item.description);
   const [image, setImage] = useState(null);
   const [fileImg, setFileImg] = useState(item.image);
-  const [flag, setFlag] = useState(false);
 
   const [open, setOpen] = useState(false);
   const handleOpenModal = (e, idx) => {

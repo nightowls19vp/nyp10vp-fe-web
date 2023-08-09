@@ -416,3 +416,81 @@ export const addPurchaseLocations = async (data, token, axiosJWT) => {
     return error.response.data;
   }
 };
+
+export const updateImgGroupProduct = async (
+  groupId,
+  id,
+  data,
+  token,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.put(
+      `/prod-mgmt/group-products/${groupId}/${id}`,
+      data,
+      {
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return res?.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const updateGroupProduct = async (
+  groupId,
+  id,
+  itemId,
+  data,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    await axiosJWT.put(`/prod-mgmt/group-products/${groupId}/${id}`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    await getProductItemById(groupId, itemId, token, dispatch, axiosJWT);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const updateItems = async (groupId, id, data, token, dispatch, axiosJWT) => {
+  try {
+    await axiosJWT.put(`/prod-mgmt/items/${groupId}/${id}`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    await getProductItemById(groupId, id, token, dispatch, axiosJWT);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const deletedProductItem = async (groupId, id, token, axiosJWT) => {
+  try {
+    await axiosJWT.delete(`/prod-mgmt/group-products/${groupId}/${id}`, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return true;
+  } catch (error) {
+    return false;
+  }
+}

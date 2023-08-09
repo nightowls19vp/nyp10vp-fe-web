@@ -63,7 +63,6 @@ function CreateProduct({
   const [addr, setAddr] = useState("");
   const [inputAddress, setInputAddress] = useState("");
   const [listAddress, setListAdrress] = useState([]);
-  const [flag, setFlag] = useState(false);
 
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue.$d);
@@ -206,7 +205,6 @@ function CreateProduct({
       spacing={2}
       id="createProduct"
       className="createCreateProduct"
-      sx={{ position: "relative", opacity: flag ? 0.5 : 1 }}
     >
       <Box className="box-img-create-product">
         <CustomComponent.Button2
@@ -383,11 +381,6 @@ function CreateProduct({
           Thêm sản phẩm
         </CustomComponent.Button1>
       </Box>
-      {flag && (
-        <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
-          <CircularProgress />
-        </Box>
-      )}
     </Stack>
   );
 }

@@ -1,26 +1,26 @@
-import React, { useEffect } from "react";
+import React, {  } from "react";
 import { Box, Typography } from "@mui/material";
 import SuperUser from "./SuperUser";
 import SidebarLayout from "../../layout/SidebarLayout";
 import DefaultLayout from "../../layout/DefaultLayout.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import GroupSpending from "./Bill/GroupSpending";
-import { loginSuccess } from "../../redux/authSlice";
 
-import { createAxios } from "../../http/createInstance";
+// import { loginSuccess } from "../../redux/authSlice";
+// import { createAxios } from "../../http/createInstance";
+// import { updateGroupId, updateGroupItemId } from "../../redux/userSlice";
 import GroupTodos from "./Todos/GroupTodos";
 import GroupTasks from "./Tasks/GroupTasks";
-import { updateGroupId, updateGroupItemId } from "../../redux/userSlice";
 
 function GroupItem() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const user = useSelector((state) => state?.auth.login?.currentUser);
+  // const user = useSelector((state) => state?.auth.login?.currentUser);
   const groups = useSelector((state) => state?.user?.groupAll);
   const selectedID = useSelector((state) => state?.user?.groupID);
   const selectedItemID = useSelector((state) => state?.user?.groupItemID);
 
-  let axiosJWT = createAxios(user, dispatch, loginSuccess);
+  // let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   // const searchParams = new URLSearchParams(document.location.search);
   // dispatch(updateGroupId(searchParams.get("groupId")));

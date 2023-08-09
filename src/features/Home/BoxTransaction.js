@@ -9,8 +9,8 @@ import { BsFillChatDotsFill } from "react-icons/bs";
 import "../../assets/css/Home.scss";
 import { useSelector } from "react-redux";
 
-function BoxTransaction() {
-  const homeChat = useSelector((state) => state?.home.homeChat);
+function BoxTransaction({ homeChat }) {
+  //const homeChat = useSelector((state) => state?.home.homeChat);
   return (
     <Box
       sx={{
@@ -108,20 +108,28 @@ function BoxTransaction() {
         <Typography sx={{ fontSize: "22px", fontWeight: 600 }}>
           Nhóm chat của tôi
         </Typography>
-        {homeChat.map((chat, idx) =>
-          chat ? (
-            <Box className="d-flex" key={idx}>
-              <Box sx={{ display: "flex", flexDirection: "row" }}>
-                <GroupIcon />
-                <Typography sx={{ paddingX: "10px", fontSize: "18px" }}>
-                  {chat?.name}
-                </Typography>
+        {homeChat.length > 0 ? (
+          homeChat.map((chat, idx) =>
+            chat ? (
+              <Box className="d-flex" key={idx}>
+                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                  <GroupIcon />
+                  <Typography sx={{ paddingX: "10px", fontSize: "18px" }}>
+                    {chat?.name}
+                  </Typography>
+                </Box>
+                <IconButton
+                  sx={{ fontSize: "30px", color: Colors.textPrimary }}
+                >
+                  <BsFillChatDotsFill />
+                </IconButton>
               </Box>
-              <IconButton sx={{ fontSize: "30px", color: Colors.textPrimary }}>
-                <BsFillChatDotsFill />
-              </IconButton>
-            </Box>
-          ) : null
+            ) : null
+          )
+        ) : (
+          <Box>
+            <Typography>Bạn hiện chưa có nhóm chat nào!</Typography>
+          </Box>
         )}
       </Stack>
     </Box>

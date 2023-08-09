@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Card,
@@ -127,7 +127,7 @@ function DetailItem({ item }) {
         dispatch(updateMessage("Cập nhật giỏ hàng thành công!"));
       } else {
         dispatch(updateOpenSnackbar(true));
-        dispatch(updateStatus(true));
+        dispatch(updateStatus(false));
         dispatch(updateMessage("Cập nhật giỏ hàng thất bại!"));
       }
     } else {

@@ -66,7 +66,7 @@ function DefaultLayout({ children }) {
         </Box>
       )}
 
-      <Box ref={refHeader} zIndex={1} sx={{ opacity: isProgress ? 0.5 : 1 }}>
+      <Box ref={refHeader} zIndex={1} sx={{ opacity: isProgress ? 0.35 : 1 }}>
         <HeaderComponent />
       </Box>
       <Box
@@ -74,7 +74,7 @@ function DefaultLayout({ children }) {
           minHeight: `calc(100vh - ${heightHeader}px - ${heightFooter}px)`,
           display: "flex",
           backgroundColor: Colors.bgGray,
-          opacity: isProgress ? 0.5 : 1
+          opacity: isProgress ? 0.35 : 1
         }}
       >
         {children}
@@ -98,7 +98,7 @@ function DefaultLayout({ children }) {
           </Alert>
         </Snackbar>
       </Box>
-      <Box ref={refFooter} zIndex={1} sx={{ opacity: isProgress ? 0.5 : 1 }}>
+      <Box ref={refFooter} zIndex={1} sx={{ opacity: isProgress ? 0.35 : 1 }}>
         <FooterComponent />
       </Box>
     </Stack>

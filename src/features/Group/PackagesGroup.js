@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Box,
-  TextField,
   Stack,
   Typography,
   Avatar,
@@ -9,7 +8,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
   IconButton,
   Input,
   InputAdornment,
@@ -25,7 +23,7 @@ import "../../assets/css/Group.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 import PackageGroup from "./PackageGroup";
-import * as SB from "../../component/Chat/SendBirdGroupChat";
+// import * as SB from "../../component/Chat/SendBirdGroupChat";
 
 function PackagesGroup({ data, pkg, title }) {
   const dispatch = useDispatch();

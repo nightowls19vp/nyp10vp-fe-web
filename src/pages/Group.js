@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 
-import SidebarLayout from "../layout/SidebarLayout";
-import { dataGroup } from "../data/group";
 import GroupItem from "../features/Group/GroupItem";
 import { getGroupByUserId } from "../redux/userRequest";
 import { loginSuccess } from "../redux/authSlice";

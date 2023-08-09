@@ -82,7 +82,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
         </Box>
       )}
 
-      <Box ref={refHeader} zIndex={1} sx={{ opacity: isProgress ? 0.5 : 1 }}>
+      <Box ref={refHeader} zIndex={1} sx={{ opacity: isProgress ? 0.35 : 1 }}>
         <HeaderComponent />
       </Box>
 
@@ -94,7 +94,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
           justifyContent: { sm: "center", md: "space-between" },
           // justifyContent: "center",
           alignItems: "stretch",
-          opacity: isProgress ? 0.5 : 1,
+          opacity: isProgress ? 0.35 : 1,
         }}
       >
         <Box
@@ -168,7 +168,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
         </Box>
       </Box>
 
-      <Box ref={refFooter} zIndex={1} sx={{ opacity: isProgress ? 0.5 : 1 }}>
+      <Box ref={refFooter} zIndex={1} sx={{ opacity: isProgress ? 0.35 : 1 }}>
         <FooterComponent />
       </Box>
     </Stack>

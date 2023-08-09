@@ -5,10 +5,10 @@ import Carousel from "better-react-carousel";
 
 import * as CustomComponent from "../../component/custom/CustomComponents";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 function BoxGroup() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const homeGroup = useSelector((state) => state?.home.homeGroup);
 
   const [widthContent, setWidthContent] = useState(window.innerWidth);

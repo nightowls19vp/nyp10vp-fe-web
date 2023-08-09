@@ -102,7 +102,7 @@ const CalendarComponent = ({ events }) => {
 
   return (
     <div className="App">
-      <h2>Thêm sự kiện mới</h2>
+      {/* <h2>Thêm sự kiện mới</h2> */}
       {/* <div>
         <input
           type="text"

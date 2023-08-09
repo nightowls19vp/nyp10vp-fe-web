@@ -8,7 +8,6 @@ import {
   CardContent,
   CardHeader,
   Checkbox,
-  Stack,
   Typography,
 } from "@mui/material";
 import Carousel from "better-react-carousel";

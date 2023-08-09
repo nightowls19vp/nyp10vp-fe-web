@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Autocomplete, Box, TextField, Stack, CircularProgress } from "@mui/material";
+import { Autocomplete, Box, TextField, Stack } from "@mui/material";
 import { createAxios } from "../../http/createInstance";
 import {
   addPurchaseLocations,
@@ -35,7 +35,6 @@ function AddAddress({ grID, handleCloseAddress }) {
   const [name, setName] = useState("");
   const [street, setStreet] = useState("");
   const [btnDisable, setBtnDisable] = useState(true);
-  const [flag, setFlag] = useState(false);
 
   const searchDataProvince = async (search) => {
     const res = await searchProvinceVietNam(search, user?.accessToken);
@@ -141,7 +140,7 @@ function AddAddress({ grID, handleCloseAddress }) {
     }
   }, [dist, prov, street, war]);
   return (
-    <Stack spacing={2} sx={{ position: "relative", opacity: flag ? 0.5 : 1}}>
+    <Stack spacing={2}>
       <Autocomplete
         clearOnEscape
         noOptionsText=""
@@ -227,11 +226,6 @@ function AddAddress({ grID, handleCloseAddress }) {
           Thêm địa chỉ
         </CustomComponent.Button1>
       </Box>
-      {flag && (
-        <Box sx={{ position: "absolute", top: "40%", left: "50%" }}>
-          <CircularProgress />
-        </Box>
-      )}
     </Stack>
   );
 }

@@ -5,7 +5,6 @@ import {
   Stack,
   Typography,
   Box,
-  CircularProgress,
 } from "@mui/material";
 
 import NoImg from "../../assets/img/image.png";
