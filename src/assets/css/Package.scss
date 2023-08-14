@@ -9,18 +9,12 @@
 }
 
 .item {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    @include flexRowStyle(center, center);
     height: 30px;
 }
 
 .btn {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    @include flexColumnStyle(center, center);
 }
 
 .interest-rate {
@@ -28,6 +22,7 @@
     .title {
         color: $textPrimary;
         font-size: 25px;
+        font-weight: bold;
     }
     .summary {
         font-style: italic;
@@ -35,11 +30,31 @@
     .box-interest-rate {
         margin: 10px;
         justify-content: flex-start;
-        .box-textfield {
+        .box-textfield-1 {
             margin: 10px;
+            @include flexColumnStyle(space-between, flex-start);
             .title-textfield {
-                min-width: 130px;
+                //
             }
         }
+    }
+    .title-1 {
+        font-size: 22px;
+        font-weight: bold;
+    }
+    .box-result {
+        font-size: 20px;
+        @include flexRowStyle(flex-start, center);
+        .title-2 {
+            margin-right: 10px;
+        }
+        .text-1 {
+            color: $error;
+        }
+    }
+
+    .btn-btn-handle {
+        width: 100%;
+        @include flexRowStyle(flex-end, center);
     }
 }

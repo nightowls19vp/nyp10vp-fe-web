@@ -9,6 +9,7 @@ import MenuItemRow from "./MenuItemRow.js";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice.js";
 import { logoutUser } from "../../redux/authRequest.js";
+import { Colors } from "../../config/Colors.js";
 
 function HeaderAvatar({ data, user }) {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function HeaderAvatar({ data, user }) {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
   const userInfo = useSelector((state) => state?.user?.userInfo.user);
 
-  const image = userInfo.avatar ?? "";
+  const image = user ? (userInfo.avatar ?? "") : "";
   const [isShown, setIsShown] = useState(false);
 
   const handleClickProfile = () => {
@@ -56,7 +57,9 @@ function HeaderAvatar({ data, user }) {
               flexDirection: "column",
               width: "200px",
               boxShadow: "2px 2px 5px #8c8c8c",
+              padding: "10px",
               borderRadius: "10px",
+              backgroundColor: Colors.background
             }}
           >
             {user ? (

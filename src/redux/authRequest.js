@@ -74,8 +74,10 @@ export const loginUser = async (
 
     dispatch(updateProfileId(1));
     navigate("/");
+    return true;
   } catch (error) {
     dispatch(loginFailed(error.response.data));
+    return false;
   }
 };
 

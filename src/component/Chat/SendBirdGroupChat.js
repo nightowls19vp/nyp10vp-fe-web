@@ -75,8 +75,6 @@ export const updateNameChannel = async (CHANNEL_URL, NAME) => {
       GroupChannelUpdateParams
     );
 
-    console.log(groupChannel);
-
     return [groupChannel, null];
   } catch (error) {
     return [null, error];
@@ -120,7 +118,6 @@ export const receiveMessage = async (channel) => {
       // ...
     };
     const messages = await channel.getMessagesByTimestamp(0, MessageListParams);
-    console.log("messages by timestamp", messages);
 
     // Reverse message array by message.createdAt
     messages.reverse();
@@ -129,8 +126,10 @@ export const receiveMessage = async (channel) => {
       return {
         _id: message.messageId,
         text: message.message,
-        // url: message.plainUrl,
+        name: message.name,
+        url: message.plainUrl,
         type: message.messageType,
+        fileType: message.type,
         createdAt: new Date(message.createdAt),
         user: {
           _id: message.sender.userId,

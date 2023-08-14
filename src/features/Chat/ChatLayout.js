@@ -28,7 +28,6 @@ import { updateChannelID } from "../../redux/userSlice.js";
 import DogImg from "../../assets/img/dog.jpg";
 import TigerImg from "../../assets/img/tiger.jpg";
 
-
 import * as SB from "../../component/Chat/SendBirdGroupChat.js";
 import Message from "./Message.js";
 
@@ -74,14 +73,13 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
   const [channelUser, setChannelUser] = useState(channelFisrt);
   const [open, setOpen] = useState(true);
 
-  console.log(channelUser);
-
   const handleChoseChannel = async (event, id) => {
     let c = await SB.getUserChannel(id);
     setChannelUser(c);
 
     let m = await SB.receiveMessage(c);
-    setListMessage(m.reverse());
+    // setListMessage(m.reverse());
+    setListMessage(m);
     dispatch(updateChannelID(id));
   };
 
@@ -92,6 +90,7 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
     list = await SB.receiveMessage(channelUser);
 
     setListMessage(list.reverse());
+    setListMessage(list);
     setMessage("");
   };
 
@@ -208,11 +207,14 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
             id="scrollBar-message"
             className="list-message"
           >
-            {listMessage.map((mess) =>
+            {/* {listMessage.map((mess) =>
               mess ? (
                 <Message mess={mess} key={mess._id} userId={userInfo?._id} />
               ) : null
-            )}
+            )} */}
+            {listMessage.length > 0 ? (
+              <Message listMessage={listMessage} userId={userInfo?._id} />
+            ) : null}
             <div id="mess-last"></div>
           </Box>
           <div className="input-chat">
@@ -280,10 +282,12 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
           {channelUser.members?.map((member, idx) =>
             member ? (
               <Box className="member-group-channel" key={member.userId}>
-               {idx === 0 ? (
-                <Avatar src={DogImg} />
-               ) : (<Avatar src={TigerImg}/>)}
-                {/* {member.connectionStatus === "online" ? (
+                {/* {idx === 0 ? (
+                  <Avatar src={DogImg} />
+                ) : (
+                  <Avatar src={TigerImg} />
+                )} */}
+                {member.connectionStatus === "online" ? (
                   <StyledBadge
                     overlap="circular"
                     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -293,7 +297,7 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
                   </StyledBadge>
                 ) : (
                   <Avatar src={member?.plainProfileUrl} />
-                )} */}
+                )}
                 <Typography sx={{ paddingX: "10px" }}>
                   {member.nickname}
                 </Typography>

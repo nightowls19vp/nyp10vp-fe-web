@@ -22,6 +22,7 @@ import LogoFB from "../../assets/img/facebook.png";
 import * as CustomButton from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 import "../../assets/css/FormSignIn.scss";
+import { updateProgress } from "../../redux/messageSlice";
 
 function FormSignIn() {
   
@@ -42,6 +43,7 @@ function FormSignIn() {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const handleLogin = async (e) => {
+    dispatch(updateProgress(true));
     e.preventDefault();
     var checkEmail = false;
     var checkPass = false;
@@ -71,7 +73,10 @@ function FormSignIn() {
     };
 
     if (checkEmail === true && checkPass === true) {
-      await loginUser(formData, dispatch, navigate, tokenJoinGr, axiosJWT);
+      const res = await loginUser(formData, dispatch, navigate, tokenJoinGr, axiosJWT);
+      if (res != null) {
+        dispatch(updateProgress(false));
+      }
     }
   };
 

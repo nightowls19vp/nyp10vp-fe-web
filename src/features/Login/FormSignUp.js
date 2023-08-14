@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Modal,
@@ -8,6 +8,7 @@ import {
   Divider,
   Container,
   Button,
+  LinearProgress,
 } from "@mui/material";
 
 import "../../assets/css/FormSignUp.scss";
@@ -17,6 +18,9 @@ import * as CustomButton from "../../component/custom/CustomComponents.js";
 import DateTimePicker from "../../component/Date/DateTimePicker.js";
 
 import api from "../../http/http-common";
+import { useDispatch } from "react-redux";
+import { loginFailed, loginStart } from "../../redux/authSlice";
+import * as ValidatePassword from "../../component/password/ValidatePassword";
 
 const style = {
   position: "absolute",
@@ -32,7 +36,27 @@ const style = {
   p: 4,
 };
 
+function LinearProgressWithLabel({ value }) {
+  return (
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+      <Box sx={{ width: "100%", mr: 1 }}>
+        <LinearProgress
+          variant="determinate"
+          color={value.color}
+          value={value.percentage}
+        />
+      </Box>
+      <Box sx={{ minWidth: 35 }}>
+        <Typography variant="body2" color="text.secondary">{`${Math.round(
+          value.percentage
+        )}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}
+
 export default function FormSignUp() {
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -58,9 +82,20 @@ export default function FormSignUp() {
   const [phoneText, setPhoneText] = React.useState("");
   const [passwordText, setPasswordText] = React.useState("");
   const [rePasswordText, setRePasswordText] = React.useState("");
-
+  const [validatePass, setValidatePass] = useState({
+    label: "",
+    color: "",
+    percentage: 0,
+  });
   const handleDateTimePicker = (dateValue) => {
     setDate(dateValue);
+  };
+
+  const handlePassword = (e) => {
+    let x = e.target.value;
+    setPassword(x);
+    let num = ValidatePassword.strengthIndicator(x);
+    setValidatePass(ValidatePassword.strengthColor(num));
   };
 
   const handleValidation = () => {
@@ -160,6 +195,21 @@ export default function FormSignUp() {
     }
   };
 
+  const googleLogin = async () => {
+    try {
+      dispatch(loginStart());
+      window.open(
+        `http://localhost:3000/api/auth/oauth2/google/${"http://localhost:8080/google".replaceAll(
+          "/",
+          "@"
+        )}`,
+        "_self"
+      );
+    } catch (error) {
+      dispatch(loginFailed(error.response.data));
+    }
+  };
+
   return (
     <Container disableGutters maxWidth={false}>
       <CustomButton.Button1 variant="contained" fullWidth onClick={handleOpen}>
@@ -234,10 +284,15 @@ export default function FormSignUp() {
               autoComplete="current-password"
               fullWidth
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => handlePassword(e)}
               error={passwordError}
               helperText={passwordText}
             />
+            {password.length > 0 && (
+              <Box>
+                <LinearProgressWithLabel value={validatePass} />
+              </Box>
+            )}
             <TextField
               required
               id="outlined-the-password-input"
@@ -263,7 +318,7 @@ export default function FormSignUp() {
               Đăng ký
             </CustomButton.Button1>
             <Divider flexItem> Hoặc </Divider>
-            <Button variant="outlined" fullWidth>
+            <Button variant="outlined" fullWidth onClick={googleLogin}>
               <img src={LogoGG} alt="Logo" width={25} />
               <Typography pl={2}> Đăng ký bằng GG </Typography>
             </Button>
