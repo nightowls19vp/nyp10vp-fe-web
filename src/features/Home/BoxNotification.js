@@ -32,7 +32,7 @@ function BoxNotification({ bill, homeBilling }) {
         display: "flex",
         justifyContent: "space-between",
         borderRadius: "20px",
-        //maxWidth: "300px",
+        maxWidth: "300px",
       }}
     >
       <Box flex={3} sx={{ display: "flex", flexDirection: "column" }}>

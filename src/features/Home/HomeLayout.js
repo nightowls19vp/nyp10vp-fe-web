@@ -49,7 +49,11 @@ function HomeLayout() {
             <BoxTransaction className="home-box-3-trans" homeChat={homeChat} />
 
             {homeTodos.length > 0 ? (
-              <BoxTodos className="home-box-3-todos" homeTodos={homeTodos} />
+              <BoxTodos
+                className="home-box-3-todos"
+                homeTodos={homeTodos}
+                widthContent={widthContent}
+              />
             ) : null}
           </Stack>
 
@@ -58,9 +62,6 @@ function HomeLayout() {
               width: widthContent < 600 ? "100%" : "30%",
               display: homeBilling.length > 0 ? "block" : "none",
               m: 1,
-              // display: "flex",
-              // flexDirection: "column",
-              // justifyContent: "space-between",
             }}
             spacing={2}
           >

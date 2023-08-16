@@ -14,10 +14,32 @@ import Carousel from "better-react-carousel";
 import "../../assets/css/Home.scss";
 //import { useSelector } from "react-redux";
 
-function BoxTodos({ homeTodos }) {
+function BoxTodos({ homeTodos, widthContent }) {
   //const homeTodos = useSelector((state) => state?.home.homeTodos);
+  const BreakpointCarousel = () => {
+    if (widthContent > 900) {
+      return 3;
+    } else if (widthContent > 700) {
+      return 2;
+    }
+  };
+
+  const HideArrowCarousel = () => {
+    if (widthContent > 900 && homeTodos.length < 4) {
+      return true;
+    } else if (widthContent > 700 && homeTodos.length < 3) {
+      return true;
+    }
+    return false;
+  };
   return (
-    <Carousel cols={3} rows={1} gap={10} loop>
+    <Carousel
+      cols={BreakpointCarousel()}
+      rows={1}
+      gap={10}
+      hideArrow={HideArrowCarousel()}
+      loop
+    >
       {homeTodos.map((todo, idx) =>
         todo ? (
           <Carousel.Item key={idx}>

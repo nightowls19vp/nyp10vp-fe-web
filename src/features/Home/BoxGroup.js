@@ -25,6 +25,15 @@ function BoxGroup() {
     }
   };
 
+  const HideArrowCarousel = () => {
+    if (widthContent > 900 && homeGroup.length < 4) {
+      return true;
+    } else if (widthContent > 700 && homeGroup.length < 3) {
+      return true;
+    }
+    return false;
+  };
+
   useEffect(() => {
     function handleWindowResize() {
       setWidthContent(window.innerWidth);
@@ -39,7 +48,13 @@ function BoxGroup() {
   return (
     <>
       {homeGroup.length > 0 ? (
-        <Carousel cols={BreakpointCarousel()} rows={1} gap={10} loop>
+        <Carousel
+          cols={BreakpointCarousel()}
+          rows={1}
+          gap={10}
+          hideArrow={HideArrowCarousel()}
+          loop
+        >
           {homeGroup.map((gr, idx) =>
             gr ? (
               <Carousel.Item key={gr._id}>

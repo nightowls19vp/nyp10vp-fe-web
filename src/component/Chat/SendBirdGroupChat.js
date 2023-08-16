@@ -100,9 +100,10 @@ export const updateAvatarChannel = async (CHANNEL_URL, AVATAR) => {
   }
 };
 
-export const sendMessage = async (channel, TEXT_MESSAGE) => {
+export const sendMessage = async (channel, TEXT_MESSAGE, CUSTOM_TYPE) => {
   const params = {
     message: TEXT_MESSAGE,
+    customType: CUSTOM_TYPE,
   };
   await channel.sendUserMessage(params).onSucceeded((message) => {
     const messageId = message.messageId;
@@ -121,15 +122,14 @@ export const receiveMessage = async (channel) => {
 
     // Reverse message array by message.createdAt
     messages.reverse();
-
+    console.log("mess", messages);
     return messages.map((message) => {
       return {
         _id: message.messageId,
         text: message.message,
         name: message.name,
         url: message.plainUrl,
-        type: message.messageType,
-        fileType: message.type,
+        type: message.customType,
         createdAt: new Date(message.createdAt),
         user: {
           _id: message.sender.userId,
@@ -149,6 +149,7 @@ export const receiveMessage = async (channel) => {
 export const sendFile = async (channel, FILE) => {
   const fileMessageParams = {};
   fileMessageParams.file = FILE;
+  fileMessageParams.message = FILE;
   await channel
     .sendFileMessage(fileMessageParams)
     .onSucceeded(() => {

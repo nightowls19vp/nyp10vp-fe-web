@@ -24,12 +24,16 @@ import "../../assets/css/Chat.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 
 import { updateChannelID } from "../../redux/userSlice.js";
+import { createAxios } from "../../http/createInstance";
 
-import DogImg from "../../assets/img/dog.jpg";
-import TigerImg from "../../assets/img/tiger.jpg";
+// import DogImg from "../../assets/img/dog.jpg";
+// import TigerImg from "../../assets/img/tiger.jpg";
 
 import * as SB from "../../component/Chat/SendBirdGroupChat.js";
 import Message from "./Message.js";
+import { uploadFileImage } from "../../redux/userRequest.js";
+import { loginSuccess } from "../../redux/authSlice.js";
+import { updateProgress } from "../../redux/messageSlice.js";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -67,6 +71,8 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
 
   const userInfo = useSelector((state) => state?.user?.userInfo.user);
   const channelID = useSelector((state) => state?.user?.channelID);
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [message, setMessage] = useState("");
   const [listMessage, setListMessage] = useState(messageFirst);
@@ -85,7 +91,7 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
 
   const handleSendMessage = async () => {
     let list = [];
-    await SB.sendMessage(channelUser, message);
+    await SB.sendMessage(channelUser, message, "text");
 
     list = await SB.receiveMessage(channelUser);
 
@@ -99,12 +105,23 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
   };
 
   const handleSendFile = async (event) => {
+    let list = [];
     const fileObj = event.target.files && event.target.files[0];
     if (!fileObj) {
       return;
     }
-
-    await SB.sendFile(channelUser, fileObj);
+    let formData = {
+      file: fileObj,
+    };
+    //dispatch(updateProgress(true));
+    const res = await uploadFileImage(formData, user?.accessToken, axiosJWT);
+    // console.log(res);
+    if (res?.statusCode === 200) {
+      await SB.sendMessage(channelUser, res?.data, "image");
+      list = await SB.receiveMessage(channelUser);
+      setListMessage(list.reverse());
+      setListMessage(list);
+    }
   };
 
   useEffect(() => {
@@ -223,6 +240,7 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
                 style={{ display: "none" }}
                 ref={inputRef}
                 type="file"
+                accept="image/*"
                 onChange={handleSendFile}
               />
               <AttachFileIcon />

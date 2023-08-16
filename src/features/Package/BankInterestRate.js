@@ -42,6 +42,7 @@ function BankInterestRate() {
   const [newTotal, setNewTotal] = useState();
   const [totalExpire, setTotalExpire] = useState();
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenExpire, setIsOpenExpire] = useState(false);
 
   const [openModal, setOpenModal] = React.useState(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -64,6 +65,8 @@ function BankInterestRate() {
     let n = Math.floor(newDuration / duration);
     let y = total * Math.pow(1 + 0.5 / n, n);
     setTotalExpire(parseInt(y));
+    setIsOpenExpire(true);
+    setOpenModal(false);
   };
 
   return (
@@ -167,21 +170,21 @@ function BankInterestRate() {
           <Typography className="title-1">
             Sau khi đến kỳ hạn, bạn sẽ nhận được:
           </Typography>
-          <Box className="box-result">
-            <Typography className="title-2">
-              Tiền lãi sau {duration} tháng:
-            </Typography>
-            <Typography className="text-1">
-              {FormatNum.formatCurrency(moneyInterest)}
-            </Typography>
-          </Box>
-          <Box className="box-result">
-            <Typography className="title-2">Tổng tiền: </Typography>
-            <Typography className="text-1">
-              {FormatNum.formatCurrency(total)}
-            </Typography>
-          </Box>
-          <Typography>
+          <Table className="table">
+            <TableBody>
+              <TableRow>
+                <TableCell className="table-cell-1">Tiền lãi sau {duration} tháng</TableCell>
+                <TableCell className="table-cell-2">{FormatNum.formatCurrency(moneyInterest)}</TableCell>
+              </TableRow>
+            </TableBody>
+            <TableBody>
+              <TableRow>
+                <TableCell className="table-cell-1">Tổng tiền</TableCell>
+                <TableCell className="table-cell-2">{FormatNum.formatCurrency(total)}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+          <Typography className="summary">
             Nếu bạn đang phân vân giữa tái đầu tư lại lại lãi suất đã tính ở
             trên hoặc gửi lại với một lãi suất khác. Chúng tôi có thể tính giúp
             bạn.
@@ -191,24 +194,28 @@ function BankInterestRate() {
               Tiếp tục
             </CustomComponent.Button2>
           </Box>
-          <Box>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell></TableCell>
-                  <TableCell>Đáo hạn</TableCell>
-                  <TableCell>Lãi suất mới</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell>Tổng tiền</TableCell>
-                  <TableCell>{FormatNum.formatCurrency(totalExpire)}</TableCell>
-                  <TableCell>{FormatNum.formatCurrency(newTotal)}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </Box>
+          {isOpenExpire && (
+            <Box>
+              <Table className="table">
+                <TableHead>
+                  <TableRow >
+                    <TableCell></TableCell>
+                    <TableCell className="table-cell-1">Đáo hạn</TableCell>
+                    <TableCell className="table-cell-1">Lãi suất mới</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="table-cell-3">Tổng tiền</TableCell>
+                    <TableCell className="table-cell-2">
+                      {FormatNum.formatCurrency(totalExpire)}
+                    </TableCell>
+                    <TableCell className="table-cell-2">{FormatNum.formatCurrency(newTotal)}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </Box>
+          )}
           <Modal open={openModal} onClose={handleCloseModal}>
             <Box sx={style}>
               <Stack spacing={2}>

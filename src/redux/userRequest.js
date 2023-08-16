@@ -829,3 +829,20 @@ export const updatePackageBill = async (
     return false;
   }
 };
+
+export const uploadFileImage = async (data, token, axiosJWT) => {
+  try {
+    console.log("vyyyy");
+    const res = await axiosJWT.post("/file/upload-and-get-url", data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log("vyyy 1");
+    return res?.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
