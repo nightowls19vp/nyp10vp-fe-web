@@ -224,7 +224,13 @@ export const deletedTodos = async (grID, id, token, dispatch, axiosJWT) => {
   }
 };
 
-export const postPackageTask = async (grID, data, token, dispatch, axiosJWT) => {
+export const postPackageTask = async (
+  grID,
+  data,
+  token,
+  dispatch,
+  axiosJWT
+) => {
   try {
     const res = await axiosJWT.post(`/pkg-mgmt/task/${grID}`, data, {
       headers: {
@@ -243,7 +249,48 @@ export const postPackageTask = async (grID, data, token, dispatch, axiosJWT) => 
     dispatch(updateGroupItemId(3));
     return error.response.data;
   }
-}
+};
+
+export const getPackageTask = async (id, token, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get(`/pkg-mgmt/task/${id}`, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res?.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const deletePackageTask = async (
+  grID,
+  id,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.delete(`/pkg-mgmt/task/${id}`, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res?.data.statusCode === 200) {
+      await getGroupByUserId(token, dispatch, axiosJWT);
+      dispatch(updateGroupId(grID));
+      dispatch(updateGroupItemId(3));
+    }
+    return true;
+  } catch (error) {
+    dispatch(updateGroupId(grID));
+    dispatch(updateGroupItemId(3));
+    return false;
+  }
+};
 
 export const GetGroupSuperUser = async (token, dispatch, axiosJWT) => {
   try {

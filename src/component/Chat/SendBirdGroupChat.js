@@ -122,7 +122,7 @@ export const receiveMessage = async (channel) => {
 
     // Reverse message array by message.createdAt
     messages.reverse();
-    console.log("mess", messages);
+    console.log(channel);
     return messages.map((message) => {
       return {
         _id: message.messageId,
@@ -130,6 +130,7 @@ export const receiveMessage = async (channel) => {
         name: message.name,
         url: message.plainUrl,
         type: message.customType,
+        lastMess: message.customType !== "image" ? channel.lastMessage.message : "",
         createdAt: new Date(message.createdAt),
         user: {
           _id: message.sender.userId,

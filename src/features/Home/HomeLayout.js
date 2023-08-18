@@ -78,8 +78,8 @@ function HomeLayout() {
           </Stack>
         </Box>
       ) : (
-        <Box sx={{ width: "100%" }}>
-          <img src={HomeImg} alt="Logo" width={"100%"} />
+        <Box className="home-image">
+          {/* <img src={HomeImg} alt="Logo" width={"100%"} /> */}
         </Box>
       )}
     </>

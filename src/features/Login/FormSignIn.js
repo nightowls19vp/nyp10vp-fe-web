@@ -43,7 +43,6 @@ function FormSignIn() {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const handleLogin = async (e) => {
-    dispatch(updateProgress(true));
     e.preventDefault();
     var checkEmail = false;
     var checkPass = false;
@@ -73,6 +72,7 @@ function FormSignIn() {
     };
 
     if (checkEmail === true && checkPass === true) {
+      dispatch(updateProgress(true));
       const res = await loginUser(formData, dispatch, navigate, tokenJoinGr, axiosJWT);
       if (res != null) {
         dispatch(updateProgress(false));

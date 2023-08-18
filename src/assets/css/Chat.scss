@@ -105,10 +105,9 @@
     color: black;
     border-radius: 20px;
     padding: 10px;
-    max-width: 50%;
-    min-width: fit-content;
+    width: fit-content;
     .imgMess {
-        width: 90%;
+        width: 100%;
         height: auto;
     }
 }

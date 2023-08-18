@@ -1,12 +1,15 @@
 import React from "react";
 
-import { Box } from "@mui/material";
+import { Box  } from "@mui/material";
 
-import HomeImg from "../../assets/img/Home.png";
+import * as CustomComponent from "../../component/custom/CustomComponents";
+import "../../assets/css/Home.scss";
 function HomeLayoutNoGroup() {
   return (
-    <Box sx={{ width: "100%"}}>
-        <img src={HomeImg} alt="Logo" width={"100%"} />
+    <Box className="home-image">
+        <Box>
+          <CustomComponent.Button1>Package</CustomComponent.Button1>
+        </Box>
     </Box>
 
   );

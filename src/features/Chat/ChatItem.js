@@ -39,8 +39,8 @@ function ChatItem() {
       setChannelFirst(c);
 
       let m = await SB.receiveMessage(c);
-      // setMessageFirst(m.reverse());
-      setMessageFirst(m);
+      setMessageFirst(m.reverse());
+      //setMessageFirst(m);
     };
 
     if (channels.length > 0) {

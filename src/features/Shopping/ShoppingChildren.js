@@ -33,6 +33,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userCheckout } from "../../redux/userRequest";
 
 import { createAxios } from "../../http/createInstance.js";
+import { updateProgress } from "../../redux/messageSlice.js";
 
 import "../../assets/css/Shopping.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
@@ -410,6 +411,7 @@ export default function EnhancedTable({ item }) {
   };
 
   const handleButtonCheckout = async () => {
+    dispatch(updateProgress(true));
     if (selected.length === 0) {
       setOpenModal(true);
     }
@@ -437,7 +439,6 @@ export default function EnhancedTable({ item }) {
     let methodCheckout = {};
 
     if (valueMethod === "zalo") {
-      console.log(valueMethod);
       methodCheckout = {
         type: "EWALLET",
         bank_code: "ZALOPAY",
@@ -455,17 +456,16 @@ export default function EnhancedTable({ item }) {
       method: methodCheckout,
     };
 
-    console.log(data);
-
     const res = await userCheckout(user?.accessToken, dispatch, data, axiosJWT);
+    console.log(res);
 
     if (res?.statusCode === 200) {
-      dispatch(updateNotiCheckout(2));
-      window.open(order.order.order_url);
+      dispatch(updateProgress(false));
+      window.open(res?.data);
 
-      setTimeout(function () {
-        dispatch(updateNotiCheckout(1));
-      }, 2 * 60 * 1000);
+      // setTimeout(function () {
+      //   dispatch(updateNotiCheckout(1));
+      // }, 2 * 60 * 1000);
 
       await getUserCart(
         user?.data.userInfo._id,
@@ -473,6 +473,8 @@ export default function EnhancedTable({ item }) {
         dispatch,
         axiosJWT
       );
+    } else {
+      dispatch(updateProgress(false));
     }
   };
 

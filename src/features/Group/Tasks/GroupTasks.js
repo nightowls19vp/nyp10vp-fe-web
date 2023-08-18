@@ -48,13 +48,14 @@ function GroupTasks({ grId, item }) {
       setListMember(array);
 
       let allEvent = [];
-      
+
       for (let el of item.task) {
         let x = el.startDate;
         if (el.recurrence?.ends) {
           x = el.recurrence?.ends;
         }
         let formData = {
+          id: el._id,
           title: el.summary,
           start: new Date(el.startDate),
           end: new Date(x),
@@ -92,12 +93,7 @@ function GroupTasks({ grId, item }) {
             <AddIcon />
           </IconButton>
         </Tooltip>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
+        <Modal open={open} onClose={handleClose}>
           <Box sx={style}>
             <AddTask
               grID={item._id}
@@ -107,7 +103,9 @@ function GroupTasks({ grId, item }) {
           </Box>
         </Modal>
       </Box>
-      {events.length > 0 && <CalendarComponent events={events} />}
+      {events.length > 0 && (
+        <CalendarComponent grID={item._id} events={events} />
+      )}
     </Stack>
   );
 }

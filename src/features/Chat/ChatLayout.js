@@ -27,7 +27,7 @@ import { updateChannelID } from "../../redux/userSlice.js";
 import { createAxios } from "../../http/createInstance";
 
 // import DogImg from "../../assets/img/dog.jpg";
-// import TigerImg from "../../assets/img/tiger.jpg";
+import ErrorImg from "../../assets/img/error_photo.png";
 
 import * as SB from "../../component/Chat/SendBirdGroupChat.js";
 import Message from "./Message.js";
@@ -84,8 +84,8 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
     setChannelUser(c);
 
     let m = await SB.receiveMessage(c);
-    // setListMessage(m.reverse());
-    setListMessage(m);
+    setListMessage(m.reverse());
+    //setListMessage(m);
     dispatch(updateChannelID(id));
   };
 
@@ -96,7 +96,7 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
     list = await SB.receiveMessage(channelUser);
 
     setListMessage(list.reverse());
-    setListMessage(list);
+    //setListMessage(list);
     setMessage("");
   };
 
@@ -113,14 +113,16 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
     let formData = {
       file: fileObj,
     };
-    //dispatch(updateProgress(true));
+    dispatch(updateProgress(true));
     const res = await uploadFileImage(formData, user?.accessToken, axiosJWT);
-    // console.log(res);
+
     if (res?.statusCode === 200) {
       await SB.sendMessage(channelUser, res?.data, "image");
       list = await SB.receiveMessage(channelUser);
       setListMessage(list.reverse());
-      setListMessage(list);
+      dispatch(updateProgress(false));
+    } else {
+      dispatch(updateProgress(false));
     }
   };
 
@@ -179,7 +181,7 @@ function ChatLayout({ item, channelFisrt, messageFirst }) {
                         <Typography
                           sx={{ paddingLeft: "8px", color: "#737373" }}
                         >
-                          {channel.lastMess}
+                          
                         </Typography>
                       </Stack>
                     </CustomComponent.ImageSrcGC>

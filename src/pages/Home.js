@@ -16,6 +16,7 @@ import {
   getTransitionUser,
 } from "../redux/homeRequest.js";
 import HomeLayoutNoGroup from "../features/Home/HomeLayoutNoGroup.js";
+import UserJoin from "./UserJoin.js";
 
 function Home() {
   const dispatch = useDispatch();
@@ -62,8 +63,9 @@ function Home() {
   return (
     <>
       <DefaultLayout>
-        <HomeLayout />
+        {/* <HomeLayout /> */}
         {/* <HomeLayoutNoGroup /> */}
+        <UserJoin />
       </DefaultLayout>
     </>
   );

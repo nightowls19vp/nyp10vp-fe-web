@@ -108,3 +108,13 @@
 #createTask::-webkit-scrollbar-thumb {
     background-color: #d9d9d9;
 }
+
+.btn-edit-task {
+    @include flexRowStyle(flex-end, center);
+    flex-wrap: wrap;
+
+    .btn-btn {
+        width: 120px;
+        margin: 5px;
+    }
+}
