@@ -7,21 +7,26 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 export default function TimePickerCus({ valueTime, handleChangeTimePicker }) {
   let date = new Date();
-  const [value, setValue] = React.useState(valueTime ? dayjs(valueTime.getTime()) : dayjs(date.getTime()));
+  const [value, setValue] = React.useState(
+    valueTime !== null ? dayjs(valueTime) : dayjs(date.getTime())
+  );
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={["TimePicker", "TimePicker"]} sx={{ paddingTop: "0px"}}>
+      <DemoContainer
+        components={["TimePicker", "TimePicker"]}
+        sx={{ paddingTop: "0px" }}
+      >
         <TimePicker
-        slotProps={{
+          slotProps={{
             textField: {
-              size: "medium"
+              size: "medium",
             },
           }}
           value={value}
           onChange={(newValue) => {
-            setValue(newValue)
-            handleChangeTimePicker(newValue)
+            setValue(newValue);
+            handleChangeTimePicker(newValue);
           }}
         />
       </DemoContainer>

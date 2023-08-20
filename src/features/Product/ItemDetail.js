@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
   Autocomplete,
@@ -19,6 +19,7 @@ import { createAxios } from "../../http/createInstance";
 import { Colors } from "../../config/Colors";
 import "../../assets/css/Product.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
+import * as FormatNumber from "../../component/custom/FormatDateNumber";
 import DateTimePicker from "../../component/Date/DateTimePicker";
 import {
   deletedProductItem,
@@ -84,11 +85,12 @@ function ItemDetail({ item, grId }) {
     storage: item?.storageLocation.name,
   };
 
+  const addressPur = purchaseLocation();
   const [image, setImage] = useState(item?.image);
   const [name, setName] = useState(item?.groupProduct.name);
   const [barcode, setBarcode] = useState(item?.groupProduct.barcode);
   const [quantity, setQuantity] = useState(item?.quantity);
-  const [money, setMoney] = useState(item?.groupProduct.price ?? 0);
+  const [money, setMoney] = useState(FormatNumber.formatCurrency(item?.groupProduct.price ?? 0));
   const [expDate, setExpDate] = useState(item?.bestBefore);
   const [storage, setStorage] = useState(item?.storageLocation.name);
   const [inputStorage, setInputStorage] = useState("");
@@ -168,6 +170,12 @@ function ItemDetail({ item, grId }) {
       setIdStorage(op.id);
     }
   };
+
+  // const handleSaveMoney = (value) => {
+  //   console.log(FormatNumber.formatCurrency(value));
+  //   //FormatNumber.formatCurrency(FormatNumber)
+  //   setMoney(FormatNumber.formatCurrency(value));
+  // }
 
   const handleChangeProduct = async () => {
     let checkGP = false;
@@ -416,8 +424,8 @@ function ItemDetail({ item, grId }) {
                   step: 1,
                 }}
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">unit</InputAdornment>
+                  endAdornment: (
+                    <InputAdornment position="end">{item?.unit}</InputAdornment>
                   ),
                 }}
                 sx={{ width: "130px" }}
@@ -437,8 +445,8 @@ function ItemDetail({ item, grId }) {
                   step: 1000,
                 }}
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">vnd</InputAdornment>
+                  endAdornment: (
+                    <InputAdornment position="end">vnd</InputAdornment>
                   ),
                 }}
                 sx={{ width: "150px" }}
@@ -478,7 +486,7 @@ function ItemDetail({ item, grId }) {
           </Box>
           <Box className="box-address">
             <LocationOnIcon />
-            <Typography>{purchaseLocation()}</Typography>
+            <Typography>{addressPur}</Typography>
           </Box>
           <Box
             sx={{

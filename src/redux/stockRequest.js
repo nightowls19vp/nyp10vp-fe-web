@@ -2,7 +2,7 @@ import apiClient from "../http/http-common";
 import {
   setIdOfStock,
   updateListProduct,
-  updateListStock,
+  updateListProductInStock,
   updateMetaListProduct,
   updateProductItem,
   updateSidebarStock,
@@ -148,25 +148,63 @@ export const getProductItemsByStorage = async (
   currentPage,
   limit,
   storageID,
+  state,
+  date,
   token,
   dispatch,
   axiosJWT
 ) => {
   try {
-    const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}`, {
-      params: {
-        page: currentPage,
-        limit: limit,
-        "filter.timestamp.deletedAt": "$null",
-        "filter.storageLocation.id": storageID,
-      },
-      headers: {
-        accept: "*/*",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    dispatch(updateListProduct(res?.data.data));
-    dispatch(updateMetaListProduct(res?.data.meta));
+    console.log(state);
+    if (state === 1) {
+      const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}`, {
+        params: {
+          page: currentPage,
+          limit: limit,
+          "filter.timestamp.deletedAt": "$null",
+          "filter.storageLocation.id": storageID,
+        },
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      dispatch(updateListProduct(res?.data.data));
+      dispatch(updateMetaListProduct(res?.data.meta));
+    } else if (state === 2) {
+      const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}`, {
+        params: {
+          page: currentPage,
+          limit: limit,
+          "filter.bestBefore": `$lte:${date}`,
+          "filter.timestamp.deletedAt": "$null",
+          "filter.storageLocation.id": storageID,
+        },
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      dispatch(updateListProduct(res?.data.data));
+      dispatch(updateMetaListProduct(res?.data.meta));
+    } else {
+      const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}`, {
+        params: {
+          page: currentPage,
+          limit: limit,
+          'filter.quantity': '$lte:2',
+          "filter.timestamp.deletedAt": "$null",
+          "filter.storageLocation.id": storageID,
+        },
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      dispatch(updateListProduct(res?.data.data));
+      dispatch(updateMetaListProduct(res?.data.meta));
+    }
+    return true;
   } catch (error) {
     return error.response.data;
   }
@@ -224,13 +262,15 @@ export const getProductItemById = async (
   axiosJWT
 ) => {
   try {
+    console.log("grID: ", groupId);
+    console.log("prod: ", id);
     const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}/${id}`, {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
       },
     });
-
+    console.log(res?.data.data);
     dispatch(updateProductItem(res?.data.data));
   } catch (error) {
     return error.response.data;
@@ -466,7 +506,14 @@ export const updateGroupProduct = async (
   }
 };
 
-export const updateItems = async (groupId, id, data, token, dispatch, axiosJWT) => {
+export const updateItems = async (
+  groupId,
+  id,
+  data,
+  token,
+  dispatch,
+  axiosJWT
+) => {
   try {
     await axiosJWT.put(`/prod-mgmt/items/${groupId}/${id}`, data, {
       headers: {
@@ -488,9 +535,100 @@ export const deletedProductItem = async (groupId, id, token, axiosJWT) => {
         accept: "*/*",
         Authorization: `Bearer ${token}`,
       },
-    })
+    });
     return true;
   } catch (error) {
     return false;
   }
-}
+};
+
+export const getAllProductInStock = async (
+  groupId,
+  currentPage,
+  limit,
+  state,
+  date,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    if (state === 1) {
+      const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}`, {
+        params: {
+          page: currentPage,
+          limit: limit,
+          "filter.timestamp.deletedAt": "$eq:$null",
+        },
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Tat ca: ", res?.data);
+      dispatch(updateListProductInStock(res?.data));
+    } else if (state === 2) {
+      const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}`, {
+        params: {
+          page: currentPage,
+          limit: limit,
+          "filter.bestBefore": `$lte:${date}`,
+          "filter.timestamp.deletedAt": "$eq:$null",
+        },
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Het han: ", res?.data);
+      dispatch(updateListProductInStock(res?.data));
+    } else {
+      const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}`, {
+        params: {
+          page: currentPage,
+          limit: limit,
+          'filter.quantity': '$lte:2',
+          "filter.timestamp.deletedAt": "$eq:$null",
+        },
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Het: ", res?.data);
+      dispatch(updateListProductInStock(res?.data));
+    }
+    return true;
+  } catch (error) {
+    dispatch(updateListProductInStock([]));
+    return false;
+  }
+};
+
+export const getBestBeforceProductInStock = async (
+  groupId,
+  currentPage,
+  limit,
+  date,
+  token,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}`, {
+      params: {
+        page: currentPage,
+        limit: limit,
+        "filter.bestBefore": `$lte:${date}`,
+        "filter.timestamp.deletedAt": "$eq:$null",
+      },
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return res?.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};

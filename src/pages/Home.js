@@ -63,9 +63,9 @@ function Home() {
   return (
     <>
       <DefaultLayout>
-        {/* <HomeLayout /> */}
+        <HomeLayout />
         {/* <HomeLayoutNoGroup /> */}
-        <UserJoin />
+        {/* <UserJoin /> */}
       </DefaultLayout>
     </>
   );

@@ -11,6 +11,7 @@ const stockSlide = createSlice({
       data: null,
       meta: null,
     },
+    productInStock: null,
   },
   reducers: {
     updateListStock: (state, action) => {
@@ -30,6 +31,9 @@ const stockSlide = createSlice({
     },
     updateMetaListProduct: (state, action) => {
       state.listProduct.meta = action.payload;
+    },
+    updateListProductInStock: (state, action) => {
+      state.productInStock = action.payload;
     }
   },
 });
@@ -40,7 +44,8 @@ export const {
   setIdOfStock,
   updateProductItem,
   updateListProduct,
-  updateMetaListProduct
+  updateMetaListProduct,
+  updateListProductInStock,
 } = stockSlide.actions;
 
 export default stockSlide.reducer;

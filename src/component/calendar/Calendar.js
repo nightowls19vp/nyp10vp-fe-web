@@ -15,6 +15,7 @@ import { getPackageTask } from "../../redux/packageRequest";
 import { createAxios } from "../../http/createInstance";
 import { loginSuccess } from "../../redux/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import * as FormatDate from "../custom/FormatDateNumber";
 
 const locales = {
   //vi: require("date-fns/locale/vi"),
@@ -52,6 +53,7 @@ const CalendarComponent = ({ grID, events }) => {
   const handleClose = () => setOpen(false);
 
   const handleSelectEvent = async (calEvent) => {
+    
     const res = await getPackageTask(calEvent.id, user?.accessToken, axiosJWT);
     if (res?.statusCode === 200) {
       console.log(res?.task);

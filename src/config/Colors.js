@@ -17,4 +17,8 @@ export const Colors = {
     error: "#e60000",
     success: "#009933",
     chat: "#ffca80",
+    pin: "#006e5f",
+    btnPurpleGray: "#bfc4d9",
+    purpleGray: "#4c5680",
+    purpleGrayBold: "#394160",
 };

@@ -460,12 +460,12 @@ export default function EnhancedTable({ item }) {
     console.log(res);
 
     if (res?.statusCode === 200) {
-      dispatch(updateProgress(false));
+      //dispatch(updateProgress(false));
       window.open(res?.data);
 
-      // setTimeout(function () {
-      //   dispatch(updateNotiCheckout(1));
-      // }, 2 * 60 * 1000);
+      setTimeout(function () {
+        dispatch(updateProgress(false));
+      }, 2 * 60 * 1000);
 
       await getUserCart(
         user?.data.userInfo._id,

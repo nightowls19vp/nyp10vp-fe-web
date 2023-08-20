@@ -29,6 +29,7 @@ import {
   userRenewGroup,
 } from "../../redux/userRequest.js";
 import { useNavigate } from "react-router-dom";
+import { updateProgress } from "../../redux/messageSlice.js";
 
 const style = {
   position: "absolute",
@@ -111,7 +112,7 @@ function DetailItemRenew({ item, grpId }) {
       method: methodValue,
     };
 
-    console.log(data);
+    dispatch(updateProgress(true));
 
     const res = await userRenewGroup(
       grpId,
@@ -124,27 +125,23 @@ function DetailItemRenew({ item, grpId }) {
     console.log(res);
 
     if (res?.statusCode === 200) {
-      window.open(order.order.order_url);
+      window.open(res?.data);
 
-      async function getGroup() {
-        await getGroupByUserId(user?.accessToken, dispatch, axiosJWT);
-      }
+      setTimeout(function () {
+        dispatch(updateProgress(false));
+      }, 2 * 60 * 1000);
 
-      function stopClock() {
-        console.log("vyyyyyy");
-        clearTimeout(timeoutID);
-        getGroup();
-      }
+      // async function getGroup() {
+      //   await getGroupByUserId(user?.accessToken, dispatch, axiosJWT);
+      // }
 
-      const timeoutID = setTimeout(stopClock, 1 * 60 * 1000);
+      // function stopClock() {
+      //   console.log("vyyyyyy");
+      //   clearTimeout(timeoutID);
+      //   getGroup();
+      // }
 
-      // socket.on("zpCallback", (data) => {
-      //   if (data) {
-      //     console.log("vy", data);
-      //     getGroup();
-      //     clearTimeout(timeoutID);
-      //   }
-      // });
+      // const timeoutID = setTimeout(stopClock, 1 * 60 * 1000);
 
       navigate("/group");
     }

@@ -117,7 +117,7 @@ function AddTask({ grID, item, handleClose }) {
     let startDateFormat = new Date(d1).toISOString();
 
     let endDateFormat = new Date();
-    if (repeat && FormatDate.compareDates(endDate, startDate)) {
+    if (repeat && FormatDate.compareTimes(endDate, startDate)) {
       let d2 = endDate.setHours(23);
       d2 = new Date(d2).setMinutes(59);
       d2 = new Date(d2).setSeconds(59);

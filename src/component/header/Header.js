@@ -32,15 +32,19 @@ import * as SB from "../Chat/SendBirdGroupChat.js";
 import { getUserCart } from "../../redux/packageRequest.js";
 import LogoMegoo from "../../assets/img/Megoo.png";
 import { useToast } from "rc-toastr";
+import { updateProgress } from "../../redux/messageSlice.js";
+import { useNavigate } from "react-router-dom";
 
 const topSearch = [];
 
 function Header() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toast } = useToast();
 
   let user = useSelector((state) => state?.auth.login?.currentUser);
   const channels = useSelector((state) => state?.user?.channel);
+  const url = window.location.pathname;
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
   const socket = SockectIO();
@@ -51,6 +55,7 @@ function Header() {
     const decodedToken = jwtDecode(user?.accessToken);
     if (decodedToken.exp < day.getTime() / 1000) {
       dispatch(loginSuccess(null));
+      navigate("/package");
     }
   }
 
@@ -137,6 +142,19 @@ function Header() {
       }
     });
 
+    socket.on("vnpCallback", async (data) => {
+      console.log("socket-io zpCallback: ", data);
+      if (data) {
+        dispatch(updateProgress(false));
+        await getUserCart(
+          user?.data.userInfo._id,
+          user?.accessToken,
+          dispatch,
+          axiosJWT
+        );
+      }
+    });
+
     return () => {
       // if (socket.readyState === 1) {
       //   socket.disconnect();
@@ -163,11 +181,14 @@ function Header() {
     >
       <Toolbar>
         <Stack flex={{ xs: 2, md: 1 }} className="app-bar">
-          <Box display={{ xs: "block", md: "none" }}>
-            <IconButton onClick={handleHeaderBars}>
-              <AiOutlineBars />
-            </IconButton>
-          </Box>
+          {url === "/stock" || url === "/group" || url === "/profile" ? (
+            <Box display={{ xs: "block", md: "none" }}>
+              <IconButton onClick={handleHeaderBars}>
+                <AiOutlineBars />
+              </IconButton>
+            </Box>
+          ) : null}
+
           <img src={LogoMegoo} alt="Logo" width={80} />
         </Stack>
         <Box
@@ -189,7 +210,7 @@ function Header() {
                 inputProps={params.inputProps}
                 autoFocus
                 sx={{ flex: 1, color: Colors.text, paddingLeft: "10px" }}
-                placeholder="Hinted search text"
+                placeholder="Tìm kiếm..."
               />
             )}
           />

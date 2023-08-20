@@ -7,8 +7,6 @@ import {
   TextField,
   Box,
   Slider,
-  IconButton,
-  Select,
 } from "@mui/material";
 
 import { Colors } from "../../config/Colors";
@@ -78,6 +76,27 @@ export const Button2 = styled(Button)({
   color: Colors.btnFill,
   "&:hover": {
     backgroundColor: Colors.btnOutline,
+    border: "2px solid",
+  },
+  borderRadius: "5px",
+});
+
+export const Button3 = styled(Button)({
+  backgroundColor: Colors.purpleGray,
+  color: Colors.background,
+  "&:hover": {
+    backgroundColor: Colors.purpleGrayBold,
+  },
+  borderRadius: "5px",
+});
+
+export const Button4 = styled(Button)({
+  backgroundColor: Colors.background,
+  border: "1px solid",
+  borderColor: Colors.purpleGray,
+  color: Colors.purpleGray,
+  "&:hover": {
+    backgroundColor: Colors.btnPurpleGray,
     border: "2px solid",
   },
   borderRadius: "5px",

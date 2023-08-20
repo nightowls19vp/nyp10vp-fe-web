@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,21 +12,33 @@ import Paper from "@mui/material/Paper";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import { visuallyHidden } from "@mui/utils";
-
-import { createAxios } from "../../http/createInstance";
-
+import { Box, TableFooter } from "@mui/material";
 import { Colors } from "../../config/Colors";
-import * as FormatNumber from "../../component/custom/FormatDateNumber.js";
-import { getProductItemsByStorage } from "../../redux/stockRequest";
-import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "../../redux/authSlice";
-import { useNavigate } from "react-router-dom";
-import { TableFooter } from "@mui/material";
-import "../../assets/css/Product.scss";
+import * as FormatNumber from "../../component/custom/FormatDateNumber";
 import { styled } from "@mui/material/styles";
 
-function createData(id, name, quantity, unit, money, exp) {
-  return { id, name, quantity, unit, money, exp };
+import "../../assets/css/AllProduct.scss";
+import {
+  getAllProductInStock,
+  getProductItemById,
+} from "../../redux/stockRequest";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess } from "../../redux/authSlice";
+import { createAxios } from "../../http/createInstance";
+import { useNavigate } from "react-router-dom";
+
+function createData(
+  id,
+  idStorage,
+  idProduct,
+  name,
+  quantity,
+  unit,
+  money,
+  exp,
+  stock
+) {
+  return { id, idStorage, idProduct, name, quantity, unit, money, exp, stock };
 }
 
 const StyledTableSortLabel = styled(TableSortLabel)(({ theme }) => ({
@@ -68,8 +79,14 @@ const headCells = [
   {
     id: "name",
     numeric: false,
-    disablePadding: true,
+    disablePadding: false,
     label: "Tên nhu yếu phẩm",
+  },
+  {
+    id: "stock",
+    numeric: false,
+    disablePadding: false,
+    label: "Kho lưu trữ",
   },
   {
     id: "quantity",
@@ -90,7 +107,6 @@ const headCells = [
     label: "Hạn sử dụng",
   },
 ];
-
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
@@ -132,40 +148,48 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
 };
 
-export default function ListItemProduct({ item, p, grId, storageID, state, date }) {
-  const dispatch = useDispatch();
+function AllProductInStock({ item, p, grID, state, date }) {
+  console.log("p", p);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
-  const rows = item.map((row) =>
-    createData(
-      row.id,
-      row.groupProduct.name,
-      row.quantity,
-      row.unit,
-      row.groupProduct.price,
-      row.bestBefore
-    )
-  );
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("exp");
   const [dense, setDense] = useState(false);
   const [page, setPage] = useState(p.currentPage - 1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
+  const rows = item.map((row) =>
+    createData(
+      row.id,
+      row.storageLocation.id,
+      row.groupProduct.id,
+      row.groupProduct.name,
+      row.quantity,
+      row.unit,
+      row.groupProduct.price ?? 0,
+      row.bestBefore,
+      row.storageLocation.name
+    )
+  );
+
+  const visibleRows = React.useMemo(
+    () => stableSort(rows, getComparator(order, orderBy)),
+    [order, orderBy, rows]
+  );
+
   const handleChangePage = async (event, newPage) => {
     let currentPage = newPage;
-    await getProductItemsByStorage(
-      grId,
+    await getAllProductInStock(
+      grID,
       currentPage + 1,
       rowsPerPage,
-      storageID,
       state,
       date,
       user?.accessToken,
@@ -177,11 +201,10 @@ export default function ListItemProduct({ item, p, grId, storageID, state, date 
 
   const handleChangeRowsPerPage = async (event) => {
     let limit = parseInt(event.target.value, 10);
-    await getProductItemsByStorage(
-      grId,
+    await getAllProductInStock(
+      grID,
       1,
       limit,
-      storageID,
       state,
       date,
       user?.accessToken,
@@ -192,9 +215,10 @@ export default function ListItemProduct({ item, p, grId, storageID, state, date 
     setPage(0);
   };
 
-  const handleClick = (e, productID) => {
+  const handleClick = async (e, id1, id2) => {
+    await getProductItemById(grID, id2, user?.accessToken, dispatch, axiosJWT);
     navigate(
-      `/stock/product-item?grId=${grId}&storageId=${storageID}&productId=${productID}`
+      `/stock/product-item?grId=${grID}&storageId=${id1}&productId=${id2}`
     );
   };
 
@@ -202,21 +226,20 @@ export default function ListItemProduct({ item, p, grId, storageID, state, date 
     setDense(event.target.checked);
   };
 
-  const visibleRows = React.useMemo(
-    () => stableSort(rows, getComparator(order, orderBy)),
-    [order, orderBy, rows]
-  );
-
   useEffect(() => {
     setPage(p.currentPage - 1);
-    setRowsPerPage(5);
+    setRowsPerPage(10);
   }, [p]);
-
+  
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper className="list-product">
+      <Paper className="table-all-product">
         <TableContainer>
-          <Table aria-labelledby="tableTitle" size={dense ? "small" : "medium"}>
+          <Table
+            sx={{ minWidth: 750 }}
+            aria-labelledby="tableTitle"
+            size={dense ? "small" : "medium"}
+          >
             <EnhancedTableHead
               order={order}
               orderBy={orderBy}
@@ -232,26 +255,19 @@ export default function ListItemProduct({ item, p, grId, storageID, state, date 
                     tabIndex={-1}
                     key={row.id}
                     sx={{ cursor: "pointer" }}
-                    onClick={(e) => handleClick(e, row.id)}
+                    onClick={(e) => handleClick(e, row.idStorage, row.id)}
                   >
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
-                    >
+                    <TableCell component="th" id={labelId} scope="row">
                       {row.name}
                     </TableCell>
+                    <TableCell align="left">{row.stock}</TableCell>
                     <TableCell align="right">
                       {row.quantity} {row.unit}
                     </TableCell>
                     <TableCell align="right">
                       {FormatNumber.formatCurrency(row.money)}
                     </TableCell>
-                    <TableCell align="right">
-                      {/* {FormatNumber.formatDate(row.exp)} */}
-                      {row.exp}
-                    </TableCell>
+                    <TableCell align="right">{row.exp}</TableCell>
                   </TableRow>
                 );
               })}
@@ -259,7 +275,7 @@ export default function ListItemProduct({ item, p, grId, storageID, state, date 
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[5, 10, 20]}
+                  rowsPerPageOptions={[10, 20]}
                   labelRowsPerPage="Số hàng trên trang"
                   count={p.totalItems}
                   rowsPerPage={rowsPerPage}
@@ -279,3 +295,5 @@ export default function ListItemProduct({ item, p, grId, storageID, state, date 
     </Box>
   );
 }
+
+export default AllProductInStock;

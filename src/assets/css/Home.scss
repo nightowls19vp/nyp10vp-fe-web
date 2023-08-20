@@ -80,6 +80,14 @@
   background-color: #fff;
 }
 
+.carousel-title-todo {
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .home-image {
   width: 100%;
   height: auto;
@@ -102,8 +110,8 @@
     @include flexRowStyle(center, center);
     flex-wrap: wrap;
     .btn-btn {
-        width: 160px;
-        margin: 10px;
+      width: 160px;
+      margin: 10px;
     }
   }
 }

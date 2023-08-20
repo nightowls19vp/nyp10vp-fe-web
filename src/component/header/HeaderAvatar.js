@@ -26,8 +26,10 @@ function HeaderAvatar({ data, user }) {
   };
 
   const handleClickLogout = async () => {
-    console.log(user?.accessToken);
-    await logoutUser(user?.accessToken, dispatch, navigate, axiosJWT);
+    dispatch(loginSuccess(null));
+    navigate("/login");
+    // console.log(user?.accessToken);
+    // await logoutUser(user?.accessToken, dispatch, navigate, axiosJWT);
   };
 
   const handleClickLogin = () => {
@@ -75,7 +77,7 @@ function HeaderAvatar({ data, user }) {
               </>
             ) : (
               <CustomComponent.ButtonPopperAvatar onClick={handleClickLogin}>
-                Đăng nhập
+                Đăng nhập/Đăng ký
               </CustomComponent.ButtonPopperAvatar>
             )}
           </Box>

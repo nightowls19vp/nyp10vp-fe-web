@@ -292,6 +292,48 @@ export const deletePackageTask = async (
   }
 };
 
+export const updatePackageTask = async (
+  grID,
+  id,
+  data1,
+  data2,
+  checkTask,
+  checkTaskStatus,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    if (checkTask) {
+      await axiosJWT.put(`/pkg-mgmt/task/${id}`, data1, {
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+
+    if (checkTaskStatus) {
+      await axiosJWT.put(`/pkg-mgmt/task/${id}/state`, data2, {
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+    
+    await getGroupByUserId(token, dispatch, axiosJWT);
+    dispatch(updateGroupId(grID));
+    dispatch(updateGroupItemId(3));
+
+    return true;
+  } catch (error) {
+    dispatch(updateGroupId(grID));
+    dispatch(updateGroupItemId(3));
+    return false;
+  }
+};
+
 export const GetGroupSuperUser = async (token, dispatch, axiosJWT) => {
   try {
     const res = await axiosJWT.get(`/pkg-mgmt/gr/user`, {

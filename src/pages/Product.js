@@ -33,7 +33,7 @@ function Product() {
       );
     };
 
-    getProductItem();
+    getProductItem().catch(console.error);
 
     return () => {
       getProductItem();

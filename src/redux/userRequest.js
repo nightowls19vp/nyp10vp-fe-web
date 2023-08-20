@@ -810,7 +810,7 @@ export const updatePackageBill = async (
     }
 
     if (checkStatus) {
-      await axiosJWT.put(`/pkg-mgmt/bill/${id}/status`, dataStatus, {
+      await axiosJWT.put(`/pkg-mgmt/bill/${id}/status/lender`, dataStatus, {
         headers: {
           accept: "*/*",
           Authorization: `Bearer ${token}`,

@@ -48,10 +48,16 @@ function BoxTodos({ homeTodos, widthContent }) {
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-between",
+                justifyContent: "flex-start",
               }}
             >
-              <CardHeader title={todo.summary} />
+              <CardHeader
+                title={
+                  <Typography className="carousel-title-todo">
+                    {todo.summary}
+                  </Typography>
+                }
+              />
               <CardContent>
                 {todo.todos.map((t, idx) =>
                   t && idx < 3 ? (
@@ -69,9 +75,9 @@ function BoxTodos({ homeTodos, widthContent }) {
                   ) : null
                 )}
               </CardContent>
-              <CardActions>
+              {/* <CardActions>
                 <Button>Xem thêm</Button>
-              </CardActions>
+              </CardActions> */}
             </Card>
           </Carousel.Item>
         ) : null

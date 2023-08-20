@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import SidebarLayout from "../../layout/SidebarLayout";
 
 function StockLayout() {
-  // const listStock = useSelector((state) => state?.stock?.listStock);
   const listGroupActived = useSelector((state) => state?.stock?.sidebarStock);
   const selectedStock = useSelector((state) => state?.stock?.idStock);
 
@@ -18,7 +17,11 @@ function StockLayout() {
       {listGroupActived?.map((group) =>
         group ? (
           group._id === selectedStock ? (
-            <StockItem item={group.stocks.data} grID={group._id} key={group._id} />
+            <StockItem
+              item={group.stocks.data}
+              grID={group._id}
+              key={group._id}
+            />
           ) : null
         ) : null
       )}

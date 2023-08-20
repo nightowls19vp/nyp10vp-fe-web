@@ -14,6 +14,7 @@ import PackageRenewPage from '../pages/PackageRenew.js';
 import ChatPage from '../pages/Chat.js';
 import ProductPage from '../pages/ListProduct.js';
 import ProductItemPage from '../pages/Product.js';
+import ListProductPage from "../pages/ProductInStock.js";
 
 const publicRoutes = [
     { path: routesConfig.home, component: HomePage},
@@ -34,6 +35,7 @@ const loginRoute = [
     { path: routesConfig.packageGroup, component: PackageRenewPage},
     { path: routesConfig.product, component: ProductPage},
     { path: routesConfig.productItem, component: ProductItemPage},
+    { path: routesConfig.listProduct, component: ListProductPage},
     { path: routesConfig.homeGG, component: HomeGGPage},
 ]
 

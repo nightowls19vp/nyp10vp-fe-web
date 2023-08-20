@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Stack,
@@ -26,6 +26,7 @@ import { styled } from "@mui/material/styles";
 import { Colors } from "../../../config/Colors";
 import {
   deletePackageTask,
+  updatePackageTask,
 } from "../../../redux/packageRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../../redux/authSlice";
@@ -60,6 +61,17 @@ function EditTask({ grID, item, handleClose }) {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const timeStart = new Date(item.startDate);
+  const setintialStatusEnd = () => {
+    if (!item.isRepeated) {
+      return "1";
+    } else {
+      if (item.recurrence && item.recurrence.ends === "") {
+        return "1";
+      } else {
+        return "2";
+      }
+    }
+  };
 
   let date = new Date();
   const [name, setName] = useState(item.summary);
@@ -68,27 +80,35 @@ function EditTask({ grID, item, handleClose }) {
   const [numRepeat, setNumRepeat] = useState(
     item.recurrence ? item.recurrence.times : 1
   );
-  const [unit, setUnit] = useState(item.recurrence ? item.recurrence.unit : "");
+  const [unit, setUnit] = useState(
+    item.recurrence ? item.recurrence.unit : "Day"
+  );
   const [formats, setFormats] = React.useState(
     item.recurrence && item.recurrence.unit === "Week"
       ? item.recurrence.repeatOn
       : []
   );
   const [startDate, setStartDate] = useState(item.startDate);
-  const [time, setTime] = useState(timeStart);
-  const [statusEnd, setStatusEnd] = useState(1);
+  const [time, setTime] = useState(dayjs(timeStart.getTime()));
+  const [statusEnd, setStatusEnd] = useState(setintialStatusEnd());
   const [endDate, setEndDate] = useState(
-    item.recurrence ? item.recurrence.ends : date
+    item.recurrence
+      ? item.recurrence.ends === ""
+        ? null
+        : item.recurrence.ends
+      : null
   );
   const [description, setDescription] = useState(item.description);
   const [msg, setMsg] = useState("");
+  const [flagTime, setFlagTime] = useState(false);
 
   const handleStartDateTimePicker = (dateValue) => {
     setStartDate(dateValue.$d);
   };
 
   const handleChangeTimePicker = (timeValue) => {
-    setTime(timeValue);
+    setTime(timeValue.$d);
+    setFlagTime(true);
   };
 
   const handleEndDateTimePicker = (dateValue) => {
@@ -129,25 +149,145 @@ function EditTask({ grID, item, handleClose }) {
       axiosJWT
     );
     if (res === true) {
-        dispatch(updateProgress(false));
-        dispatch(updateOpenSnackbar(true));
-        dispatch(updateStatus(true));
-        dispatch(updateMessage("Xóa thành công lịch biểu!"));
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(true));
+      dispatch(updateMessage("Xóa thành công lịch biểu!"));
     } else {
-        dispatch(updateProgress(false));
-        dispatch(updateOpenSnackbar(true));
-        dispatch(updateStatus(false));
-        dispatch(updateMessage("Xóa thất bại lịch biểu!"));
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(false));
+      dispatch(updateMessage("Xóa thất bại lịch biểu!"));
     }
     handleClose();
   };
 
-  const handleEditTask = () => {
+  const handleEditTask = async () => {
+    setMsg("");
     if (name.length <= 0) {
-        setMsg("Vui lòng điền tiêu đề cho lịch biểu!");
-        return;
+      setMsg("Vui lòng điền tiêu đề cho lịch biểu!");
+      return;
     }
-  }
+    if (statusEnd === "2" && endDate === null) {
+      setMsg("Vui lòng điền ngày kết thúc!");
+      return;
+    }
+
+    let checkTask = false;
+    let checkTaskStatus = false;
+
+    let nowDate = new Date();
+    let startDateFormat = new Date(startDate);
+    if (!flagTime) {
+      let d1 = startDateFormat.setHours(time.$H);
+      d1 = new Date(d1).setMinutes(time.$m);
+      d1 = new Date(d1).setSeconds(time.$s);
+      startDateFormat = new Date(d1).toISOString();
+    } else {
+      let d1 = startDateFormat.setHours(time.getHours());
+      d1 = new Date(d1).setMinutes(time.getMinutes());
+      d1 = new Date(d1).setSeconds(time.getSeconds());
+      startDateFormat = new Date(d1).toISOString();
+    }
+
+    let endDateFormat = new Date(endDate !== null ? endDate : nowDate);
+    if (repeat && FormatDate.compareTimes(endDate, startDate)) {
+      let d2 = endDateFormat.setHours(23);
+      d2 = new Date(d2).setMinutes(59);
+      d2 = new Date(d2).setSeconds(59);
+      endDateFormat = new Date(d2).toISOString();
+    } else {
+      let d2 = new Date(startDate).setHours(23);
+      d2 = new Date(d2).setMinutes(59);
+      d2 = new Date(d2).setSeconds(59);
+      endDateFormat = new Date(d2).toISOString();
+    }
+
+    if (
+      item.summary !== name ||
+      item.description !== description ||
+      !FormatDate.compareEqualTimes(item.startDate, startDateFormat)
+    ) {
+      checkTask = true;
+    }
+    if (item.state !== status) {
+      checkTaskStatus = true;
+    }
+    if (item.isRepeated !== repeat) {
+      checkTask = true;
+    } else {
+      if (repeat === true) {
+        if (
+          item.recurrence.times !== numRepeat ||
+          item.recurrence.unit !== unit
+        ) {
+          checkTask = true;
+        } else {
+          if (item.recurrence.unit === "Week") {
+            if (item.recurrence.repeatOn !== formats) {
+              checkTask = true;
+            }
+          }
+        }
+        if (setintialStatusEnd() !== statusEnd) {
+          checkTask = true;
+        }
+        if (
+          statusEnd === "2" &&
+          !FormatDate.compareEqualTimes(item.recurrence.ends, endDateFormat)
+        ) {
+          checkTask = true;
+        }
+      }
+    }
+    let recurrence = {
+      times: numRepeat,
+      unit: unit,
+      repeatOn: formats,
+      ends:  statusEnd === "1" ? "" : endDateFormat,
+    };
+
+    let formData1 = {
+      summary: name,
+      description: description,
+      isRepeated: repeat,
+      recurrence: recurrence,
+      members: item.members,
+      startDate: startDateFormat,
+      state: status,
+    };
+    let formData2 = {
+      members: item.members,
+      state: status,
+    };
+    if (checkTask || checkTaskStatus) {
+      handleClose();
+      dispatch(updateProgress(true));
+      const res = await updatePackageTask(
+        grID,
+        item._id,
+        formData1,
+        formData2,
+        checkTask,
+        checkTaskStatus,
+        user?.accessToken,
+        dispatch,
+        axiosJWT
+      );
+
+      if (res) {
+        dispatch(updateProgress(false));
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Chỉnh sửa lịch biểu thành công"));
+      } else {
+        dispatch(updateProgress(false));
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Chỉnh sửa lịch biểu thất bại"));
+      }
+    }
+  };
 
   return (
     <Stack spacing={1.5} id="createTask" className="createCreateTask">

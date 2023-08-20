@@ -12,6 +12,7 @@ const routes = {
     chatGr: '/group-chat',
     product: '/stock/product-stock',
     productItem: '/stock/product-item',
+    listProduct: '/stock/list-product',
 };
 
 export default routes;
