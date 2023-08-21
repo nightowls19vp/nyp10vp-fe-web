@@ -92,7 +92,7 @@ export const updateAvatarChannel = async (CHANNEL_URL, AVATAR) => {
       GroupChannelUpdateParams
     );
 
-    console.log(groupChannel);
+    console.log("groupChannel", groupChannel);
 
     return [groupChannel, null];
   } catch (error) {

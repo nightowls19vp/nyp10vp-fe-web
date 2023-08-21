@@ -1,0 +1,24 @@
+@import "mixins";
+@import "color";
+
+
+.funding-box {
+    @include flexRowStyle(space-between, center);
+    .icon-title{
+        font-size: 50px;
+        color: $textPrimary;
+        padding-right: 15px;
+    }
+    .title-group-funding {
+        @include flexRowStyle(flex-start, center);
+    }
+}
+
+.form-group-funding {
+    .name-bill {
+        width: 30%;
+        &:hover {
+            width: 100%;
+        }
+    }
+}

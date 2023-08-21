@@ -10,6 +10,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   AccordionActions,
+  Tooltip,
 } from "@mui/material";
 //import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import AddTaskIcon from "@mui/icons-material/AddTask";
@@ -32,6 +33,8 @@ import {
   updateProgress,
   updateStatus,
 } from "../../../redux/messageSlice";
+import AddIcon from "@mui/icons-material/Add";
+import NotificationEmpty from "../NotificationEmpty";
 
 const style = {
   position: "absolute",
@@ -130,9 +133,22 @@ function GroupTodos({ grId, item }) {
             Các việc cần làm trong nhóm
           </Typography>
         </Box>
-        <IconButton onClick={handleOpen}>
+        <Box sx={{ display: { xs: "none", sm: "flex" } }}>
+          <CustomComponent.Button1 onClick={handleOpen}>
+            <AddIcon color={Colors.background} />
+            Thêm 
+          </CustomComponent.Button1>
+        </Box>
+        <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+          <Tooltip title="Thêm chi tiêu mới">
+            <CustomComponent.Button1 onClick={handleOpen}>
+              <AddIcon color={Colors.background} />
+            </CustomComponent.Button1>
+          </Tooltip>
+        </Box>
+        {/* <IconButton onClick={handleOpen}>
           <AddTaskIcon sx={{ color: Colors.textPrimary, fontSize: "32px" }} />
-        </IconButton>
+        </IconButton> */}
       </Box>
 
       <Modal
@@ -182,7 +198,9 @@ function GroupTodos({ grId, item }) {
               </Accordion>
             ) : null
           )
-        : null}
+        : (
+          <NotificationEmpty msg="Danh sách việc cần làm rỗng" />
+        )}
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box sx={styleModal}>
           <Typography>Bạn có muốn xóa chi tiêu này không?</Typography>

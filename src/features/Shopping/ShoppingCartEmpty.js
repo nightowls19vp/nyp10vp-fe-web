@@ -1,32 +1,30 @@
 import React from "react";
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { RiShoppingBasket2Line } from "react-icons/ri";
 
 import { Colors } from "../../config/Colors";
 import * as CustomComponents from "../../component/custom/CustomComponents.js";
 import { useNavigate } from "react-router-dom";
+import "../../assets/css/Home.scss";
+import DefaultLayout from "../../layout/DefaultLayout";
 
 function ShoppingCartEmpty() {
   const navigate = useNavigate();
-  const handleButton = () => {
+  const handleGoPackage = () => {
     navigate("/package");
   };
   return (
-    <Stack
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      spacing={2}
-      paddingY={5}
-    >
-      <RiShoppingBasket2Line color={Colors.textPrimary} size={"15%"} />
-      <Typography variant="h5" gutterBottom>
-        Không có sản phẩm nào trong giỏ hàng của bạn
-      </Typography>
-      <CustomComponents.Button1 sx={{ width: {xs: '30%', sm: '20%', md: '10%'} }} onClick={handleButton}>
-        Mua ngay
-      </CustomComponents.Button1>
-    </Stack>
+    <DefaultLayout>
+      <Box className="home-image">
+      <Box className="home-go-package">
+        <RiShoppingBasket2Line color={Colors.textPrimary} size={"15%"} />
+        <Typography>Không có sản phẩm nào trong giỏ hàng của bạn</Typography>
+        <CustomComponents.Button1 className="btn-btn" onClick={handleGoPackage}>
+          Mua ngay
+        </CustomComponents.Button1>
+      </Box>
+    </Box>
+    </DefaultLayout>
   );
 }
 

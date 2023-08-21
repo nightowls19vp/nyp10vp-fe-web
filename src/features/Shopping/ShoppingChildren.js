@@ -465,7 +465,7 @@ export default function EnhancedTable({ item }) {
 
       setTimeout(function () {
         dispatch(updateProgress(false));
-      }, 2 * 60 * 1000);
+      }, 5 * 60 * 1000);
 
       await getUserCart(
         user?.data.userInfo._id,
@@ -629,9 +629,9 @@ export default function EnhancedTable({ item }) {
               <Typography
                 variant="subtitle2"
                 color={"#ff3333"}
-                paddingLeft={"2px"}
+                paddingLeft={"5px"}
               >
-                {total}đ
+                {FormatNumber.formatCurrency(total)}
               </Typography>
             </Box>
             <Box align="right">

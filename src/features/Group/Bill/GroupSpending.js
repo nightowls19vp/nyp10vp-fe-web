@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
 
-import { Stack, Box, Typography, IconButton, Modal } from "@mui/material";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import {
+  Stack,
+  Box,
+  Typography,
+  Modal,
+  Tooltip,
+} from "@mui/material";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+import AddIcon from "@mui/icons-material/Add";
 
 import "../../../assets/css/Group.scss";
 import { Colors } from "../../../config/Colors";
+import * as CustomComponent from "../../../component/custom/CustomComponents";
 import FormSpending from "./FormSpending";
 import Bill from "./Bill";
+import NotificationEmpty from "../NotificationEmpty";
 
 const style = {
   position: "absolute",
@@ -60,11 +68,19 @@ function GroupSpending({ item }) {
             Quản lý chi tiêu trong nhóm
           </Typography>
         </Box>
-        <IconButton onClick={handleOpen}>
-          <ControlPointIcon
-            sx={{ color: Colors.textPrimary, fontSize: "32px" }}
-          />
-        </IconButton>
+        <Box sx={{ display: { xs: "none", sm: "flex" } }}>
+          <CustomComponent.Button1 onClick={handleOpen}>
+            <AddIcon color={Colors.background} />
+            Thêm chi tiêu mới
+          </CustomComponent.Button1>
+        </Box>
+        <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+          <Tooltip title="Thêm chi tiêu mới">
+            <CustomComponent.Button1 onClick={handleOpen}>
+              <AddIcon color={Colors.background} />
+            </CustomComponent.Button1>
+          </Tooltip>
+        </Box>
       </Box>
       <Modal
         open={open}
@@ -95,7 +111,9 @@ function GroupSpending({ item }) {
             bill ? <Bill key={bill._id} grID={item._id} item={bill} /> : null
           )}
         </Box>
-      ) : null}
+      ) : (
+        <NotificationEmpty msg="Danh sách chi tiêu rỗng" />
+      )}
     </Stack>
   );
 }

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import * as SB from "../../component/Chat/SendBirdGroupChat.js";
 import { updateChannelID } from "../../redux/userSlice";
+import ChatEmpty from "./ChatEmpty";
 
 function ChatItem() {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ function ChatItem() {
           channelFisrt={channelFisrt}
           messageFirst={messageFirst}
         />
-      ) : null}
+      ) : (<ChatEmpty />)}
     </>
   );
 }

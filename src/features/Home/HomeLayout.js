@@ -6,16 +6,17 @@ import "../../assets/css/Home.scss";
 import BoxGroup from "./BoxGroup";
 import BoxNotification from "./BoxNotification";
 import BoxTodos from "./BoxTodos";
-// import { Colors } from "../../config/Colors";
-// import BoxChat from "./BoxChat";
 import BoxTransaction from "./BoxTransaction";
+import * as CustomComponent from "../../component/custom/CustomComponents";
 import { useSelector } from "react-redux";
-import HomeImg from "../../assets/img/Home.png";
+import { useNavigate } from "react-router-dom";
 
 function HomeLayout() {
+  const navigate = useNavigate();
   const homeTodos = useSelector((state) => state?.home.homeTodos);
   const homeBilling = useSelector((state) => state?.home.homeBilling);
   const homeChat = useSelector((state) => state?.home.homeChat);
+  const homeTrans = useSelector((state) => state?.home.homeTrans);
   const homeGroup = useSelector((state) => state?.home.homeGroup);
 
   const [widthContent, setWidthContent] = useState(window.innerWidth);
@@ -31,6 +32,10 @@ function HomeLayout() {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
+
+  const handlePagePackage = () => {
+    navigate("/package");
+  }
   return (
     <>
       {homeGroup.length > 0 ? (
@@ -46,7 +51,7 @@ function HomeLayout() {
           >
             <BoxGroup />
 
-            <BoxTransaction className="home-box-3-trans" homeChat={homeChat} />
+            <BoxTransaction className="home-box-3-trans" homeChat={homeChat} homeTrans={homeTrans} />
 
             {homeTodos.length > 0 ? (
               <BoxTodos
@@ -79,7 +84,7 @@ function HomeLayout() {
         </Box>
       ) : (
         <Box className="home-image">
-          {/* <img src={HomeImg} alt="Logo" width={"100%"} /> */}
+          <CustomComponent.Button1 onClick={handlePagePackage}>Package</CustomComponent.Button1>
         </Box>
       )}
     </>

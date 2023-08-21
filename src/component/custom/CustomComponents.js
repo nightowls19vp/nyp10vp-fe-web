@@ -102,6 +102,16 @@ export const Button4 = styled(Button)({
   borderRadius: "5px",
 });
 
+export const ButtonTodo = styled(Button)({
+  backgroundColor: Colors.purpleGray,
+  color: Colors.background,
+  height: "56px",
+  "&:hover": {
+    backgroundColor: Colors.purpleGrayBold,
+  },
+  borderRadius: "5px",
+});
+
 export const ButtonProduct = styled(ButtonBase)(({ theme }) => ({
   position: "relative",
   // borderRadius: "50%",

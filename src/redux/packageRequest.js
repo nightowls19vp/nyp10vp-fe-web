@@ -115,12 +115,12 @@ export const postPackageTodos = async (
     if (res?.data.statusCode === 201) {
       await getGroupByUserId(token, dispatch, axiosJWT);
       dispatch(updateGroupId(group_id));
-      dispatch(updateGroupItemId(2));
+      dispatch(updateGroupItemId(3));
     }
     return res?.data;
   } catch (error) {
     dispatch(updateGroupId(group_id));
-    dispatch(updateGroupItemId(2));
+    dispatch(updateGroupItemId(3));
     return error.response.data;
   }
 };
@@ -137,12 +137,12 @@ export const addTodo = async (grID, id, data, token, dispatch, axiosJWT) => {
     if (res?.data.statusCode === 200) {
       await getGroupByUserId(token, dispatch, axiosJWT);
       dispatch(updateGroupId(grID));
-      dispatch(updateGroupItemId(2));
+      dispatch(updateGroupItemId(3));
     }
     return res?.data;
   } catch (error) {
     dispatch(updateGroupId(grID));
-    dispatch(updateGroupItemId(2));
+    dispatch(updateGroupItemId(3));
     return error.response.data;
   }
 };
@@ -214,12 +214,12 @@ export const deletedTodos = async (grID, id, token, dispatch, axiosJWT) => {
     if (res?.data.statusCode === 200) {
       await getGroupByUserId(token, dispatch, axiosJWT);
       dispatch(updateGroupId(grID));
-      dispatch(updateGroupItemId(2));
+      dispatch(updateGroupItemId(3));
     }
     return res?.data;
   } catch (error) {
     dispatch(updateGroupId(grID));
-    dispatch(updateGroupItemId(2));
+    dispatch(updateGroupItemId(3));
     return error.response.data;
   }
 };
@@ -241,12 +241,12 @@ export const postPackageTask = async (
     if (res?.data.statusCode === 201) {
       await getGroupByUserId(token, dispatch, axiosJWT);
       dispatch(updateGroupId(grID));
-      dispatch(updateGroupItemId(3));
+      dispatch(updateGroupItemId(4));
     }
     return res?.data;
   } catch (error) {
     dispatch(updateGroupId(grID));
-    dispatch(updateGroupItemId(3));
+    dispatch(updateGroupItemId(4));
     return error.response.data;
   }
 };
@@ -282,12 +282,12 @@ export const deletePackageTask = async (
     if (res?.data.statusCode === 200) {
       await getGroupByUserId(token, dispatch, axiosJWT);
       dispatch(updateGroupId(grID));
-      dispatch(updateGroupItemId(3));
+      dispatch(updateGroupItemId(4));
     }
     return true;
   } catch (error) {
     dispatch(updateGroupId(grID));
-    dispatch(updateGroupItemId(3));
+    dispatch(updateGroupItemId(4));
     return false;
   }
 };
@@ -324,12 +324,12 @@ export const updatePackageTask = async (
     
     await getGroupByUserId(token, dispatch, axiosJWT);
     dispatch(updateGroupId(grID));
-    dispatch(updateGroupItemId(3));
+    dispatch(updateGroupItemId(4));
 
     return true;
   } catch (error) {
     dispatch(updateGroupId(grID));
-    dispatch(updateGroupItemId(3));
+    dispatch(updateGroupItemId(4));
     return false;
   }
 };

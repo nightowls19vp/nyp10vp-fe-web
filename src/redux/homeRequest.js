@@ -29,9 +29,9 @@ export const getGroupsUser = async (token, dispatch, axiosJWT) => {
   }
 };
 
-export const getTransitionUser = async (token, dispatch, axiosJWT) => {
+export const getTransitionUser = async (userId, token, dispatch, axiosJWT) => {
   try {
-    const res = await axiosJWT.get("/txn/user", {
+    const res = await axiosJWT.get(`/txn/${userId}`, {
       headers: {
         accept: "*/*",
         Authorization: `Bearer ${token}`,

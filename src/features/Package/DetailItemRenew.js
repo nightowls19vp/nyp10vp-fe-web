@@ -77,8 +77,8 @@ function DetailItemRenew({ item, grpId }) {
 
     if (duration < item.duration) {
       setDuration(item.duration);
-    } else if (duration > 10) {
-      setDuration(10);
+    } else if (duration > 20) {
+      setDuration(20);
     }
   };
 
@@ -129,7 +129,7 @@ function DetailItemRenew({ item, grpId }) {
 
       setTimeout(function () {
         dispatch(updateProgress(false));
-      }, 2 * 60 * 1000);
+      }, 5 * 60 * 1000);
 
       // async function getGroup() {
       //   await getGroupByUserId(user?.accessToken, dispatch, axiosJWT);
@@ -205,9 +205,8 @@ function DetailItemRenew({ item, grpId }) {
             <Typography variant="overline" display="block" gutterBottom>
               Số người
             </Typography>
-            {item.name === "Family Package" ? (
+            {item.editableNoOfMember === false ? (
               <Box className="item">
-                {/* <CustomComponents.CssTextField size="small" value={member} /> */}
                 <Typography variant="subtitle1" fontSize={18} gutterBottom>
                   {member}
                 </Typography>
@@ -237,9 +236,7 @@ function DetailItemRenew({ item, grpId }) {
             <Typography variant="overline" display="block" gutterBottom>
               Thời gian
             </Typography>
-            {item.name === "Experience Package" ||
-            item.name === "Annual Package" ||
-            item.name === "Family Package" ? (
+            {item.editableDuration === false ? (
               <Box className="item">
                 <Typography variant="subtitle1" fontSize={18} gutterBottom>
                   {duration}
@@ -251,7 +248,7 @@ function DetailItemRenew({ item, grpId }) {
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
                   min={item.duration}
-                  max={10}
+                  max={20}
                   value={duration}
                   onChange={(event) => setDuration(event.target.value)}
                 />

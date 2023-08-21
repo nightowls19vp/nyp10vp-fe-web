@@ -97,6 +97,7 @@
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  background-position: center;
 
   @include flexRowStyle(center, center);
 
@@ -111,6 +112,13 @@
     flex-wrap: wrap;
     .btn-btn {
       width: 160px;
+      margin: 10px;
+    }
+  }
+
+  .home-go-package {
+    @include flexColumnStyle(center, center);
+    .btn-btn {
       margin: 10px;
     }
   }

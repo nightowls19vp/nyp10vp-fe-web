@@ -14,6 +14,8 @@ import { Colors } from "../../../config/Colors";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CalendarComponent from "../../../component/calendar/Calendar";
 import AddTask from "./AddTask";
+import * as CustomComponent from "../../../component/custom/CustomComponents";
+import NotificationEmpty from "../NotificationEmpty";
 
 const style = {
   position: "absolute",
@@ -88,11 +90,24 @@ function GroupTasks({ grId, item }) {
             Sự kiện trong nhóm
           </Typography>
         </Box>
-        <Tooltip title="Thêm sự kiện">
+        <Box sx={{ display: { xs: "none", sm: "flex" } }}>
+          <CustomComponent.Button1 onClick={handleOpen}>
+            <AddIcon color={Colors.background} />
+            Thêm sự kiện
+          </CustomComponent.Button1>
+        </Box>
+        <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+          <Tooltip title="Thêm sự kiện">
+            <CustomComponent.Button1 onClick={handleOpen}>
+              <AddIcon color={Colors.background} />
+            </CustomComponent.Button1>
+          </Tooltip>
+        </Box>
+        {/* <Tooltip title="Thêm sự kiện">
           <IconButton onClick={handleOpen}>
             <AddIcon />
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
         <Modal open={open} onClose={handleClose}>
           <Box sx={style}>
             <AddTask
@@ -103,8 +118,10 @@ function GroupTasks({ grId, item }) {
           </Box>
         </Modal>
       </Box>
-      {events.length > 0 && (
+      {events.length > 0 ? (
         <CalendarComponent grID={item._id} events={events} />
+      ) : (
+        <NotificationEmpty msg="Danh sách sự kiện rỗng" />
       )}
     </Stack>
   );

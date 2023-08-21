@@ -57,8 +57,8 @@ function DetailItem({ item }) {
 
     if (duration < item.duration) {
       setDuration(item.duration);
-    } else if (duration > 10) {
-      setDuration(10);
+    } else if (duration > 20) {
+      setDuration(20);
     }
   };
 
@@ -273,7 +273,7 @@ function DetailItem({ item }) {
           <Typography variant="overline" display="block" gutterBottom>
             Số người (người)
           </Typography>
-          {item.name === "Family Package" ? (
+          {item.editableNoOfMember === false ? (
             <Box className="item">
               <Typography variant="subtitle1" fontSize={18} gutterBottom>
                 {member}
@@ -304,9 +304,7 @@ function DetailItem({ item }) {
           <Typography variant="overline" display="block" gutterBottom>
             Thời gian (tháng)
           </Typography>
-          {item.name === "Experience Package" ||
-          item.name === "Annual Package" ||
-          item.name === "Family Package" ? (
+          {item.editableDuration === false ? (
             <Box className="item">
               <Typography variant="subtitle1" fontSize={18} gutterBottom>
                 {duration}
@@ -318,7 +316,7 @@ function DetailItem({ item }) {
                 valueLabelDisplay="auto"
                 aria-label="pretto slider"
                 min={item.duration}
-                max={10}
+                max={20}
                 value={duration}
                 onChange={(event) => setDuration(event.target.value)}
               />

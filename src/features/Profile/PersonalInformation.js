@@ -32,6 +32,7 @@ import {
   updateProgress,
   updateStatus,
 } from "../../redux/messageSlice";
+import * as SB from "../../component/Chat/SendBirdGroupChat.js";
 
 function PersonalInformation() {
   const inputRef = useRef();
@@ -88,6 +89,7 @@ function PersonalInformation() {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
         dispatch(updateMessage("Cập nhật avatar thành công"));
+        await SB.setupUser(user?.data.userInfo._id, name, res.data);
         setImage(res.data);
       } else {
         dispatch(updateOpenSnackbar(true));
@@ -143,6 +145,7 @@ function PersonalInformation() {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
         dispatch(updateMessage("Cập nhật thông tin thành công"));
+        await SB.setupUser(user?.data.userInfo._id, name, image);
       } else {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(false));

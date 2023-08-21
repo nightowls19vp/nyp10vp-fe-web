@@ -31,6 +31,7 @@ function PackageGroup({ item, data, title }) {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   let groupChannelMembers = [];
+  const nowDate = new Date().toISOString();
 
   const onError = (error) => {
     console.log(error);
@@ -160,7 +161,7 @@ function PackageGroup({ item, data, title }) {
               Còn lại:
             </Typography>
             <Typography fontSize={16} gutterBottom>
-              {CalculateDate(item.startDate, item.endDate)} ngày
+              {CalculateDate(item.endDate, nowDate)} ngày
             </Typography>
           </Box>
         )}

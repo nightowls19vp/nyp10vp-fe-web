@@ -1,4 +1,4 @@
-import React, {  } from "react";
+import React from "react";
 import { Box, Typography } from "@mui/material";
 import SuperUser from "./SuperUser";
 import SidebarLayout from "../../layout/SidebarLayout";
@@ -11,6 +11,8 @@ import GroupSpending from "./Bill/GroupSpending";
 // import { updateGroupId, updateGroupItemId } from "../../redux/userSlice";
 import GroupTodos from "./Todos/GroupTodos";
 import GroupTasks from "./Tasks/GroupTasks";
+import HomeLayoutNoGroup from "../Home/HomeLayoutNoGroup";
+import GroupFunding from "./Funding/GroupFunding";
 
 function GroupItem() {
   // const dispatch = useDispatch();
@@ -29,19 +31,7 @@ function GroupItem() {
   return (
     <>
       {selectedID === 0 ? (
-        <DefaultLayout>
-          <Box
-            sx={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Typography fontSize={22}> Hiện bạn chưa có nhóm nào </Typography>
-          </Box>
-        </DefaultLayout>
+        <HomeLayoutNoGroup msg="Hiện bạn chưa có nhóm nào" />
       ) : (
         <SidebarLayout data={groups} title="group" selectedID={selectedItemID}>
           {groups.map((gr) =>
@@ -56,21 +46,23 @@ function GroupItem() {
                           title={gr.name}
                         />
                       ) : selectedItemID === 1 ? (
+                        <GroupFunding key={route._id} />
+                      ) : selectedItemID === 2 ? (
                         <GroupSpending
-                          item={route.child[1].group}
+                          item={route.child[2].group}
                           key={route._id}
                         />
-                      ) : selectedItemID === 2 ? (
+                      ) : selectedItemID === 3 ? (
                         <GroupTodos
                           key={route._id}
                           grId={route._id}
-                          item={route.child[2].group}
+                          item={route.child[3].group}
                         />
                       ) : (
                         <GroupTasks
                           key={route._id}
                           grId={route._id}
-                          item={route.child[3].group}
+                          item={route.child[4].group}
                         />
                       )
                     ) : null

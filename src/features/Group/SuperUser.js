@@ -27,6 +27,7 @@ import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import PackagesGroup from "./PackagesGroup";
 import OtherPackages from "./OtherPackages";
 import { updateMessage, updateOpenSnackbar, updateProgress, updateStatus } from "../../redux/messageSlice";
+import * as SB from "../../component/Chat/SendBirdGroupChat.js";
 
 const style = {
   position: "absolute",
@@ -97,6 +98,10 @@ function SuperUser({ item, title }) {
       dispatch(updateOpenSnackbar(true));
       dispatch(updateStatus(true));
       dispatch(updateMessage("Cập nhật avatar nhóm thành công!"));
+      if (item.channel) {
+        console.log("update avatar");
+        await SB.updateAvatarChannel(item.channel, res.data);
+      }
       setImage(res.data);
     } else {
       dispatch(updateProgress(false));

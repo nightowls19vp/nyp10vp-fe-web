@@ -1,17 +1,28 @@
 import React from "react";
 
-import { Box  } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import * as CustomComponent from "../../component/custom/CustomComponents";
 import "../../assets/css/Home.scss";
-function HomeLayoutNoGroup() {
-  return (
-    <Box className="home-image">
-        <Box>
-          <CustomComponent.Button1>Package</CustomComponent.Button1>
-        </Box>
-    </Box>
+import DefaultLayout from "../../layout/DefaultLayout";
+import { useNavigate } from "react-router-dom";
+function HomeLayoutNoGroup({ msg }) {
+  const navigate = useNavigate();
 
+  const handleGoPackage = () => {
+    navigate("package");
+  };
+  return (
+    <DefaultLayout>
+      <Box className="home-image">
+        <Box className="home-go-package">
+          <Typography>{msg}</Typography>
+          <CustomComponent.Button1 className="btn-btn" onClick={handleGoPackage}>
+            Đến trang gói dịch vụ
+          </CustomComponent.Button1>
+        </Box>
+      </Box>
+    </DefaultLayout>
   );
 }
 

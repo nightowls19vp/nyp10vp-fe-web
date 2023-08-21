@@ -180,14 +180,9 @@ function FormTodos({ todoID, handleClose }) {
             onChange={(e) => setDescription(e.target.value)}
             sx={{ margin: "5px" }}
           />
-          <Button
-            variant="contained"
-            color="success"
-            sx={{ height: "56px" }}
-            onClick={handleAddTodo}
-          >
+          <CustomComponent.ButtonTodo onClick={handleAddTodo}>
             Thêm
-          </Button>
+          </CustomComponent.ButtonTodo>
         </Box>
       </Box>
       <Typography className="todo-msg">{msg}</Typography>

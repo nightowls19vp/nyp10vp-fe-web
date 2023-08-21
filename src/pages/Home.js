@@ -17,6 +17,7 @@ import {
 } from "../redux/homeRequest.js";
 import HomeLayoutNoGroup from "../features/Home/HomeLayoutNoGroup.js";
 import UserJoin from "./UserJoin.js";
+import Package from "./Package.js";
 
 function Home() {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ function Home() {
     const getHomeGroupsUser = async () => {
       await getGroupsUser(user?.accessToken, dispatch, axiosJWT);
 
-      await getTransitionUser(user?.accessToken, dispatch, axiosJWT);
+      await getTransitionUser(user?.data.userInfo._id, user?.accessToken, dispatch, axiosJWT);
 
       await getChatsUser(user?.accessToken, dispatch, axiosJWT);
 
