@@ -70,7 +70,7 @@ function PackagesGroup({ data, pkg, title }) {
     let formData = {
       grId: data._id,
       emails: selectedPeople,
-      feUrl: "http://localhost:8080/pkg-mgmt/gr/join",
+      feUrl: "https://megoo.netlify.app/pkg-mgmt/gr/join",
     };
     const res = await usersInvitePeople(user?.accessToken, formData, axiosJWT);
     if (res) {

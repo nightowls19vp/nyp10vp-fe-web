@@ -23,6 +23,7 @@ import * as CustomButton from "../../component/custom/CustomComponents.js";
 import { Colors } from "../../config/Colors";
 import "../../assets/css/FormSignIn.scss";
 import { updateProgress } from "../../redux/messageSlice";
+import { API_HOST,WEB_HOST } from "../../http/http-common";
 
 function FormSignIn() {
   
@@ -84,7 +85,7 @@ function FormSignIn() {
     try {
       dispatch(loginStart());
       window.open(
-        `http://localhost:3000/api/auth/oauth2/google/${"http://localhost:8080/google".replaceAll(
+        `${API_HOST}/auth/oauth2/google/${(WEB_HOST+"/google").replaceAll(
           "/",
           "@"
         )}`,

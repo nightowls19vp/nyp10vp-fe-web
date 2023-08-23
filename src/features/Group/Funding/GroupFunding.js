@@ -143,67 +143,67 @@ function GroupFunding({ item, title }) {
       </Modal>
 
       <Stack spacing={2} mt={2}>
-        {item && item?.funding.length > 0
-          ? item.funding.map((funding, idx) =>
-              funding ? (
-                // <FundingDetail
-                //   key={funding._id}
-                //   item={funding}
-                //   title={title}
-                //   members={listMember}
-                // />
-                <Accordion
-                  key={idx}
-                  expanded={expanded === funding._id}
-                  onChange={handleChangeAccordion(funding)}
+        {item && item?.funding.length > 0 ? (
+          item.funding.map((funding, idx) =>
+            funding ? (
+              <Accordion
+                key={idx}
+                expanded={expanded === funding._id}
+                onChange={handleChangeAccordion(funding)}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls={`${funding._id}-content`}
+                  id={`${funding._id}-header`}
                 >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls={`${funding._id}-content`}
-                    id={`${funding._id}-header`}
+                  <Typography
+                    sx={{
+                      fontSize: "20px",
+                      fontWeight: 500,
+                      marginRight: "10px",
+                      display: "table-cell",
+                      width: "50%",
+                    }}
                   >
-                    <Typography
-                      sx={{
-                        fontSize: "20px",
-                        fontWeight: 500,
-                        marginRight: "10px",
-                        display: "table-cell",
-                        width: "50%",
-                      }}
-                    >
-                      {funding.summary}
-                    </Typography>
-                    <CustomComponent.ChipFunding4
-                      sx={{ width: "100px" }}
-                      label="Pending"
+                    {funding.summary}
+                  </Typography>
+                  <CustomComponent.ChipFunding4
+                    sx={{ width: "100px" }}
+                    label="Pending"
+                  />
+                </AccordionSummary>
+                <AccordionDetails>
+                  {funding !== null && (
+                    <FundingDetail
+                      key={funding._id}
+                      item={funding}
+                      title={title}
+                      members={listMember}
                     />
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    {funding !== null && (
-                      <FundingDetail
-                        key={funding._id}
-                        item={funding}
-                        title={title}
-                        members={listMember}
-                      />
-                    )}
-                  </AccordionDetails>
-                  <AccordionActions>
-                    <CustomComponent.Button2
-                      onClick={(e) => handleDeleteFund(e, funding)}
-                    >
-                      Xóa
-                    </CustomComponent.Button2>
-                    <CustomComponent.Button1
-                      onClick={(e) => handleEditFund(e, funding)}
-                    >
-                      Chỉnh sửa
-                    </CustomComponent.Button1>
-                  </AccordionActions>
-                </Accordion>
-              ) : null
-            )
-          : null}
+                  )}
+                </AccordionDetails>
+                <AccordionActions>
+                  <CustomComponent.Button2
+                    onClick={(e) => handleDeleteFund(e, funding)}
+                  >
+                    Xóa
+                  </CustomComponent.Button2>
+                  <CustomComponent.Button1
+                    onClick={(e) => handleEditFund(e, funding)}
+                  >
+                    Chỉnh sửa
+                  </CustomComponent.Button1>
+                </AccordionActions>
+              </Accordion>
+            ) : null
+          )
+        ) : (
+          <Box
+            sx={{ width: "100%", display: "flex", justifyContent: "center" }}
+          >
+            <Typography>Danh sách quản lý quỹ tiền chung rỗng</Typography>
+          </Box>
+        )}
       </Stack>
     </Stack>
   );

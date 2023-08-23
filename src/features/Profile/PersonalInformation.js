@@ -26,6 +26,7 @@ import "../../assets/css/Content.scss";
 import { Colors } from "../../config/Colors";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 import DateOfBird from "../../component/Date/DateOfBird";
+import { API_HOST,WEB_HOST } from "../../http/http-common";
 import {
   updateMessage,
   updateOpenSnackbar,
@@ -149,10 +150,10 @@ function PersonalInformation() {
   const handleConnectSocialAcc = () => {
     try {
       window.open(
-        `http://localhost:3000/api/auth/oauth2/google/${"http://localhost:8080/profile".replaceAll(
+        `${API_HOST}/auth/oauth2/google/${(WEB_HOST+"/google").replaceAll(
           "/",
           "@"
-        )}/${user?.data.userInfo._id}`,
+        )}`,
         "_self"
       );
     } catch (error) {

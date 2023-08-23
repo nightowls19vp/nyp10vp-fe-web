@@ -21,6 +21,7 @@ import api from "../../http/http-common";
 import { useDispatch } from "react-redux";
 import { loginFailed, loginStart } from "../../redux/authSlice";
 import * as ValidatePassword from "../../component/password/ValidatePassword";
+import { API_HOST,WEB_HOST } from "../../http/http-common";
 
 const style = {
   position: "absolute",
@@ -199,7 +200,7 @@ export default function FormSignUp() {
     try {
       dispatch(loginStart());
       window.open(
-        `http://localhost:3000/api/auth/oauth2/google/${"http://localhost:8080/google".replaceAll(
+        `${API_HOST}/auth/oauth2/google/${(WEB_HOST+"/google").replaceAll(
           "/",
           "@"
         )}`,

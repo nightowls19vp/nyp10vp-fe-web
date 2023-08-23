@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 import "../../assets/css/Home.scss";
 import BoxGroup from "./BoxGroup";
@@ -35,7 +35,7 @@ function HomeLayout() {
 
   const handlePagePackage = () => {
     navigate("/package");
-  }
+  };
   return (
     <>
       {homeGroup.length > 0 ? (
@@ -51,7 +51,11 @@ function HomeLayout() {
           >
             <BoxGroup />
 
-            <BoxTransaction className="home-box-3-trans" homeChat={homeChat} homeTrans={homeTrans} />
+            <BoxTransaction
+              className="home-box-3-trans"
+              homeChat={homeChat}
+              homeTrans={homeTrans}
+            />
 
             {homeTodos.length > 0 ? (
               <BoxTodos
@@ -84,7 +88,12 @@ function HomeLayout() {
         </Box>
       ) : (
         <Box className="home-image">
-          <CustomComponent.Button1 onClick={handlePagePackage}>Package</CustomComponent.Button1>
+          <Box className="home-go-package">
+            <Typography>Bạn chưa tham gia gói quản lý nào</Typography>
+            <CustomComponent.Button1 className="btn-btn" onClick={handlePagePackage}>
+              Mua ngay
+            </CustomComponent.Button1>
+          </Box>
         </Box>
       )}
     </>
