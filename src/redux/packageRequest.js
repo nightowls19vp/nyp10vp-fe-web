@@ -370,8 +370,39 @@ export const postPackageFunding = async (
         Authorization: `Bearer ${token}`,
       },
     });
+    await getGroupByUserId(token, dispatch, axiosJWT);
+    dispatch(updateGroupId(group_id));
+    dispatch(updateGroupItemId(1));
     return res?.data;
   } catch (error) {
+    dispatch(updateGroupId(group_id));
+    dispatch(updateGroupItemId(1));
     return error.response.data;
+  }
+};
+
+export const deletePackageFunding = async (
+  group_id,
+  id,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.delete(`/pkg-mgmt/funding/${id}`, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(res?.data);
+    await getGroupByUserId(token, dispatch, axiosJWT);
+    dispatch(updateGroupId(group_id));
+    dispatch(updateGroupItemId(1));
+    return true;
+  } catch (error) {
+    dispatch(updateGroupId(group_id));
+    dispatch(updateGroupItemId(1));
+    return false;
   }
 };

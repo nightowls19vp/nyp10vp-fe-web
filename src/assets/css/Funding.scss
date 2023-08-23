@@ -73,6 +73,9 @@
         @include flexRowStyle(space-between, center);
     }
     .funding-detail-money {
+        #input-example {
+            height: 56px !important;
+        }
         @include flexColumnStyle(flex-start, stretch);
         margin: 5px;
         .icon {

@@ -113,22 +113,14 @@ function PersonalInformation() {
     }
     dispatch(updateProgress(true));
     let formData = {};
-    if (dob === null) {
-      formData = {
-        name: name,
-        phone: phone,
-      };
-    } else if (phone === null) {
-      formData = {
-        name: name,
-        dob: dob,
-      };
-    } else {
-      formData = {
-        name: name,
-        dob: dob,
-        phone: phone,
-      };
+    if (name) {
+      formData.name = name;
+    }
+    if (dob) {
+      formData.dob = dob;
+    }
+    if (phone) {
+      formData.phone = phone;
     }
 
     const res = await updateInformationUser(

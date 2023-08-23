@@ -19,8 +19,17 @@ import AddIcon from "@mui/icons-material/Add";
 import FormFunding from "./FormFunding";
 import FundingDetail from "./FundingDetail";
 import { updateFunding } from "../../../redux/packageSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { loginSuccess } from "../../../redux/authSlice";
+import { createAxios } from "../../../http/createInstance";
+import { deletePackageFunding } from "../../../redux/packageRequest";
+import {
+  updateMessage,
+  updateOpenSnackbar,
+  updateProgress,
+  updateStatus,
+} from "../../../redux/messageSlice";
 
 const style = {
   position: "absolute",
@@ -38,6 +47,7 @@ const style = {
 };
 
 function GroupFunding({ item, title }) {
+  console.log(item);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -45,10 +55,38 @@ function GroupFunding({ item, title }) {
   const [listMember, setListMember] = useState();
   const [expanded, setExpanded] = React.useState(false);
 
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
+
   const handleChangeAccordion = (fun) => (event, isExpanded) => {
     setExpanded(isExpanded ? fun._id : false);
     dispatch(updateFunding(fun));
   };
+
+  const handleDeleteFund = async (e, fund) => {
+    dispatch(updateProgress(true));
+    const res = await deletePackageFunding(
+      item?._id,
+      fund?._id,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
+
+    if (res === true) {
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(true));
+      dispatch(updateMessage("Xóa thành công quản lý quỹ"));
+    } else {
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(false));
+      dispatch(updateMessage("Xóa thất bại quản lý quỹ"));
+    }
+  };
+
+  const handleEditFund = async (e, fund) => {};
 
   useEffect(() => {
     const getUsersInGroup = () => {
@@ -104,55 +142,69 @@ function GroupFunding({ item, title }) {
         </Box>
       </Modal>
 
-      {item && item?.funding.length > 0
-        ? item.funding.map((funding, idx) =>
-            funding && idx < 1 ? (
-              // <FundingDetail
-              //   key={funding._id}
-              //   item={funding}
-              //   title={title}
-              //   members={listMember}
-              // />
-              <Accordion
-                key={idx}
-                expanded={expanded === funding._id}
-                onChange={handleChangeAccordion(funding)}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls={`${funding._id}-content`}
-                  id={`${funding._id}-header`}
+      <Stack spacing={2} mt={2}>
+        {item && item?.funding.length > 0
+          ? item.funding.map((funding, idx) =>
+              funding ? (
+                // <FundingDetail
+                //   key={funding._id}
+                //   item={funding}
+                //   title={title}
+                //   members={listMember}
+                // />
+                <Accordion
+                  key={idx}
+                  expanded={expanded === funding._id}
+                  onChange={handleChangeAccordion(funding)}
                 >
-                  <Typography
-                    sx={{
-                      fontSize: "20px",
-                      fontWeight: 500,
-                      marginRight: "10px",
-                    }}
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={`${funding._id}-content`}
+                    id={`${funding._id}-header`}
                   >
-                    {funding.summary}
-                  </Typography>
-                  <CustomComponent.ChipFunding3 label="Pending" />
-                </AccordionSummary>
-                <AccordionDetails>
-                  {funding !== null && (
-                    <FundingDetail
-                      key={funding._id}
-                      item={funding}
-                      title={title}
-                      members={listMember}
+                    <Typography
+                      sx={{
+                        fontSize: "20px",
+                        fontWeight: 500,
+                        marginRight: "10px",
+                        display: "table-cell",
+                        width: "50%",
+                      }}
+                    >
+                      {funding.summary}
+                    </Typography>
+                    <CustomComponent.ChipFunding4
+                      sx={{ width: "100px" }}
+                      label="Pending"
                     />
-                  )}
-                </AccordionDetails>
-                <AccordionActions>
-                  {/* <IconButton onClick={(e) => handleOpenModal(e, todo)}>
-                    <DeleteIcon sx={{ color: Colors.error }} />
-                  </IconButton> */}
-                </AccordionActions>
-              </Accordion>
-            ) : null
-          )
-        : null}
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {funding !== null && (
+                      <FundingDetail
+                        key={funding._id}
+                        item={funding}
+                        title={title}
+                        members={listMember}
+                      />
+                    )}
+                  </AccordionDetails>
+                  <AccordionActions>
+                    <CustomComponent.Button2
+                      onClick={(e) => handleDeleteFund(e, funding)}
+                    >
+                      Xóa
+                    </CustomComponent.Button2>
+                    <CustomComponent.Button1
+                      onClick={(e) => handleEditFund(e, funding)}
+                    >
+                      Chỉnh sửa
+                    </CustomComponent.Button1>
+                  </AccordionActions>
+                </Accordion>
+              ) : null
+            )
+          : null}
+      </Stack>
     </Stack>
   );
 }

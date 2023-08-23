@@ -182,6 +182,13 @@ function ProductItem({ grId, storageID }) {
           </CustomComponent.Button4>
         )}
       </Box>
+      <Box className="box-btn-select-product">
+        {listProducts?.length <= 0 && (
+          <>
+            <Typography sx={{ color: Colors.purpleGray}}>Danh sách nhu yếu phẩm rỗng</Typography>
+          </>
+        )}
+      </Box>
       {listProducts?.length > 0 ? (
         <ListItemProduct
           item={listProducts}
@@ -191,9 +198,7 @@ function ProductItem({ grId, storageID }) {
           state={stateBtn}
           date={nowDate}
         />
-      ) : (
-        null
-      )}
+      ) : null}
       <Modal
         open={openAdd}
         onClose={handleCloseAdd}

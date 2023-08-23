@@ -34,6 +34,7 @@ import {
 } from "../../../redux/messageSlice";
 import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
 import { Colors } from "../../../config/Colors";
+import CurrencyInput from "react-currency-input-field";
 
 const style = {
   position: "absolute",
@@ -296,6 +297,13 @@ function BillDetail({ grID, handleClose }) {
                     value={data[idx].amount}
                     onChange={(e) => handleChangeAmount(e, route.borrower._id)}
                   />
+        //           <CurrencyInput
+        //   id="input-example"
+        //   className="currency-input"
+        //   value={data[idx].amount}
+        //   decimalsLimit={2}
+        //   onValueChange={(value) => setMoney(value)}
+        // />
                 ) : (
                   <Typography>
                     {FormatNumber.formatCurrency(data[idx].amount)}

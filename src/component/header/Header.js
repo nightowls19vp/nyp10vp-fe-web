@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -8,6 +8,7 @@ import {
   IconButton,
   Box,
   Autocomplete,
+  TextField,
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -34,7 +35,7 @@ import LogoMegoo from "../../assets/img/Megoo.png";
 import { useToast } from "rc-toastr";
 import { updateProgress } from "../../redux/messageSlice.js";
 import { useNavigate } from "react-router-dom";
-import { getProductItemById } from "../../redux/stockRequest.js";
+import { getProductItemById, searchGroupProducts } from "../../redux/stockRequest.js";
 
 const topSearch = [];
 
@@ -45,7 +46,12 @@ function Header() {
 
   let user = useSelector((state) => state?.auth.login?.currentUser);
   const channels = useSelector((state) => state?.user?.channel);
+  const [inputProduct, setInputProduct] = useState("");
+  const [products, setProducts] = useState([]);
   const url = window.location.pathname;
+  const urlQuery = new URL(window.location.href).searchParams;
+  const grId = urlQuery.get("grId");
+  const storageID = urlQuery.get("storageId");
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
   const socket = SockectIO();
@@ -66,6 +72,33 @@ function Header() {
 
   const inviteInGroupChannel = async (channel, user) => {
     await SB.inviteMember(channel, user);
+  };
+
+  const searchDataGroupProducts = async (search) => {
+    const res = await searchGroupProducts(
+      search,
+      grId,
+      user?.accessToken,
+      axiosJWT
+    );
+    setProducts(res);
+  };
+
+  const handleChangeInputProduct = (e) => {
+    let character = e.target.value;
+    setTimeout(async () => {
+      await searchDataGroupProducts(character);
+    }, 200);
+    setInputProduct(character);
+  };
+
+  const handleSelectedProduct = (e, op) => {
+    if (op) {
+      console.log(op);
+      navigate(
+        `/stock/product-item?grId=${grId}&storageId=${storageID}&productId=${op.id}`
+      );
+    }
   };
 
   useEffect(() => {
@@ -196,7 +229,7 @@ function Header() {
         default:
           break;
       }
-      toast.default('Nhắc nhở nhu yếu phẩm', message);
+      toast.default("Nhắc nhở nhu yếu phẩm", message);
       //displayNotification('Nhắc nhở nhu yếu phẩm', message);
     });
 
@@ -243,7 +276,7 @@ function Header() {
           }}
           className="search-bar"
         >
-          <Autocomplete
+          {/* <Autocomplete
             disablePortal
             id="combo-box-demo"
             options={topSearch}
@@ -256,6 +289,24 @@ function Header() {
                 autoFocus
                 sx={{ flex: 1, color: Colors.text, paddingLeft: "10px" }}
                 placeholder="Tìm kiếm..."
+              />
+            )}
+          /> */}
+          <Autocomplete
+            id="free-solo-product"
+            freeSolo
+            fullWidth
+            options={products}
+            getOptionLabel={(option) => option.name}
+            onChange={(e, op) => handleSelectedProduct(e, op)}
+            renderInput={(params) => (
+              <TextField
+              variant="standard"
+                {...params}
+                value={inputProduct}
+                onChange={handleChangeInputProduct}
+                placeholder="Tìm kiếm..."
+                sx={{ flex: 1, color: Colors.text,  }}
               />
             )}
           />

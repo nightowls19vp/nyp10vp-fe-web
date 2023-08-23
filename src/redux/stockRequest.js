@@ -262,8 +262,6 @@ export const getProductItemById = async (
   axiosJWT
 ) => {
   try {
-    console.log("grID: ", groupId);
-    console.log("prod: ", id);
     const res = await axiosJWT.get(`/prod-mgmt/items/${groupId}/${id}`, {
       headers: {
         accept: "*/*",

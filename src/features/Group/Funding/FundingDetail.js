@@ -7,6 +7,7 @@ import { FaMoneyBillWave } from "react-icons/fa";
 import * as CustomComponent from "../../../component/custom/CustomComponents";
 import DateTimePicker from "../../../component/Date/DateTimePicker";
 import CurrencyInput from "react-currency-input-field";
+import "../../../assets/css/Funding.scss";
 
 function FundingDetail({ item, title, members }) {
     // const initalChange = () => {
