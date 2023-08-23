@@ -1,19 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { Box, Modal, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionActions,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Modal,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { GiReceiveMoney } from "react-icons/gi";
 import "../../../assets/css/Funding.scss";
 import { Colors } from "../../../config/Colors";
 import * as CustomComponent from "../../../component/custom/CustomComponents";
 import AddIcon from "@mui/icons-material/Add";
 import FormFunding from "./FormFunding";
+import FundingDetail from "./FundingDetail";
+import { updateFunding } from "../../../redux/packageSlice";
+import { useDispatch } from "react-redux";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  //width: { xs: "95%", sm: "80%", md: "70%", lg: "50%" },
+  width: { xs: "95%", sm: "60%", md: "50%", lg: "30%" },
   //height: "50%",
   bgcolor: "background.paper",
   border:
@@ -23,10 +37,40 @@ const style = {
   p: 4,
 };
 
-function GroupFunding() {
+function GroupFunding({ item, title }) {
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [listMember, setListMember] = useState();
+  const [expanded, setExpanded] = React.useState(false);
+
+  const handleChangeAccordion = (fun) => (event, isExpanded) => {
+    setExpanded(isExpanded ? fun._id : false);
+    dispatch(updateFunding(fun));
+  };
+
+  useEffect(() => {
+    const getUsersInGroup = () => {
+      let array = [];
+      for (let member of item.members) {
+        let formData = {
+          _id: member.user._id,
+          name: member.user.name,
+          avatar: member.user.avatar,
+        };
+        array.push(formData);
+      }
+      setListMember(array);
+    };
+
+    getUsersInGroup();
+
+    return () => {
+      getUsersInGroup();
+    };
+  }, [item.members]);
+
   return (
     <Stack sx={{ width: "100%" }}>
       <Box className="funding-box">
@@ -52,9 +96,63 @@ function GroupFunding() {
       </Box>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
-            <FormFunding />
+          <FormFunding
+            grID={item._id}
+            item={listMember}
+            handleClose={handleClose}
+          />
         </Box>
       </Modal>
+
+      {item && item?.funding.length > 0
+        ? item.funding.map((funding, idx) =>
+            funding && idx < 1 ? (
+              // <FundingDetail
+              //   key={funding._id}
+              //   item={funding}
+              //   title={title}
+              //   members={listMember}
+              // />
+              <Accordion
+                key={idx}
+                expanded={expanded === funding._id}
+                onChange={handleChangeAccordion(funding)}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls={`${funding._id}-content`}
+                  id={`${funding._id}-header`}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "20px",
+                      fontWeight: 500,
+                      marginRight: "10px",
+                    }}
+                  >
+                    {funding.summary}
+                  </Typography>
+                  <CustomComponent.ChipFunding3 label="Pending" />
+                </AccordionSummary>
+                <AccordionDetails>
+                  {funding !== null && (
+                    <FundingDetail
+                      key={funding._id}
+                      item={funding}
+                      title={title}
+                      members={listMember}
+                    />
+                  )}
+                </AccordionDetails>
+                <AccordionActions>
+                  {/* <IconButton onClick={(e) => handleOpenModal(e, todo)}>
+                    <DeleteIcon sx={{ color: Colors.error }} />
+                  </IconButton> */}
+                </AccordionActions>
+              </Accordion>
+            ) : null
+          )
+        : null}
     </Stack>
   );
 }

@@ -7,6 +7,7 @@ import {
   TextField,
   Box,
   Slider,
+  Chip,
 } from "@mui/material";
 
 import { Colors } from "../../config/Colors";
@@ -110,6 +111,47 @@ export const ButtonTodo = styled(Button)({
     backgroundColor: Colors.purpleGrayBold,
   },
   borderRadius: "5px",
+});
+
+export const ChipFunding1 = styled(Chip)({
+  backgroundColor: Colors.btnFill,
+  color: Colors.background,
+  "&:hover": {
+    backgroundColor: Colors.primary,
+  },
+});
+
+export const ChipFunding2 = styled(Chip)({
+  backgroundColor: Colors.background,
+  border: "1px solid",
+  borderColor: Colors.btnFill,
+  color: Colors.btnFill,
+  "&:hover": {
+    backgroundColor: Colors.btnOutline,
+    border: "2px solid",
+  },
+});
+
+export const ChipFunding3 = styled(Chip)({
+  backgroundColor: Colors.background,
+  border: "1px solid",
+  borderColor: Colors.purpleGrayBold,
+  color: Colors.purpleGrayBold,
+  "&:hover": {
+    backgroundColor: Colors.btnPurpleGray,
+    border: "2px solid",
+  },
+});
+
+export const ChipFunding4 = styled(Chip)({
+  backgroundColor: Colors.background,
+  border: "1px solid",
+  borderColor: Colors.pin,
+  color: Colors.pin,
+  "&:hover": {
+    backgroundColor: "#00e6c7",
+    border: "2px solid",
+  },
 });
 
 export const ButtonProduct = styled(ButtonBase)(({ theme }) => ({

@@ -45,6 +45,7 @@ import {
   updateNotiCheckout,
   updateNumberCart,
 } from "../../redux/packageSlice";
+import MethodPay from "./MethodPay";
 
 const style = {
   position: "absolute",
@@ -465,7 +466,7 @@ export default function EnhancedTable({ item }) {
 
       setTimeout(function () {
         dispatch(updateProgress(false));
-      }, 5 * 60 * 1000);
+      }, 2 * 60 * 1000);
 
       await getUserCart(
         user?.data.userInfo._id,
@@ -608,17 +609,16 @@ export default function EnhancedTable({ item }) {
                 <FormControlLabel
                   value="zalo"
                   control={<Radio />}
-                  label="Zalo"
+                  label={
+                    <MethodPay title="Zalo" />
+                  }
                 />
                 <FormControlLabel
                   value="vnpay"
                   control={<Radio />}
-                  label="Vnpay"
-                />
-                <FormControlLabel
-                  value="other"
-                  control={<Radio />}
-                  label="Khác"
+                  label={
+                    <MethodPay title="Vnpay" />
+                  }
                 />
               </RadioGroup>
             </FormControl>

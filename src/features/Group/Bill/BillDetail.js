@@ -10,6 +10,8 @@ import {
   Typography,
   InputBase,
   Modal,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -20,6 +22,7 @@ import * as CustomComponent from "../../../component/custom/CustomComponents.js"
 import * as FormatNumber from "../../../component/custom/FormatDateNumber.js";
 import {
   deletePackageBill,
+  postDoubleCheck,
   updatePackageBill,
 } from "../../../redux/userRequest";
 import { loginSuccess } from "../../../redux/authSlice";
@@ -29,6 +32,8 @@ import {
   updateProgress,
   updateStatus,
 } from "../../../redux/messageSlice";
+import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
+import { Colors } from "../../../config/Colors";
 
 const style = {
   position: "absolute",
@@ -128,6 +133,34 @@ function BillDetail({ grID, handleClose }) {
     }
   };
 
+  const handleNotification = async (e, user) => {
+    let formData = {
+      to_user: user,
+    };
+    console.log(formData);
+    console.log(bill._id);
+    handleClose();
+    dispatch(updateProgress(false));
+    const res = await postDoubleCheck(
+      bill._id,
+      formData,
+      user?.accessToken,
+      axiosJWT
+    );
+
+    if (res === true) {
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(true));
+      dispatch(updateMessage("Lời nhắc nhở đã được gửi thành công!"));
+    } else {
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(false));
+      dispatch(updateMessage("Lời nhắc nhở đã được gửi không thành công!"));
+    }
+  };
+
   const handleUpdateBill = async () => {
     let checkAmount = false;
     let checkStatus = false;
@@ -214,15 +247,32 @@ function BillDetail({ grID, handleClose }) {
         <Typography variant="subtitle1" sx={{ fontStyle: "italic" }}>
           {bill?.description}
         </Typography>
-        <Box
-          sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
-        >
-          <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
-            Nguời chi trả:
-          </Typography>
-          <Typography sx={{ marginLeft: "10px" }}>
-            {bill?.lender.name}
-          </Typography>
+        <Box className="box-status-noti">
+          <Box
+            sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+          >
+            <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
+              Nguời chi trả:
+            </Typography>
+            <Typography sx={{ marginLeft: "10px" }}>
+              {bill?.lender.name}
+            </Typography>
+          </Box>
+          {userInfo._id !== bill?.lender._id ? (
+            <Tooltip title="Nhắc nhở">
+              <IconButton
+                onClick={(e) => handleNotification(e, bill?.lender._id)}
+              >
+                <CircleNotificationsIcon
+                  sx={{
+                    marginLeft: "5px",
+                    fontSize: "35px",
+                    color: Colors.textPrimary,
+                  }}
+                />
+              </IconButton>
+            </Tooltip>
+          ) : null}
         </Box>
         {bill?.borrowers.map((route, idx) =>
           route ? (
@@ -253,7 +303,7 @@ function BillDetail({ grID, handleClose }) {
                 )}
               </Box>
               {userInfo._id === bill?.lender._id ? (
-                <Box>
+                <Box className="box-status-noti">
                   <FormControl
                     sx={{
                       width: "130px",
@@ -313,6 +363,19 @@ function BillDetail({ grID, handleClose }) {
                       </MenuItem>
                     </Select>
                   </FormControl>
+                  <Tooltip title="Nhắc nhở">
+                    <IconButton
+                      onClick={(e) => handleNotification(e, route.borrower._id)}
+                    >
+                      <CircleNotificationsIcon
+                        sx={{
+                          marginLeft: "5px",
+                          fontSize: "35px",
+                          color: Colors.textPrimary,
+                        }}
+                      />
+                    </IconButton>
+                  </Tooltip>
                 </Box>
               ) : (
                 <Box

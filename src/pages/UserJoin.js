@@ -27,7 +27,6 @@ function UserJoin() {
   };
   return (
     <Stack className="home-image">
-      {/* <Modal /> */}
       <Typography className="text-user-join">Bạn có một lời mời tham gia nhóm</Typography>
       <Box className="btn-user-join">
         <CustomComponent.Button1 className="btn-btn" onClick={handleButtonAccept}>

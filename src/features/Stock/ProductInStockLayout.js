@@ -99,7 +99,9 @@ function ProductInStockLayout({ grID }) {
             state={stateBtn}
             date={nowDate}
           />
-        ) : null}
+        ) : (
+          <Typography sx={{ mt: 1, color: Colors.purpleGray}}>Danh sách nhu yếu phẩm rỗng</Typography>
+        )}
       </Box>
     </Stack>
   );

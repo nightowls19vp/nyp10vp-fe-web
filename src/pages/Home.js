@@ -65,8 +65,6 @@ function Home() {
     <>
       <DefaultLayout>
         <HomeLayout />
-        {/* <HomeLayoutNoGroup /> */}
-        {/* <UserJoin /> */}
       </DefaultLayout>
     </>
   );

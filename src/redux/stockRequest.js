@@ -45,7 +45,7 @@ export const getGroupActivedByUserId = async (token, dispatch, axiosJWT) => {
     });
 
     let formData = [];
-
+    console.log("stock: ", res?.data.groups);
     for (let item of res?.data.groups) {
       if (item.packages[0].status === "Active") {
         const stock = await getStorageLocation(item._id, token, axiosJWT);
@@ -329,6 +329,8 @@ export const addItemsToStorage = async (
       1,
       5,
       storageId,
+      1,
+      null,
       token,
       dispatch,
       axiosJWT
@@ -341,11 +343,11 @@ export const addItemsToStorage = async (
 };
 
 export const addGroupProducts = async (
-  grId,
-  storageId,
+  // grId,
+  // storageId,
   data1,
   token,
-  dispatch,
+  //dispatch,
   axiosJWT
 ) => {
   try {

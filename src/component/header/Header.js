@@ -34,6 +34,7 @@ import LogoMegoo from "../../assets/img/Megoo.png";
 import { useToast } from "rc-toastr";
 import { updateProgress } from "../../redux/messageSlice.js";
 import { useNavigate } from "react-router-dom";
+import { getProductItemById } from "../../redux/stockRequest.js";
 
 const topSearch = [];
 
@@ -127,6 +128,16 @@ function Header() {
 
     socket.on("taskReminder", (data) => {
       console.log("taskReminder: ", data);
+      if (data) {
+        toast.default(`Bạn có một việc cần làm "${data.summary}"`);
+      }
+    });
+
+    socket.on("funding", (data) => {
+      console.log("funding: ", data);
+      if (data) {
+        toast.default(`Bạn có một phiếu quỹ "${data?.summary}"`);
+      }
     });
 
     socket.on("zpCallback", async (data) => {
@@ -153,6 +164,40 @@ function Header() {
           axiosJWT
         );
       }
+    });
+
+    socket.on("prodNoti", async (data) => {
+      console.log("prodNoti data:", data);
+
+      const resDto = await getProductItemById(
+        data.groupId,
+        data.itemId,
+        user?.accessToken,
+        dispatch,
+        axiosJWT
+      );
+
+      const item = resDto.data;
+      let message = "";
+
+      switch (data.type) {
+        case "outOfStock":
+          message = `Nhu yếu phẩm <b>${item?.groupProduct?.name}</b> đã hết !`;
+          break;
+        case "runningOutOfStock":
+          message = `Nhu yếu phẩm <b>${item?.groupProduct?.name}</b> sắp hết ! Chỉ còn ${item?.quantity} ${item?.unit}`;
+          break;
+        case "expiringSoon":
+          message = `Nhu yếu phẩm <b>${item?.groupProduct?.name}</b> sắp hết hạn sử dụng !`;
+          break;
+        case "expired":
+          message = `Nhu yếu phẩm <b>${item?.groupProduct?.name}</b> đã hết hạn sử dụng !`;
+          break;
+        default:
+          break;
+      }
+      toast.default('Nhắc nhở nhu yếu phẩm', message);
+      //displayNotification('Nhắc nhở nhu yếu phẩm', message);
     });
 
     return () => {

@@ -65,23 +65,27 @@ function StockItem({ item, grID }) {
           </Typography>
         </Box>
         <Box className="title-stock">
-          <CustomComponent.Button3
-            className="btn-btn"
-            sx={{ display: { xs: "none", sm: "flex" }, width: "148px" }}
-            onClick={handleListProduct}
-          >
-            <MenuIcon color={Colors.background} />
-            Nhu yếu phẩm
-          </CustomComponent.Button3>
-          <Tooltip title="Danh sách nhu yếu phẩm">
-            <CustomComponent.Button3
-              className="btn-btn"
-              sx={{ display: { xs: "flex", sm: "none" }, width: "30px" }}
-              onClick={handleListProduct}
-            >
-              <MenuIcon color={Colors.background} />
-            </CustomComponent.Button3>
-          </Tooltip>
+          {item.length > 0 ? (
+            <>
+              <CustomComponent.Button3
+                className="btn-btn"
+                sx={{ display: { xs: "none", sm: "flex" }, width: "148px" }}
+                onClick={handleListProduct}
+              >
+                <MenuIcon color={Colors.background} />
+                Nhu yếu phẩm
+              </CustomComponent.Button3>
+              <Tooltip title="Danh sách nhu yếu phẩm">
+                <CustomComponent.Button3
+                  className="btn-btn"
+                  sx={{ display: { xs: "flex", sm: "none" }, width: "30px" }}
+                  onClick={handleListProduct}
+                >
+                  <MenuIcon color={Colors.background} />
+                </CustomComponent.Button3>
+              </Tooltip>{" "}
+            </>
+          ) : null}
           <CustomComponent.Button1
             className="btn-btn"
             sx={{ display: { xs: "none", sm: "flex" }, width: "148px" }}

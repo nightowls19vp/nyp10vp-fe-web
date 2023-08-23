@@ -30,6 +30,7 @@ import {
 } from "../../redux/userRequest.js";
 import { useNavigate } from "react-router-dom";
 import { updateProgress } from "../../redux/messageSlice.js";
+import MethodPay from "../Shopping/MethodPay.js";
 
 const style = {
   position: "absolute",
@@ -129,7 +130,7 @@ function DetailItemRenew({ item, grpId }) {
 
       setTimeout(function () {
         dispatch(updateProgress(false));
-      }, 5 * 60 * 1000);
+      }, 2 * 60 * 1000);
 
       // async function getGroup() {
       //   await getGroupByUserId(user?.accessToken, dispatch, axiosJWT);
@@ -311,17 +312,16 @@ function DetailItemRenew({ item, grpId }) {
                 <FormControlLabel
                   value="zalo"
                   control={<Radio />}
-                  label="Zalo"
+                  label={
+                    <MethodPay title="Zalo" />
+                  }
                 />
                 <FormControlLabel
                   value="vnpay"
                   control={<Radio />}
-                  label="Vnpay"
-                />
-                <FormControlLabel
-                  value="other"
-                  control={<Radio />}
-                  label="Khác"
+                  label={
+                    <MethodPay title="Vnpay" />
+                  }
                 />
               </RadioGroup>
             </FormControl>

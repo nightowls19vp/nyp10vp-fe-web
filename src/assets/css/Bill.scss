@@ -56,3 +56,7 @@
 .bill-btn-deleted {
   @include flexRowStyle(flex-end, center);
 }
+
+.box-status-noti {
+  @include flexRowStyle(space-between, center);
+}

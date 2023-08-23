@@ -46,7 +46,11 @@ function GroupItem() {
                           title={gr.name}
                         />
                       ) : selectedItemID === 1 ? (
-                        <GroupFunding key={route._id} />
+                        <GroupFunding
+                          item={route.child[1].group}
+                          title={gr.name}
+                          key={route._id}
+                        />
                       ) : selectedItemID === 2 ? (
                         <GroupSpending
                           item={route.child[2].group}

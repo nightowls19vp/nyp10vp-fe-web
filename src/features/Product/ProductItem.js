@@ -191,7 +191,9 @@ function ProductItem({ grId, storageID }) {
           state={stateBtn}
           date={nowDate}
         />
-      ) : null}
+      ) : (
+        null
+      )}
       <Modal
         open={openAdd}
         onClose={handleCloseAdd}

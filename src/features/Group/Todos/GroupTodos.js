@@ -176,12 +176,9 @@ function GroupTodos({ grId, item }) {
                   id={`${todo._id}-header`}
                 >
                   <Typography
-                    //variant="caption"
-                    //display="block"
                     sx={{
                       fontSize: "20px",
                       fontWeight: 500,
-                      // color: "#5186AD",
                     }}
                   >
                     {todo.summary}

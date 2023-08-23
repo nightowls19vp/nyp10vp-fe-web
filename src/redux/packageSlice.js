@@ -13,6 +13,7 @@ const packageSlice = createSlice({
     noti: null,
     bill: null,
     todos: null,
+    fund: null,
   },
   reducers: {
     setInitialPackage: (state, action) => {
@@ -48,6 +49,9 @@ const packageSlice = createSlice({
     updateTodos: (state, action) => {
       state.todos = action.payload;
     },
+    updateFunding: (state, action) => {
+      state.fund = action.payload;
+    }
   },
 });
 
@@ -63,6 +67,7 @@ export const {
   updateNotiPackage,
   updateBill,
   updateTodos,
+  updateFunding,
 } = packageSlice.actions;
 
 export default packageSlice.reducer;

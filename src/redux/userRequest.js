@@ -135,7 +135,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
   try {
     const resSU_group = await axiosJWT.get("/pkg-mgmt/gr/user", {
       params: {
-        projection: "name;avatar;channel;packages;members;billing;todos;task",
+        projection: "name;avatar;channel;packages;members;billing;todos;task;funding",
         role: "Super User",
         page: 0,
         limit: 10,
@@ -149,7 +149,7 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
 
     const resU_group = await axiosJWT.get("/pkg-mgmt/gr/user", {
       params: {
-        projection: "name;avatar;channel;packages;members;billing;todos;task",
+        projection: "name;avatar;channel;packages;members;billing;todos;task;funding",
         role: "User",
         page: 0,
         limit: 10,
@@ -252,12 +252,12 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             },
             {
               _id: 1,
-              name: "Chia tiền",
+              name: "Quản lý quỹ",
               group: itemFunding,
             },
             {
               _id: 2,
-              name: "Quản lý chi tiêu",
+              name: "Quản lý nợ",
               group: itemSpending,
             },
             {
@@ -348,12 +348,12 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             },
             {
               _id: 1,
-              name: "Chia tiền",
+              name: "Quản lý quỹ",
               group: itemFunding,
             },
             {
               _id: 2,
-              name: "Quản lý chi tiêu",
+              name: "Quản lý nợ",
               group: itemSpending,
             },
             {
@@ -445,12 +445,12 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             },
             {
               _id: 1,
-              name: "Chia tiền",
+              name: "Quản lý quỹ",
               group: itemFunding,
             },
             {
               _id: 2,
-              name: "Quản lý chi tiêu",
+              name: "Quản lý nợ",
               group: itemSpending,
             },
             {
@@ -543,12 +543,12 @@ export const getGroupByUserId = async (token, dispatch, axiosJWT) => {
             },
             {
               _id: 1,
-              name: "Chia tiền",
+              name: "Quản lý quỹ",
               group: itemFunding,
             },
             {
               _id: 2,
-              name: "Quản lý chi tiêu",
+              name: "Quản lý nợ",
               group: itemSpending,
             },
             {
@@ -876,6 +876,20 @@ export const updatePackageBill = async (
     return false;
   }
 };
+
+export const postDoubleCheck = async (id, data, token, axiosJWT) => {
+  try {
+    await axiosJWT.post(`/pkg-mgmt/bill/${id}/send_request`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
 
 export const uploadFileImage = async (data, token, axiosJWT) => {
   try {

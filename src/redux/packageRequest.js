@@ -321,7 +321,7 @@ export const updatePackageTask = async (
         },
       });
     }
-    
+
     await getGroupByUserId(token, dispatch, axiosJWT);
     dispatch(updateGroupId(grID));
     dispatch(updateGroupItemId(4));
@@ -351,6 +351,26 @@ export const GetGroupSuperUser = async (token, dispatch, axiosJWT) => {
     if (res?.data.statusCode === 200) {
       dispatch(updateMyPackages(res?.data.groups));
     }
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const postPackageFunding = async (
+  group_id,
+  data,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.post(`/pkg-mgmt/funding/${group_id}`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res?.data;
   } catch (error) {
     return error.response.data;
   }

@@ -148,11 +148,11 @@ function CreateProduct({
     dispatch(updateProgress(true));
 
     const resProduct = await addGroupProducts(
-      grId,
-      storageID,
+      // grId,
+      // storageID,
       formData1,
       user?.accessToken,
-      dispatch,
+      //dispatch,
       axiosJWT
     );
 
@@ -182,6 +182,7 @@ function CreateProduct({
       dispatch,
       axiosJWT
     );
+
 
     if (resItem != null) {
       dispatch(updateProgress(false));

@@ -72,11 +72,10 @@ function PackagesGroup({ data, pkg, title }) {
       emails: selectedPeople,
       feUrl: "http://localhost:8080/pkg-mgmt/gr/join",
     };
-    console.log(formData);
     const res = await usersInvitePeople(user?.accessToken, formData, axiosJWT);
-
-    console.log(res);
-    handleCloseInvite();
+    if (res) {
+      setOpenInvite(false);
+    }
   };
 
   return (
