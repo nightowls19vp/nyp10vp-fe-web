@@ -4,7 +4,7 @@ import ProductInStockLayout from "../features/Stock/ProductInStockLayout";
 
 function ProductInStock() {
   const urlQuery = new URL(window.location.href).searchParams;
-  const groupId = urlQuery.get("groupId");
+  const groupId = urlQuery.get("grId");
   return (
     <DefaultLayout>
       <ProductInStockLayout grID={groupId} />

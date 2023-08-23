@@ -51,7 +51,7 @@ function StockItem({ item, grID }) {
       axiosJWT
     );
     if (res) {
-      navigate(`/stock/list-product?groupId=${grID}`);
+      navigate(`/stock/list-product?grId=${grID}`);
     }
   };
 
