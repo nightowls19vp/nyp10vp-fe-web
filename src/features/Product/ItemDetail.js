@@ -1,27 +1,17 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
   Autocomplete,
   Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  IconButton,
-  Input,
   InputAdornment,
-  InputBase,
-  OutlinedInput,
+  Modal,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { FaBarcode } from "react-icons/fa";
 
 import { createAxios } from "../../http/createInstance";
@@ -29,16 +19,47 @@ import { createAxios } from "../../http/createInstance";
 import { Colors } from "../../config/Colors";
 import "../../assets/css/Product.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
+import * as FormatNumber from "../../component/custom/FormatDateNumber";
 import DateTimePicker from "../../component/Date/DateTimePicker";
-import { searchStorageLocation } from "../../redux/stockRequest";
+import {
+  deletedProductItem,
+  searchStorageLocation,
+  updateGroupProduct,
+  updateImgGroupProduct,
+  updateItems,
+} from "../../redux/stockRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
+import {
+  updateMessage,
+  updateOpenSnackbar,
+  updateProgress,
+  updateStatus,
+} from "../../redux/messageSlice";
+import { useNavigate } from "react-router-dom";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 300,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  borderRadius: "15px",
+  bgcolor: "background.paper",
+  border: "1px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 function ItemDetail({ item, grId }) {
   const inputRef = useRef();
   const avatarRef = useRef();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state?.auth.login?.currentUser);
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
@@ -55,17 +76,30 @@ function ItemDetail({ item, grId }) {
     return addr;
   };
 
+  const initalData = {
+    name: item?.groupProduct.name,
+    barcode: item?.groupProduct.barcode,
+    quantity: item?.quantity,
+    money: item?.groupProduct.price ?? 0,
+    exp: item?.bestBefore,
+    storage: item?.storageLocation.name,
+  };
+
+  const addressPur = purchaseLocation();
   const [image, setImage] = useState(item?.image);
   const [name, setName] = useState(item?.groupProduct.name);
   const [barcode, setBarcode] = useState(item?.groupProduct.barcode);
   const [quantity, setQuantity] = useState(item?.quantity);
-  const [money, setMoney] = useState(item?.groupProduct.price ?? 0);
+  const [money, setMoney] = useState(FormatNumber.formatCurrency(item?.groupProduct.price ?? 0));
   const [expDate, setExpDate] = useState(item?.bestBefore);
   const [storage, setStorage] = useState(item?.storageLocation.name);
   const [inputStorage, setInputStorage] = useState("");
-  //const [purchase, setPurchase] = useState(purchaseLocation());
   const [listStorage, setListStorage] = useState([]);
   const [idStorage, setIdStorage] = useState();
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
   const handleClick = () => {
     inputRef.current.click();
@@ -76,7 +110,34 @@ function ItemDetail({ item, grId }) {
     if (!fileObj) {
       return;
     }
-    setImage(fileObj);
+    dispatch(updateProgress(true));
+    let formData = {
+      file: fileObj,
+    };
+
+    const res = await updateImgGroupProduct(
+      grId,
+      item?.groupProduct.id,
+      item?.id,
+      formData,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
+
+    if (res != null) {
+      dispatch(updateProgress(false));
+      if (res?.statusCode === 200) {
+        setImage(res?.data.image);
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Cập nhật hình ảnh nhu yếu phẩm thành công"));
+      } else {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Cập nhật hình ảnh nhu yếu phẩm thất bại"));
+      }
+    }
   };
 
   const handleDateTimePicker = (dateValue) => {
@@ -91,8 +152,8 @@ function ItemDetail({ item, grId }) {
       axiosJWT
     );
 
-    if (res.statusCode === 200) {
-      setListStorage(res.data);
+    if (res?.statusCode === 200) {
+      setListStorage(res?.data);
     }
   };
 
@@ -110,9 +171,151 @@ function ItemDetail({ item, grId }) {
     }
   };
 
-  const handleChangeProduct = () => {
+  // const handleSaveMoney = (value) => {
+  //   console.log(FormatNumber.formatCurrency(value));
+  //   //FormatNumber.formatCurrency(FormatNumber)
+  //   setMoney(FormatNumber.formatCurrency(value));
+  // }
 
-  }
+  const handleChangeProduct = async () => {
+    let checkGP = false;
+    let checkItem = false;
+    if (
+      barcode !== initalData.barcode ||
+      name !== initalData.name ||
+      money !== initalData.money
+    ) {
+      checkGP = true;
+    }
+
+    if (
+      quantity !== initalData.quantity ||
+      expDate !== initalData.exp ||
+      storage !== initalData.storage
+    ) {
+      checkItem = true;
+    }
+
+    if (checkGP === false && checkItem === false) {
+      return;
+    }
+    dispatch(updateProgress(true));
+    let formData1 = {
+      name: name,
+      barcode: barcode,
+      price: money,
+    };
+    let formData2 = {
+      bestBefore: expDate,
+      quantity: quantity,
+    };
+    if (checkGP === true && checkItem === true) {
+      const resGP = await updateGroupProduct(
+        grId,
+        item?.groupProduct.id,
+        item?.id,
+        formData1,
+        user?.accessToken,
+        dispatch,
+        axiosJWT
+      );
+      if (resGP === false) {
+        dispatch(updateProgress(false));
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Cập nhật thông tin nhu yếu phẩm thất bại!"));
+      } else {
+        const resItems = await updateItems(
+          grId,
+          item?.id,
+          formData2,
+          user?.accessToken,
+          dispatch,
+          axiosJWT
+        );
+        if (resItems === false) {
+          dispatch(updateProgress(false));
+          dispatch(updateOpenSnackbar(true));
+          dispatch(updateStatus(false));
+          dispatch(updateMessage("Cập nhật thông tin nhu yếu phẩm thất bại!"));
+        } else {
+          dispatch(updateProgress(false));
+          dispatch(updateOpenSnackbar(true));
+          dispatch(updateStatus(true));
+          dispatch(
+            updateMessage("Cập nhật thông tin nhu yếu phẩm thành công!")
+          );
+        }
+      }
+    } else if (checkGP) {
+      const resGP = await updateGroupProduct(
+        grId,
+        item?.groupProduct.id,
+        item?.id,
+        formData1,
+        user?.accessToken,
+        dispatch,
+        axiosJWT
+      );
+      if (resGP) {
+        dispatch(updateProgress(false));
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Cập nhật thông tin nhu yếu phẩm thành công!"));
+      } else {
+        dispatch(updateProgress(false));
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Cập nhật thông tin nhu yếu phẩm thất bại!"));
+      }
+    } else {
+      const resItems = await updateItems(
+        grId,
+        item?.id,
+        formData2,
+        user?.accessToken,
+        dispatch,
+        axiosJWT
+      );
+      if (resItems === false) {
+        dispatch(updateProgress(false));
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Cập nhật thông tin nhu yếu phẩm thất bại!"));
+      } else {
+        dispatch(updateProgress(false));
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Cập nhật thông tin nhu yếu phẩm thành công!"));
+      }
+    }
+  };
+
+  const handleDeleteItem = async () => {
+    handleCloseModal();
+    dispatch(updateProgress(true));
+    const res = await deletedProductItem(
+      grId,
+      item?.id,
+      user?.accessToken,
+      axiosJWT
+    );
+    if (res) {
+      dispatch(updateProgress(false));
+      navigate(
+        `/stock/product-stock?grId=${grId}&storageId=${item?.storageLocation.id}`
+      );
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(true));
+      dispatch(updateMessage("Xóa nhu yếu phẩm thành công!"));
+      
+    } else {
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(false));
+      dispatch(updateMessage("Xóa nhu yếu phẩm thất bại!"));
+    }
+  };
 
   return (
     <Stack sx={{ marginBottom: "3% !important" }} spacing={1}>
@@ -156,7 +359,7 @@ function ItemDetail({ item, grId }) {
                   borderRadius={"50%"}
                   padding={"8px"}
                 >
-                  <AddAPhotoIcon color={Colors.black} size={25} />
+                  <ModeEditIcon color={Colors.black} size={25} />
                 </Box>
               </CustomComponent.ImageProduct>
             </CustomComponent.ButtonProduct>
@@ -207,7 +410,7 @@ function ItemDetail({ item, grId }) {
               width: { xs: "90%", sm: "80%", md: "100%", lg: "80%" },
             }}
           >
-            <Box sx={{ mr: 1, mt: 1, mb: 1, }}>
+            <Box sx={{ mr: 1, mt: 1, mb: 1 }}>
               <Typography>Số lượng</Typography>
               <TextField
                 id="outlined-start-adornment-quantity"
@@ -221,14 +424,14 @@ function ItemDetail({ item, grId }) {
                   step: 1,
                 }}
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">unit</InputAdornment>
+                  endAdornment: (
+                    <InputAdornment position="end">{item?.unit}</InputAdornment>
                   ),
                 }}
                 sx={{ width: "130px" }}
               />
             </Box>
-            <Box sx={{ m: 1,  }}>
+            <Box sx={{ m: 1 }}>
               <Typography>Giá tiền</Typography>
               <TextField
                 id="outlined-start-adornment-money"
@@ -242,8 +445,8 @@ function ItemDetail({ item, grId }) {
                   step: 1000,
                 }}
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">vnd</InputAdornment>
+                  endAdornment: (
+                    <InputAdornment position="end">vnd</InputAdornment>
                   ),
                 }}
                 sx={{ width: "150px" }}
@@ -281,15 +484,50 @@ function ItemDetail({ item, grId }) {
               )}
             />
           </Box>
+          <Box className="box-address">
+            <LocationOnIcon />
+            <Typography>{addressPur}</Typography>
+          </Box>
           <Box
             sx={{
               width: { xs: "90%", sm: "80%", md: "100%", lg: "80%" },
               display: "flex",
               justifyContent: "flex-end",
+              height: "max-content",
             }}
           >
-            <CustomComponent.Button1 onClick={handleChangeProduct}>Lưu thay đổi</CustomComponent.Button1>
+            <CustomComponent.Button2
+              onClick={handleOpenModal}
+              sx={{ width: "160px", height: "100%", m: 1 }}
+            >
+              Xóa nhu yếu phẩm
+            </CustomComponent.Button2>
+            <CustomComponent.Button1
+              onClick={handleChangeProduct}
+              sx={{ width: "160px", height: "100%", m: 1 }}
+            >
+              Lưu thay đổi
+            </CustomComponent.Button1>
           </Box>
+          <Modal open={openModal} onClose={handleCloseModal}>
+            <Box sx={style}>
+              <Typography>Bạn có muốn xóa chi tiêu này không?</Typography>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <CustomComponent.Button1
+                  sx={{ width: "40px", marginRight: "10px" }}
+                  onClick={handleDeleteItem}
+                >
+                  Có
+                </CustomComponent.Button1>
+                <CustomComponent.Button2
+                  sx={{ width: "40px", marginLeft: "10px" }}
+                  onClick={handleCloseModal}
+                >
+                  Không
+                </CustomComponent.Button2>
+              </Box>
+            </Box>
+          </Modal>
         </Stack>
       </Stack>
     </Stack>

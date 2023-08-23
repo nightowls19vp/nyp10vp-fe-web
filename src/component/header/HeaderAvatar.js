@@ -6,17 +6,19 @@ import { Box, Button, Avatar } from "@mui/material";
 
 import * as CustomComponent from "../custom/CustomComponents.js";
 import MenuItemRow from "./MenuItemRow.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice.js";
 import { logoutUser } from "../../redux/authRequest.js";
+import { Colors } from "../../config/Colors.js";
 
 function HeaderAvatar({ data, user }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
+  const userInfo = useSelector((state) => state?.user?.userInfo.user);
 
-  const image = user?.data.userInfo.avatar ?? "";
+  const image = user ? (userInfo.avatar ?? "") : "";
   const [isShown, setIsShown] = useState(false);
 
   const handleClickProfile = () => {
@@ -24,8 +26,10 @@ function HeaderAvatar({ data, user }) {
   };
 
   const handleClickLogout = async () => {
-    console.log(user?.accessToken);
-    await logoutUser(user?.accessToken, dispatch, navigate, axiosJWT);
+    dispatch(loginSuccess(null));
+    navigate("/login");
+    // console.log(user?.accessToken);
+    // await logoutUser(user?.accessToken, dispatch, navigate, axiosJWT);
   };
 
   const handleClickLogin = () => {
@@ -55,7 +59,9 @@ function HeaderAvatar({ data, user }) {
               flexDirection: "column",
               width: "200px",
               boxShadow: "2px 2px 5px #8c8c8c",
+              padding: "10px",
               borderRadius: "10px",
+              backgroundColor: Colors.background
             }}
           >
             {user ? (
@@ -71,7 +77,7 @@ function HeaderAvatar({ data, user }) {
               </>
             ) : (
               <CustomComponent.ButtonPopperAvatar onClick={handleClickLogin}>
-                Đăng nhập
+                Đăng nhập/Đăng ký
               </CustomComponent.ButtonPopperAvatar>
             )}
           </Box>

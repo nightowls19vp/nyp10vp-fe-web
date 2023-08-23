@@ -20,6 +20,9 @@
     display: flex;
     flex-direction: row;
     align-items: flex-end;
+    .btn-btn {
+        margin: 5px;
+    }
 }
 
 .input-modal-description {

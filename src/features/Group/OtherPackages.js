@@ -18,6 +18,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
+import * as CustomComponent from "../../component/custom/CustomComponents";
 
 function createData(id, name, status, startDate, endDate) {
   let s = new Date(startDate);
@@ -87,7 +88,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { order, orderBy, rowCount, onRequestSort } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -236,7 +237,15 @@ export default function OtherPackages({ item }) {
                     >
                       {row.name}
                     </TableCell>
-                    <TableCell align="left">{row.status}</TableCell>
+                    <TableCell align="left">
+                    {row.status === "Not Activated" ? (
+                        <CustomComponent.ChipFunding2 label="Chưa kích hoạt" />
+                    ) : row.status === "Active" ? (
+                      <CustomComponent.ChipFunding3 label="Đã kích hoạt" />
+                    ) : (
+                      <CustomComponent.ChipFunding4 label="Hết hạn" />
+                    )}
+                    </TableCell>
                     <TableCell align="left">{row.startDate}</TableCell>
                     <TableCell align="left">{row.endDate}</TableCell>
                   </TableRow>

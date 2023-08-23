@@ -8,17 +8,38 @@ import {
   CardContent,
   CardHeader,
   Checkbox,
-  Stack,
   Typography,
 } from "@mui/material";
 import Carousel from "better-react-carousel";
 import "../../assets/css/Home.scss";
 //import { useSelector } from "react-redux";
 
-function BoxTodos({ homeTodos }) {
+function BoxTodos({ homeTodos, widthContent }) {
   //const homeTodos = useSelector((state) => state?.home.homeTodos);
+  const BreakpointCarousel = () => {
+    if (widthContent > 900) {
+      return 3;
+    } else if (widthContent > 700) {
+      return 2;
+    }
+  };
+
+  const HideArrowCarousel = () => {
+    if (widthContent > 900 && homeTodos.length < 4) {
+      return true;
+    } else if (widthContent > 700 && homeTodos.length < 3) {
+      return true;
+    }
+    return false;
+  };
   return (
-    <Carousel cols={3} rows={1} gap={10} loop>
+    <Carousel
+      cols={BreakpointCarousel()}
+      rows={1}
+      gap={10}
+      hideArrow={HideArrowCarousel()}
+      loop
+    >
       {homeTodos.map((todo, idx) =>
         todo ? (
           <Carousel.Item key={idx}>
@@ -27,10 +48,16 @@ function BoxTodos({ homeTodos }) {
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-between",
+                justifyContent: "flex-start",
               }}
             >
-              <CardHeader title={todo.summary} />
+              <CardHeader
+                title={
+                  <Typography className="carousel-title-todo">
+                    {todo.summary}
+                  </Typography>
+                }
+              />
               <CardContent>
                 {todo.todos.map((t, idx) =>
                   t && idx < 3 ? (
@@ -48,9 +75,9 @@ function BoxTodos({ homeTodos }) {
                   ) : null
                 )}
               </CardContent>
-              <CardActions>
+              {/* <CardActions>
                 <Button>Xem thêm</Button>
-              </CardActions>
+              </CardActions> */}
             </Card>
           </Carousel.Item>
         ) : null

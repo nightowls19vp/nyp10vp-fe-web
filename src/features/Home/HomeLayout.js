@@ -1,23 +1,26 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 
 import "../../assets/css/Home.scss";
 import BoxGroup from "./BoxGroup";
 import BoxNotification from "./BoxNotification";
 import BoxTodos from "./BoxTodos";
-import { Colors } from "../../config/Colors";
-import BoxChat from "./BoxChat";
 import BoxTransaction from "./BoxTransaction";
+import * as CustomComponent from "../../component/custom/CustomComponents";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function HomeLayout() {
+  const navigate = useNavigate();
   const homeTodos = useSelector((state) => state?.home.homeTodos);
   const homeBilling = useSelector((state) => state?.home.homeBilling);
   const homeChat = useSelector((state) => state?.home.homeChat);
+  const homeTrans = useSelector((state) => state?.home.homeTrans);
+  const homeGroup = useSelector((state) => state?.home.homeGroup);
 
   const [widthContent, setWidthContent] = useState(window.innerWidth);
-  
+
   useEffect(() => {
     function handleWindowResize() {
       setWidthContent(window.innerWidth);
@@ -29,28 +32,62 @@ function HomeLayout() {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
+
+  const handlePagePackage = () => {
+    navigate("/package");
+  }
   return (
-    <Box
-      sx={{ display: "flex", flexDirection: widthContent < 978 ? "column" : "row" }}
-      className="home-box"
-    >
-      <Stack sx={{ width: widthContent < 978 ? "100%" : "70%", m: 1 }} spacing={3}>
-        <BoxGroup />
+    <>
+      {homeGroup.length > 0 ? (
+        <Box className="home-box">
+          <Stack
+            sx={{
+              width: homeBilling.length <= 0 ? "100%" : "70%",
+              m: 1,
+              display:
+                widthContent < 600 && homeBilling.length > 0 ? "none" : "block",
+            }}
+            spacing={3}
+          >
+            <BoxGroup />
 
-        <BoxTransaction className="home-box-3-trans" />
+            <BoxTransaction className="home-box-3-trans" homeChat={homeChat} homeTrans={homeTrans} />
 
-        {homeTodos.length > 0 ? (
-          <BoxTodos className="home-box-3-todos" homeTodos={homeTodos} />
-        ) : null}
-      </Stack>
+            {homeTodos.length > 0 ? (
+              <BoxTodos
+                className="home-box-3-todos"
+                homeTodos={homeTodos}
+                widthContent={widthContent}
+              />
+            ) : null}
+          </Stack>
 
-      <Stack sx={{ width: widthContent < 978 ? "100%" : "30%", m: 1 }} spacing={2}>
-        {homeBilling.length > 0 &&
-          homeBilling.map((bill, idx) =>
-            bill && idx < 5 ? <BoxNotification bill={bill} homeBilling={homeBilling} key={idx} /> : null
-          )}
-      </Stack>
-    </Box>
+          <Stack
+            sx={{
+              width: widthContent < 600 ? "100%" : "30%",
+              display: homeBilling.length > 0 ? "block" : "none",
+              m: 1,
+            }}
+            spacing={2}
+          >
+            {homeBilling.length > 0 &&
+              homeBilling.map((bill, idx) =>
+                bill && idx < 5 ? (
+                  <BoxNotification
+                    bill={bill}
+                    homeBilling={homeBilling}
+                    key={idx}
+                  />
+                ) : null
+              )}
+          </Stack>
+        </Box>
+      ) : (
+        <Box className="home-image">
+          <CustomComponent.Button1 onClick={handlePagePackage}>Package</CustomComponent.Button1>
+        </Box>
+      )}
+    </>
   );
 }
 

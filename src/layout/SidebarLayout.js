@@ -1,5 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Stack, Box, Snackbar, Alert, Drawer } from "@mui/material";
+import React, { useState, useEffect, useRef, Fragment } from "react";
+import {
+  Stack,
+  Box,
+  Snackbar,
+  Alert,
+  Drawer,
+  CircularProgress,
+} from "@mui/material";
 
 import HeaderComponent from "../component/header/Header";
 import SideBarComponent from "../component/sidebar/Sidebar";
@@ -21,8 +28,11 @@ function SidebarLayout({ data, title, selectedID, children }) {
   const [heightHeader, setHeightHeader] = useState(0);
   const [heightFooter, setHeightFooter] = useState(0);
   const [widthContent, setWidthContent] = useState(window.innerWidth);
+  const [widthProgress, setWidthProgress] = useState(window.innerWidth / 2);
+  const [heightProgress, setHeightProgress] = useState(window.innerHeight / 2);
 
   const showSidebar = useSelector((state) => state?.package?.showSidebar);
+  const isProgress = useSelector((state) => state?.message.isProgress);
   const openSnackbar = useSelector((state) => state?.message.flag);
   const statusSnackbar = useSelector((state) => state?.message.status);
   const msgSnackbar = useSelector((state) => state?.message.msg);
@@ -42,6 +52,8 @@ function SidebarLayout({ data, title, selectedID, children }) {
   useEffect(() => {
     function handleWindowResize() {
       setWidthContent(window.innerWidth);
+      setWidthProgress(window.innerWidth / 2);
+      setHeightProgress(window.innerHeight / 2);
     }
 
     window.addEventListener("resize", handleWindowResize);
@@ -57,8 +69,20 @@ function SidebarLayout({ data, title, selectedID, children }) {
   }, []);
 
   return (
-    <Stack>
-      <Box ref={refHeader} zIndex={1}>
+    <Stack sx={{ position: "relative" }}>
+      {isProgress && (
+        <Box
+          sx={{
+            position: "absolute",
+            left: `${widthProgress}px`,
+            top: `${heightProgress}px`,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
+
+      <Box ref={refHeader} zIndex={1} sx={{ opacity: isProgress ? 0.35 : 1 }}>
         <HeaderComponent />
       </Box>
 
@@ -70,6 +94,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
           justifyContent: { sm: "center", md: "space-between" },
           // justifyContent: "center",
           alignItems: "stretch",
+          opacity: isProgress ? 0.35 : 1,
         }}
       >
         <Box
@@ -86,7 +111,10 @@ function SidebarLayout({ data, title, selectedID, children }) {
               open={showSidebar}
               onClose={handleCloseDrawer}
               sx={{
-                '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                "& .MuiDrawer-paper": {
+                  boxSizing: "border-box",
+                  width: drawerWidth,
+                },
               }}
             >
               <SideBarComponent
@@ -121,7 +149,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
           <Snackbar
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
             open={openSnackbar}
-            autoHideDuration={3000}
+            autoHideDuration={500}
             onClose={handleCloseSnackbar}
           >
             <Alert
@@ -140,7 +168,7 @@ function SidebarLayout({ data, title, selectedID, children }) {
         </Box>
       </Box>
 
-      <Box ref={refFooter} zIndex={1}>
+      <Box ref={refFooter} zIndex={1} sx={{ opacity: isProgress ? 0.35 : 1 }}>
         <FooterComponent />
       </Box>
     </Stack>

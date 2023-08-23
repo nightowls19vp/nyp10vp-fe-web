@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import {
   Avatar,
@@ -44,79 +44,68 @@ function Bill({ grID, item }) {
 
   return (
     <>
-      <ButtonBase onClick={handleOpen} sx={{ height: "100px"}}>
-        <Box sx={{ width: "90%", minWidth: "250px" }} className="bill">
-          <Typography
-            variant="h6"
-            sx={{
-              fontSize: 18,
-              width: "30%",
-              display: "flex",
-              justifyContent: "flex-start",
-            }}
-          >
-            {item?.summary}
-          </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              width: "20%",
-            }}
-          >
-            <FaMoneyBillWave size={25} />
-            <Typography
-              variant="overline"
-              display="block"
-              sx={{ paddingLeft: "10px", fontSize: "16px" }}
-            >
-              {FormatNumber.formatCurrency(item?.total)}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              width: "20%",
-            }}
-          >
-            <AccessTimeIcon />
-            <Typography
-              variant="overline"
-              display="block"
-              sx={{ fontStyle: "italic", paddingLeft: "10px" }}
-            >
-              {FormatNumber.formatDate(item?.date)}
-            </Typography>
-          </Box>
-          <Box className="bill-end" sx={{ width: "30%" }}>
-            <Avatar src={item.lender.avatar ?? ""} />
-            <Box
-              sx={{
-                backgroundColor:
-                  item.status === "PENDING"
-                    ? "#ccffdd"
-                    : item.status === "APPROVED"
-                    ? "#ccf5ff"
-                    : "#f2f2f2",
+      <ButtonBase onClick={handleOpen} sx={{ height: "fit-content" }}>
+        <Stack
+          sx={{
+            width: "100%",
+            minWidth: "300px",
+          }}
+          spacing={1}
+          className="bill"
+        >
+          <Box className="summary-bill">{item?.summary}</Box>
+          <Box className="flex-item-bill">
+          <Box className="total-bill">
+              <AccessTimeIcon />
+              <Typography
+                variant="overline"
+                display="block"
+                sx={{ fontStyle: "italic", paddingLeft: "10px" }}
+              >
+                {FormatNumber.formatDate(item?.date)}
+              </Typography>
+            </Box>
 
-                color:
-                item.status === "PENDING"
-                    ? "#008000"
-                    : item.status === "APPROVED"
-                    ? "#0000cc"
-                    : "#000000",
+            <Box className="total-bill">
+              <FaMoneyBillWave size={25} />
+              <Typography
+                variant="overline"
+                display="block"
+                sx={{ paddingLeft: "10px", fontSize: "16px" }}
+              >
+                {FormatNumber.formatCurrency(item?.total)}
+              </Typography>
+            </Box>
 
-                marginLeft: "5px",
-              }}
-              className="status-bill"
-            >
-              <Typography sx={{ fontWeight: 600 }}>{item.status}</Typography>
+            <Box className="end-bill" sx={{ width: "20%" }}>
+              <Avatar src={item.lender.avatar ?? ""} />
+              <Box
+                sx={{
+                  backgroundColor:
+                    item.status === "PENDING"
+                      ? "#ccffdd"
+                      : item.status === "APPROVED"
+                      ? "#ccf5ff"
+                      : "#f2f2f2",
+
+                  color:
+                    item.status === "PENDING"
+                      ? "#008000"
+                      : item.status === "APPROVED"
+                      ? "#0000cc"
+                      : "#000000",
+
+                  marginLeft: "5px",
+                }}
+                className="status-bill"
+              >
+                <Typography sx={{ fontWeight: 550, fontSize: "1em" }}>
+                  {item.status}
+                </Typography>
+              </Box>
             </Box>
           </Box>
-        </Box>
+        </Stack>
       </ButtonBase>
       <Modal
         open={open}
@@ -125,7 +114,7 @@ function Bill({ grID, item }) {
         aria-describedby="modal-modal-description-bill"
       >
         <Box sx={style}>
-          <BillDetail grID={grID} />
+          <BillDetail grID={grID} handleClose={handleClose} />
         </Box>
       </Modal>
     </>

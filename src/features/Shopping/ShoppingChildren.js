@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, {  } from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import {
@@ -22,20 +22,18 @@ import {
   FormLabel,
   FormControl,
   Stack,
-  CircularProgress,
   Modal,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { CiSquarePlus, CiSquareMinus } from "react-icons/ci";
 
 import { useDispatch, useSelector } from "react-redux";
 import { userCheckout } from "../../redux/userRequest";
 
 import { createAxios } from "../../http/createInstance.js";
-import SockectIO from "../../http/socket.js";
+import { updateProgress } from "../../redux/messageSlice.js";
 
 import "../../assets/css/Shopping.scss";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
@@ -47,7 +45,7 @@ import {
   updateNotiCheckout,
   updateNumberCart,
 } from "../../redux/packageSlice";
-import { Colors } from "../../config/Colors";
+import MethodPay from "./MethodPay";
 
 const style = {
   position: "absolute",
@@ -59,14 +57,6 @@ const style = {
   border: "1px solid #d9d9d9",
   boxShadow: 24,
   p: 4,
-};
-
-const styleProgress = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
 };
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -276,8 +266,6 @@ export default function EnhancedTable({ item }) {
   const order = useSelector((state) => state?.auth?.order);
   const flag = useSelector((state) => state?.package?.flagCart);
 
-  const socket = SockectIO();
-
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [openModal, setOpenModal] = React.useState(false);
@@ -424,6 +412,7 @@ export default function EnhancedTable({ item }) {
   };
 
   const handleButtonCheckout = async () => {
+    dispatch(updateProgress(true));
     if (selected.length === 0) {
       setOpenModal(true);
     }
@@ -451,7 +440,6 @@ export default function EnhancedTable({ item }) {
     let methodCheckout = {};
 
     if (valueMethod === "zalo") {
-      console.log(valueMethod);
       methodCheckout = {
         type: "EWALLET",
         bank_code: "ZALOPAY",
@@ -469,16 +457,15 @@ export default function EnhancedTable({ item }) {
       method: methodCheckout,
     };
 
-    console.log(data);
-
     const res = await userCheckout(user?.accessToken, dispatch, data, axiosJWT);
+    console.log(res);
 
     if (res?.statusCode === 200) {
-      dispatch(updateNotiCheckout(2));
-      window.open(order.order.order_url);
+      //dispatch(updateProgress(false));
+      window.open(res?.data);
 
       setTimeout(function () {
-        dispatch(updateNotiCheckout(1));
+        dispatch(updateProgress(false));
       }, 2 * 60 * 1000);
 
       await getUserCart(
@@ -487,6 +474,8 @@ export default function EnhancedTable({ item }) {
         dispatch,
         axiosJWT
       );
+    } else {
+      dispatch(updateProgress(false));
     }
   };
 
@@ -620,17 +609,16 @@ export default function EnhancedTable({ item }) {
                 <FormControlLabel
                   value="zalo"
                   control={<Radio />}
-                  label="Zalo"
+                  label={
+                    <MethodPay title="Zalo" />
+                  }
                 />
                 <FormControlLabel
                   value="vnpay"
                   control={<Radio />}
-                  label="Vnpay"
-                />
-                <FormControlLabel
-                  value="other"
-                  control={<Radio />}
-                  label="Khác"
+                  label={
+                    <MethodPay title="Vnpay" />
+                  }
                 />
               </RadioGroup>
             </FormControl>
@@ -641,9 +629,9 @@ export default function EnhancedTable({ item }) {
               <Typography
                 variant="subtitle2"
                 color={"#ff3333"}
-                paddingLeft={"2px"}
+                paddingLeft={"5px"}
               >
-                {total}đ
+                {FormatNumber.formatCurrency(total)}
               </Typography>
             </Box>
             <Box align="right">

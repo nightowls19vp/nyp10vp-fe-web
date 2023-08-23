@@ -19,6 +19,7 @@ export const dataHeader2 = [
   {
     id: 1,
     name: "home",
+    title: "Trang chủ",
     route: routesConfig.home,
     iconFill: <MdHome size={35} color={Colors.primary} />,
     iconOutline: <MdOutlineHome size={35} color={Colors.icon} />,
@@ -26,6 +27,7 @@ export const dataHeader2 = [
   {
     id: 2,
     name: "Package",
+    title: "Gói dịch vụ",
     route: routesConfig.package,
     iconFill: <MdPersonAddAlt1 size={35} color={Colors.primary} />,
     iconOutline: <MdPersonAddAlt size={35} color={Colors.icon} />,
@@ -33,6 +35,7 @@ export const dataHeader2 = [
   {
     id: 3,
     name: "Stock",
+    title: "Kho lưu trữ",
     route: routesConfig.stock,
     iconFill: <MdInventory2 size={35} color={Colors.primary} />,
     iconOutline: <MdOutlineInventory2 size={35} color={Colors.icon} />,
@@ -40,6 +43,7 @@ export const dataHeader2 = [
   {
     id: 4,
     name: "Chat",
+    title: "Group chat",
     route: routesConfig.chatGr,
     iconFill: <MdChat size={35} color={Colors.primary} />,
     iconOutline: <MdOutlineChat size={35} color={Colors.icon} />,
@@ -47,6 +51,7 @@ export const dataHeader2 = [
   {
     id: 5,
     name: "Group",
+    title: "Group",
     route: routesConfig.group,
     iconFill: <MdGroups2 size={25} color={Colors.primary} />,
     iconOutline: <MdOutlineGroups2 size={25} color={Colors.icon} />,
@@ -54,6 +59,7 @@ export const dataHeader2 = [
   {
     id: 6,
     name: "Shopping",
+    title: "Giỏ hàng",
     route: routesConfig.shopping,
     iconFill: <MdShoppingCart size={25} color={Colors.primary} />,
     iconOutline: <MdOutlineShoppingCart size={25} color={Colors.icon} />,

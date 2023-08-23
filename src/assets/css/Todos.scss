@@ -1,8 +1,24 @@
 @import "mixins";
 @import "color";
 
+.addAddTodo {
+    max-height: calc(100vh - 200px);
+    // height: 100%;
+    overflow: auto;
+    padding-right: 10px;
+}
+
+#addTodo::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+}
+
+#addTodo::-webkit-scrollbar-thumb {
+    background-color: #d9d9d9;
+}
+
 .form-add-todo {
-    @include flexRowStyle();
+    @include flexRowStyle(space-between, center);
 }
 
 .todo-msg {
@@ -11,7 +27,7 @@
 }
 
 .box-todo {
-    @include flexColumnStyle();
+    @include flexColumnStyle(space-between, center);
     justify-content: flex-start;
     align-items: flex-start;
     padding: 20px;
@@ -21,7 +37,7 @@
     border-radius: 20px;
     .title-box {
         width: 100%;
-        @include flexRowStyle();
+        @include flexRowStyle(center, center);
         justify-content: center;
         .text-title {
             font-size: 20px;
@@ -31,14 +47,14 @@
 }
 
 .list-todo {
-    @include flexRowStyle();
+    @include flexRowStyle(space-between, center);
+    text-decoration: none;
     width: 100%;
     .text-todo {
         margin-left: 42px;
         font-style: italic;
     }
     .todos {
-        @include flexRowStyle();
-        justify-content: flex-start;
+        @include flexRowStyle(flex-start, center);
     }
 }

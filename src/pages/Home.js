@@ -8,8 +8,16 @@ import { createAxios } from "../http/createInstance.js";
 import { getUserCart } from "../redux/packageRequest.js";
 import { getGroupChannel } from "../redux/userRequest.js";
 import HomeLayout from "../features/Home/HomeLayout.js";
-import { getBillingsUser, getChatsUser, getGroupsUser, getTodosUser, getTransitionUser } from "../redux/homeRequest.js";
+import {
+  getBillingsUser,
+  getChatsUser,
+  getGroupsUser,
+  getTodosUser,
+  getTransitionUser,
+} from "../redux/homeRequest.js";
 import HomeLayoutNoGroup from "../features/Home/HomeLayoutNoGroup.js";
+import UserJoin from "./UserJoin.js";
+import Package from "./Package.js";
 
 function Home() {
   const dispatch = useDispatch();
@@ -32,7 +40,7 @@ function Home() {
     const getHomeGroupsUser = async () => {
       await getGroupsUser(user?.accessToken, dispatch, axiosJWT);
 
-      await getTransitionUser(user?.accessToken, dispatch, axiosJWT);
+      await getTransitionUser(user?.data.userInfo._id, user?.accessToken, dispatch, axiosJWT);
 
       await getChatsUser(user?.accessToken, dispatch, axiosJWT);
 
@@ -56,8 +64,7 @@ function Home() {
   return (
     <>
       <DefaultLayout>
-        {/* <HomeLayout /> */}
-        <HomeLayoutNoGroup />
+        <HomeLayout />
       </DefaultLayout>
     </>
   );

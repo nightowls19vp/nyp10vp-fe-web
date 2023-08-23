@@ -75,8 +75,6 @@ export const updateNameChannel = async (CHANNEL_URL, NAME) => {
       GroupChannelUpdateParams
     );
 
-    console.log(groupChannel);
-
     return [groupChannel, null];
   } catch (error) {
     return [null, error];
@@ -94,7 +92,7 @@ export const updateAvatarChannel = async (CHANNEL_URL, AVATAR) => {
       GroupChannelUpdateParams
     );
 
-    console.log(groupChannel);
+    console.log("groupChannel", groupChannel);
 
     return [groupChannel, null];
   } catch (error) {
@@ -102,9 +100,10 @@ export const updateAvatarChannel = async (CHANNEL_URL, AVATAR) => {
   }
 };
 
-export const sendMessage = async (channel, TEXT_MESSAGE) => {
+export const sendMessage = async (channel, TEXT_MESSAGE, CUSTOM_TYPE) => {
   const params = {
     message: TEXT_MESSAGE,
+    customType: CUSTOM_TYPE,
   };
   await channel.sendUserMessage(params).onSucceeded((message) => {
     const messageId = message.messageId;
@@ -120,17 +119,18 @@ export const receiveMessage = async (channel) => {
       // ...
     };
     const messages = await channel.getMessagesByTimestamp(0, MessageListParams);
-    console.log("messages by timestamp", messages);
 
     // Reverse message array by message.createdAt
     messages.reverse();
-
+    console.log(channel);
     return messages.map((message) => {
       return {
         _id: message.messageId,
         text: message.message,
-        // url: message.plainUrl,
-        type: message.messageType,
+        name: message.name,
+        url: message.plainUrl,
+        type: message.customType,
+        lastMess: message.customType !== "image" ? channel.lastMessage.message : "",
         createdAt: new Date(message.createdAt),
         user: {
           _id: message.sender.userId,
@@ -150,6 +150,7 @@ export const receiveMessage = async (channel) => {
 export const sendFile = async (channel, FILE) => {
   const fileMessageParams = {};
   fileMessageParams.file = FILE;
+  fileMessageParams.message = FILE;
   await channel
     .sendFileMessage(fileMessageParams)
     .onSucceeded(() => {

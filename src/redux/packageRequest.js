@@ -115,12 +115,12 @@ export const postPackageTodos = async (
     if (res?.data.statusCode === 201) {
       await getGroupByUserId(token, dispatch, axiosJWT);
       dispatch(updateGroupId(group_id));
-      dispatch(updateGroupItemId(2));
+      dispatch(updateGroupItemId(3));
     }
     return res?.data;
   } catch (error) {
     dispatch(updateGroupId(group_id));
-    dispatch(updateGroupItemId(2));
+    dispatch(updateGroupItemId(3));
     return error.response.data;
   }
 };
@@ -137,12 +137,12 @@ export const addTodo = async (grID, id, data, token, dispatch, axiosJWT) => {
     if (res?.data.statusCode === 200) {
       await getGroupByUserId(token, dispatch, axiosJWT);
       dispatch(updateGroupId(grID));
-      dispatch(updateGroupItemId(2));
+      dispatch(updateGroupItemId(3));
     }
     return res?.data;
   } catch (error) {
     dispatch(updateGroupId(grID));
-    dispatch(updateGroupItemId(2));
+    dispatch(updateGroupItemId(3));
     return error.response.data;
   }
 };
@@ -214,17 +214,23 @@ export const deletedTodos = async (grID, id, token, dispatch, axiosJWT) => {
     if (res?.data.statusCode === 200) {
       await getGroupByUserId(token, dispatch, axiosJWT);
       dispatch(updateGroupId(grID));
-      dispatch(updateGroupItemId(2));
+      dispatch(updateGroupItemId(3));
     }
     return res?.data;
   } catch (error) {
     dispatch(updateGroupId(grID));
-    dispatch(updateGroupItemId(2));
+    dispatch(updateGroupItemId(3));
     return error.response.data;
   }
 };
 
-export const postPackageTask = async (grID, data, token, dispatch, axiosJWT) => {
+export const postPackageTask = async (
+  grID,
+  data,
+  token,
+  dispatch,
+  axiosJWT
+) => {
   try {
     const res = await axiosJWT.post(`/pkg-mgmt/task/${grID}`, data, {
       headers: {
@@ -235,15 +241,98 @@ export const postPackageTask = async (grID, data, token, dispatch, axiosJWT) => 
     if (res?.data.statusCode === 201) {
       await getGroupByUserId(token, dispatch, axiosJWT);
       dispatch(updateGroupId(grID));
-      dispatch(updateGroupItemId(3));
+      dispatch(updateGroupItemId(4));
     }
     return res?.data;
   } catch (error) {
     dispatch(updateGroupId(grID));
-    dispatch(updateGroupItemId(3));
+    dispatch(updateGroupItemId(4));
     return error.response.data;
   }
-}
+};
+
+export const getPackageTask = async (id, token, axiosJWT) => {
+  try {
+    const res = await axiosJWT.get(`/pkg-mgmt/task/${id}`, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res?.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+export const deletePackageTask = async (
+  grID,
+  id,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.delete(`/pkg-mgmt/task/${id}`, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res?.data.statusCode === 200) {
+      await getGroupByUserId(token, dispatch, axiosJWT);
+      dispatch(updateGroupId(grID));
+      dispatch(updateGroupItemId(4));
+    }
+    return true;
+  } catch (error) {
+    dispatch(updateGroupId(grID));
+    dispatch(updateGroupItemId(4));
+    return false;
+  }
+};
+
+export const updatePackageTask = async (
+  grID,
+  id,
+  data1,
+  data2,
+  checkTask,
+  checkTaskStatus,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    if (checkTask) {
+      await axiosJWT.put(`/pkg-mgmt/task/${id}`, data1, {
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+
+    if (checkTaskStatus) {
+      await axiosJWT.put(`/pkg-mgmt/task/${id}/state`, data2, {
+        headers: {
+          accept: "*/*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+
+    await getGroupByUserId(token, dispatch, axiosJWT);
+    dispatch(updateGroupId(grID));
+    dispatch(updateGroupItemId(4));
+
+    return true;
+  } catch (error) {
+    dispatch(updateGroupId(grID));
+    dispatch(updateGroupItemId(4));
+    return false;
+  }
+};
 
 export const GetGroupSuperUser = async (token, dispatch, axiosJWT) => {
   try {
@@ -264,5 +353,56 @@ export const GetGroupSuperUser = async (token, dispatch, axiosJWT) => {
     }
   } catch (error) {
     return error.response.data;
+  }
+};
+
+export const postPackageFunding = async (
+  group_id,
+  data,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.post(`/pkg-mgmt/funding/${group_id}`, data, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    await getGroupByUserId(token, dispatch, axiosJWT);
+    dispatch(updateGroupId(group_id));
+    dispatch(updateGroupItemId(1));
+    return res?.data;
+  } catch (error) {
+    dispatch(updateGroupId(group_id));
+    dispatch(updateGroupItemId(1));
+    return error.response.data;
+  }
+};
+
+export const deletePackageFunding = async (
+  group_id,
+  id,
+  token,
+  dispatch,
+  axiosJWT
+) => {
+  try {
+    const res = await axiosJWT.delete(`/pkg-mgmt/funding/${id}`, {
+      headers: {
+        accept: "*/*",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(res?.data);
+    await getGroupByUserId(token, dispatch, axiosJWT);
+    dispatch(updateGroupId(group_id));
+    dispatch(updateGroupItemId(1));
+    return true;
+  } catch (error) {
+    dispatch(updateGroupId(group_id));
+    dispatch(updateGroupItemId(1));
+    return false;
   }
 };

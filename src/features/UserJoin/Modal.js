@@ -1,11 +1,11 @@
 import React from "react";
 import {Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { loginSuccess, setTokenJoinGroup } from "../../redux/authSlice";
+import { setTokenJoinGroup } from "../../redux/authSlice";
 import { useDispatch } from "react-redux";
 
 import "../../assets/css/Home.scss";
-import { Colors } from "../../config/Colors";
+// import { Colors } from "../../config/Colors";
 import * as CustomComponent from "../../component/custom/CustomComponents.js";
 
 const style = {

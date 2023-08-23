@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 
 import { createAxios } from "../http/createInstance";
 
-import DefaultLayout from "../layout/DefaultLayout.js";
-import { getGroupActivedByUserId, getStorageLocation } from "../redux/stockRequest.js";
+// import DefaultLayout from "../layout/DefaultLayout.js";
+import { getGroupActivedByUserId } from "../redux/stockRequest.js";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../redux/authSlice.js";
 import StockLayout from "../features/Stock/StockLayout";

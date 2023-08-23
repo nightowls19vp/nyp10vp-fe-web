@@ -16,7 +16,7 @@
     width: 100%;
     .btn-connect {
         width: 100%;
-        @include flexRowStyle();
+        @include flexRowStyle(space-between, center);
     }
 }
 
@@ -31,11 +31,11 @@
 }
 
 .box-my-package {
-    @include flexColumnStyle();
+    @include flexColumnStyle(space-between, center);
     width: 100%;
     .title {
         width: 96%;
-        @include flexRowStyle();
+        @include flexRowStyle(flex-start, center);
         justify-content: flex-start;
         margin-bottom: 2%;
         .text {

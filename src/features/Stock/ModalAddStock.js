@@ -5,7 +5,6 @@ import {
   Stack,
   Typography,
   Box,
-  CircularProgress,
 } from "@mui/material";
 
 import NoImg from "../../assets/img/image.png";
@@ -20,6 +19,7 @@ import { postStorageLocation } from "../../redux/stockRequest";
 import {
   updateMessage,
   updateOpenSnackbar,
+  updateProgress,
   updateStatus,
 } from "../../redux/messageSlice.js";
 
@@ -34,7 +34,7 @@ function ModalAddStock({ grID, handleClose }) {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [fileImg, setFileImg] = useState(NoImg);
-  const [flag, setFlag] = useState(false);
+  //const [flag, setFlag] = useState(false);
 
   const handleChangeNameStock = (e) => {
     setNameStock(e.target.value);
@@ -65,7 +65,9 @@ function ModalAddStock({ grID, handleClose }) {
       file: image,
       description: description,
     };
-    setFlag(true);
+    //setFlag(true);
+    handleClose();
+    dispatch(updateProgress(true));
     const res = await postStorageLocation(
       grID,
       formData,
@@ -75,7 +77,8 @@ function ModalAddStock({ grID, handleClose }) {
     );
 
     if (res != null) {
-      setFlag(false);
+      //setFlag(false);
+      dispatch(updateProgress(false));
       if (res?.statusCode === 200) {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
@@ -86,8 +89,6 @@ function ModalAddStock({ grID, handleClose }) {
         dispatch(updateMessage("Tạo kho lưu trữ thất bại!"));
       }
     }
-
-    handleClose();
   };
 
   return (
@@ -109,7 +110,6 @@ function ModalAddStock({ grID, handleClose }) {
             id="modalAddStock"
             spacing={2}
             className="modalModalAddStock"
-            sx={{ opacity: flag ? 0.5 : 1 }}
           >
             <CustomComponent.Button2
               onClick={handleClick}
@@ -154,11 +154,11 @@ function ModalAddStock({ grID, handleClose }) {
               </CustomComponent.Button1>
             </Box>
           </Stack>
-          {flag && (
+          {/* {flag && (
             <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
               <CircularProgress />
             </Box>
-          )}
+          )} */}
         </Box>
       </Box>
     </Box>

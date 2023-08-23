@@ -1,4 +1,4 @@
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, Modal, TextField } from "@mui/material";
 import format from "date-fns/format";
 import getDay from "date-fns/getDay";
 import parse from "date-fns/parse";
@@ -10,6 +10,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Colors } from "../../config/Colors";
 import "../../assets/css/Calendar.scss";
+import EditTask from "../../features/Group/Tasks/EditTask";
+import { getPackageTask } from "../../redux/packageRequest";
+import { createAxios } from "../../http/createInstance";
+import { loginSuccess } from "../../redux/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import * as FormatDate from "../custom/FormatDateNumber";
 
 const locales = {
   //vi: require("date-fns/locale/vi"),
@@ -23,116 +29,54 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-// const events = [
-//   {
-//     title: "Big Meeting 1",
-//     allDay: true,
-//     start: new Date(2023, 7, 1),
-//     end: new Date(2023, 7, 1),
-//   },
-//   {
-//     title: "Big Meeting 2",
-//     allDay: true,
-//     start: new Date(2023, 7, 1),
-//     end: new Date(2023, 7, 1),
-//   },
-//   {
-//     title: "Big Meeting 3",
-//     allDay: true,
-//     start: new Date(2023, 7, 1),
-//     end: new Date(2023, 7, 1),
-//   },
-//   {
-//     title: "Vacation",
-//     start: new Date(2023, 7, 7),
-//     end: new Date(2023, 7, 10),
-//   },
-//   {
-//     title: "Conference",
-//     start: new Date(2023, 7, 20),
-//     end: new Date(2023, 7, 23),
-//   },
-// ];
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: { xs: "70%", sm: "60%", md: "50%", lg: "30%" },
+  bgcolor: "background.paper",
+  border: "1px solid #000",
+  boxShadow: 24,
+  borderRadius: "20px",
+  p: 4,
+};
 
-const CalendarComponent = ({ events }) => {
-  //const [newEvent, setNewEvent] = useState();
-  //const [allEvents, setAllEvents] = useState();
-  // const initalEvents = () => {
-  //   let arr = [];
-  //   for (let el of events) {
-  //     let formData = {
-  //       title: el.summary,
-  //       start: el.startDate,
-  //       end: el.recurrence.ends
-  //     }
-  //     arr.push(formData);
-  //   }
-  //   return;
-  // }
-  // const allEvents = initalEvents();
+const CalendarComponent = ({ grID, events }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  // function handleAddEvent() {
-  //   for (let i = 0; i < allEvents.length; i++) {
-  //     const d1 = new Date(allEvents[i].start);
-  //     const d2 = new Date(newEvent.start);
-  //     const d3 = new Date(allEvents[i].end);
-  //     const d4 = new Date(newEvent.end);
+  const [open, setOpen] = React.useState(false);
+  const [task, setTask] = useState();
+  //const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-  //     if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
-  //       alert("CLASH");
-  //       break;
-  //     }
-  //   }
-
-  //   setAllEvents([...allEvents, newEvent]);
-  // }
-
-  // useEffect(() => {
-  //   let arr = [];
-  //   for (let el of item) {
-  //     let formData = {
-  //       title: el.summary,
-  //       start: el.startDate,
-  //       end: el.recurrence.ends
-  //     }
-  //     arr.push(formData);
-  //   }
-  //   setAllEvents(arr);
-  // }, [item])
+  const handleSelectEvent = async (calEvent) => {
+    
+    const res = await getPackageTask(calEvent.id, user?.accessToken, axiosJWT);
+    if (res?.statusCode === 200) {
+      console.log(res?.task);
+      setTask(res?.task);
+      setOpen(true);
+    }
+  };
 
   return (
     <div className="App">
-      <h2>Thêm sự kiện mới</h2>
-      {/* <div>
-        <input
-          type="text"
-          placeholder="Tiêu đề"
-          style={{ width: "20%", marginRight: "10px" }}
-          value={newEvent.title}
-          onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-        />
-        <DatePicker
-          placeholderText="Ngày bắt đầu"
-          style={{ marginRight: "10px" }}
-          selected={newEvent.start}
-          onChange={(start) => setNewEvent({ ...newEvent, start })}
-        />
-        <DatePicker
-          placeholderText="Ngày kết thúc"
-          selected={newEvent.end}
-          onChange={(end) => setNewEvent({ ...newEvent, end })}
-        />
-        <button stlye={{ marginTop: "10px" }} onClick={handleAddEvent}>
-          Thêm sự kiện
-        </button>
-      </div> */}
       <Calendar
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 500, margin: "50px", }}
+        onSelectEvent={handleSelectEvent}
+        style={{ height: 500, margin: "50px" }}
       />
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={style}>
+          <EditTask grID={grID} item={task} handleClose={handleClose} />
+        </Box>
+      </Modal>
     </div>
   );
 };

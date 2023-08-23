@@ -29,6 +29,8 @@ import {
   userRenewGroup,
 } from "../../redux/userRequest.js";
 import { useNavigate } from "react-router-dom";
+import { updateProgress } from "../../redux/messageSlice.js";
+import MethodPay from "../Shopping/MethodPay.js";
 
 const style = {
   position: "absolute",
@@ -76,8 +78,8 @@ function DetailItemRenew({ item, grpId }) {
 
     if (duration < item.duration) {
       setDuration(item.duration);
-    } else if (duration > 10) {
-      setDuration(10);
+    } else if (duration > 20) {
+      setDuration(20);
     }
   };
 
@@ -111,7 +113,7 @@ function DetailItemRenew({ item, grpId }) {
       method: methodValue,
     };
 
-    console.log(data);
+    dispatch(updateProgress(true));
 
     const res = await userRenewGroup(
       grpId,
@@ -124,27 +126,23 @@ function DetailItemRenew({ item, grpId }) {
     console.log(res);
 
     if (res?.statusCode === 200) {
-      window.open(order.order.order_url);
+      window.open(res?.data);
 
-      async function getGroup() {
-        await getGroupByUserId(user?.accessToken, dispatch, axiosJWT);
-      }
+      setTimeout(function () {
+        dispatch(updateProgress(false));
+      }, 2 * 60 * 1000);
 
-      function stopClock() {
-        console.log("vyyyyyy");
-        clearTimeout(timeoutID);
-        getGroup();
-      }
+      // async function getGroup() {
+      //   await getGroupByUserId(user?.accessToken, dispatch, axiosJWT);
+      // }
 
-      const timeoutID = setTimeout(stopClock, 1 * 60 * 1000);
+      // function stopClock() {
+      //   console.log("vyyyyyy");
+      //   clearTimeout(timeoutID);
+      //   getGroup();
+      // }
 
-      // socket.on("zpCallback", (data) => {
-      //   if (data) {
-      //     console.log("vy", data);
-      //     getGroup();
-      //     clearTimeout(timeoutID);
-      //   }
-      // });
+      // const timeoutID = setTimeout(stopClock, 1 * 60 * 1000);
 
       navigate("/group");
     }
@@ -208,9 +206,8 @@ function DetailItemRenew({ item, grpId }) {
             <Typography variant="overline" display="block" gutterBottom>
               Số người
             </Typography>
-            {item.name === "Family Package" ? (
+            {item.editableNoOfMember === false ? (
               <Box className="item">
-                {/* <CustomComponents.CssTextField size="small" value={member} /> */}
                 <Typography variant="subtitle1" fontSize={18} gutterBottom>
                   {member}
                 </Typography>
@@ -240,9 +237,7 @@ function DetailItemRenew({ item, grpId }) {
             <Typography variant="overline" display="block" gutterBottom>
               Thời gian
             </Typography>
-            {item.name === "Experience Package" ||
-            item.name === "Annual Package" ||
-            item.name === "Family Package" ? (
+            {item.editableDuration === false ? (
               <Box className="item">
                 <Typography variant="subtitle1" fontSize={18} gutterBottom>
                   {duration}
@@ -254,7 +249,7 @@ function DetailItemRenew({ item, grpId }) {
                   valueLabelDisplay="auto"
                   aria-label="pretto slider"
                   min={item.duration}
-                  max={10}
+                  max={20}
                   value={duration}
                   onChange={(event) => setDuration(event.target.value)}
                 />
@@ -317,17 +312,16 @@ function DetailItemRenew({ item, grpId }) {
                 <FormControlLabel
                   value="zalo"
                   control={<Radio />}
-                  label="Zalo"
+                  label={
+                    <MethodPay title="Zalo" />
+                  }
                 />
                 <FormControlLabel
                   value="vnpay"
                   control={<Radio />}
-                  label="Vnpay"
-                />
-                <FormControlLabel
-                  value="other"
-                  control={<Radio />}
-                  label="Khác"
+                  label={
+                    <MethodPay title="Vnpay" />
+                  }
                 />
               </RadioGroup>
             </FormControl>

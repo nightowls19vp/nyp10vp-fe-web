@@ -134,7 +134,6 @@ function DetailItemRenew({ item, grpId }) {
       }
 
       function stopClock() {
-        console.log("vyyyyyy");
         clearTimeout(timeoutID);
         getGroup();
       }

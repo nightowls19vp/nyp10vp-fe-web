@@ -24,7 +24,7 @@ function ShoppingParent() {
           Giỏ hàng
         </Typography>
       </Box>
-      {number > 0 ? <ShoppingChildren item={userCart} /> : <ShoppingCartEmpty />}
+      <ShoppingChildren item={userCart} />
     </Stack>
   );
 }

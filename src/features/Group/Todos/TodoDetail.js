@@ -7,7 +7,6 @@ import {
   Typography,
   TextField,
   IconButton,
-  CircularProgress,
   Modal,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -19,13 +18,14 @@ import {
   deleteTodo,
   updateIsCompletedTodo,
 } from "../../../redux/packageRequest";
-import { updateTodos } from "../../../redux/packageSlice";
+// import { updateTodos } from "../../../redux/packageSlice";
 import * as CustomComponent from "../../../component/custom/CustomComponents";
 import "../../../assets/css/Todos.scss";
 import { Colors } from "../../../config/Colors";
 import {
   updateMessage,
   updateOpenSnackbar,
+  updateProgress,
   updateStatus,
 } from "../../../redux/messageSlice";
 
@@ -56,7 +56,6 @@ function TodoDetail({ grID, item }) {
   const [msg, setMsg] = useState("");
   const [listTodo, setListTodo] = useState(item?.todos);
   const [idxTodo, setIdxTodo] = useState("");
-  const [flag, setFlag] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = (e, idx) => {
     setIdxTodo(idx);
@@ -67,7 +66,8 @@ function TodoDetail({ grID, item }) {
   const handleAddTodo = async () => {
     if (todo.length <= 0) {
       setMsg("Vui lòng điền vào mục CÔNG VIỆC");
-    } else {
+      return;
+    } 
       let formTodo = {
         todo: todo,
         description: description,
@@ -79,7 +79,8 @@ function TodoDetail({ grID, item }) {
         todos: todos,
         state: item.state,
       };
-      setFlag(true);
+      handleClose();
+      dispatch(updateProgress(true));
       const res = await addTodo(
         grID,
         item._id,
@@ -90,7 +91,7 @@ function TodoDetail({ grID, item }) {
       );
 
       if (res != null) {
-        setFlag(false);
+        dispatch(updateProgress(false));
         if (res?.statusCode === 200) {
           dispatch(updateOpenSnackbar(true));
           dispatch(updateStatus(true));
@@ -103,7 +104,7 @@ function TodoDetail({ grID, item }) {
           dispatch(updateMessage("Thêm việc cần làm thất bại!"));
         }
       }
-    }
+    
   };
 
   const handleDeleteTodo = async () => {
@@ -170,7 +171,7 @@ function TodoDetail({ grID, item }) {
   return (
     <Stack
       spacing={2}
-      sx={{ width: "100%", position: "relative", opacity: flag ? 0.5 : 1 }}
+      sx={{ width: "100%" }}
     >
       <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}>
         <TextField
@@ -302,11 +303,6 @@ function TodoDetail({ grID, item }) {
           </Box>
         </Box>
       </Modal>
-      {flag && (
-        <Box sx={{ position: "absolute", top: "40%", left: "50%" }}>
-          <CircularProgress />
-        </Box>
-      )}
     </Stack>
   );
 }

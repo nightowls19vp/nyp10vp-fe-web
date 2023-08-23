@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-
-import { styled } from "@mui/material/styles";
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableFooter,
-  TablePagination,
-} from "@mui/material";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Paper from "@mui/material/Paper";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import { visuallyHidden } from "@mui/utils";
 
 import { createAxios } from "../../http/createInstance";
 
@@ -21,35 +22,117 @@ import { getProductItemsByStorage } from "../../redux/stockRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
 import { useNavigate } from "react-router-dom";
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: Colors.textPrimary,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-  ":hover": {
-    backgroundColor: Colors.btnOutline,
-  },
-}));
+import { TableFooter } from "@mui/material";
+import "../../assets/css/Product.scss";
+import { styled } from "@mui/material/styles";
 
 function createData(id, name, quantity, unit, money, exp) {
   return { id, name, quantity, unit, money, exp };
+}
+
+const StyledTableSortLabel = styled(TableSortLabel)(({ theme }) => ({
+  "&.MuiTableSortLabel-root": {
+    color: Colors.textPrimary,
+  },
+}));
+
+function descendingComparator(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  return order === "desc"
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function stableSort(array, comparator) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) {
+      return order;
+    }
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
+}
+
+const headCells = [
+  {
+    id: "name",
+    numeric: false,
+    disablePadding: true,
+    label: "Tên nhu yếu phẩm",
+  },
+  {
+    id: "quantity",
+    numeric: true,
+    disablePadding: false,
+    label: "Số lượng",
+  },
+  {
+    id: "money",
+    numeric: true,
+    disablePadding: false,
+    label: "Giá tiền",
+  },
+  {
+    id: "exp",
+    numeric: true,
+    disablePadding: false,
+    label: "Hạn sử dụng",
+  },
+];
+
+function EnhancedTableHead(props) {
+  const { order, orderBy, onRequestSort } = props;
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
+
+  return (
+    <TableHead>
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align={headCell.numeric ? "right" : "left"}
+            padding={headCell.disablePadding ? "none" : "normal"}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            <StyledTableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : "asc"}
+              onClick={createSortHandler(headCell.id)}
+            >
+              {headCell.label}
+              {orderBy === headCell.id ? (
+                <Box component="span" sx={visuallyHidden}>
+                  {order === "desc" ? "sorted descending" : "sorted ascending"}
+                </Box>
+              ) : null}
+            </StyledTableSortLabel>
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+}
+
+EnhancedTableHead.propTypes = {
+  onRequestSort: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
+  orderBy: PropTypes.string.isRequired,
 };
 
-function ListItemProduct({ item, p, grId, storageID }) {
+export default function ListItemProduct({ item, p, grId, storageID, state, date }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state?.auth.login?.currentUser);
@@ -64,20 +147,27 @@ function ListItemProduct({ item, p, grId, storageID }) {
       row.bestBefore
     )
   );
-
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("exp");
+  const [dense, setDense] = useState(false);
   const [page, setPage] = useState(p.currentPage - 1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
 
   const handleChangePage = async (event, newPage) => {
     let currentPage = newPage;
     await getProductItemsByStorage(
       grId,
-      currentPage+1,
+      currentPage + 1,
       rowsPerPage,
       storageID,
+      state,
+      date,
       user?.accessToken,
       dispatch,
       axiosJWT
@@ -92,6 +182,8 @@ function ListItemProduct({ item, p, grId, storageID }) {
       1,
       limit,
       storageID,
+      state,
+      date,
       user?.accessToken,
       dispatch,
       axiosJWT
@@ -101,63 +193,89 @@ function ListItemProduct({ item, p, grId, storageID }) {
   };
 
   const handleClick = (e, productID) => {
-    navigate(`/stock/product-item?grId=${grId}&storageId=${storageID}&productId=${productID}`);
+    navigate(
+      `/stock/product-item?grId=${grId}&storageId=${storageID}&productId=${productID}`
+    );
   };
 
-  return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Tên sản phẩm</StyledTableCell>
-            <StyledTableCell align="right">Số lượng</StyledTableCell>
-            <StyledTableCell align="right">Giá tiền (vnd)</StyledTableCell>
-            <StyledTableCell align="right">Hạn sử dụng</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow
-              key={row.id}
-              sx={{
-                cursor: "pointer",
-                "&:last-child td, &:last-child th": { border: 0 },
-              }}
-              onClick={(e) => handleClick(e, row.id)}
-            >
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">
-                {row.quantity} {row.unit}
-              </StyledTableCell>
-              <StyledTableCell align="right">{FormatNumber.formatCurrency(row.money)}</StyledTableCell>
-              <StyledTableCell align="right">{FormatNumber.formatDate(row.exp)}</StyledTableCell>
-            </StyledTableRow>
-          ))}
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
+  };
 
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 55 }}>
-              <TableCell colSpan={6} />
-            </TableRow>
-          )}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 20]}
-              labelRowsPerPage="Số hàng trên trang"
-              count={p.totalItems}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
+  const visibleRows = React.useMemo(
+    () => stableSort(rows, getComparator(order, orderBy)),
+    [order, orderBy, rows]
+  );
+
+  useEffect(() => {
+    setPage(p.currentPage - 1);
+    setRowsPerPage(5);
+  }, [p]);
+
+  return (
+    <Box sx={{ width: "100%" }}>
+      <Paper className="list-product">
+        <TableContainer>
+          <Table aria-labelledby="tableTitle" size={dense ? "small" : "medium"}>
+            <EnhancedTableHead
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
             />
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </TableContainer>
+            <TableBody>
+              {visibleRows.map((row, index) => {
+                const labelId = `enhanced-table-checkbox-${index}`;
+
+                return (
+                  <TableRow
+                    hover
+                    tabIndex={-1}
+                    key={row.id}
+                    sx={{ cursor: "pointer" }}
+                    onClick={(e) => handleClick(e, row.id)}
+                  >
+                    <TableCell
+                      component="th"
+                      id={labelId}
+                      scope="row"
+                      padding="none"
+                    >
+                      {row.name}
+                    </TableCell>
+                    <TableCell align="right">
+                      {row.quantity} {row.unit}
+                    </TableCell>
+                    <TableCell align="right">
+                      {FormatNumber.formatCurrency(row.money)}
+                    </TableCell>
+                    <TableCell align="right">
+                      {/* {FormatNumber.formatDate(row.exp)} */}
+                      {row.exp}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 20]}
+                  labelRowsPerPage="Số hàng trên trang"
+                  count={p.totalItems}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
+      </Paper>
+      <FormControlLabel
+        control={<Switch checked={dense} onChange={handleChangeDense} />}
+        label="Dense padding"
+      />
+    </Box>
   );
 }
-
-export default ListItemProduct;

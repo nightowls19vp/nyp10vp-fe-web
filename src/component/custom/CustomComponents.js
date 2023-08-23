@@ -7,8 +7,7 @@ import {
   TextField,
   Box,
   Slider,
-  IconButton,
-  Select,
+  Chip,
 } from "@mui/material";
 
 import { Colors } from "../../config/Colors";
@@ -26,10 +25,10 @@ export const ButtonPopperAvatar = styled(ButtonBase)({
   backgroundColor: Colors.background,
   color: Colors.black,
   padding: "10px",
-  borderRadius: "20px",
+  //borderRadius: "20px",
   "&:hover": {
     backgroundColor: Colors.search,
-    // borderRadius: "20px",
+    borderRadius: "10px",
   },
 });
 
@@ -83,6 +82,78 @@ export const Button2 = styled(Button)({
   borderRadius: "5px",
 });
 
+export const Button3 = styled(Button)({
+  backgroundColor: Colors.purpleGray,
+  color: Colors.background,
+  "&:hover": {
+    backgroundColor: Colors.purpleGrayBold,
+  },
+  borderRadius: "5px",
+});
+
+export const Button4 = styled(Button)({
+  backgroundColor: Colors.background,
+  border: "1px solid",
+  borderColor: Colors.purpleGray,
+  color: Colors.purpleGray,
+  "&:hover": {
+    backgroundColor: Colors.btnPurpleGray,
+    border: "2px solid",
+  },
+  borderRadius: "5px",
+});
+
+export const ButtonTodo = styled(Button)({
+  backgroundColor: Colors.purpleGray,
+  color: Colors.background,
+  height: "56px",
+  "&:hover": {
+    backgroundColor: Colors.purpleGrayBold,
+  },
+  borderRadius: "5px",
+});
+
+export const ChipFunding1 = styled(Chip)({
+  backgroundColor: Colors.btnFill,
+  color: Colors.background,
+  "&:hover": {
+    backgroundColor: Colors.primary,
+  },
+});
+
+export const ChipFunding2 = styled(Chip)({
+  backgroundColor: Colors.background,
+  border: "1px solid",
+  borderColor: Colors.btnFill,
+  color: Colors.btnFill,
+  "&:hover": {
+    backgroundColor: Colors.btnOutline,
+    border: "2px solid",
+  },
+});
+
+export const ChipFunding3 = styled(Chip)({
+  backgroundColor: Colors.background,
+  border: "1px solid",
+  borderColor: Colors.purpleGrayBold,
+  color: Colors.purpleGrayBold,
+  "&:hover": {
+    backgroundColor: Colors.btnPurpleGray,
+    border: "2px solid",
+  },
+});
+
+export const ChipFunding4 = styled(Chip)({
+  backgroundColor: Colors.background,
+  border: "1px solid",
+  borderColor: Colors.pin,
+  color: Colors.pin,
+  "&:hover": {
+    backgroundColor: "#00e6c7",
+    border: "2px solid",
+  },
+});
+
 export const ButtonProduct = styled(ButtonBase)(({ theme }) => ({
   position: "relative",
   // borderRadius: "50%",
@@ -120,14 +191,15 @@ export const ImageSrcProduct = styled("span")({
 export const ImageProduct = styled("span")(({ theme }) => ({
   position: "absolute",
   left: 0,
-  right: -5,
+  right: 0,
+  top: 0,
   bottom: 0,
   // [theme.breakpoints.down("md")]: {
   //   top: 0,
   // },
   display: "flex",
   alignItems: "center",
-  justifyContent: "flex-end",
+  justifyContent: "center",
 }));
 
 export const ButtonAvatar = styled(ButtonBase)(({ theme }) => ({

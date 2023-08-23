@@ -39,6 +39,7 @@ function ImageStock({ item, grID }) {
 
   const [openDetail, setOpenDetail] = useState("");
   const [openEdit, setOpenEdit] = useState(false);
+  const [editStock, setEditStock] = useState(null);
   // const [status, setStatus] = useState(false);
   // const [msg, setMsg] = useState("");
   // const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -48,7 +49,8 @@ function ImageStock({ item, grID }) {
     navigate(`/stock/product-stock?grId=${grID}&storageId=${id}`);
   };
 
-  const handleUpdateStock = () => {
+  const handleUpdateStock = (e, stock) => {
+    setEditStock(stock);
     setOpenEdit(true);
   };
 
@@ -71,108 +73,107 @@ function ImageStock({ item, grID }) {
       return true;
     }
     return false;
-  }
+  };
 
   const handleMountOnEnter = (e, id) => {
-   setOpenDetail(id);
-  }
+    setOpenDetail(id);
+  };
 
   const handleMountOnExit = () => {
     setOpenDetail("");
-  }
+  };
 
   return (
-    <>
+    <Box sx={{ position: "relative" }}>
       <Carousel cols={3} rows={handleColumnsCarousel} gap={10} loop>
         {item.map((stock, idx) =>
           stock ? (
-            <Carousel.Item  key={idx}>
-            <Box
-              sx={{
-                position: "relative",
-                width: { xs: "70%", md: "100%"}
-              }}
-             
-            >
-              <CustomComponent.ImageButtonStock
-                focusRipple
-                style={{
-                  width: "100%",
+            <Carousel.Item key={idx}>
+              <Box
+                sx={{
+                  position: "relative",
+                  width: { xs: "70%", md: "100%" },
                 }}
-                onClick={(e) => handleClickImage(e, stock.id)}
-                onMouseEnter={(e) => handleMountOnEnter(e, stock.id)}
-                onMouseLeave={(e) => handleMountOnExit(e)}
               >
-                <CustomComponent.ImageSrcStock
-                  style={{ backgroundImage: `url(${stock.image})` }}
-                />
-                <CustomComponent.ImageBackdropStock className="MuiImageBackdrop-root" />
-                <CustomComponent.ImageStock>
-                  <Slide
-                    direction="up"
-                    in={isSelected(stock.id)}
-                    mountOnEnter
-                    unmountOnExit
-                  >
-                    <Box
-                      sx={{
-                        width: "100%",
-                        height: "40%",
-                        bgcolor: Colors.search,
-                        borderRadius: "0px 0px 20px 20px",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
+                <CustomComponent.ImageButtonStock
+                  focusRipple
+                  style={{
+                    width: "100%",
+                  }}
+                  onClick={(e) => handleClickImage(e, stock.id)}
+                  onMouseEnter={(e) => handleMountOnEnter(e, stock.id)}
+                  onMouseLeave={(e) => handleMountOnExit(e)}
+                >
+                  <CustomComponent.ImageSrcStock
+                    style={{ backgroundImage: `url(${stock.image})` }}
+                  />
+                  <CustomComponent.ImageBackdropStock className="MuiImageBackdrop-root" />
+                  <CustomComponent.ImageStock>
+                    <Slide
+                      direction="up"
+                      in={isSelected(stock.id)}
+                      mountOnEnter
+                      unmountOnExit
                     >
-                      <Typography> {stock.name} </Typography>
-                      <Typography
+                      <Box
                         sx={{
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          fontStyle: "italic",
+                          width: "100%",
+                          height: "40%",
+                          bgcolor: Colors.search,
+                          borderRadius: "0px 0px 20px 20px",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
                         }}
                       >
-                        {stock.description}
-                      </Typography>
-                    </Box>
-                  </Slide>
-                </CustomComponent.ImageStock>
-              </CustomComponent.ImageButtonStock>
-              <IconButton
-                sx={{ position: "absolute", top: "0", right: "0" }}
-                onClick={handleUpdateStock}
-              >
-                <Box className="box-edit-stock">
-                  <EditIcon
-                    color={Colors.black}
-                    size={25}
-                    className="btn-edit-stock"
-                  />
-                </Box>
-              </IconButton>
-              <Modal
-                open={openEdit}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-edit-stock"
-                aria-describedby="modal-modal-edit-stock"
-              >
-                <Box sx={style}>
-                  <ModalEditStock
-                    item={stock}
-                    grID={grID}
-                    handleClose={handleClose}
-                  />
-                </Box>
-              </Modal>
-            </Box>
+                        <Typography> {stock.name} </Typography>
+                        <Typography
+                          sx={{
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            fontStyle: "italic",
+                          }}
+                        >
+                          {stock.description}
+                        </Typography>
+                      </Box>
+                    </Slide>
+                  </CustomComponent.ImageStock>
+                </CustomComponent.ImageButtonStock>
+                <IconButton
+                  sx={{ position: "absolute", top: "0", right: "0" }}
+                  onClick={(e) => handleUpdateStock(e, stock)}
+                >
+                  <Box className="box-edit-stock">
+                    <EditIcon
+                      color={Colors.black}
+                      size={25}
+                      className="btn-edit-stock"
+                    />
+                  </Box>
+                </IconButton>
+              </Box>
             </Carousel.Item>
           ) : null
         )}
       </Carousel>
-    </>
+      <Modal
+        open={openEdit}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-edit-stock"
+        aria-describedby="modal-modal-edit-stock"
+      >
+        <Box sx={style}>
+          <ModalEditStock
+            item={editStock}
+            grID={grID}
+            handleClose={handleClose}
+          />
+        </Box>
+      </Modal>
+    </Box>
   );
 }
 

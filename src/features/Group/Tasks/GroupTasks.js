@@ -14,6 +14,8 @@ import { Colors } from "../../../config/Colors";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CalendarComponent from "../../../component/calendar/Calendar";
 import AddTask from "./AddTask";
+import * as CustomComponent from "../../../component/custom/CustomComponents";
+import NotificationEmpty from "../NotificationEmpty";
 
 const style = {
   position: "absolute",
@@ -48,14 +50,21 @@ function GroupTasks({ grId, item }) {
       setListMember(array);
 
       let allEvent = [];
+
       for (let el of item.task) {
+        let x = el.startDate;
+        if (el.recurrence?.ends) {
+          x = el.recurrence?.ends;
+        }
         let formData = {
+          id: el._id,
           title: el.summary,
-          start: el.startDate,
-          end: el.recurrence?.ends ?? el.startDate,
+          start: new Date(el.startDate),
+          end: new Date(x),
         };
         allEvent.push(formData);
       }
+      console.log(item.task);
       setEvents(allEvent);
     };
 
@@ -81,17 +90,25 @@ function GroupTasks({ grId, item }) {
             Sự kiện trong nhóm
           </Typography>
         </Box>
-        <Tooltip title="Thêm sự kiện">
+        <Box sx={{ display: { xs: "none", sm: "flex" } }}>
+          <CustomComponent.Button1 onClick={handleOpen}>
+            <AddIcon color={Colors.background} />
+            Thêm sự kiện
+          </CustomComponent.Button1>
+        </Box>
+        <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+          <Tooltip title="Thêm sự kiện">
+            <CustomComponent.Button1 onClick={handleOpen}>
+              <AddIcon color={Colors.background} />
+            </CustomComponent.Button1>
+          </Tooltip>
+        </Box>
+        {/* <Tooltip title="Thêm sự kiện">
           <IconButton onClick={handleOpen}>
             <AddIcon />
           </IconButton>
-        </Tooltip>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
+        </Tooltip> */}
+        <Modal open={open} onClose={handleClose}>
           <Box sx={style}>
             <AddTask
               grID={item._id}
@@ -101,7 +118,11 @@ function GroupTasks({ grId, item }) {
           </Box>
         </Modal>
       </Box>
-      {events.length > 0 && <CalendarComponent events={events} />}
+      {events.length > 0 ? (
+        <CalendarComponent grID={item._id} events={events} />
+      ) : (
+        <NotificationEmpty msg="Danh sách sự kiện rỗng" />
+      )}
     </Stack>
   );
 }

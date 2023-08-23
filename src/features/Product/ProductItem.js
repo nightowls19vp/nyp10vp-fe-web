@@ -5,12 +5,10 @@ import {
   Breadcrumbs,
   Link,
   Typography,
-  IconButton,
   Box,
   Modal,
+  Tooltip,
 } from "@mui/material";
-
-import { MdOutlineAddBox } from "react-icons/md";
 
 import { createAxios } from "../../http/createInstance";
 
@@ -19,8 +17,12 @@ import ListItemProduct from "./ListItemProduct.js";
 import AddProduct from "./AddProduct";
 import CreateProduct from "./CreateProduct";
 import { useDispatch, useSelector } from "react-redux";
-import { loginSuccess } from "../../redux/authSlice";
 import AddAddress from "./AddAddress";
+import * as CustomComponent from "../../component/custom/CustomComponents";
+import AddIcon from "@mui/icons-material/Add";
+import "../../assets/css/Product.scss";
+import { loginSuccess } from "../../redux/authSlice";
+import { getProductItemsByStorage } from "../../redux/stockRequest";
 
 const style = {
   position: "absolute",
@@ -36,15 +38,28 @@ const style = {
 };
 
 function ProductItem({ grId, storageID }) {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state?.auth.login?.currentUser);
+  let axiosJWT = createAxios(user, dispatch, loginSuccess);
+
   const listProducts = useSelector((state) => state?.stock?.listProduct.data);
   const metaProducts = useSelector((state) => state?.stock?.listProduct.meta);
 
   const [openAdd, setOpenAdd] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
   const [openAddress, setOpenAddress] = useState(false);
+  const [stateBtn, setStateBtn] = useState(1);
+  const [nowDate, setNowDate] = useState("");
+
+  const handleOpen = () => {
+    if (listProducts.length > 0) {
+      setOpenAdd(true);
+    } else {
+      setOpenCreate(true);
+    }
+  };
 
   const handleOpenAdd = () => {
-    setOpenAddress(false);
     setOpenCreate(false);
     setOpenAdd(true);
   };
@@ -55,13 +70,36 @@ function ProductItem({ grId, storageID }) {
   };
 
   const handleAddress = () => {
-    setOpenAdd(false);
     setOpenAddress(true);
   };
 
   const handleCloseAdd = () => setOpenAdd(false);
   const handleCloseCreatePro = () => setOpenCreate(false);
   const handleCloseAddress = () => setOpenAddress(false);
+
+  const handleListProduct = async (e, state) => {
+    let d = "";
+    if (state === 2) {
+      let date = new Date();
+      let m = date.getMonth() + 1;
+      d = date.getFullYear() + "-" + m + "-" + date.getDate();
+      setNowDate(d);
+    }
+    const res = await getProductItemsByStorage(
+      grId,
+      1,
+      5,
+      storageID,
+      state,
+      d,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
+    if (res) {
+      setStateBtn(state);
+    }
+  };
 
   return (
     <Stack
@@ -89,9 +127,67 @@ function ProductItem({ grId, storageID }) {
           </Link>
           <Typography color="text.primary"> Nhu yếu phẩm trong kho </Typography>
         </Breadcrumbs>
-        <IconButton onClick={handleOpenAdd}>
+        <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <CustomComponent.Button1 onClick={handleOpen}>
+            <AddIcon color={Colors.background} />
+            Thêm nhu yếu phẩm
+          </CustomComponent.Button1>
+        </Box>
+        <Box sx={{ display: { xs: "flex", md: "none" } }}>
+          <Tooltip title="Thêm nhu yếu phẩm">
+            <CustomComponent.Button1 onClick={handleOpen}>
+              <AddIcon color={Colors.background} />
+            </CustomComponent.Button1>
+          </Tooltip>
+        </Box>
+        {/* <IconButton onClick={handleOpen}>
           <MdOutlineAddBox color={Colors.textPrimary} size={30} />
-        </IconButton>
+        </IconButton> */}
+      </Box>
+      <Box className="box-btn-select-product">
+        {stateBtn === 1 ? (
+          <CustomComponent.Button3 className="btn-btn">
+            Tất cả
+          </CustomComponent.Button3>
+        ) : (
+          <CustomComponent.Button4
+            className="btn-btn"
+            onClick={(e) => handleListProduct(e, 1)}
+          >
+            Tất cả
+          </CustomComponent.Button4>
+        )}
+        {stateBtn === 2 ? (
+          <CustomComponent.Button3 className="btn-btn">
+            Hết hạn
+          </CustomComponent.Button3>
+        ) : (
+          <CustomComponent.Button4
+            className="btn-btn"
+            onClick={(e) => handleListProduct(e, 2)}
+          >
+            Hết hạn
+          </CustomComponent.Button4>
+        )}
+        {stateBtn === 3 ? (
+          <CustomComponent.Button3 className="btn-btn">
+            Sắp hết
+          </CustomComponent.Button3>
+        ) : (
+          <CustomComponent.Button4
+            className="btn-btn"
+            onClick={(e) => handleListProduct(e, 3)}
+          >
+            Sắp hết
+          </CustomComponent.Button4>
+        )}
+      </Box>
+      <Box className="box-btn-select-product">
+        {listProducts?.length <= 0 && (
+          <>
+            <Typography sx={{ color: Colors.purpleGray}}>Danh sách nhu yếu phẩm rỗng</Typography>
+          </>
+        )}
       </Box>
       {listProducts?.length > 0 ? (
         <ListItemProduct
@@ -99,6 +195,8 @@ function ProductItem({ grId, storageID }) {
           p={metaProducts}
           grId={grId}
           storageID={storageID}
+          state={stateBtn}
+          date={nowDate}
         />
       ) : null}
       <Modal

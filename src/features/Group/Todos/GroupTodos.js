@@ -10,7 +10,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   AccordionActions,
-  CircularProgress,
+  Tooltip,
 } from "@mui/material";
 //import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import AddTaskIcon from "@mui/icons-material/AddTask";
@@ -30,8 +30,11 @@ import * as CustomComponent from "../../../component/custom/CustomComponents";
 import {
   updateMessage,
   updateOpenSnackbar,
+  updateProgress,
   updateStatus,
 } from "../../../redux/messageSlice";
+import AddIcon from "@mui/icons-material/Add";
+import NotificationEmpty from "../NotificationEmpty";
 
 const style = {
   position: "absolute",
@@ -72,7 +75,6 @@ function GroupTodos({ grId, item }) {
   const [open, setOpen] = useState(false);
   const [idxTodo, setIdxTodo] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const [flag, setFlag] = useState(false);
   const [expanded, setExpanded] = React.useState(false);
 
   const handleChangeAccordion = (todo) => (event, isExpanded) => {
@@ -91,7 +93,7 @@ function GroupTodos({ grId, item }) {
 
   const handleDeleteTodos = async () => {
     handleCloseModal();
-    setFlag(true);
+    dispatch(updateProgress(true));
     const res = await deletedTodos(
       grId,
       idxTodo,
@@ -101,7 +103,7 @@ function GroupTodos({ grId, item }) {
     );
 
     if (res != null) {
-      setFlag(false);
+      dispatch(updateProgress(false));
       if (res?.statusCode === 200) {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
@@ -115,7 +117,7 @@ function GroupTodos({ grId, item }) {
   };
   return (
     <Stack
-      sx={{ width: "100%", position: "relative", opacity: flag ? 0.5 : 1 }}
+      sx={{ width: "100%" }}
       spacing={2}
     >
       <Box className="flex-group">
@@ -131,9 +133,22 @@ function GroupTodos({ grId, item }) {
             Các việc cần làm trong nhóm
           </Typography>
         </Box>
-        <IconButton onClick={handleOpen}>
+        <Box sx={{ display: { xs: "none", sm: "flex" } }}>
+          <CustomComponent.Button1 onClick={handleOpen}>
+            <AddIcon color={Colors.background} />
+            Thêm 
+          </CustomComponent.Button1>
+        </Box>
+        <Box sx={{ display: { xs: "flex", sm: "none" } }}>
+          <Tooltip title="Thêm chi tiêu mới">
+            <CustomComponent.Button1 onClick={handleOpen}>
+              <AddIcon color={Colors.background} />
+            </CustomComponent.Button1>
+          </Tooltip>
+        </Box>
+        {/* <IconButton onClick={handleOpen}>
           <AddTaskIcon sx={{ color: Colors.textPrimary, fontSize: "32px" }} />
-        </IconButton>
+        </IconButton> */}
       </Box>
 
       <Modal
@@ -161,12 +176,9 @@ function GroupTodos({ grId, item }) {
                   id={`${todo._id}-header`}
                 >
                   <Typography
-                    //variant="caption"
-                    //display="block"
                     sx={{
-                      fontSize: "22px",
+                      fontSize: "20px",
                       fontWeight: 500,
-                      color: "#5186AD",
                     }}
                   >
                     {todo.summary}
@@ -183,7 +195,9 @@ function GroupTodos({ grId, item }) {
               </Accordion>
             ) : null
           )
-        : null}
+        : (
+          <NotificationEmpty msg="Danh sách việc cần làm rỗng" />
+        )}
       <Modal open={openModal} onClose={handleCloseModal}>
         <Box sx={styleModal}>
           <Typography>Bạn có muốn xóa chi tiêu này không?</Typography>
@@ -203,11 +217,11 @@ function GroupTodos({ grId, item }) {
           </Box>
         </Box>
       </Modal>
-      {flag && (
+      {/* {flag && (
         <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
           <CircularProgress />
         </Box>
-      )}
+      )} */}
     </Stack>
   );
 }

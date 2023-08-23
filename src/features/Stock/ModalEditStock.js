@@ -5,7 +5,6 @@ import {
   Stack,
   Typography,
   Box,
-  CircularProgress,
   Modal,
 } from "@mui/material";
 
@@ -17,12 +16,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
 import {
   deletedStorageLocation,
-  postStorageLocation,
   updateStorageLocation,
 } from "../../redux/stockRequest";
 import {
   updateMessage,
   updateOpenSnackbar,
+  updateProgress,
   updateStatus,
 } from "../../redux/messageSlice.js";
 
@@ -50,10 +49,9 @@ function ModalEditStock({ item, grID, handleClose }) {
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   const [nameStock, setNameStock] = useState(item.name);
-  const [description, setDescription] = useState(item.description);
+  const [descr, setDescr] = useState(item.description);
   const [image, setImage] = useState(null);
   const [fileImg, setFileImg] = useState(item.image);
-  const [flag, setFlag] = useState(false);
 
   const [open, setOpen] = useState(false);
   const handleOpenModal = (e, idx) => {
@@ -66,7 +64,7 @@ function ModalEditStock({ item, grID, handleClose }) {
   };
 
   const handleChangeDescription = (e) => {
-    setDescription(e.target.value);
+    setDescr(e.target.value);
   };
 
   const handleClick = () => {
@@ -83,12 +81,21 @@ function ModalEditStock({ item, grID, handleClose }) {
   };
 
   const handleEditStock = async () => {
+    if (
+      item.name === nameStock &&
+      item.image === fileImg &&
+      item.description === descr
+    ) {
+      return;
+    }
     let formData = {
       name: nameStock,
       file: image,
-      description: description,
+      description: descr
     };
-    setFlag(true);
+    // setFlag(true);
+    handleClose();
+    dispatch(updateProgress(true));
     const res = await updateStorageLocation(
       grID,
       item.id,
@@ -99,7 +106,7 @@ function ModalEditStock({ item, grID, handleClose }) {
     );
 
     if (res != null) {
-      setFlag(false);
+      dispatch(updateProgress(false));
       if (res?.statusCode === 200) {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
@@ -111,12 +118,14 @@ function ModalEditStock({ item, grID, handleClose }) {
       }
     }
 
-    handleClose();
+    // handleClose();
   };
 
   const handleDeleteStock = async () => {
     handleCloseModal();
-    setFlag(true);
+    // setFlag(true);
+    handleClose();
+    dispatch(updateProgress(true));
     const res = await deletedStorageLocation(
       grID,
       item.id,
@@ -126,7 +135,8 @@ function ModalEditStock({ item, grID, handleClose }) {
     );
 
     if (res != null) {
-      setFlag(false);
+      // setFlag(false);
+      dispatch(updateProgress(false));
       if (res?.statusCode === 200) {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
@@ -137,11 +147,11 @@ function ModalEditStock({ item, grID, handleClose }) {
         dispatch(updateMessage("Xóa kho lưu trữ thất bại!"));
       }
     }
-    handleClose();
+    // handleClose();
   };
 
   return (
-    <Box sx={{ width: "100%", position: "relative", opacity: flag ? 0.5 : 1 }}>
+    <Box sx={{ width: "100%", position: "relative" }}>
       <Typography
         id="modal-modal-title"
         variant="h6"
@@ -188,7 +198,7 @@ function ModalEditStock({ item, grID, handleClose }) {
                 Nhập mô tả kho:
               </Typography>
               <TextField
-                value={description}
+                value={descr}
                 size="small"
                 multiline
                 rows={2}
@@ -254,11 +264,11 @@ function ModalEditStock({ item, grID, handleClose }) {
           </Box>
         </Box>
       </Modal>
-      {flag && (
+      {/* {flag && (
         <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
           <CircularProgress />
         </Box>
-      )}
+      )} */}
     </Box>
   );
 }

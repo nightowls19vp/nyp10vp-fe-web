@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import {
   MenuItem,
@@ -10,7 +10,8 @@ import {
   Typography,
   InputBase,
   Modal,
-  CircularProgress,
+  Tooltip,
+  IconButton,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -21,14 +22,19 @@ import * as CustomComponent from "../../../component/custom/CustomComponents.js"
 import * as FormatNumber from "../../../component/custom/FormatDateNumber.js";
 import {
   deletePackageBill,
+  postDoubleCheck,
   updatePackageBill,
 } from "../../../redux/userRequest";
 import { loginSuccess } from "../../../redux/authSlice";
 import {
   updateMessage,
   updateOpenSnackbar,
+  updateProgress,
   updateStatus,
 } from "../../../redux/messageSlice";
+import CircleNotificationsIcon from "@mui/icons-material/CircleNotifications";
+import { Colors } from "../../../config/Colors";
+import CurrencyInput from "react-currency-input-field";
 
 const style = {
   position: "absolute",
@@ -46,7 +52,7 @@ const style = {
   p: 4,
 };
 
-function BillDetail({ grID }) {
+function BillDetail({ grID, handleClose }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
@@ -67,10 +73,9 @@ function BillDetail({ grID }) {
   };
   const initalData = initalChange();
   const [data, setData] = useState(initalChange());
-  const [flag, setFlag] = useState(false);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleCloseDeleted = () => setOpen(false);
 
   const handleChangeStatus = (event, idx) => {
     let arr = [];
@@ -105,7 +110,8 @@ function BillDetail({ grID }) {
   };
 
   const handleDeleteBill = async () => {
-    setFlag(true);
+    handleCloseDeleted();
+    dispatch(updateProgress(true));
     const res = await deletePackageBill(
       grID,
       bill._id,
@@ -115,7 +121,7 @@ function BillDetail({ grID }) {
     );
 
     if (res != null) {
-      setFlag(false);
+      dispatch(updateProgress(false));
       if (res?.statusCode === 200) {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
@@ -125,6 +131,34 @@ function BillDetail({ grID }) {
         dispatch(updateStatus(false));
         dispatch(updateMessage("Xóa chi tiêu thất bại!"));
       }
+    }
+  };
+
+  const handleNotification = async (e, user) => {
+    let formData = {
+      to_user: user,
+    };
+    console.log(formData);
+    console.log(bill._id);
+    handleClose();
+    dispatch(updateProgress(false));
+    const res = await postDoubleCheck(
+      bill._id,
+      formData,
+      user?.accessToken,
+      axiosJWT
+    );
+
+    if (res === true) {
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(true));
+      dispatch(updateMessage("Lời nhắc nhở đã được gửi thành công!"));
+    } else {
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(false));
+      dispatch(updateMessage("Lời nhắc nhở đã được gửi không thành công!"));
     }
   };
 
@@ -142,6 +176,12 @@ function BillDetail({ grID }) {
       }
     }
 
+    if (checkAmount === false && checkStatus === false) {
+      return;
+    }
+
+    handleClose();
+    dispatch(updateProgress(true));
     let borrowersAmount = [];
     let borrowersStatus = [];
     for (let x of data) {
@@ -169,32 +209,28 @@ function BillDetail({ grID }) {
       borrowers: borrowersStatus,
     };
 
-    if (checkAmount === true || checkStatus === true) {
-      setFlag(true);
+    const res = await updatePackageBill(
+      grID,
+      bill._id,
+      formData1,
+      checkAmount,
+      formData2,
+      checkStatus,
+      user?.accessToken,
+      dispatch,
+      axiosJWT
+    );
 
-      const res = await updatePackageBill(
-        grID,
-        bill._id,
-        formData1,
-        checkAmount,
-        formData2,
-        checkStatus,
-        user?.accessToken,
-        dispatch,
-        axiosJWT
-      );
-
-      if (res != null) {
-        setFlag(false);
-        if (res === true) {
-          dispatch(updateOpenSnackbar(true));
-          dispatch(updateStatus(true));
-          dispatch(updateMessage("Chỉnh sửa chi tiêu thành công!"));
-        } else {
-          dispatch(updateOpenSnackbar(true));
-          dispatch(updateStatus(false));
-          dispatch(updateMessage("Chỉnh sửa chi tiêu thất bại!"));
-        }
+    if (res != null) {
+      dispatch(updateProgress(false));
+      if (res === true) {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(true));
+        dispatch(updateMessage("Chỉnh sửa chi tiêu thành công!"));
+      } else {
+        dispatch(updateOpenSnackbar(true));
+        dispatch(updateStatus(false));
+        dispatch(updateMessage("Chỉnh sửa chi tiêu thất bại!"));
       }
     }
   };
@@ -202,8 +238,6 @@ function BillDetail({ grID }) {
     <Box
       sx={{
         width: "100%",
-        position: "relative",
-        opacity: flag === true ? 0.5 : 1,
       }}
     >
       <Typography variant="h4">{bill?.summary}</Typography>
@@ -214,15 +248,32 @@ function BillDetail({ grID }) {
         <Typography variant="subtitle1" sx={{ fontStyle: "italic" }}>
           {bill?.description}
         </Typography>
-        <Box
-          sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
-        >
-          <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
-            Nguời chi trả:
-          </Typography>
-          <Typography sx={{ marginLeft: "10px" }}>
-            {bill?.lender.name}
-          </Typography>
+        <Box className="box-status-noti">
+          <Box
+            sx={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+          >
+            <Typography variant="subtitle1" sx={{ fontWeight: 550 }}>
+              Nguời chi trả:
+            </Typography>
+            <Typography sx={{ marginLeft: "10px" }}>
+              {bill?.lender.name}
+            </Typography>
+          </Box>
+          {userInfo._id !== bill?.lender._id ? (
+            <Tooltip title="Nhắc nhở">
+              <IconButton
+                onClick={(e) => handleNotification(e, bill?.lender._id)}
+              >
+                <CircleNotificationsIcon
+                  sx={{
+                    marginLeft: "5px",
+                    fontSize: "35px",
+                    color: Colors.textPrimary,
+                  }}
+                />
+              </IconButton>
+            </Tooltip>
+          ) : null}
         </Box>
         {bill?.borrowers.map((route, idx) =>
           route ? (
@@ -246,12 +297,21 @@ function BillDetail({ grID }) {
                     value={data[idx].amount}
                     onChange={(e) => handleChangeAmount(e, route.borrower._id)}
                   />
+        //           <CurrencyInput
+        //   id="input-example"
+        //   className="currency-input"
+        //   value={data[idx].amount}
+        //   decimalsLimit={2}
+        //   onValueChange={(value) => setMoney(value)}
+        // />
                 ) : (
-                  <Typography>{FormatNumber.formatCurrency(data[idx].amount)}</Typography>
+                  <Typography>
+                    {FormatNumber.formatCurrency(data[idx].amount)}
+                  </Typography>
                 )}
               </Box>
               {userInfo._id === bill?.lender._id ? (
-                <Box>
+                <Box className="box-status-noti">
                   <FormControl
                     sx={{
                       width: "130px",
@@ -311,6 +371,19 @@ function BillDetail({ grID }) {
                       </MenuItem>
                     </Select>
                   </FormControl>
+                  <Tooltip title="Nhắc nhở">
+                    <IconButton
+                      onClick={(e) => handleNotification(e, route.borrower._id)}
+                    >
+                      <CircleNotificationsIcon
+                        sx={{
+                          marginLeft: "5px",
+                          fontSize: "35px",
+                          color: Colors.textPrimary,
+                        }}
+                      />
+                    </IconButton>
+                  </Tooltip>
                 </Box>
               ) : (
                 <Box
@@ -367,7 +440,7 @@ function BillDetail({ grID }) {
           </Box>
         ) : null}
       </Stack>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleCloseDeleted}>
         <Box sx={style}>
           <Typography>Bạn có muốn xóa chi tiêu này không?</Typography>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -379,18 +452,13 @@ function BillDetail({ grID }) {
             </CustomComponent.Button1>
             <CustomComponent.Button2
               sx={{ width: "40px", marginLeft: "10px" }}
-              onClick={handleClose}
+              onClick={handleCloseDeleted}
             >
               Không
             </CustomComponent.Button2>
           </Box>
         </Box>
       </Modal>
-      {flag && (
-        <Box sx={{ position: "absolute", top: "40%", left: "50%" }}>
-          <CircularProgress />
-        </Box>
-      )}
     </Box>
   );
 }

@@ -3,20 +3,41 @@ import React, { useState } from "react";
 import {
   Box,
   InputAdornment,
+  Modal,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
-import TextFieldCustom from "../../component/text-field/TextFieldCustom";
-import * as CustomComponent from "../../component/custom/CustomComponents";
+
+import CurrencyInput from "react-currency-input-field";
+import DateTimePicker from "../../component/Date/DateTimePicker";
+import "../../assets/css/InterestBank.scss";
 
 function BankInterestRate() {
-  const [price, setPrice] = useState();
+  const nowDate = new Date();
+  const [price, setPrice] = useState(1000);
+  const [date, setDate] = useState(nowDate);
   const [interest, setInterest] = useState();
   const [duration, setDuration] = useState();
-  const ChangeValue = (value) => {
-    setPrice(value);
+  const [dateExpire, setDateExpire] = useState();
+  // const [moneyInterest, setMoneyIntterest] = useState();
+  // const [total, setTotal] = useState();
+  // const [newInterest, setNewInterest] = useState();
+  // const [newDuration, setNewDuration] = useState();
+  // const [newTotal, setNewTotal] = useState();
+  // const [totalExpire, setTotalExpire] = useState();
+  // const [isOpen, setIsOpen] = useState(false);
+  // const [isOpenExpire, setIsOpenExpire] = useState(false);
+
+  const handleDateTimePicker = (dateValue) => {
+    setDate(dateValue.$d);
   };
+
   return (
     <Stack spacing={2} className="interest-rate">
       <Typography className="title">Lãi suất ngân hàng</Typography>
@@ -25,76 +46,61 @@ function BankInterestRate() {
         tiền lãi trong tương lai. Từ đó có thể so sánh các mức lãi suất ngân
         hàng, kỳ hạn gửi và đưa ra quyết định có lợi nhất cho mình.
       </Typography>
-      <Box
-        className="box-interest-rate"
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          justifyContent: "center",
-        }}
-      >
-        <Box
-          className="box-textfield"
-          sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}
-        >
-          <Typography className="title-textfield">Số tiền gửi</Typography>
-          <Box sx={{ minWidth: "270px" }}>
-            <TextFieldCustom
-              labelText={""}
-              sizeText={"medium"}
-              ChangeValue={ChangeValue}
+      <Box>
+        <Typography>Số tiền gửi</Typography>
+        <CurrencyInput
+          id="input-example"
+          className="currency-input"
+          value={price}
+          decimalsLimit={2}
+          onValueChange={(value) => setPrice(value)}
+        />
+      </Box>
+      <Box>
+        <Stack spacing={1.5}>
+          <Box>
+            <Typography>Ngày gửi</Typography>
+            <DateTimePicker
+              valueDay={date}
+              handleDateTimePicker={handleDateTimePicker}
+              sizeDateTime={"medium"}
             />
           </Box>
-        </Box>
-        <Box
-          className="box-textfield"
-          sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}
-        >
-          <Typography className="title-textfield">Lãi suất gửi</Typography>
-          <TextField
-            value={interest}
-            onChange={(e) => setInterest(e.target.value)}
-            type="number"
-            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">%/năm</InputAdornment>
-              ),
-            }}
-            sx={{ minWidth: "270px" }}
-          />
-        </Box>
-      </Box>
-      <Box
-        className="box-interest-rate"
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-        <Box
-          className="box-textfield"
-          sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}
-        >
-          <Typography className="title-textfield">Kỳ hạn gửi</Typography>
-          <TextField
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
-            type="number"
-            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">tháng</InputAdornment>
-              ),
-            }}
-            sx={{ minWidth: "270px" }}
-          />
-        </Box>
-        <Box className="box-textfield">
-          <CustomComponent.Button1>Thực hiện</CustomComponent.Button1>
-        </Box>
+          <Box>
+            <Typography>Kỳ hạn hiện tại</Typography>
+            <TextField
+              fullWidth
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+              type="number"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">tháng</InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+          <Box>
+            <Typography>Lãi suất tiền gửi</Typography>
+            <TextField
+              fullWidth
+              value={interest}
+              onChange={(e) => setInterest(e.target.value)}
+              type="number"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">%/năm</InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+          <Box>
+            <Typography>Ngày đáo hạn</Typography>
+            <Typography>{dateExpire}</Typography>
+          </Box>
+        </Stack>
       </Box>
     </Stack>
   );

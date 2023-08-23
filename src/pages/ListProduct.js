@@ -16,9 +16,7 @@ function ListProduct() {
   const storageID = urlQuery.get("storageId");
 
   const dispatch = useDispatch();
-
   const user = useSelector((state) => state?.auth.login?.currentUser);
-
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
   useEffect(() => {
@@ -28,6 +26,8 @@ function ListProduct() {
         1,
         5,
         storageID,
+        1,
+        null,
         user?.accessToken,
         dispatch,
         axiosJWT

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
   Box,
@@ -11,7 +11,6 @@ import {
   Typography,
   Select,
   MenuItem,
-  CircularProgress,
 } from "@mui/material";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 
@@ -24,12 +23,14 @@ import { postPackageTodos } from "../../../redux/packageRequest";
 import {
   updateMessage,
   updateOpenSnackbar,
+  updateProgress,
   updateStatus,
 } from "../../../redux/messageSlice";
 import { Colors } from "../../../config/Colors";
 import "../../../assets/css/Todos.scss";
 
 function FormTodos({ todoID, handleClose }) {
+  const listRef = useRef();
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state?.auth.login?.currentUser);
@@ -41,7 +42,6 @@ function FormTodos({ todoID, handleClose }) {
   const [msg, setMsg] = useState("");
   const [status, setStatus] = useState("Public");
   const [listTodo, setListTodo] = useState([]);
-  const [flag, setFlag] = useState(false);
 
   const handleChangeStatus = (event) => {
     setStatus(event.target.value);
@@ -97,7 +97,8 @@ function FormTodos({ todoID, handleClose }) {
       state: status,
     };
 
-    setFlag(true);
+    handleClose();
+    dispatch(updateProgress(true));
 
     const res = await postPackageTodos(
       todoID,
@@ -108,7 +109,7 @@ function FormTodos({ todoID, handleClose }) {
     );
 
     if (res != null) {
-      setFlag(false);
+      dispatch(updateProgress(false));
       if (res?.statusCode === 201) {
         dispatch(updateOpenSnackbar(true));
         dispatch(updateStatus(true));
@@ -119,8 +120,6 @@ function FormTodos({ todoID, handleClose }) {
         dispatch(updateMessage("Thêm 1 việc cần làm thất bại!"));
       }
     }
-
-    handleClose();
   };
 
   useEffect(() => {
@@ -129,11 +128,12 @@ function FormTodos({ todoID, handleClose }) {
     }
   }, [todo]);
 
+  useEffect(() => {
+    listRef.current?.lastElementChild?.scrollIntoView();
+  }, [listTodo]);
+
   return (
-    <Stack
-      spacing={2}
-      sx={{ position: "relative", opacity: flag === true ? 0.75 : 1 }}
-    >
+    <Stack spacing={2} id="addTodo" className="addAddTodo">
       <Box
         className="title-group-spending"
         sx={{ justifyContent: "space-between" }}
@@ -180,40 +180,37 @@ function FormTodos({ todoID, handleClose }) {
             onChange={(e) => setDescription(e.target.value)}
             sx={{ margin: "5px" }}
           />
-          <Button
-            variant="contained"
-            color="success"
-            sx={{ height: "56px" }}
-            onClick={handleAddTodo}
-          >
+          <CustomComponent.ButtonTodo onClick={handleAddTodo}>
             Thêm
-          </Button>
+          </CustomComponent.ButtonTodo>
         </Box>
       </Box>
       <Typography className="todo-msg">{msg}</Typography>
 
       {listTodo.length > 0 && listTodo !== null ? (
-        <Stack spacing={2} sx={{ width: "100%"}}>
+        <Stack spacing={2} sx={{ width: "100%" }}>
           <Typography>Danh sách việc đã thêm</Typography>
-          {listTodo.map((todo, idx) => (
-            <Box className="list-todo" key={idx}>
-              <Box>
-                <Box className="todos">
-                  <Checkbox
-                    checked={todo.isCompleted}
-                    onChange={(e) => handleIsComplete(e, idx)}
-                  />
-                  <Typography>{todo.todo}</Typography>
+          <ul ref={listRef}>
+            {listTodo.map((todo, idx) => (
+              <li className="list-todo" key={idx}>
+                <Box>
+                  <Box className="todos">
+                    <Checkbox
+                      checked={todo.isCompleted}
+                      onChange={(e) => handleIsComplete(e, idx)}
+                    />
+                    <Typography>{todo.todo}</Typography>
+                  </Box>
+                  <Typography className="text-todo">
+                    {todo.description}
+                  </Typography>
                 </Box>
-                <Typography className="text-todo">
-                  {todo.description}
-                </Typography>
-              </Box>
-              <IconButton onClick={(e) => handleDeleteTodo(e, idx)}>
-                <BackspaceIcon sx={{ color: Colors.error }} />
-              </IconButton>
-            </Box>
-          ))}
+                <IconButton onClick={(e) => handleDeleteTodo(e, idx)}>
+                  <BackspaceIcon sx={{ color: Colors.error }} />
+                </IconButton>
+              </li>
+            ))}
+          </ul>
         </Stack>
       ) : null}
       {listTodo.length > 0 && listTodo !== null ? (
@@ -221,12 +218,6 @@ function FormTodos({ todoID, handleClose }) {
           Lưu
         </CustomComponent.Button1>
       ) : null}
-
-      {flag && (
-        <Box sx={{ position: "absolute", top: "50%", left: "50%" }}>
-          <CircularProgress />
-        </Box>
-      )}
     </Stack>
   );
 }

@@ -7,7 +7,6 @@ import {
   Select,
   MenuItem,
   FormControlLabel,
-  Checkbox,
   Typography,
   TextField,
   RadioGroup,
@@ -21,12 +20,21 @@ import DateTimePicker from "../../../component/Date/DateTimePicker";
 import TimePickerCus from "../../../component/Date/TimePickerCus";
 import { createAxios } from "../../../http/createInstance";
 import * as CustomComponent from "../../../component/custom/CustomComponents";
+import * as FormatDate from "../../../component/custom/FormatDateNumber";
 import "../../../assets/css/Group.scss";
 import { styled } from "@mui/material/styles";
 import { Colors } from "../../../config/Colors";
 import { postPackageTask } from "../../../redux/packageRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../../redux/authSlice";
+import {
+  updateMessage,
+  updateOpenSnackbar,
+  updateProgress,
+  updateStatus,
+} from "../../../redux/messageSlice";
+
+import dayjs from "dayjs";
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   "& .MuiToggleButtonGroup-grouped": {
@@ -49,7 +57,7 @@ function AddTask({ grID, item, handleClose }) {
   const user = useSelector((state) => state?.auth.login?.currentUser);
   let axiosJWT = createAxios(user, dispatch, loginSuccess);
 
-  const nowDate = new Date();
+  let date = new Date();
   const [name, setName] = useState("");
   const [status, setStatus] = useState("Public");
   const [repeat, setRepeat] = useState(false);
@@ -57,14 +65,19 @@ function AddTask({ grID, item, handleClose }) {
   const [unit, setUnit] = useState("Day");
   //const [allDay, setAllDay] = useState(false);
   const [formats, setFormats] = React.useState(() => []);
-  const [startDate, setStartDate] = useState(nowDate);
+  const [startDate, setStartDate] = useState(date);
+  const [time, setTime] = useState(dayjs(date.getTime()));
   const [statusEnd, setStatusEnd] = useState(1);
-  const [endDate, setEndDate] = useState(nowDate);
+  const [endDate, setEndDate] = useState(date);
   const [description, setDescription] = useState("");
   const [msg, setMsg] = useState("");
 
   const handleStartDateTimePicker = (dateValue) => {
     setStartDate(dateValue.$d);
+  };
+
+  const handleChangeTimePicker = (timeValue) => {
+    setTime(timeValue);
   };
 
   const handleEndDateTimePicker = (dateValue) => {
@@ -93,9 +106,29 @@ function AddTask({ grID, item, handleClose }) {
 
   const handleChangeStatusEnd = (e) => {
     setStatusEnd(e.target.value);
-  }
+  };
 
   const handleAddEvents = async () => {
+    handleClose();
+    dispatch(updateProgress(true));
+    let d1 = startDate.setHours(time.$H);
+    d1 = new Date(d1).setMinutes(time.$m);
+    d1 = new Date(d1).setSeconds(time.$s);
+    let startDateFormat = new Date(d1).toISOString();
+
+    let endDateFormat = new Date();
+    if (repeat && FormatDate.compareTimes(endDate, startDate)) {
+      let d2 = endDate.setHours(23);
+      d2 = new Date(d2).setMinutes(59);
+      d2 = new Date(d2).setSeconds(59);
+      endDateFormat = new Date(d2).toISOString();
+    } else {
+      let d2 = startDate.setHours(23);
+      d2 = new Date(d2).setMinutes(59);
+      d2 = new Date(d2).setSeconds(59);
+      endDateFormat = new Date(d2).toISOString();
+    }
+
     if (name.length <= 0) {
       setMsg("Vui lòng điền vào ô TIÊU ĐỀ!");
       return;
@@ -105,7 +138,7 @@ function AddTask({ grID, item, handleClose }) {
       times: numRepeat,
       unit: unit,
       repeatOn: formats,
-      ends: statusEnd === 1 ? "" : endDate,
+      ends: statusEnd === 1 ? "" : endDateFormat,
     };
     console.log(recurrence);
 
@@ -119,7 +152,7 @@ function AddTask({ grID, item, handleClose }) {
       isRepeated: repeat,
       recurrence: recurrence,
       members: members,
-      startDate: startDate,
+      startDate: startDateFormat,
       state: status,
     };
 
@@ -131,7 +164,17 @@ function AddTask({ grID, item, handleClose }) {
       axiosJWT
     );
 
-    console.log(res);
+    if (res?.statusCode === 201) {
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(true));
+      dispatch(updateMessage("Tạo lịch biểu thành công!"));
+    } else {
+      dispatch(updateProgress(false));
+      dispatch(updateOpenSnackbar(true));
+      dispatch(updateStatus(false));
+      dispatch(updateMessage("Tạo lịch biểu thất bại!"));
+    }
   };
   return (
     <Stack spacing={1.5} id="createTask" className="createCreateTask">
@@ -157,23 +200,23 @@ function AddTask({ grID, item, handleClose }) {
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", m: 1 }}>
         <AccessTimeIcon sx={{ m: 1 }} />
-        <Box>
+        {/* <Box>
+          <DateTimePicker
+            valueDay={startDate}
+            handleDateTimePicker={handleStartDateTimePicker}
+            sizeDateTime={"medium"}
+          />
+        </Box> */}
+        <Box flex={1} sx={{ m: 1 }}>
           <DateTimePicker
             valueDay={startDate}
             handleDateTimePicker={handleStartDateTimePicker}
             sizeDateTime={"medium"}
           />
         </Box>
-        {/* <Box flex={1} sx={{ m: 1 }}>
-          <DateTimePicker
-            valueDay={startDate}
-            handleDateTimePicker={handleStartDateTimePicker}
-            sizeDateTime={"medium"}
-          />
-        </Box> */}
-        {/* <Box flex={1} sx={{ m: 1 }}>
-          <TimePickerCus />
-        </Box> */}
+        <Box flex={1} sx={{ m: 1 }}>
+          <TimePickerCus handleChangeTimePicker={handleChangeTimePicker} />
+        </Box>
       </Box>
       <Box sx={{ paddingLeft: "5px" }}>
         <FormControlLabel

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import "../assets/css/Chat.scss";
 // import { Colors } from "../config/Colors";
